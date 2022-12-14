@@ -52,11 +52,14 @@ bool modelManager::modelRender(modelInf* MI)
 		}
 		MV1SetAttachAnimBlendRate(MI->modelHandle, MI->attachIndexOld, 1.0f - MI->rate);
 		MV1SetAttachAnimBlendRate(MI->modelHandle, MI->attachIndex, MI->rate);
+
+		MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndexOld, MI->playTime);
 	}
+
+	MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndex, MI->playTime);
 
 	MV1SetPosition(MI->modelHandle, MI->pos);
 	MV1SetRotationXYZ(MI->modelHandle, VScale(MI->dir, (DX_PI_F / 180.0f)));
-	MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndex, MI->playTime);
 	MV1DrawModel(MI->modelHandle);
 
 	return true;
