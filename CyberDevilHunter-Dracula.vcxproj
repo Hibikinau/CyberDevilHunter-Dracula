@@ -169,7 +169,6 @@
     <ClCompile Include="game\sorce\modelManager.cpp" />
     <ClCompile Include="game\sorce\modeMenu.cpp" />
     <ClCompile Include="game\sorce\modeTitle.cpp" />
-    <ClCompile Include="game\sorce\obstacleEnemy.cpp" />
     <ClCompile Include="game\sorce\player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,7 +179,6 @@
     <ClInclude Include="game\sorce\modelManager.h" />
     <ClInclude Include="game\sorce\modeMenu.h" />
     <ClInclude Include="game\sorce\modeTitle.h" />
-    <ClInclude Include="game\sorce\obstacleEnemy.h" />
     <ClInclude Include="game\sorce\player.h" />
     <ClInclude Include="game\sorce\ResourceServerIns.h" />
   </ItemGroup>

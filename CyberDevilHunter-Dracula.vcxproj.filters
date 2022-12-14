@@ -39,9 +39,6 @@
     <ClCompile Include="game\sorce\player.cpp">
       <Filter>ソース ファイル\char</Filter>
     </ClCompile>
-    <ClCompile Include="game\sorce\obstacleEnemy.cpp">
-      <Filter>ソース ファイル\char</Filter>
-    </ClCompile>
     <ClCompile Include="game\sorce\modeMenu.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\charBase.h">
-      <Filter>ヘッダー ファイル\char</Filter>
-    </ClInclude>
-    <ClInclude Include="game\sorce\obstacleEnemy.h">
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\allMode.h">
