@@ -7,7 +7,7 @@
 
 bool PL::Initialize()
 {
-	_cg = LoadGraph("res/player00.png");
+	_cg = LoadGraph("game/res/player00.png");
 	useAnim = 0;
 	_x = 0;
 	_y = 0;
@@ -20,7 +20,7 @@ bool PL::Initialize()
 	_modelInf.pos = VGet(0.0f, 0.0f, 18000.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
-	_modelManager.modelImport("res/SDChar/motion_SDChar_idle_walk_run.mv1", 1.0f, &_modelInf);
+	_modelManager.modelImport("game/res/SDChar/motion_SDChar_idle_walk_run.mv1", 1.0f, &_modelInf);
 	return true;
 }
 

@@ -2,7 +2,7 @@
 
 bool	modeG::Initialize()
 {
-	_modelManager.modelImport("res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
+	_modelManager.modelImport("game/res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
 	SetUseLighting(true);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
