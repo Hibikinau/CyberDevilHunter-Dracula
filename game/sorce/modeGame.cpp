@@ -16,6 +16,10 @@ bool	modeG::Initialize()
 	insPL->Initialize();
 	insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
 	charBox.emplace_back(std::move(insPL));
+
+	auto boss = std::make_unique<Boss>();
+	boss->Initialize();
+	charBox.emplace_back(std::move(boss));
 	return true;
 }
 

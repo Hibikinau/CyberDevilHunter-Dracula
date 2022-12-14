@@ -2,6 +2,7 @@
 #include"../../AppFrame/source/appframe.h"
 #include"modelManager.h"
 #include"player.h"
+#include"bossTentative.h"
 #include<memory>
 
 class modeG : public ModeBase
