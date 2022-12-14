@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Application">
+      <UniqueIdentifier>{4ca63305-d083-453b-88a9-706f0a1ac180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ModeServer">
+      <UniqueIdentifier>{f65d1d8e-b785-4c0b-a849-085fd92b4b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CFile">
+      <UniqueIdentifier>{8fbd5843-f112-4047-a7f8-83460621436b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceServer">
+      <UniqueIdentifier>{c93aa2ee-8ff3-48cf-9c51-1a0f26c2b845}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\Application\ApplicationBase.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Application\WinMain.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Mode\ModeBase.cpp">
+      <Filter>ModeServer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Mode\ModeServer.cpp">
+      <Filter>ModeServer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\CFile\CFile.cpp">
+      <Filter>CFile</Filter>
+    </ClCompile>
+    <ClCompile Include="source\ResourceServer\ResourceServer.cpp">
+      <Filter>ResourceServer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\Application\ApplicationBase.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Application\UtilMacro.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="source\appframe.h" />
+    <ClInclude Include="source\Mode\ModeBase.h">
+      <Filter>ModeServer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Mode\ModeServer.h">
+      <Filter>ModeServer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\CFile\CFile.h">
+      <Filter>CFile</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ResourceServer\ResourceServer.h">
+      <Filter>ResourceServer</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
