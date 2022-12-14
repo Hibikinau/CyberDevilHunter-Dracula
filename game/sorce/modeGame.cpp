@@ -44,13 +44,6 @@ bool	modeG::Process()
 		charBox.emplace_back(std::move(insPL));
 	}
 
-	if (_imputInf._gTrgp & PAD_INPUT_8)
-	{
-		auto insOE = std::make_unique<OE>();
-		insOE->Initialize(rand() % 6);
-		charBox.emplace_back(std::move(insOE));
-	}
-
 	useCommand();
 
 	cameraMove();

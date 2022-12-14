@@ -2,7 +2,6 @@
 #include"../../AppFrame/source/appframe.h"
 #include"modelManager.h"
 #include"player.h"
-#include"obstacleEnemy.h"
 #include<memory>
 
 #include"modeTitle.h"
