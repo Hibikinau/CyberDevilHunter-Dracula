@@ -25,8 +25,8 @@ bool	modeG::Process()
 	{
 		if (charBox[i]->getType() == 1)
 		{
-			charBox[i]->gravity();
 			charBox[i]->Process();
+			charBox[i]->gravity();
 			plMI = charBox[i]->getInf();
 		}
 		else { charBox[i]->Process(); }

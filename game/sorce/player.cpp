@@ -61,7 +61,7 @@ bool	PL::Process()
 			spd = 0.f;
 			animSpd = 0.5f;
 		}
-		if (checkTrgImput(KEY_INPUT_SPACE, PAD_INPUT_3) && Estate != JUMP)
+		if (checkTrgImput(KEY_INPUT_SPACE, PAD_INPUT_3) && Estate != JUMP && isGround)
 		{
 			Estate = JUMP;
 			_modelInf.vec.y = 20.f;
@@ -72,7 +72,7 @@ bool	PL::Process()
 		_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
 	}
-
+	if (isGround) { Estate = NOMAL; }
 	if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
 	if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
 

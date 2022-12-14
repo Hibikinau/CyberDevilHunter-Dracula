@@ -68,14 +68,14 @@
     <ClInclude Include="game\sorce\modeGame.h">
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
-    <ClInclude Include="game\sorce\modelManager.h">
-      <Filter>ヘッダー ファイル\mode</Filter>
-    </ClInclude>
     <ClInclude Include="game\sorce\modeMenu.h">
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\modeTitle.h">
       <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\modelManager.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ struct modelInf
 class modelManager
 {
 public:
+	int a;
 	bool modelImport(const char* dir, const float scale, modelInf* MI);
 	bool animChange(int _animHandle, modelInf* MI);
 	bool modelRender(modelInf* MI);
