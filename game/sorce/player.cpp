@@ -72,8 +72,6 @@ bool	PL::Process()
 		_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
 	}
-	if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g; }
-	else { _modelInf.pos.y = 0.f, Estate = NOMAL; }
 
 	if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
 	if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
