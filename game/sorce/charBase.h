@@ -3,12 +3,16 @@
 #include"modelManager.h"
 #include"ResourceServerIns.h"
 
+struct statusInf
+{//Å‘å’l‚ğ‘ã“ü
+	float hitPoint, bloodPoint, stamina;
+};
+
 class CB
 {
 public:
 	CB() {};
 	virtual ~CB() {};
-
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();
@@ -18,10 +22,12 @@ public:
 	virtual int	getType() { return type; }
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	modelInf getInf() { return _modelInf; }
+	statusInf	getStatus() { return _statusInf; }
 
 	int type;//pl=1, oEnemy=2
 	bool isGround;
 	float g;
 	modelManager _modelManager;
 	modelInf _modelInf;
+	statusInf _statusInf;
 };

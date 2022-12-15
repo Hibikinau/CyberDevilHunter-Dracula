@@ -9,7 +9,7 @@
 //	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
 //};
 
-enum ExclusiveState
+enum class ExclusiveState
 {
 	NOMAL,
 	JUMP
@@ -41,6 +41,7 @@ protected:
 	int* _gKeyp, *_gTrgp;
 	char* _gKeyb, * _gTrgb;
 	bool isUseFbx;
+	float maxHitPoint, maxBloodPoint, maxStamina;
 	modelManager _modelManager;
 	ExclusiveState Estate;
 

@@ -4,6 +4,7 @@
 #define motion_idel 0
 #define motion_walk 1
 #define motion_run 2
+typedef ExclusiveState _estate;
 
 bool PL::Initialize()
 {
@@ -14,7 +15,10 @@ bool PL::Initialize()
 	spd = walkSpd;
 	type = 1;
 	g = 1.f;
-	Estate = NOMAL;
+	Estate = _estate::NOMAL;
+	maxHitPoint = _statusInf.hitPoint = 200;
+	maxStamina = _statusInf.stamina = 100;
+	maxBloodPoint = _statusInf.bloodPoint = 100;
 
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 18000.f);
@@ -57,13 +61,13 @@ bool	PL::Process()
 		if (addDir != 0) { charMove(spd, *_cameraDir + addDir); }
 		else
 		{
-			if(Estate == NOMAL){ _modelManager.animChange(motion_idel, &_modelInf); }
+			if(Estate == _estate::NOMAL){ _modelManager.animChange(motion_idel, &_modelInf); }
 			spd = 0.f;
 			animSpd = 0.5f;
 		}
-		if (checkTrgImput(KEY_INPUT_SPACE, PAD_INPUT_3) && Estate != JUMP)
+		if (checkTrgImput(KEY_INPUT_SPACE, PAD_INPUT_3) && Estate != _estate::JUMP)
 		{
-			Estate = JUMP;
+			Estate = _estate::JUMP;
 			_modelInf.vec.y = 20.f;
 			_modelManager.animChange(motion_run, &_modelInf);
 			animSpd = 0.5f;
@@ -91,7 +95,7 @@ bool	PL::Render()
 
 void PL::charMove(float Speed, float _Dir)
 {
-	if (Estate != JUMP)
+	if (Estate != ExclusiveState::JUMP)
 	{
 		if (checkKeyImput(KEY_INPUT_LSHIFT, PAD_INPUT_4))
 		{
