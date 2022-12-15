@@ -1,6 +1,6 @@
 #pragma once
 #include"charBase.h"
-
+#include"player.h"
 
 
 
@@ -27,6 +27,7 @@ public:
 		NONE,
 		WAIT,
 		WALK,
+		KICK,
 		_EOT_
 	};
 	STATUS status;
@@ -35,6 +36,7 @@ public:
 	int _handle;
 	int Anim_handle;
 	int Anim_handle2;
+	int Anim_handle3;
 	int _attach_index;
 	float _total_time;
 	float _play_time;
@@ -52,5 +54,5 @@ protected:
 	bool isUseFbx;
 	modelManager _modelManager;
 	
-
+	PL player;
 };

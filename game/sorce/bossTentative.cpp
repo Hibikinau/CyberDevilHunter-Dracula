@@ -11,6 +11,7 @@ bool Boss::Initialize()
 	_handle = MV1LoadModel("game/res/reimu/reimu.mv1");
 	Anim_handle = MV1LoadModel("game/res/reimu/taiki.mv1");
 	Anim_handle2 = MV1LoadModel("game/res/reimu/aruku.mv1");
+	Anim_handle2 = MV1LoadModel("game/res/reimu/kick.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
 
 	MV1SetScale(_handle, VGet(10, 10, 10));
@@ -44,6 +45,14 @@ bool	Boss::Process()
 	float addDir = 0.f;
 	STATUS oldStatus = status;
 	status = STATUS::WAIT;
+
+	/*if () {
+		status = STATUS::KICK;
+	}
+	else {
+		status = STATUS::WAIT;
+	}*/
+
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {
 		// 再生時間を進める
@@ -64,6 +73,9 @@ bool	Boss::Process()
 		case STATUS::WALK:
 			_attach_index = MV1AttachAnim(_handle, 0, Anim_handle2, FALSE);
 			//(*iteChara)->_attach_index = MV1AttachAnim((*iteChara)->_handle, MV1GetAnimIndex((*iteChara)->_handle, "Anim001"), -1, FALSE);
+			break;
+		case STATUS::KICK:
+			_attach_index = MV1AttachAnim(_handle, 0, Anim_handle3, FALSE);
 			break;
 		}
 		// アタッチしたアニメーションの総再生時間を取得する
