@@ -47,6 +47,7 @@ bool	PL::Input()
 
 bool	PL::Process()
 {
+	
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())

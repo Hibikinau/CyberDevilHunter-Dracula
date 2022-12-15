@@ -26,7 +26,7 @@ protected:
 	int _x, _y;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraHigh;
-	std::vector<std::shared_ptr<CB> > charBox;
+	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
 	modelInf plMI, stage;
 	modelManager _modelManager;
