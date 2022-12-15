@@ -25,12 +25,6 @@
     <Filter Include="ヘッダー ファイル\mode">
       <UniqueIdentifier>{48d1ada7-94c0-4b4a-a0cf-e135f4fad1e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\boss">
-      <UniqueIdentifier>{e0d8bcdf-6925-40fb-b2fe-3e1379459c62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\boss">
-      <UniqueIdentifier>{ab5e0eae-f6e9-4ebf-8121-418bbe717fb9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game\sorce\gameMain.cpp">
@@ -53,9 +47,6 @@
     </ClCompile>
     <ClCompile Include="game\sorce\modeGame.cpp">
       <Filter>ソース ファイル\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="game\sorce\bossTentative.cpp">
-      <Filter>ソース ファイル\boss</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,9 +76,6 @@
     </ClInclude>
     <ClInclude Include="game\sorce\modelManager.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="game\sorce\bossTentative.h">
-      <Filter>ヘッダー ファイル\boss</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

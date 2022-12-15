@@ -14,40 +14,34 @@ bool	modeG::Initialize()
 
 	auto insPL = std::make_unique<PL>();
 	insPL->Initialize();
+	insPL->setCB(&charBox);
 	insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
-	charBox.emplace_back(std::move(insPL));
+	charBox.emplace(Char_PL, std::move(insPL));
 
 	auto boss = std::make_unique<Boss>();
 	boss->Initialize();
-	charBox.emplace_back(std::move(boss));
+	boss->setCB(&charBox);
+	charBox.emplace(Char_BOSS1, std::move(boss));
 	return true;
 }
 
 bool	modeG::Process()
 {
-	for (int i = 0; i < charBox.size(); i++)
+	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
-		if (charBox[i]->getType() == 1)
+		if (i->second->getType() == 1)
 		{
-			charBox[i]->gravity();
-			charBox[i]->Process();
-			plMI = charBox[i]->getInf();
+			i->second->Process();
+			i->second->gravity();
+			plMI = i->second->getInf();
 		}
-		else { charBox[i]->Process(); }
+		else { i->second->Process(); }
 	}
 
 	if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
 	if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
 	if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 7.f; }
 	if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 7.f; }
-
-	if (_imputInf._gTrgp & PAD_INPUT_8)
-	{
-		auto insPL = std::make_unique<PL>();
-		insPL->Initialize();
-		insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
-		charBox.emplace_back(std::move(insPL));
-	}
 
 	useCommand();
 
@@ -68,7 +62,7 @@ bool	modeG::Process()
 
 bool	modeG::Render()
 {
-	for (int i = 0; i < charBox.size(); i++) { charBox[i]->Render(); }
+	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Render(); }
 
 	//SetLightPositionHandle(LightHandle02, PLpos);
 	//ShadowMap_DrawSetup(shadowMapHandle);
