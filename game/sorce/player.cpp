@@ -76,7 +76,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::Lstick://ダッシュ
-		Estate = _estate::NORMAL;
+		//Estate = _estate::NORMAL;
 		if (*_gTrgp & PAD_INPUT_9) { isDash ^= true; }
 
 		//移動先の角度をベクトルにして移動ベクトルに加算
@@ -149,21 +149,28 @@ void PL::charMove(float Speed, float _Dir)
 pushButton PL::setAction()
 {
 	if (isGround && Estate == _estate::JUMP) { Estate = _estate::NORMAL; }
+	bool isNext = false;
+	pushButton insEnum = pushButton::Neutral;
 	_modelInf.playTime += animSpd;
 	if (_modelInf.playTime > _modelInf.totalTime)
 	{
 		_modelInf.playTime = 0.f;
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP) { Estate = _estate::NORMAL; }
 	}
-	else if(Estate != _estate::NORMAL){ return pushButton::Irregular; }
+	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	if (checkTrgImput(-1, PAD_INPUT_4)) { return pushButton::B; }//B
-	if (checkTrgImput(-1, PAD_INPUT_3)) { return pushButton::A; }//A
-	if (checkTrgImput(-1, PAD_INPUT_1)) { return pushButton::X; }//X
-	if (checkTrgImput(-1, PAD_INPUT_2)) { return pushButton::Y; }//Y
-	if (*_gKeyp & PAD_INPUT_9 || *_gKeyp & PAD_INPUT_UP || *_gKeyp & PAD_INPUT_DOWN 
-		|| *_gKeyp & PAD_INPUT_LEFT || *_gKeyp & PAD_INPUT_RIGHT) { return pushButton::Lstick; }//Lstick
-		return pushButton::Neutral;
+	if (nextKey != pushButton::Neutral && !isNext) { insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+
+	if (*_gKeyp & PAD_INPUT_9 || *_gKeyp & PAD_INPUT_UP || *_gKeyp & PAD_INPUT_DOWN
+		|| *_gKeyp & PAD_INPUT_LEFT || *_gKeyp & PAD_INPUT_RIGHT) {
+		insEnum = pushButton::Lstick;
+	}//Lstick
+	if (checkTrgImput(-1, PAD_INPUT_4)) { isNext ? nextKey = pushButton::B : insEnum = pushButton::B; }//B
+	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
+	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
+	if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
+	if (isNext && insEnum == pushButton::Neutral) { insEnum = pushButton::Irregular; }
+	return insEnum;
 }
 
 float PL::getMoveDir()

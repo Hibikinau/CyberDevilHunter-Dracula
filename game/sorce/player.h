@@ -19,12 +19,12 @@ enum class ExclusiveState
 
 enum class pushButton
 {
+	Neutral,
 	A,
 	B,
 	X,
 	Y,
 	Lstick,
-	Neutral,
 	Irregular,
 };
 
