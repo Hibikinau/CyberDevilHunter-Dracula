@@ -1,6 +1,7 @@
 #include"player.h"
 #define walkSpd 6.f
 #define runSpd 20.f
+#define attackMotionTotalTime 14.f
 #define motion_idel 7
 #define motion_walk 0
 #define motion_run 1
@@ -29,6 +30,7 @@ bool PL::Initialize()
 	_modelInf.pos = VGet(0.0f, 0.0f, 18000.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
+	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
 	return true;
 }
@@ -57,7 +59,10 @@ bool	PL::Process()
 
 		break;
 	case pushButton::X://ŽãUŒ‚
-		//Estate = _estate::ATTACK;
+		Estate = _estate::ATTACK;
+		_modelInf.playTime = 0.f;
+		_modelManager.animChange(motion_DR1, &_modelInf);
+		animSpd = attackMotionTotalTime / _valData->plAtkSpd;
 
 		break;
 	case pushButton::Y://‹­UŒ‚
@@ -155,7 +160,7 @@ pushButton PL::setAction()
 	_modelInf.playTime += animSpd;
 	if (_modelInf.playTime > _modelInf.totalTime)
 	{
-		_modelInf.playTime = 0.f;
+		if (Estate == _estate::JUMP || Estate == _estate::NORMAL){_modelInf.playTime = 0.f;}
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
@@ -170,7 +175,7 @@ pushButton PL::setAction()
 	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
 	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
 	if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
-	if (isNext && insEnum == pushButton::Neutral) { insEnum = pushButton::Irregular; }
+	if (isNext) { insEnum = pushButton::Irregular; }
 	return insEnum;
 }
 

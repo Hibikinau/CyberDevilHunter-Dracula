@@ -1,4 +1,5 @@
 #include"allMode.h"
+#include <sstream>
 
 bool	modeG::Initialize()
 {
@@ -15,6 +16,7 @@ bool	modeG::Initialize()
 	auto insPL = std::make_unique<PL>();
 	insPL->Initialize();
 	insPL->setCB(&charBox);
+	insPL->_valData = &_valData;
 	insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
 	charBox.emplace(Char_PL, std::move(insPL));
 
@@ -73,7 +75,7 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
-
+	debugWardBox.emplace_back("/plAtkSpd^Ç±Ç±Ç…ÉtÉåÅ[ÉÄêîÇì¸ÇÍÇÈ^");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
@@ -108,7 +110,22 @@ int modeG::useCommand()
 	if (_wardBox.size() == 0) { return 1; }
 
 	if (std::equal(_wardBox.begin(), _wardBox.end(), "/debug")) { debugMode ? debugMode = false : debugMode = true;	return 2; }
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/menu")){ _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
+	if (std::equal(_wardBox.begin(), _wardBox.end(), "/menu")) { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
+	if (_wardBox.find("/plAtkSpd") != 4294967295)
+	{
+		try
+		{
+			std::stringstream a{ _wardBox };
+			std::string data;
+			std::getline(a, data,'^');
+			std::getline(a, data,'^');
+			_valData.plAtkSpd = std::stof(data);
+		}
+		catch (std::exception)
+		{
+			return -1;
+		}
+	}
 	if (std::equal(_wardBox.begin(), _wardBox.end(), "/test"))
 	{
 		OutputDebugString("succes");

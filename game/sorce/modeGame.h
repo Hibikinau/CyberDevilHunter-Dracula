@@ -33,6 +33,7 @@ protected:
 	std::string NS;
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;
+	valData _valData;
 
 	bool debugMode = true;
 };

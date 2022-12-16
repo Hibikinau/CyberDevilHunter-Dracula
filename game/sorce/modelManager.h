@@ -9,6 +9,11 @@ struct modelInf
 	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
 };
 
+struct valData
+{
+	float plAtkSpd = 0.5f;
+};
+
 class modelManager
 {
 public:
