@@ -56,7 +56,10 @@ bool	modeG::Process()
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
-	debugWardBox.emplace_back("弱攻撃のフレーム数/" + std::to_string(_valData.plAtkSpd));
+	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
+	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
+	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
+	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
 	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI.pos.x))
 		+ "/y." + std::to_string(static_cast<int>(plMI.pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI.pos.z)));
@@ -83,7 +86,8 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
-	debugWardBox.emplace_back("/atkF^フレーム数^(自機の攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -115,6 +119,16 @@ void modeG::cameraMove()
 	cameraFor.y -= cameraHigh;
 }
 
+float getNum(std::string data)
+{
+	std::string input;
+	std::stringstream b{ data };
+	std::getline(b, input, '^');
+	std::getline(b, input, '^');
+
+	return std::stof(input);
+}
+
 int modeG::useCommand()
 {
 	if (!_imputInf._gTrgb[KEY_INPUT_RETURN]) { return 1; }
@@ -128,28 +142,28 @@ int modeG::useCommand()
 
 	try
 	{
-	std::getline(a, data, '/');
-	for (int i = 0; i < commandNum; i++)
-	{
 		std::getline(a, data, '/');
-
-		if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
-		if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
-		if (data.find("atkF") != std::string::npos)
+		for (int i = 0; i < commandNum; i++)
 		{
-			std::stringstream b{ data };
-			OutputDebugString("succes");
-			std::getline(b, input, '^');
-			std::getline(b, input, '^');
-			_valData.plAtkSpd = std::stof(input);
+			std::getline(a, data, '/');
 
+			if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
+			if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
+			if (data.find("atkF1") != std::string::npos) { _valData.plAtkSpd1 = getNum(data); }
+			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
+			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
+			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
+			if (data.find("atkFall") != std::string::npos) 
+			{
+				auto a = getNum(data); 
+				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
+			}
+			if (data == "test")
+			{
+				OutputDebugString("succes");
+				return 2;
+			}
 		}
-		if (data == "test")
-		{
-			OutputDebugString("succes");
-			return 2;
-		}
-	}
 	}
 	catch (std::exception)
 	{

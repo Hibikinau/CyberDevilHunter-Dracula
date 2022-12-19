@@ -11,7 +11,7 @@ struct modelInf
 
 struct valData
 {
-	float plAtkSpd = 20.f;
+	float plAtkSpd1 = 20.f, plAtkSpd2 = 20.f, plAtkSpd3 = 20.f, plAtkSpd4 = 20.f;
 };
 
 class modelManager

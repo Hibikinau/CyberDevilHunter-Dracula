@@ -1,7 +1,10 @@
 #include"player.h"
 #define walkSpd 6.f
 #define runSpd 20.f
-#define attackMotionTotalTime 14.f
+#define attackMotionTotalTime1 14.f
+#define attackMotionTotalTime2 12.f
+#define attackMotionTotalTime3 10.f
+#define attackMotionTotalTime4 14.f
 #define motion_idel 7
 #define motion_walk 0
 #define motion_run 1
@@ -61,8 +64,35 @@ bool	PL::Process()
 	case pushButton::X://ŽãUŒ‚
 		Estate = _estate::ATTACK;
 		_modelInf.playTime = 0.f;
-		_modelManager.animChange(motion_DR1, &_modelInf, false, true);
-		animSpd = attackMotionTotalTime / _valData->plAtkSpd;
+		waitNextAttack = 20;
+		if (attackNumOld == 1)
+		{
+			_modelManager.animChange(motion_DR2, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
+			waitNextAttack += _valData->plAtkSpd2;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 2)
+		{
+			_modelManager.animChange(motion_DR3, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
+			waitNextAttack += _valData->plAtkSpd3;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 3)
+		{
+			_modelManager.animChange(motion_DR4, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
+			waitNextAttack += _valData->plAtkSpd4;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 4 || attackNumOld == 0)
+		{
+			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
+			waitNextAttack += _valData->plAtkSpd1;
+			attackNumOld = 1;
+		}
 
 		break;
 	case pushButton::Y://‹­UŒ‚
@@ -108,7 +138,7 @@ bool	PL::Process()
 		}
 		break;
 	}
-
+	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 

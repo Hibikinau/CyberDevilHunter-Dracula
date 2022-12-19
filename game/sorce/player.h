@@ -49,7 +49,7 @@ public:
 	float getMoveDir();
 
 protected:
-	int _cg, useAnim;
+	int _cg, useAnim, attackNumOld, waitNextAttack;
 	int _x, _y, stepChargeSec, isStep;
 	float spd, animSpd, * _cameraDir;
 	int* _gKeyp, *_gTrgp;
