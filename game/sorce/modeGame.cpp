@@ -41,10 +41,12 @@ bool	modeG::Process()
 		else { i->second->Process(); }
 	}
 
-	if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
-	if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
-	if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 7.f; }
-	if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 7.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 5.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 5.f; }
+	cameraDir += _imputInf.rStickX / 200;
+	cameraHigh += _imputInf.rStickY / 200;
 
 	useCommand();
 
@@ -78,6 +80,7 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
+	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF^フレーム数^(自機の攻撃モーションの総フレーム数変更)");

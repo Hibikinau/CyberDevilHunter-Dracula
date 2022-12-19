@@ -27,6 +27,7 @@ public:
 	static	ApplicationBase	*GetInstance() { return _lpInstance; }
 	virtual int GetKey() { return _imputInf._gKeyp; }
 	virtual int GetTrg() { return _imputInf._gTrgp; }
+	virtual void GetRstick(int *xbuf, int *ybuf) { GetJoypadAnalogInputRight(xbuf, ybuf, DX_INPUT_PAD1); }
 	virtual int GetWard() { return KeyInputString(10, 700, 141, _imputInf.wardBox, true); }//–ß‚è’l1.³í 2.ƒLƒƒƒ“ƒZƒ‹ 3.¸”s
 
 protected:
