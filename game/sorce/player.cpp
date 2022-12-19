@@ -49,7 +49,7 @@ bool	PL::Input()
 
 bool	PL::Process()
 {
-	
+
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())
@@ -61,7 +61,7 @@ bool	PL::Process()
 	case pushButton::X://ŽãUŒ‚
 		Estate = _estate::ATTACK;
 		_modelInf.playTime = 0.f;
-		_modelManager.animChange(motion_DR1, &_modelInf);
+		_modelManager.animChange(motion_DR1, &_modelInf, false, true);
 		animSpd = attackMotionTotalTime / _valData->plAtkSpd;
 
 		break;
@@ -75,7 +75,7 @@ bool	PL::Process()
 			Estate = _estate::JUMP;
 			_modelInf.vec.y = 30.f;
 			_modelInf.playTime = 0.f;
-			_modelManager.animChange(motion_jump, &_modelInf);
+			_modelManager.animChange(motion_jump, &_modelInf, false, false);
 			animSpd = 0.5f;
 			moveCheck = false;
 
@@ -93,7 +93,7 @@ bool	PL::Process()
 		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
 		Estate = _estate::NORMAL;
-		_modelManager.animChange(motion_idel, &_modelInf);
+		_modelManager.animChange(motion_idel, &_modelInf, true, true);
 		spd = 0.f;
 		animSpd = 0.5f;
 		break;
@@ -122,7 +122,7 @@ bool	PL::Process()
 
 bool	PL::Render()
 {
-	_modelManager.modelRender(&_modelInf);
+	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
 	DrawGraph(0, 0, _cg, true);
 	return true;
 }
@@ -133,13 +133,13 @@ void PL::charMove(float Speed, float _Dir)
 	{
 		if (isDash)
 		{
-			_modelManager.animChange(motion_run, &_modelInf);
+			_modelManager.animChange(motion_run, &_modelInf, true, true);
 			spd = runSpd;
 			animSpd = 0.5f;
 		}
 		else
 		{
-			_modelManager.animChange(motion_walk, &_modelInf);
+			_modelManager.animChange(motion_walk, &_modelInf, true, true);
 			spd = walkSpd;
 			animSpd = 0.9f;
 		}
@@ -157,10 +157,9 @@ pushButton PL::setAction()
 	if (isGround && Estate == _estate::JUMP) { Estate = _estate::NORMAL; }
 	bool isNext = false;
 	pushButton insEnum = pushButton::Neutral;
-	_modelInf.playTime += animSpd;
-	if (_modelInf.playTime > _modelInf.totalTime)
+	if (isAnimEnd)
 	{
-		if (Estate == _estate::JUMP || Estate == _estate::NORMAL){_modelInf.playTime = 0.f;}
+		isAnimEnd = false;
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }

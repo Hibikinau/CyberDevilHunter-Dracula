@@ -23,6 +23,7 @@ bool	modeM::Render()
 	//DrawGraph(0, 0, _cg, false);
 	DrawBox(80, 45, 1200, 675, GetColor(255, 255, 255), true);
 	DrawString(1150, 60, "MENU", GetColor(0, 0, 255));
+	DrawString(580, 360, "QÉLÅ[Ç≈ñﬂÇÈ", GetColor(0, 0, 255));
 
 	return true;
 }

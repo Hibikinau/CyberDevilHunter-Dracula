@@ -7,6 +7,7 @@ bool	modeG::Initialize()
 	SetUseLighting(true);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
+	countTime = GetNowCount();
 
 	/*shadowMapHandle = MakeShadowMap(2048, 2048);
 	SetShadowMapLightDirection(shadowMapHandle, VGet(-1.f, -1.f, 0.5f));
@@ -52,6 +53,8 @@ bool	modeG::Process()
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
+	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
+	debugWardBox.emplace_back("弱攻撃のフレーム数/" + std::to_string(_valData.plAtkSpd));
 	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI.pos.x))
 		+ "/y." + std::to_string(static_cast<int>(plMI.pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI.pos.z)));
@@ -75,13 +78,21 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
-	debugWardBox.emplace_back("/plAtkSpd^ここにフレーム数を入れる^");
+	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
+	debugWardBox.emplace_back("/menu(メニュー画面表示)");
+	debugWardBox.emplace_back("/atkF^フレーム数^(自機の攻撃モーションの総フレーム数変更)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
+		int sizeX, sizeY, lineCount;
+		GetDrawStringSize(&sizeX, &sizeY, &lineCount, debugWardBox[i].c_str(), debugWardBox[i].length());
+		DrawBox(10, 10 + 20 * i, 10 + sizeX, 10 + 20 * i + sizeY, GetColor(0, 0, 0), true);
 		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
 	}
 	debugWardBox.clear();
 
+	int nowTime = GetNowCount();
+	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
+	else { FPScount++; }
 	return true;
 }
 
@@ -105,34 +116,42 @@ int modeG::useCommand()
 {
 	if (!_imputInf._gTrgb[KEY_INPUT_RETURN]) { return 1; }
 	DrawBox(10, 700, 1270, 730, GetColor(0, 0, 0), true);
-	auto a = KeyInputString(10, 700, 141, _imputInf.wardBox, true);
+	KeyInputString(10, 700, 141, _imputInf.wardBox, true);
 	std::string _wardBox = _imputInf.wardBox;
 	if (_wardBox.size() == 0) { return 1; }
+	std::stringstream a{ _wardBox };
+	std::string data, input;
+	auto commandNum = std::count(_wardBox.cbegin(), _wardBox.cend(), '/');
 
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/debug")) { debugMode ? debugMode = false : debugMode = true;	return 2; }
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/menu")) { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
-	if (_wardBox.find("/plAtkSpd") != 4294967295)
+	try
 	{
-		try
+	std::getline(a, data, '/');
+	for (int i = 0; i < commandNum; i++)
+	{
+		std::getline(a, data, '/');
+
+		if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
+		if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
+		if (data.find("atkF") != std::string::npos)
 		{
-			std::stringstream a{ _wardBox };
-			std::string data;
-			std::getline(a, data,'^');
-			std::getline(a, data,'^');
-			_valData.plAtkSpd = std::stof(data);
+			std::stringstream b{ data };
+			OutputDebugString("succes");
+			std::getline(b, input, '^');
+			std::getline(b, input, '^');
+			_valData.plAtkSpd = std::stof(input);
+
 		}
-		catch (std::exception)
+		if (data == "test")
 		{
-			return -1;
+			OutputDebugString("succes");
+			return 2;
 		}
 	}
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/test"))
-	{
-		OutputDebugString("succes");
-		return 2;
 	}
-	//debugWardBox.emplace_back(_wardBox);
-
+	catch (std::exception)
+	{
+		return -1;
+	}
 	return -1;
 }
 

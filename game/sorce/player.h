@@ -54,7 +54,7 @@ protected:
 	float spd, animSpd, * _cameraDir;
 	int* _gKeyp, *_gTrgp;
 	char* _gKeyb, * _gTrgb;
-	bool isUseFbx, attackFlag, isDash;
+	bool isUseFbx, attackFlag, isDash, isAnimEnd;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	modelManager _modelManager;
