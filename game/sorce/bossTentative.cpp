@@ -24,7 +24,7 @@ bool Boss::Initialize()
 	_vDir = VGet(0, 0, 1);		// キャラモデルはデフォルトで-Z方向を向いている
 	// 腰位置の設定
 	_colSubY = 40.f;
-
+	plMI=getInf();
 	return true;
 }
 
@@ -46,12 +46,12 @@ bool	Boss::Process()
 	STATUS oldStatus = status;
 	status = STATUS::WAIT;
 
-	/*if () {
+	if (_vPos.x<plMI.pos.x) {
 		status = STATUS::KICK;
 	}
 	else {
 		status = STATUS::WAIT;
-	}*/
+	}
 
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {

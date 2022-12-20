@@ -53,6 +53,6 @@ protected:
 	char* _gKeyb, * _gTrgb;
 	bool isUseFbx;
 	modelManager _modelManager;
-	
+	modelInf plMI;
 	PL player;
 };
