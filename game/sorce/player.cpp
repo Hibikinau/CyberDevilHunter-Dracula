@@ -17,7 +17,6 @@ typedef ExclusiveState _estate;
 
 bool PL::Initialize()
 {
-	_cg = LoadGraph("game/res/player00.png");
 	useAnim = 0;
 	_x = 0;
 	_y = 0;
@@ -35,6 +34,8 @@ bool PL::Initialize()
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
+	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true);
+	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true);
 	return true;
 }
 
@@ -62,7 +63,7 @@ bool	PL::Process()
 
 		break;
 	case pushButton::X://弱攻撃
-		Estate = _estate::ATTACK;
+		Estate = _estate::quickATTACK;
 		_modelInf.playTime = 0.f;
 		waitNextAttack = 20;
 		if (attackNumOld == 1)
@@ -153,7 +154,6 @@ bool	PL::Process()
 bool	PL::Render()
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	DrawGraph(0, 0, _cg, true);
 	return true;
 }
 

@@ -13,7 +13,8 @@ enum class ExclusiveState
 {
 	NORMAL,
 	JUMP,
-	ATTACK,
+	quickATTACK,
+	chargeATTACK,
 	DODGE,
 };
 
