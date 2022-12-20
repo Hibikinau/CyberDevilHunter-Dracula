@@ -8,13 +8,22 @@
 
 bool Boss::Initialize()
 {
-	_handle = MV1LoadModel("game/res/reimu/reimu.mv1");
+	_handle = MV1LoadModel("game/res/reimu/にがもん式霊夢V01_s05a/霊夢 [にがもん式]Ver 0.1_s05a.pmx");
 	Anim_handle = MV1LoadModel("game/res/reimu/taiki.mv1");
 	Anim_handle2 = MV1LoadModel("game/res/reimu/aruku.mv1");
 	Anim_handle2 = MV1LoadModel("game/res/reimu/kick.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
 
 	MV1SetScale(_handle, VGet(10, 10, 10));
+	//輪郭線の大きさを修正する
+	int MaterialNum = MV1GetMaterialNum(_handle);
+	for (int i = 0; i < MaterialNum; i++)
+	{
+		// マテリアルの輪郭線の太さを取得
+		float dotwidth = MV1GetMaterialOutLineDotWidth(_handle, i);
+		// マテリアルの輪郭線の太さを拡大した分小さくする
+		MV1SetMaterialOutLineDotWidth(_handle, i, dotwidth / 10);
+	}
 	status = STATUS::NONE;
 	// 再生時間の初期化
 	_total_time = 0.f;

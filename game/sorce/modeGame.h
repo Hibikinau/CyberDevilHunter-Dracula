@@ -26,6 +26,7 @@ protected:
 	int _x, _y;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraHigh;
+	int startTime, countTime, FPS, FPScount;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
 	modelInf plMI, stage;
@@ -33,6 +34,7 @@ protected:
 	std::string NS;
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;
+	valData _valData;
 
 	bool debugMode = true;
 };

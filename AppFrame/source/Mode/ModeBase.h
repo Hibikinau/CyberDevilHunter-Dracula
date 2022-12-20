@@ -6,7 +6,7 @@ class ModeServer;
 
 struct imputInf
 {
-	int		_gKeyp, _gTrgp;
+	int		_gKeyp, _gTrgp, rStickX, rStickY;
 	char _gKeyb[256], _gTrgb[256], wardBox[142];
 };
 
