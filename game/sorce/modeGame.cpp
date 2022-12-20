@@ -1,4 +1,5 @@
 #include"allMode.h"
+#include <sstream>
 
 bool	modeG::Initialize()
 {
@@ -6,6 +7,7 @@ bool	modeG::Initialize()
 	SetUseLighting(true);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
+	countTime = GetNowCount();
 
 	/*shadowMapHandle = MakeShadowMap(2048, 2048);
 	SetShadowMapLightDirection(shadowMapHandle, VGet(-1.f, -1.f, 0.5f));
@@ -15,6 +17,7 @@ bool	modeG::Initialize()
 	auto insPL = std::make_unique<PL>();
 	insPL->Initialize();
 	insPL->setCB(&charBox);
+	insPL->_valData = &_valData;
 	insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
 	charBox.emplace(Char_PL, std::move(insPL));
 
@@ -38,10 +41,12 @@ bool	modeG::Process()
 		else { i->second->Process(); }
 	}
 
-	if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
-	if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
-	if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 7.f; }
-	if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 7.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 5.f; }
+	//if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 5.f; }
+	cameraDir += _imputInf.rStickX / 200;
+	cameraHigh += _imputInf.rStickY / 200;
 
 	useCommand();
 
@@ -50,6 +55,11 @@ bool	modeG::Process()
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
+	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
+	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
+	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
+	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
+	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
 	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI.pos.x))
 		+ "/y." + std::to_string(static_cast<int>(plMI.pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI.pos.z)));
@@ -73,13 +83,23 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
-
+	debugWardBox.emplace_back("-------コマンド一覧-------");
+	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
+	debugWardBox.emplace_back("/menu(メニュー画面表示)");
+	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
+		int sizeX, sizeY, lineCount;
+		GetDrawStringSize(&sizeX, &sizeY, &lineCount, debugWardBox[i].c_str(), debugWardBox[i].length());
+		DrawBox(10, 10 + 20 * i, 10 + sizeX, 10 + 20 * i + sizeY, GetColor(0, 0, 0), true);
 		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
 	}
 	debugWardBox.clear();
 
+	int nowTime = GetNowCount();
+	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
+	else { FPScount++; }
 	return true;
 }
 
@@ -99,23 +119,56 @@ void modeG::cameraMove()
 	cameraFor.y -= cameraHigh;
 }
 
+float getNum(std::string data)
+{
+	std::string input;
+	std::stringstream b{ data };
+	std::getline(b, input, '^');
+	std::getline(b, input, '^');
+
+	return std::stof(input);
+}
+
 int modeG::useCommand()
 {
 	if (!_imputInf._gTrgb[KEY_INPUT_RETURN]) { return 1; }
 	DrawBox(10, 700, 1270, 730, GetColor(0, 0, 0), true);
-	auto a = KeyInputString(10, 700, 141, _imputInf.wardBox, true);
+	KeyInputString(10, 700, 141, _imputInf.wardBox, true);
 	std::string _wardBox = _imputInf.wardBox;
 	if (_wardBox.size() == 0) { return 1; }
+	std::stringstream a{ _wardBox };
+	std::string data, input;
+	auto commandNum = std::count(_wardBox.cbegin(), _wardBox.cend(), '/');
 
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/debug")) { debugMode ? debugMode = false : debugMode = true;	return 2; }
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/menu")){ _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
-	if (std::equal(_wardBox.begin(), _wardBox.end(), "/test"))
+	try
 	{
-		OutputDebugString("succes");
-		return 2;
-	}
-	//debugWardBox.emplace_back(_wardBox);
+		std::getline(a, data, '/');
+		for (int i = 0; i < commandNum; i++)
+		{
+			std::getline(a, data, '/');
 
+			if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
+			if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
+			if (data.find("atkF1") != std::string::npos) { _valData.plAtkSpd1 = getNum(data); }
+			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
+			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
+			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
+			if (data.find("atkFall") != std::string::npos) 
+			{
+				auto a = getNum(data); 
+				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
+			}
+			if (data == "test")
+			{
+				OutputDebugString("succes");
+				return 2;
+			}
+		}
+	}
+	catch (std::exception)
+	{
+		return -1;
+	}
 	return -1;
 }
 

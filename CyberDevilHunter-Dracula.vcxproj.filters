@@ -48,6 +48,9 @@
     <ClCompile Include="game\sorce\modeGame.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
+    <ClCompile Include="game\sorce\bossTentative.cpp">
+      <Filter>ソース ファイル\char</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\gameMain.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="game\sorce\modelManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\bossTentative.h">
+      <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

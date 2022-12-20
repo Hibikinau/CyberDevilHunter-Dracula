@@ -1,6 +1,10 @@
 #include"player.h"
 #define walkSpd 6.f
 #define runSpd 20.f
+#define attackMotionTotalTime1 14.f
+#define attackMotionTotalTime2 12.f
+#define attackMotionTotalTime3 10.f
+#define attackMotionTotalTime4 14.f
 #define motion_idel 7
 #define motion_walk 0
 #define motion_run 1
@@ -13,7 +17,6 @@ typedef ExclusiveState _estate;
 
 bool PL::Initialize()
 {
-	_cg = LoadGraph("game/res/player00.png");
 	useAnim = 0;
 	_x = 0;
 	_y = 0;
@@ -29,7 +32,10 @@ bool PL::Initialize()
 	_modelInf.pos = VGet(0.0f, 0.0f, 18000.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
+	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
+	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true);
+	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true);
 	return true;
 }
 
@@ -47,7 +53,7 @@ bool	PL::Input()
 
 bool	PL::Process()
 {
-	
+
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())
@@ -57,7 +63,37 @@ bool	PL::Process()
 
 		break;
 	case pushButton::X://弱攻撃
-		//Estate = _estate::ATTACK;
+		Estate = _estate::quickATTACK;
+		_modelInf.playTime = 0.f;
+		waitNextAttack = 20;
+		if (attackNumOld == 1)
+		{
+			_modelManager.animChange(motion_DR2, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
+			waitNextAttack += _valData->plAtkSpd2;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 2)
+		{
+			_modelManager.animChange(motion_DR3, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
+			waitNextAttack += _valData->plAtkSpd3;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 3)
+		{
+			_modelManager.animChange(motion_DR4, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
+			waitNextAttack += _valData->plAtkSpd4;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 4 || attackNumOld == 0)
+		{
+			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
+			waitNextAttack += _valData->plAtkSpd1;
+			attackNumOld = 1;
+		}
 
 		break;
 	case pushButton::Y://強攻撃
@@ -70,7 +106,7 @@ bool	PL::Process()
 			Estate = _estate::JUMP;
 			_modelInf.vec.y = 30.f;
 			_modelInf.playTime = 0.f;
-			_modelManager.animChange(motion_jump, &_modelInf);
+			_modelManager.animChange(motion_jump, &_modelInf, false, false);
 			animSpd = 0.5f;
 			moveCheck = false;
 
@@ -88,7 +124,7 @@ bool	PL::Process()
 		break;
 	case pushButton::Neutral://入力なし
 		Estate = _estate::NORMAL;
-		_modelManager.animChange(motion_idel, &_modelInf);
+		_modelManager.animChange(motion_idel, &_modelInf, true, true);
 		spd = 0.f;
 		animSpd = 0.5f;
 		break;
@@ -103,7 +139,7 @@ bool	PL::Process()
 		}
 		break;
 	}
-
+	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
@@ -117,8 +153,7 @@ bool	PL::Process()
 
 bool	PL::Render()
 {
-	_modelManager.modelRender(&_modelInf);
-	DrawGraph(0, 0, _cg, true);
+	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
 	return true;
 }
 
@@ -128,13 +163,13 @@ void PL::charMove(float Speed, float _Dir)
 	{
 		if (isDash)
 		{
-			_modelManager.animChange(motion_run, &_modelInf);
+			_modelManager.animChange(motion_run, &_modelInf, true, true);
 			spd = runSpd;
 			animSpd = 0.5f;
 		}
 		else
 		{
-			_modelManager.animChange(motion_walk, &_modelInf);
+			_modelManager.animChange(motion_walk, &_modelInf, true, true);
 			spd = walkSpd;
 			animSpd = 0.9f;
 		}
@@ -152,10 +187,9 @@ pushButton PL::setAction()
 	if (isGround && Estate == _estate::JUMP) { Estate = _estate::NORMAL; }
 	bool isNext = false;
 	pushButton insEnum = pushButton::Neutral;
-	_modelInf.playTime += animSpd;
-	if (_modelInf.playTime > _modelInf.totalTime)
+	if (isAnimEnd)
 	{
-		_modelInf.playTime = 0.f;
+		isAnimEnd = false;
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
@@ -170,7 +204,7 @@ pushButton PL::setAction()
 	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
 	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
 	if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
-	if (isNext && insEnum == pushButton::Neutral) { insEnum = pushButton::Irregular; }
+	if (isNext) { insEnum = pushButton::Irregular; }
 	return insEnum;
 }
 

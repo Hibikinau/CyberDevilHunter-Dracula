@@ -32,4 +32,5 @@ public:
 	modelInf _modelInf;
 	statusInf _statusInf;
 	std::map<std::string, std::shared_ptr<CB> > *charBox;
+	valData *_valData;
 };

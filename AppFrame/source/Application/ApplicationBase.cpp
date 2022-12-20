@@ -57,6 +57,8 @@ bool ApplicationBase::Input() {
 		_imputInf._gKeyb[i] == 1 && _gTrgbOld[i] != 1 ? _imputInf._gTrgb[i] = 1 : _imputInf._gTrgb[i] = 0;
 	}
 	_serverMode->Imput(&_imputInf);
+
+	GetRstick(&_imputInf.rStickX, &_imputInf.rStickY);
 	return true;
 }
 
