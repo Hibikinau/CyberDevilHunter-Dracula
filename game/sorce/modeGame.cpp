@@ -83,22 +83,15 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
-	int weponNum = 0;
-	for (auto insWeponInf : plMI->wepons)
-	{
-		auto debugWeponInf = "no." + std::to_string(weponNum) + " ";
-		debugWeponInf += insWeponInf.name;
-		insWeponInf.isActive ? debugWeponInf += " : Active" : debugWeponInf += " : notActive";
-		debugWardBox.emplace_back(debugWeponInf);
-		weponNum++;
-	}
+	debugWardBox.emplace_back("-------武器セット一覧-------");
+	debugWardBox.emplace_back("No.0 左手:SwordBreaker 右手:RabbitBunker");
+	debugWardBox.emplace_back("No.1 左手:無し　        右手:GunBlade");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
-	debugWardBox.emplace_back("/weponact^武器の番号^(武器の表示)");
-	debugWardBox.emplace_back("/wepondea^武器の番号^(武器の非表示)");
+	debugWardBox.emplace_back("/weponset^武器セットの番号^(武器セットの番号)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -163,8 +156,22 @@ int modeG::useCommand()
 			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
 			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
 			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
-			if (data.find("weponact") != std::string::npos) { plMI->wepons[getNum(data)].isActive = true; }
-			if (data.find("wepondea") != std::string::npos) { plMI->wepons[getNum(data)].isActive = false; }
+			if (data.find("weponset") != std::string::npos)
+			{
+				auto weponSetNum = getNum(data);
+				if (weponSetNum == 0)
+				{
+					plMI->wepons[0].isActive = true;
+					plMI->wepons[1].isActive = true;
+					plMI->wepons[2].isActive = false;
+				}
+				else if (weponSetNum == 1)
+				{
+					plMI->wepons[0].isActive = false;
+					plMI->wepons[1].isActive = false;
+					plMI->wepons[2].isActive = true;
+				}
+			}
 			if (data.find("atkFall") != std::string::npos)
 			{
 				auto a = getNum(data);
