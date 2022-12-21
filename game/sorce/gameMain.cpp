@@ -16,8 +16,8 @@ bool gameMain::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 }
 
 bool gameMain::Terminate() {
+	_modeServer->Clear();
 	base::Terminate();
-
 	return true;
 }
 

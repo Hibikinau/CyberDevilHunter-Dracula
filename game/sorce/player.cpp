@@ -5,6 +5,7 @@
 #define attackMotionTotalTime2 12.f
 #define attackMotionTotalTime3 10.f
 #define attackMotionTotalTime4 14.f
+#define attackMotionTotalTimeZoiru 58.f
 #define motion_idel 7
 #define motion_walk 0
 #define motion_run 1
@@ -13,6 +14,7 @@
 #define motion_DR2 4
 #define motion_DR3 5
 #define motion_DR4 6
+#define motion_ZOIRU 8
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -67,7 +69,6 @@ bool	PL::Process()
 		break;
 	case pushButton::X://é„çUåÇ
 		Estate = _estate::quickATTACK;
-		_modelInf.playTime = 0.f;
 		waitNextAttack = 20;
 		if (attackNumOld == 1)
 		{
@@ -100,7 +101,9 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://ã≠çUåÇ
-		//Estate = _estate::ATTACK;
+		Estate = _estate::chargeATTACK;
+		_modelManager.animChange(motion_ZOIRU, &_modelInf, false, true);
+		animSpd = 0.5f;
 
 		break;
 	case pushButton::A://ÉWÉÉÉìÉv

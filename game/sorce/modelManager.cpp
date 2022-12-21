@@ -25,7 +25,7 @@ bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 	return true;
 }
 
-bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame,const float scale, bool activate, const char* name)
+bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name)
 {
 	weponModelInf weponMI;
 	weponMI.isActive = activate;
@@ -58,6 +58,8 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 	MI->attachIndexOld = MV1AttachAnim(MI->modelHandle, MI->animHandleOld, -1, false);
 	MI->animHandleOld = _animHandle;
 	MI->animOldLoop = isLoop;
+	MI->playTimeOld = MI->playTime;
+	MI->playTime = 0.f;
 
 	MI->totalTime = MV1GetAttachAnimTotalTime(MI->modelHandle, MI->attachIndex);
 
@@ -68,30 +70,21 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed)
 {
 	bool checkAnimEnd = false;
 	if (MI->isBrending) { MI->rate = 0.f, MI->isBrending = false; }
-	if (MI->rate < 1.0f)
+	if (MI->rate <= 1.0f)
 	{
-		MI->rate > 1.0f ? MI->rate = 1.0f : MI->rate += 0.1f;
+		MI->rate >= 1.0f ? MI->rate = 1.0f : MI->rate += 0.1f;
 
-		MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndexOld, MI->playTime);
+		MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndexOld, MI->playTimeOld);
 	}
 	else
 	{
 		MI->playTime += animSpeed;
-		if (MI->playTime > MI->totalTime)
+		if (MI->playTime >= MI->totalTime)
 		{
 			checkAnimEnd = true;
 			if (MI->animOldLoop) { MI->playTime = 0.f; }
 			else { MI->playTime = MI->totalTime; }
 		}
-	}
-
-	for (auto _weponInf : MI->wepons)
-	{
-		if (!_weponInf.isActive) { continue; }
-		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
-		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
-
-		MV1DrawModel(_weponInf.weponHandle);
 	}
 
 	MV1SetAttachAnimBlendRate(MI->modelHandle, MI->attachIndexOld, 1.0f - MI->rate);
@@ -102,6 +95,15 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed)
 	MV1SetPosition(MI->modelHandle, MI->pos);
 	MV1SetRotationXYZ(MI->modelHandle, VScale(MI->dir, (DX_PI_F / 180.0f)));
 	MV1DrawModel(MI->modelHandle);
+
+	for (auto _weponInf : MI->wepons)
+	{
+		if (!_weponInf.isActive) { continue; }
+		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
+		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
+
+		MV1DrawModel(_weponInf.weponHandle);
+	}
 
 	return checkAnimEnd;
 }

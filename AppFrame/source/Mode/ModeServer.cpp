@@ -67,16 +67,22 @@ int ModeServer::Release(const char* name, bool isDel) {
 
 // 全部削除
 void ModeServer::Clear() {
-	auto itr = _vMode.begin();
-	for (itr; itr != _vMode.end(); itr++) {
-		itr->second->Terminate();
+	OutputDebugString("error!");
+	try
+	{
+		for (auto itr = _vMode.begin(); itr != _vMode.end(); ++itr) {
+			if (itr->second != NULL) { itr->second->Terminate(); }
+		}
+		for (auto iteAdd = _vModeAdd.begin(); iteAdd != _vModeAdd.end(); ++iteAdd) {
+			if (iteAdd->second != NULL) { iteAdd->second->Terminate(); }
+		}
 	}
-	auto iteAdd = _vModeAdd.begin();
-	for (; iteAdd != _vModeAdd.end(); ++iteAdd) {
-		itr->second->Terminate();
+	catch (std::exception)
+	{
+		OutputDebugString("error!");
 	}
-	_vMode.clear();
 	_vModeAdd.clear();
+	_vMode.clear();
 	_vModeDel.clear();
 	_nowMode.clear();
 }

@@ -83,6 +83,8 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
+	debugWardBox.emplace_back(std::to_string( plMI->playTime));
+	debugWardBox.emplace_back(std::to_string( plMI->playTimeOld));
 	debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("No.0 左手:SwordBreaker 右手:RabbitBunker");
 	debugWardBox.emplace_back("No.1 左手:無し　        右手:GunBlade");

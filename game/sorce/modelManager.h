@@ -13,7 +13,7 @@ struct weponModelInf
 struct modelInf
 {
 	int modelHandle, animHandleOld = -1, importCnt, attachIndex, attachIndexOld = -1;
-	float playTime, totalTime, rate;
+	float playTime, playTimeOld, totalTime, rate;
 	bool isBrending = false, animOldLoop;
 	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
 	std::vector<weponModelInf> wepons;
