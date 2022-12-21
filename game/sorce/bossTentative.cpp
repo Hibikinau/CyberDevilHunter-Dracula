@@ -9,8 +9,8 @@
 bool Boss::Initialize()
 {
 	_handle = MV1LoadModel("game/res/reimu/にがもん式霊夢V01_s05a/霊夢 [にがもん式]Ver 0.1_s05a.pmx");
-	Anim_handle = MV1LoadModel("game/res/reimu/taiki.mv1");
-	Anim_handle2 = MV1LoadModel("game/res/reimu/aruku.mv1");
+	//Anim_handle = MV1LoadModel("game/res/reimu/taiki.mv1");
+	//Anim_handle2 = MV1LoadModel("game/res/reimu/aruku.mv1");
 	_attach_index = -1;		// アニメーションアタッチはされていない
 
 	MV1SetScale(_handle, VGet(10, 10, 10));
@@ -108,7 +108,7 @@ bool	Boss::Render()
 
 void Boss::charMove(float Speed, float _Dir)
 {
-	
+
 }
 
 bool Boss::step()

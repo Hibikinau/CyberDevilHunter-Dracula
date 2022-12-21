@@ -6,6 +6,7 @@ struct weponModelInf
 	int weponHandle, weponAttachFrameNum;
 	MATRIX weponFrameMatrix;
 	bool isActive;
+	std::string name;
 };
 
 //3dモデル用
@@ -21,6 +22,7 @@ struct modelInf
 struct valData
 {
 	float plAtkSpd1 = 20.f, plAtkSpd2 = 20.f, plAtkSpd3 = 20.f, plAtkSpd4 = 20.f;
+	std::vector<int> activateWepon, disableWepon;
 };
 
 class modelManager
@@ -34,7 +36,7 @@ public:
 	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード)
 	//アニメーションの再生が終わったらtrueを返す
 	bool modelRender(modelInf* MI, float animSpeed);
-	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの名前, 武器モデルの拡大率, 武器モデルの描写を有効にするか)
-	bool weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate);
+	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの名前, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前)
+	bool weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name);
 
 };

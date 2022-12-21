@@ -60,9 +60,9 @@ bool	modeG::Process()
 	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
 	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
 	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
-	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI.pos.x))
-		+ "/y." + std::to_string(static_cast<int>(plMI.pos.y))
-		+ "/z." + std::to_string(static_cast<int>(plMI.pos.z)));
+	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
+		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
+		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
 	// PC情報を取得します
 	getPcInf();
@@ -83,11 +83,22 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
+	int weponNum = 0;
+	for (auto insWeponInf : plMI->wepons)
+	{
+		auto debugWeponInf = "no." + std::to_string(weponNum) + " ";
+		debugWeponInf += insWeponInf.name;
+		insWeponInf.isActive ? debugWeponInf += " : Active" : debugWeponInf += " : notActive";
+		debugWardBox.emplace_back(debugWeponInf);
+		weponNum++;
+	}
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/weponact^武器の番号^(武器の表示)");
+	debugWardBox.emplace_back("/wepondea^武器の番号^(武器の非表示)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -112,9 +123,8 @@ void modeG::cameraMove()
 {
 	float radian = cameraDir * DX_PI_F / 180.0f;
 	auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
-	auto _pos =
-		cameraPos = VAdd(plMI.pos, InsV);
-	cameraFor = VSub(plMI.pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
+	auto _pos = cameraPos = VAdd(plMI->pos, InsV);
+	cameraFor = VSub(plMI->pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
 	cameraPos.y += cameraHigh;
 	cameraFor.y -= cameraHigh;
 }
@@ -153,9 +163,11 @@ int modeG::useCommand()
 			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
 			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
 			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
-			if (data.find("atkFall") != std::string::npos) 
+			if (data.find("weponact") != std::string::npos) { plMI->wepons[getNum(data)].isActive = true; }
+			if (data.find("wepondea") != std::string::npos) { plMI->wepons[getNum(data)].isActive = false; }
+			if (data.find("atkFall") != std::string::npos)
 			{
-				auto a = getNum(data); 
+				auto a = getNum(data);
 				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
 			}
 			if (data == "test")

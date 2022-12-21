@@ -25,10 +25,11 @@ bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 	return true;
 }
 
-bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame,const float scale, bool activate)
+bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame,const float scale, bool activate, const char* name)
 {
 	weponModelInf weponMI;
 	weponMI.isActive = activate;
+	weponMI.name = name;
 	weponMI.weponHandle = MV1LoadModel(dir);
 	if (weponMI.weponHandle == -1) { return false; }
 	weponMI.weponAttachFrameNum = MV1SearchFrame(MI->modelHandle, attachFrame);

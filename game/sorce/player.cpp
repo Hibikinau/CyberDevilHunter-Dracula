@@ -34,8 +34,11 @@ bool PL::Initialize()
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
-	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true);
-	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true);
+	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true, "RabbitBunker");
+	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true, "SwordBreaker");
+	_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+
+	auto a = MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
 	return true;
 }
 

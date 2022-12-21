@@ -29,7 +29,7 @@ protected:
 	int startTime, countTime, FPS, FPScount;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
-	modelInf plMI, stage;
+	modelInf *plMI, stage;
 	modelManager _modelManager;
 	std::string NS;
 	std::vector<std::string> debugWardBox;

@@ -22,7 +22,7 @@ public:
 	virtual int	getType() { return type; }
 	virtual void setCB(std::map<std::string, std::shared_ptr<CB> > *_CB) { charBox = _CB; }
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
-	modelInf getInf() { return _modelInf; }
+	modelInf* getInf() { return &_modelInf; }
 	statusInf	getStatus() { return _statusInf; }
 
 	int type;//pl=1, oEnemy=2
