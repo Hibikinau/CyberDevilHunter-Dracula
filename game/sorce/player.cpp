@@ -14,7 +14,9 @@
 #define motion_DR2 4
 #define motion_DR3 5
 #define motion_DR4 6
-#define motion_ZOIRU 8
+#define motion_ZOIRUcharge 9
+#define motion_ZOIRUattack1 10
+#define motion_ZOIRUattack2 11
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -101,10 +103,29 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://強攻撃
-		Estate = _estate::chargeATTACK;
-		_modelManager.animChange(motion_ZOIRU, &_modelInf, false, true);
-		animSpd = 0.5f;
-
+		if (Estate != _estate::chargeATTACK)
+		{
+			Estate = _estate::chargeATTACK;
+			isCharge = 1;
+			chargeLevel = 0;
+			_modelManager.animChange(motion_ZOIRUcharge, &_modelInf, false, true);
+			animSpd = 0.2f;
+		}
+		if (isCharge == 2)
+		{
+			animSpd = 2.f;
+			if (chargeLevel == 0)
+			{
+				if (_modelInf.playTime >= _modelInf.totalTime / 5.f) { chargeLevel++; }
+				if (_modelInf.playTime >= _modelInf.totalTime){ chargeLevel++; }
+			}
+			if (_modelInf.playTime >= _modelInf.totalTime) 
+			{
+				if(chargeLevel == 2){ _modelManager.animChange(motion_ZOIRUattack1, &_modelInf, false, true); }
+				else{ _modelManager.animChange(motion_ZOIRUattack2, &_modelInf, false, true); }
+				isCharge = 0, animSpd = 0.5f; 
+			}
+		}
 		break;
 	case pushButton::A://ジャンプ
 		if (isGround)
@@ -119,7 +140,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::Lstick://ダッシュ
-		//Estate = _estate::NORMAL;
+		Estate = _estate::NORMAL;
 		if (*_gTrgp & PAD_INPUT_9) { isDash ^= true; }
 
 		//移動先の角度をベクトルにして移動ベクトルに加算
@@ -145,6 +166,12 @@ bool	PL::Process()
 		}
 		break;
 	}
+
+	if (Estate == _estate::chargeATTACK && chargeLevel == 2 && _modelInf.playTime < 31.f && _modelInf.playTime > 9.f)
+	{
+		charMove(40.f, _modelInf.dir.y + 180);
+	}
+
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -165,7 +192,7 @@ bool	PL::Render()
 
 void PL::charMove(float Speed, float _Dir)
 {
-	if (Estate != _estate::JUMP)
+	if (Estate != _estate::JUMP && Estate != _estate::chargeATTACK)
 	{
 		if (isDash)
 		{
@@ -196,11 +223,11 @@ pushButton PL::setAction()
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
-		if (Estate != _estate::NORMAL && Estate != _estate::JUMP) { Estate = _estate::NORMAL; }
+		if (Estate != _estate::NORMAL && Estate != _estate::JUMP && (Estate != _estate::chargeATTACK && isCharge != 0)) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	if (nextKey != pushButton::Neutral && !isNext) { insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (*_gKeyp & PAD_INPUT_9 || *_gKeyp & PAD_INPUT_UP || *_gKeyp & PAD_INPUT_DOWN
 		|| *_gKeyp & PAD_INPUT_LEFT || *_gKeyp & PAD_INPUT_RIGHT) {
@@ -208,7 +235,12 @@ pushButton PL::setAction()
 	}//Lstick
 	if (checkTrgImput(-1, PAD_INPUT_4)) { isNext ? nextKey = pushButton::B : insEnum = pushButton::B; }//B
 	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
-	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
+	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
+	if (checkKeyImput(-1, PAD_INPUT_2))//Y
+	{
+		if (isCharge == 1) { insEnum = pushButton::Y; }
+	}
+	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false; } }//Y離したとき
 	//if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
 	if (isNext) { insEnum = pushButton::Irregular; }
 	return insEnum;

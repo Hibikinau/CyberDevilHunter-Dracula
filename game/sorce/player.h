@@ -52,6 +52,8 @@ public:
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
 	int _x, _y, stepChargeSec, isStep;
+	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
+	int chargeLevel;
 	float spd, animSpd, * _cameraDir;
 	int* _gKeyp, *_gTrgp;
 	char* _gKeyb, * _gTrgb;
