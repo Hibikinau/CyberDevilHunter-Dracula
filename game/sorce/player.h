@@ -60,8 +60,9 @@ protected:
 	bool isUseFbx, attackFlag, isDash, isAnimEnd;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
+	bool bufferedInput;
 	modelManager _modelManager;
-	ExclusiveState Estate;
+	ExclusiveState Estate, oldEstate;
 	pushButton nextKey;
 
 };

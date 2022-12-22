@@ -6,6 +6,8 @@
 #define attackMotionTotalTime3 10.f
 #define attackMotionTotalTime4 14.f
 #define attackMotionTotalTimeZoiru 58.f
+#define attackMotionTotalTimeSenpu 43.f
+#define attackMotionTotalTimeSenpuL 34.f
 #define motion_idel 7
 #define motion_walk 0
 #define motion_run 1
@@ -17,6 +19,8 @@
 #define motion_ZOIRUcharge 9
 #define motion_ZOIRUattack1 10
 #define motion_ZOIRUattack2 11
+#define motion_SENPUU 12
+#define motion_SENPUUL 13
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -60,7 +64,6 @@ bool	PL::Input()
 
 bool	PL::Process()
 {
-
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())
@@ -72,7 +75,14 @@ bool	PL::Process()
 	case pushButton::X://ŽãUŒ‚
 		Estate = _estate::quickATTACK;
 		waitNextAttack = 20;
-		if (attackNumOld == 1)
+		if (attackNumOld == 0)
+		{
+			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
+			waitNextAttack += _valData->plAtkSpd1;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(motion_DR2, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
@@ -93,12 +103,19 @@ bool	PL::Process()
 			waitNextAttack += _valData->plAtkSpd4;
 			attackNumOld++;
 		}
-		else if (attackNumOld == 4 || attackNumOld == 0)
+		else if (attackNumOld == 4)
 		{
-			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
-			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
-			waitNextAttack += _valData->plAtkSpd1;
-			attackNumOld = 1;
+			_modelManager.animChange(motion_SENPUU, &_modelInf, false, false);
+			animSpd = attackMotionTotalTimeSenpu / 60.f;
+			waitNextAttack += 60.f;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 5)
+		{
+			if (!_modelManager.animChange(motion_SENPUUL, &_modelInf, false, false)) { _modelInf.playTime = 0.f; }
+			animSpd = attackMotionTotalTimeSenpu / 60.f;
+			waitNextAttack += 30.f;
+			attackNumOld = 5;
 		}
 
 		break;
@@ -150,6 +167,7 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
+		if (attackNumOld != 0) { break; }
 		Estate = _estate::NORMAL;
 		_modelManager.animChange(motion_idel, &_modelInf, true, true);
 		spd = 0.f;
@@ -171,7 +189,6 @@ bool	PL::Process()
 	{
 		charMove(40.f, _modelInf.dir.y + 180);
 	}
-
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -219,6 +236,7 @@ pushButton PL::setAction()
 {
 	if (isGround && Estate == _estate::JUMP) { Estate = _estate::NORMAL; }
 	bool isNext = false;
+	bufferedInput = false;
 	pushButton insEnum = pushButton::Neutral;
 	if (isAnimEnd)
 	{
@@ -227,7 +245,7 @@ pushButton PL::setAction()
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (*_gKeyp & PAD_INPUT_9 || *_gKeyp & PAD_INPUT_UP || *_gKeyp & PAD_INPUT_DOWN
 		|| *_gKeyp & PAD_INPUT_LEFT || *_gKeyp & PAD_INPUT_RIGHT) {
