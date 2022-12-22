@@ -258,7 +258,7 @@ pushButton PL::setAction()
 	{
 		if (isCharge == 1) { insEnum = pushButton::Y; }
 	}
-	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false; } }//Y—£‚µ‚½‚Æ‚«
+	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//Y—£‚µ‚½‚Æ‚«
 	//if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
 	if (isNext) { insEnum = pushButton::Irregular; }
 	return insEnum;
