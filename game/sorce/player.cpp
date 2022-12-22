@@ -209,7 +209,7 @@ pushButton PL::setAction()
 	if (checkTrgImput(-1, PAD_INPUT_4)) { isNext ? nextKey = pushButton::B : insEnum = pushButton::B; }//B
 	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
 	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
-	if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
+	//if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
 	if (isNext) { insEnum = pushButton::Irregular; }
 	return insEnum;
 }
