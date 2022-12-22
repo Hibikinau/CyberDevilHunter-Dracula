@@ -71,6 +71,13 @@ bool	Boss::Process()
 		status = STATUS::WAIT;
 	}*/
 
+	for (auto i = charBox->begin(); i != charBox->end(); i++) {
+		if (i->second->getType() == 1)
+		{
+			plMI = i->second->getInf();
+		}
+	}
+
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {
 		// 再生時間を進める

@@ -56,7 +56,7 @@ protected:
 	bool attackFlag, isDash, isAnimEnd;
 	//modelInf _modelInf;
 	//std::map<std::string, std::shared_ptr<CB> > charBox;
-	//modelInf plMI, stage;
+	modelInf plMI, stage;
 	//std::vector<std::unique_ptr<PL>> player;
 	//std::vector<std::unique_ptr<modelInf>> _modelInf;
     //PL player;
