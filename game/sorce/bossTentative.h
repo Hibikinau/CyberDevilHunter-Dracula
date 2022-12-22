@@ -60,4 +60,5 @@ protected:
 	//std::vector<std::unique_ptr<PL>> player;
 	//std::vector<std::unique_ptr<modelInf>> _modelInf;
     //PL player;
+	double dir;
 };

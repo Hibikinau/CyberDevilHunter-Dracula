@@ -1,4 +1,5 @@
 #include"bossTentative.h"
+#include <math.h>
 #define walkSpd 6.f
 #define runSpd 20.f
 #define motion_idel 0
@@ -66,13 +67,17 @@ bool	Boss::Process()
 		}
 	}
 
+	
+
 	if (_vPos.x<plMI.pos.x) {
 		status = STATUS::KICK;
 	}
 	else {
 		status = STATUS::WAIT;
 	}
-
+	auto x = plMI.pos.x - _modelInf.pos.x;
+	auto y = plMI.pos.y - _modelInf.pos.y;
+	dir=atan2(x,y);
 
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {
@@ -121,7 +126,7 @@ bool	Boss::Process()
 
 bool	Boss::Render()
 {
-	
+	DrawFormatString(600, 20, GetColor(0, 0, 0), "%f",dir);
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
 	return true;
 }
