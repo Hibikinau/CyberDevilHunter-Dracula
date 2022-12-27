@@ -21,6 +21,7 @@
 #define motion_ZOIRUattack2 11
 #define motion_SENPUU 12
 #define motion_SENPUUL 13
+#define motion_rollingF 14
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -69,8 +70,11 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::B://‰ñ”ð
-		//Estate = _estate::DODGE;
-
+		Estate = _estate::DODGE;
+		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
+		animSpd = 0.5f;
+		spd = 25.f;
+		isImmortal = true;
 		break;
 	case pushButton::X://ŽãUŒ‚
 		Estate = _estate::quickATTACK;
@@ -136,11 +140,11 @@ bool	PL::Process()
 				if (_modelInf.playTime >= _modelInf.totalTime / 5.f) { chargeLevel++; }
 				if (_modelInf.playTime >= _modelInf.totalTime){ chargeLevel++; }
 			}
-			if (_modelInf.playTime >= _modelInf.totalTime) 
+			if (_modelInf.playTime >= _modelInf.totalTime)
 			{
 				if(chargeLevel == 2){ _modelManager.animChange(motion_ZOIRUattack1, &_modelInf, false, true); }
 				else{ _modelManager.animChange(motion_ZOIRUattack2, &_modelInf, false, true); }
-				isCharge = 0, animSpd = 0.5f; 
+				isCharge = 0, animSpd = 0.5f;
 			}
 		}
 		break;
@@ -188,7 +192,12 @@ bool	PL::Process()
 	if (Estate == _estate::chargeATTACK && chargeLevel == 2 && _modelInf.playTime < 31.f && _modelInf.playTime > 9.f)
 	{
 		charMove(40.f, _modelInf.dir.y + 180);
-	}
+	}/*
+	if(isImmortal)
+	{
+		charMove(spd, getMoveDir());
+	}*/
+
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -241,6 +250,7 @@ pushButton PL::setAction()
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
+		isImmortal = false;
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP && (Estate != _estate::chargeATTACK && isCharge != 0)) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }

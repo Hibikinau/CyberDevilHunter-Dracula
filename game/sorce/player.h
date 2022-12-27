@@ -61,6 +61,7 @@ protected:
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
+	bool isImmortal;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate;
 	pushButton nextKey;
