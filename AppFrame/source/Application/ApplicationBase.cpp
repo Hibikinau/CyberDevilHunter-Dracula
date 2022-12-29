@@ -58,6 +58,7 @@ bool ApplicationBase::Input() {
 	}
 	_serverMode->Imput(&_imputInf);
 
+	GetLstick(&_imputInf.lStickX, &_imputInf.lStickY);
 	GetRstick(&_imputInf.rStickX, &_imputInf.rStickY);
 	return true;
 }

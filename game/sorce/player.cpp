@@ -75,6 +75,7 @@ bool	PL::Process()
 		animSpd = 0.5f;
 		spd = 25.f;
 		isImmortal = true;
+		dodgeDir = getMoveDir();
 		break;
 	case pushButton::X://弱攻撃
 		Estate = _estate::quickATTACK;
@@ -138,12 +139,12 @@ bool	PL::Process()
 			if (chargeLevel == 0)
 			{
 				if (_modelInf.playTime >= _modelInf.totalTime / 5.f) { chargeLevel++; }
-				if (_modelInf.playTime >= _modelInf.totalTime){ chargeLevel++; }
+				if (_modelInf.playTime >= _modelInf.totalTime) { chargeLevel++; }
 			}
 			if (_modelInf.playTime >= _modelInf.totalTime)
 			{
-				if(chargeLevel == 2){ _modelManager.animChange(motion_ZOIRUattack1, &_modelInf, false, true); }
-				else{ _modelManager.animChange(motion_ZOIRUattack2, &_modelInf, false, true); }
+				if (chargeLevel == 2) { _modelManager.animChange(motion_ZOIRUattack1, &_modelInf, false, true); }
+				else { _modelManager.animChange(motion_ZOIRUattack2, &_modelInf, false, true); }
 				isCharge = 0, animSpd = 0.5f;
 			}
 		}
@@ -162,11 +163,11 @@ bool	PL::Process()
 		break;
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
-		if (*_gTrgp & PAD_INPUT_9) { isDash ^= true; }
+		if (_imputInf->_gTrgp & PAD_INPUT_9) { isDash ^= true; }
 
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir();
-		if (addDir != 0) { charMove(spd, *_cameraDir + addDir); }
+		if (addDir != 0) { charMove(spd, *_cameraDir + addDir, true); }
 		moveCheck = false;
 
 		break;
@@ -182,7 +183,7 @@ bool	PL::Process()
 		{
 			//移動先の角度をベクトルにして移動ベクトルに加算
 			float addDir = getMoveDir();
-			if (addDir != 0) { charMove(spd / 2, *_cameraDir + addDir); }
+			if (addDir != 0) { charMove(spd / 2, *_cameraDir + addDir, true); }
 			moveCheck = false;
 
 		}
@@ -191,12 +192,12 @@ bool	PL::Process()
 
 	if (Estate == _estate::chargeATTACK && chargeLevel == 2 && _modelInf.playTime < 31.f && _modelInf.playTime > 9.f)
 	{
-		charMove(40.f, _modelInf.dir.y + 180);
-	}/*
+		charMove(40.f, _modelInf.dir.y + 180, true);
+	}
 	if(isImmortal)
 	{
-		charMove(spd, getMoveDir());
-	}*/
+		charMove(spd, *_cameraDir + dodgeDir, false);
+	}
 
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
@@ -216,9 +217,9 @@ bool	PL::Render()
 	return true;
 }
 
-void PL::charMove(float Speed, float _Dir)
+void PL::charMove(float Speed, float _Dir, bool animChange)
 {
-	if (Estate != _estate::JUMP && Estate != _estate::chargeATTACK)
+	if (Estate != _estate::JUMP && Estate != _estate::chargeATTACK && animChange)
 	{
 		if (isDash)
 		{
@@ -257,11 +258,10 @@ pushButton PL::setAction()
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
-	if (*_gKeyp & PAD_INPUT_9 || *_gKeyp & PAD_INPUT_UP || *_gKeyp & PAD_INPUT_DOWN
-		|| *_gKeyp & PAD_INPUT_LEFT || *_gKeyp & PAD_INPUT_RIGHT) {
+	if (_imputInf->_gKeyp & PAD_INPUT_9 || _imputInf->_gKeyp & PAD_INPUT_UP || _imputInf->_gKeyp & PAD_INPUT_DOWN
+		|| _imputInf->_gKeyp & PAD_INPUT_LEFT || _imputInf->_gKeyp & PAD_INPUT_RIGHT) {
 		insEnum = pushButton::Lstick;
 	}//Lstick
-	if (checkTrgImput(-1, PAD_INPUT_4)) { isNext ? nextKey = pushButton::B : insEnum = pushButton::B; }//B
 	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
 	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
 	if (checkKeyImput(-1, PAD_INPUT_2))//Y
@@ -269,8 +269,19 @@ pushButton PL::setAction()
 		if (isCharge == 1) { insEnum = pushButton::Y; }
 	}
 	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//Y離したとき
-	//if (checkTrgImput(-1, PAD_INPUT_3)) { isNext ? nextKey = pushButton::A : insEnum = pushButton::A; }//A
+
 	if (isNext) { insEnum = pushButton::Irregular; }
+
+	if (checkTrgImput(-1, PAD_INPUT_4))
+	{
+		if (isNext)
+		{
+			if (_modelInf.playTime < 6.0f) { insEnum = pushButton::B, nextKey = pushButton::Neutral; }
+			else { nextKey = pushButton::B; }
+		}
+		else { insEnum = pushButton::B; }
+	}//B
+
 	return insEnum;
 }
 
@@ -278,18 +289,20 @@ float PL::getMoveDir()
 {
 	float _addDir = 0.f;
 	//移動先の角度指定
-	if (checkKeyImput(KEY_INPUT_W, PAD_INPUT_UP) && !checkKeyImput(KEY_INPUT_S, PAD_INPUT_DOWN)) { _addDir = 180.f; }
-	if (!checkKeyImput(KEY_INPUT_W, PAD_INPUT_UP) && checkKeyImput(KEY_INPUT_S, PAD_INPUT_DOWN)) { _addDir = 360.f; }
-	if (!checkKeyImput(KEY_INPUT_A, PAD_INPUT_LEFT) && checkKeyImput(KEY_INPUT_D, PAD_INPUT_RIGHT))
-	{
-		if (_addDir == 0.f) { _addDir = 270.f; }
-		else { _addDir == 360.f ? _addDir -= 45.f : _addDir += 45.f; }
-	}
-	if (checkKeyImput(KEY_INPUT_A, PAD_INPUT_LEFT) && !checkKeyImput(KEY_INPUT_D, PAD_INPUT_RIGHT))
-	{
-		if (_addDir == 0.f) { _addDir = 90.f; }
-		else { _addDir == 360.f ? _addDir += 45.f : _addDir -= 45.f; }
-	}
+	//if (checkKeyImput(KEY_INPUT_W, PAD_INPUT_UP) && !checkKeyImput(KEY_INPUT_S, PAD_INPUT_DOWN)) { _addDir = 180.f; }
+	//if (!checkKeyImput(KEY_INPUT_W, PAD_INPUT_UP) && checkKeyImput(KEY_INPUT_S, PAD_INPUT_DOWN)) { _addDir = 360.f; }
+	//if (!checkKeyImput(KEY_INPUT_A, PAD_INPUT_LEFT) && checkKeyImput(KEY_INPUT_D, PAD_INPUT_RIGHT))
+	//{
+	//	if (_addDir == 0.f) { _addDir = 270.f; }
+	//	else { _addDir == 360.f ? _addDir -= 45.f : _addDir += 45.f; }
+	//}
+	//if (checkKeyImput(KEY_INPUT_A, PAD_INPUT_LEFT) && !checkKeyImput(KEY_INPUT_D, PAD_INPUT_RIGHT))
+	//{
+	//	if (_addDir == 0.f) { _addDir = 90.f; }
+	//	else { _addDir == 360.f ? _addDir += 45.f : _addDir -= 45.f; }
+	//}
+	_addDir = (std::atan2(-_imputInf->lStickX, _imputInf->lStickY) * 180.f) / DX_PI_F;
+	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
 
 	return _addDir;
 }

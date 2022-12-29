@@ -25,11 +25,12 @@ protected:
 	ModeServer* _modeServer;
 	int _x, _y;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
-	float spd, cameraDir, cameraHigh;
+	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
+	bool isLockon;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
-	modelInf *plMI, stage;
+	modelInf *plMI, stage, *bossMI;
 	modelManager _modelManager;
 	std::string NS;
 	std::vector<std::string> debugWardBox;

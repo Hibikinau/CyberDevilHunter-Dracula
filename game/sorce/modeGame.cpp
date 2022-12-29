@@ -18,7 +18,7 @@ bool	modeG::Initialize()
 	insPL->Initialize();
 	insPL->setCB(&charBox);
 	insPL->_valData = &_valData;
-	insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
+	insPL->getInputKey(&_imputInf, &cameraDir);
 	charBox.emplace(Char_PL, std::move(insPL));
 
 	auto boss = std::make_unique<Boss>();
@@ -38,14 +38,15 @@ bool	modeG::Process()
 			i->second->gravity();
 			plMI = i->second->getInf();
 		}
-		else { i->second->Process(); }
+		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
 
-	//if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
-	//if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
-	//if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 5.f; }
-	//if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 5.f; }
-	cameraDir += _imputInf.rStickX / 200;
+	if (_imputInf._gTrgp & PAD_INPUT_10)
+	{
+		isLockon ^= true;
+	}
+
+	cameraNtDir += _imputInf.rStickX / 200;
 	cameraHigh += _imputInf.rStickY / 200;
 
 	useCommand();
@@ -54,6 +55,8 @@ bool	modeG::Process()
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
+
+	debugWardBox.emplace_back(std::to_string((std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
 	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
@@ -83,8 +86,8 @@ bool	modeG::Render()
 	//{
 	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
 	//}
-	debugWardBox.emplace_back(std::to_string( plMI->playTime));
-	debugWardBox.emplace_back(std::to_string( plMI->playTimeOld));
+	debugWardBox.emplace_back(std::to_string(plMI->playTime));
+	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("No.0 左手:SwordBreaker 右手:RabbitBunker");
 	debugWardBox.emplace_back("No.1 左手:無し　        右手:GunBlade");
@@ -116,12 +119,24 @@ bool	modeG::Terminate()
 
 void modeG::cameraMove()
 {
-	float radian = cameraDir * DX_PI_F / 180.0f;
-	auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
-	auto _pos = cameraPos = VAdd(plMI->pos, InsV);
-	cameraFor = VSub(plMI->pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
-	cameraPos.y += cameraHigh;
-	cameraFor.y -= cameraHigh;
+	if (isLockon)
+	{
+		auto EtoPdir = VSub(bossMI->pos, plMI->pos);
+		cameraFor = bossMI->pos;
+		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -300.f)), VGet(0.f, 250.f, 0.f));
+		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
+		cameraDir = cameraLockDir;
+	}
+	else
+	{
+		float radian = cameraNtDir * DX_PI_F / 180.0f;
+		auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
+		auto _pos = cameraPos = VAdd(plMI->pos, InsV);
+		cameraFor = VSub(plMI->pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
+		cameraPos.y += cameraHigh;
+		cameraFor.y -= cameraHigh;
+		cameraDir = cameraNtDir;
+	}
 }
 
 float getNum(std::string data)
