@@ -17,7 +17,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer *ms) {
 	if (AppWindowed()) {
 		ChangeWindowMode(true);							// ウィンドウモードに指定する
 	}
-	SetMainWindowText("kojinGAME");
+	SetMainWindowText("CyberDevilHunter-Dracula");
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);
 
 	if (DxLib_Init() == -1)
