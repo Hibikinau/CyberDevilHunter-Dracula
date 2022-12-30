@@ -70,12 +70,15 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::B://‰ñ”ð
+		if (Estate == _estate::DODGE) { break; }
 		Estate = _estate::DODGE;
 		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
 		animSpd = 0.5f;
 		spd = 25.f;
 		isImmortal = true;
+		isCharge = 0;
 		dodgeDir = getMoveDir();
+		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
 		break;
 	case pushButton::X://ŽãUŒ‚
 		Estate = _estate::quickATTACK;
@@ -125,6 +128,9 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://‹­UŒ‚
+		StartJoypadVibration(DX_INPUT_PAD1, 100, -1);
+		if (_modelInf.playTime >= _modelInf.totalTime / 2.f) { StartJoypadVibration(DX_INPUT_PAD1, 500, -1); }
+		if (_modelInf.playTime >= _modelInf.totalTime) { StartJoypadVibration(DX_INPUT_PAD1, 1000, -1); }
 		if (Estate != _estate::chargeATTACK)
 		{
 			Estate = _estate::chargeATTACK;
@@ -194,9 +200,9 @@ bool	PL::Process()
 	{
 		charMove(40.f, _modelInf.dir.y + 180, true);
 	}
-	if(isImmortal)
+	if (isImmortal)
 	{
-		charMove(spd, *_cameraDir + dodgeDir, false);
+		charMove(spd, dodgeDir, false);
 	}
 
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
@@ -252,6 +258,7 @@ pushButton PL::setAction()
 	{
 		isAnimEnd = false;
 		isImmortal = false;
+		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP && (Estate != _estate::chargeATTACK && isCharge != 0)) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
@@ -260,17 +267,16 @@ pushButton PL::setAction()
 
 	if (_imputInf->_gKeyp & PAD_INPUT_9 || _imputInf->_gKeyp & PAD_INPUT_UP || _imputInf->_gKeyp & PAD_INPUT_DOWN
 		|| _imputInf->_gKeyp & PAD_INPUT_LEFT || _imputInf->_gKeyp & PAD_INPUT_RIGHT) {
-		insEnum = pushButton::Lstick;
+		if (Estate != _estate::chargeATTACK) { insEnum = pushButton::Lstick; }
 	}//Lstick
+	if (isNext) { insEnum = pushButton::Irregular; }
 	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
 	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
 	if (checkKeyImput(-1, PAD_INPUT_2))//Y
 	{
-		if (isCharge == 1) { insEnum = pushButton::Y; }
+		if (isCharge >= 1) { insEnum = pushButton::Y; }
 	}
 	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//Y—£‚µ‚½‚Æ‚«
-
-	if (isNext) { insEnum = pushButton::Irregular; }
 
 	if (checkTrgImput(-1, PAD_INPUT_4))
 	{
