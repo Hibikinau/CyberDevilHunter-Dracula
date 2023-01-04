@@ -25,7 +25,7 @@ public:
 	modelInf* getInf() { return &_modelInf; }
 	statusInf	getStatus() { return _statusInf; }
 
-	int type;//pl=1, oEnemy=2
+	int type = 0;//pl=1, oEnemy=2
 	bool isGround;
 	float g;
 	modelManager _modelManager;

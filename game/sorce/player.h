@@ -59,10 +59,10 @@ protected:
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
-	bool isImmortal;
+	int immortalTime;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate;
 	pushButton nextKey;
 	imputInf *_imputInf;
-
+	modelInf *Einf;
 };

@@ -75,7 +75,7 @@ bool	PL::Process()
 		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
 		animSpd = 0.5f;
 		spd = 25.f;
-		isImmortal = true;
+		immortalTime = 99999;
 		isCharge = 0;
 		dodgeDir = getMoveDir();
 		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
@@ -200,9 +200,10 @@ bool	PL::Process()
 	{
 		charMove(40.f, _modelInf.dir.y + 180, true);
 	}
-	if (isImmortal)
+	if (immortalTime > 0)
 	{
 		charMove(spd, dodgeDir, false);
+		immortalTime--;
 	}
 
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
@@ -214,6 +215,13 @@ bool	PL::Process()
 
 	if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 	if (moveCheck) { isDash = false; }
+
+	for (auto i = charBox->begin(); i != charBox->end(); i++) {
+		if (i->second->getType() != 1) { Einf = i->second->getInf(); }
+	}
+	auto a = VSub(Einf->pos, _modelInf.pos);
+	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) { _statusInf.hitPoint -= 2.f; }
+
 	return true;
 }
 
@@ -247,7 +255,6 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 
 	_modelInf.dir.y = _Dir + 180.f;
 
-	for()
 }
 
 pushButton PL::setAction()
@@ -259,7 +266,7 @@ pushButton PL::setAction()
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
-		isImmortal = false;
+		immortalTime = 0;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && Estate != _estate::JUMP && (Estate != _estate::chargeATTACK && isCharge != 0)) { Estate = _estate::NORMAL; }
 	}
