@@ -35,7 +35,7 @@ protected:
 	static	ApplicationBase* _lpInstance;
 	imputInf _imputInf;
 	std::vector<std::string> debugWardBox;
-
 	ModeServer* _serverMode;
+	XINPUT_STATE imputInfX;
 
 };
