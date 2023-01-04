@@ -30,6 +30,7 @@ bool	modeG::Initialize()
 
 bool	modeG::Process()
 {
+	statusInf plStatus = { 0.f, 0.f, 0.f };
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
 		if (i->second->getType() == 1)
@@ -37,6 +38,7 @@ bool	modeG::Process()
 			i->second->Process();
 			i->second->gravity();
 			plMI = i->second->getInf();
+			plStatus = i->second->getStatus();
 		}
 		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
@@ -55,6 +57,8 @@ bool	modeG::Process()
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
+
+	debugWardBox.emplace_back("Ž©‹@‚ÌHP = " + std::to_string(plStatus.hitPoint));
 
 	debugWardBox.emplace_back(std::to_string((std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 

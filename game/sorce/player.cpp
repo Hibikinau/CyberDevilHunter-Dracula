@@ -246,6 +246,8 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 	_modelInf.vec.z += cos(radian) * Speed;
 
 	_modelInf.dir.y = _Dir + 180.f;
+
+	for()
 }
 
 pushButton PL::setAction()
