@@ -43,13 +43,13 @@ bool	modeG::Process()
 		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
 
-	if (_imputInf._gTrgp & PAD_INPUT_10)
+	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
 	{
 		isLockon ^= true;
 	}
 
-	cameraNtDir += _imputInf.rStickX / 200;
-	cameraHigh += _imputInf.rStickY / 200;
+	cameraNtDir += _imputInf.rStickX / 5000;
+	cameraHigh -= _imputInf.rStickY / 5000;
 
 	useCommand();
 

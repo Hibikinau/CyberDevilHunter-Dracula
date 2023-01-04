@@ -169,7 +169,7 @@ bool	PL::Process()
 		break;
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
-		if (_imputInf->_gTrgp & PAD_INPUT_9) { isDash ^= true; }
+		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
 
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir();
@@ -274,20 +274,19 @@ pushButton PL::setAction()
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
-	if (_imputInf->_gKeyp & PAD_INPUT_9 || _imputInf->_gKeyp & PAD_INPUT_UP || _imputInf->_gKeyp & PAD_INPUT_DOWN
-		|| _imputInf->_gKeyp & PAD_INPUT_LEFT || _imputInf->_gKeyp & PAD_INPUT_RIGHT) {
+	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir() != 0) {
 		if (Estate != _estate::chargeATTACK) { insEnum = pushButton::Lstick; }
 	}//Lstick
 	if (isNext) { insEnum = pushButton::Irregular; }
-	if (checkTrgImput(-1, PAD_INPUT_1)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
-	if (checkTrgImput(-1, PAD_INPUT_2)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
-	if (checkKeyImput(-1, PAD_INPUT_2))//Y
+	if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
+	if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
+	if (checkKeyImput(-1, XINPUT_BUTTON_Y))//Y
 	{
 		if (isCharge >= 1) { insEnum = pushButton::Y; }
 	}
 	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//Y離したとき
 
-	if (checkTrgImput(-1, PAD_INPUT_4))
+	if (checkTrgImput(-1, XINPUT_BUTTON_B))
 	{
 		if (isNext)
 		{
@@ -316,7 +315,7 @@ float PL::getMoveDir()
 	//	if (_addDir == 0.f) { _addDir = 90.f; }
 	//	else { _addDir == 360.f ? _addDir += 45.f : _addDir -= 45.f; }
 	//}
-	_addDir = (std::atan2(-_imputInf->lStickX, _imputInf->lStickY) * 180.f) / DX_PI_F;
+	_addDir = (std::atan2(-_imputInf->lStickX, -_imputInf->lStickY) * 180.f) / DX_PI_F;
 	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
 
 	return _addDir;

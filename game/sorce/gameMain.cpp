@@ -30,7 +30,7 @@ bool gameMain::Input() {
 bool gameMain::Process() {
 	base::Process();
 
-	if (_imputInf._gKeyb[KEY_INPUT_ESCAPE] || _imputInf._gKeyp & PAD_INPUT_11) { return false; }
+	if (_imputInf._gKeyb[KEY_INPUT_ESCAPE] || _imputInf._gKeyp[XINPUT_BUTTON_BACK] == 1) { return false; }
 	return true;
 }
 

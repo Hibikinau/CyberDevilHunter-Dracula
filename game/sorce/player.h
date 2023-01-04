@@ -45,8 +45,8 @@ public:
 		_imputInf = iInf, _cameraDir = cameraDir; return true;
 	};
 	pushButton setAction();
-	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp & Pad) { return true; } else { return false; } }
-	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp & Pad) { return true; } else { return false; } }
+	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
+	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
 	float getMoveDir();
 
 protected:

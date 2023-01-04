@@ -25,8 +25,6 @@ public:
 	virtual int DispSizeH() { return 480; }
 
 	static	ApplicationBase	*GetInstance() { return _lpInstance; }
-	virtual int GetKey() { return _imputInf._gKeyp; }
-	virtual int GetTrg() { return _imputInf._gTrgp; }
 	virtual void GetLstick(int* xbuf, int* ybuf) { GetJoypadAnalogInput(xbuf, ybuf, DX_INPUT_PAD1); }
 	virtual void GetRstick(int *xbuf, int *ybuf) { GetJoypadAnalogInputRight(xbuf, ybuf, DX_INPUT_PAD1); }
 	virtual int GetWard() { return KeyInputString(10, 700, 141, _imputInf.wardBox, true); }//ñﬂÇËíl1.ê≥èÌ 2.ÉLÉÉÉìÉZÉã 3.é∏îs

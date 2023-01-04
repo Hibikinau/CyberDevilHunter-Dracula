@@ -64,13 +64,15 @@ bool ApplicationBase::Input() {
 	char _gTrgbOldX[16] = { 0 };
 	for (int i = 0; i < 16; i++) { _gTrgbOldX[i] = imputInfX.Buttons[i]; }
 	GetJoypadXInputState(DX_INPUT_PAD1, &imputInfX);
+	for (int i = 0; i < 16; i++) { _imputInf._gKeyp[i] = imputInfX.Buttons[i]; }
 	for (int i = 0; i < 16; i++)
 	{
-		_imputInf._gKeyb[i] == 1 && _gTrgbOld[i] != 1 ? _imputInf._gTrgb[i] = 1 : _imputInf._gTrgb[i] = 0;
+		_imputInf._gKeyp[i] == 1 && _gTrgbOldX[i] != 1 ? _imputInf._gTrgp[i] = 1 : _imputInf._gTrgp[i] = 0;
 	}
-	GetLstick(&_imputInf.lStickX, &_imputInf.lStickY);
-	GetRstick(&_imputInf.rStickX, &_imputInf.rStickY);
-
+	_imputInf.lStickX = imputInfX.ThumbLX;
+	_imputInf.lStickY = imputInfX.ThumbLY;
+	_imputInf.rStickX = imputInfX.ThumbRX;
+	_imputInf.rStickY = imputInfX.ThumbRY;
 
 	_serverMode->Imput(&_imputInf);
 	return true;
