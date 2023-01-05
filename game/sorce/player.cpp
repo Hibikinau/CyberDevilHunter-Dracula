@@ -219,6 +219,7 @@ bool	PL::Process()
 	for (auto i = charBox->begin(); i != charBox->end(); i++) {
 		if (i->second->getType() != 1) { Einf = i->second->getInf(); }
 	}
+	//boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
 	auto a = VSub(Einf->pos, _modelInf.pos);
 	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) { _statusInf.hitPoint -= 2.f; }
 
@@ -303,18 +304,6 @@ float PL::getMoveDir()
 {
 	float _addDir = 0.f;
 	//ˆÚ“®æ‚ÌŠp“xŽw’è
-	//if (checkKeyImput(KEY_INPUT_W, PAD_INPUT_UP) && !checkKeyImput(KEY_INPUT_S, PAD_INPUT_DOWN)) { _addDir = 180.f; }
-	//if (!checkKeyImput(KEY_INPUT_W, PAD_INPUT_UP) && checkKeyImput(KEY_INPUT_S, PAD_INPUT_DOWN)) { _addDir = 360.f; }
-	//if (!checkKeyImput(KEY_INPUT_A, PAD_INPUT_LEFT) && checkKeyImput(KEY_INPUT_D, PAD_INPUT_RIGHT))
-	//{
-	//	if (_addDir == 0.f) { _addDir = 270.f; }
-	//	else { _addDir == 360.f ? _addDir -= 45.f : _addDir += 45.f; }
-	//}
-	//if (checkKeyImput(KEY_INPUT_A, PAD_INPUT_LEFT) && !checkKeyImput(KEY_INPUT_D, PAD_INPUT_RIGHT))
-	//{
-	//	if (_addDir == 0.f) { _addDir = 90.f; }
-	//	else { _addDir == 360.f ? _addDir += 45.f : _addDir -= 45.f; }
-	//}
 	_addDir = (std::atan2(-_imputInf->lStickX, -_imputInf->lStickY) * 180.f) / DX_PI_F;
 	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
 
