@@ -29,9 +29,14 @@ int WINAPI WinMain(
 		return 0;
 	}
 
+	int FPS = 60;
+	int setTime = GetNowCount();//1000=1秒
+
 	// 1フレームループを組む ----------------------------------------------------------
 	while (ProcessMessage() == 0)		// プログラムが終了するまでループ
 	{
+		while (setTime > GetNowCount()) {};
+		setTime = static_cast<int>(1000 / FPS) + GetNowCount();
 		appBase->Input();
 		if (!appBase->Process()) { break; }
 

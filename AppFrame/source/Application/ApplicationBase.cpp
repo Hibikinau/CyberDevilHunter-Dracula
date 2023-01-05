@@ -45,8 +45,9 @@ bool ApplicationBase::Terminate() {
 
 bool ApplicationBase::Input() {
 	//-------------Dpad入力-------------
+	//_gTrgp、_gTrgpが変数の方的なアレで動かない
 	//int keyold = _imputInf._gKeyp;
-	//_imputInf._gKeyp = GetJoypadInputState(DX_INPUT_PAD1);
+	//_imputInf._gTrgp = GetJoypadInputState(DX_INPUT_PAD1);
 	//_imputInf._gTrgp = (_imputInf._gKeyp ^ keyold) & _imputInf._gKeyp;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
 	//GetLstick(&_imputInf.lStickX, &_imputInf.lStickY);
 	//GetRstick(&_imputInf.rStickX, &_imputInf.rStickY);
