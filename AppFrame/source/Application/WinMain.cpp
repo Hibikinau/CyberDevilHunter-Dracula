@@ -1,14 +1,7 @@
-/*
-** WinMain
-*/
-
 //
 // include •”
 //
-
 #include "../appframe.h"
-
-
 
 //
 // WinMain(). ƒvƒƒOƒ‰ƒ€‹N“®ŠÖ”
@@ -37,6 +30,7 @@ int WINAPI WinMain(
 	{
 		while (setTime > GetNowCount()) {};
 		setTime = static_cast<int>(1000 / FPS) + GetNowCount();
+
 		appBase->Input();
 		if (!appBase->Process()) { break; }
 

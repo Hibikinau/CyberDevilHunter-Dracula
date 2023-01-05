@@ -108,3 +108,13 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed)
 	return MI->isAnimEnd;
 }
 
+bool modelManager::modelDelete(modelInf* MI)
+{
+	for (int i = 0; i < MI->wepons.size(); i++)
+	{
+		DeleteGraph(MI->wepons[i].weponHandle);
+	}
+	MI->wepons.clear();
+	DeleteGraph(MI->modelHandle);
+	return true;
+}

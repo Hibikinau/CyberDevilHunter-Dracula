@@ -28,6 +28,7 @@ public:
 	int type = 0;//pl=1, oEnemy=2
 	bool isGround;
 	float g;
+	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	modelManager _modelManager;
 	modelInf _modelInf;
 	statusInf _statusInf;

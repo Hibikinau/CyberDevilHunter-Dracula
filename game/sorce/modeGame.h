@@ -19,6 +19,7 @@ public:
 	void cameraMove();
 	int useCommand();
 	bool getPcInf();
+	bool makePL();
 
 
 protected:
@@ -37,5 +38,5 @@ protected:
 	imputInf _imputInf;
 	valData _valData;
 
-	bool debugMode = true;
+	bool debugMode = true, plDead;
 };

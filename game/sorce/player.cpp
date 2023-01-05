@@ -22,6 +22,7 @@
 #define motion_SENPUU 12
 #define motion_SENPUUL 13
 #define motion_rollingF 14
+#define motion_demoDead 15
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -53,7 +54,7 @@ bool PL::Initialize()
 
 bool	PL::Terminate()
 {
-
+	CB::Terminate();
 	return true;
 }
 
@@ -65,6 +66,13 @@ bool	PL::Input()
 
 bool	PL::Process()
 {
+	if (_statusInf.hitPoint <= 0 || isDead != 0)
+	{
+		_modelManager.animChange(motion_demoDead, &_modelInf, false, false);
+		if (_modelInf.isAnimEnd && isDead == 1) { isDead = 2; return false; }
+		else if(isDead != 2){ isDead = 1; }
+		return true;
+	}
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())

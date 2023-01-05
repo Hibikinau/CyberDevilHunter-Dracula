@@ -38,5 +38,6 @@ public:
 	bool modelRender(modelInf* MI, float animSpeed);
 	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの名前, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前)
 	bool weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name);
-
+	//キャラモデルのメモリ解放
+	bool modelDelete(modelInf* MI);
 };

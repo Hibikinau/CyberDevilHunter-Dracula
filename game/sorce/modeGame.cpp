@@ -1,19 +1,8 @@
 #include"allMode.h"
 #include <sstream>
 
-bool	modeG::Initialize()
+bool modeG::makePL()
 {
-	_modelManager.modelImport("game/res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
-	SetUseLighting(true);
-	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
-	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
-	countTime = GetNowCount();
-
-	/*shadowMapHandle = MakeShadowMap(2048, 2048);
-	SetShadowMapLightDirection(shadowMapHandle, VGet(-1.f, -1.f, 0.5f));
-	SetShadowMapDrawArea(2048, VGet(-1024, -1024, -1024), VGet(1024, 1024, 1024));*/
-	//SetGlobalAmbientLight(GetColorF(0.5f, 0.5f, 0.5f, 0.7f));
-
 	auto insPL = std::make_unique<PL>();
 	insPL->Initialize();
 	insPL->setCB(&charBox);
@@ -21,17 +10,33 @@ bool	modeG::Initialize()
 	insPL->getInputKey(&_imputInf, &cameraDir);
 	charBox.emplace(Char_PL, std::move(insPL));
 
+	return true;
+}
+
+bool	modeG::Initialize()
+{
+	DrawString(640, 360, "loading...", GetColor(255, 255, 255));
+	ScreenFlip();
+	_modelManager.modelImport("game/res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
+	SetUseLighting(true);
+	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
+	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
+	countTime = GetNowCount();
+
+	makePL();
+
 	auto boss = std::make_unique<Boss>();
 	boss->Initialize();
 	boss->setCB(&charBox);
 	charBox.emplace(Char_BOSS1, std::move(boss));
+
 	return true;
 }
 
 bool	modeG::Process()
 {
 	statusInf plStatus = { 0.f, 0.f, 0.f };
-	for (auto i = charBox.begin(); i != charBox.end(); i++)
+	for (auto i = charBox.begin(); i != charBox.end();)
 	{
 		if (i->second->getType() == 1)
 		{
@@ -39,8 +44,15 @@ bool	modeG::Process()
 			i->second->gravity();
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
+			if (i->second->isDead == 2)
+			{
+				i->second->Terminate();
+				i = charBox.erase(i);
+				plDead = true;
+			}
+			else { i++; }
 		}
-		else { i->second->Process(); bossMI = i->second->getInf(); }
+		else { i->second->Process(); bossMI = i->second->getInf(); i++; }
 	}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
@@ -74,6 +86,11 @@ bool	modeG::Process()
 	// PC情報を取得します
 	getPcInf();
 
+	if (plDead)
+	{
+		makePL();
+		plDead = false;
+	}
 	return true;
 }
 
@@ -118,6 +135,10 @@ bool	modeG::Render()
 
 bool	modeG::Terminate()
 {
+	int a = InitGraph();
+	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Terminate(); }
+	charBox.clear();
+	debugWardBox.clear();
 	return true;
 }
 
