@@ -8,6 +8,12 @@ struct statusInf
 	float hitPoint, bloodPoint, stamina;
 };
 
+struct collCapsule
+{//Å‘å’l‚ğ‘ã“ü
+	VECTOR underPos, overPos;
+	float r;
+};
+
 class CB
 {
 public:

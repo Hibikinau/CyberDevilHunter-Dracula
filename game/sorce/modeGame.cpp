@@ -36,7 +36,7 @@ bool	modeG::Initialize()
 bool	modeG::Process()
 {
 	statusInf plStatus = { 0.f, 0.f, 0.f };
-	for (auto i = charBox.begin(); i != charBox.end();)
+	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
 		if (i->second->getType() == 1)
 		{
@@ -44,15 +44,16 @@ bool	modeG::Process()
 			i->second->gravity();
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
-			if (i->second->isDead == 2)
-			{
-				i->second->Terminate();
-				i = charBox.erase(i);
-				plDead = true;
-			}
-			else { i++; }
 		}
-		else { i->second->Process(); bossMI = i->second->getInf(); i++; }
+		else { i->second->Process(); bossMI = i->second->getInf(); }
+	}
+
+	if (charBox[Char_PL]->_statusInf.hitPoint <= 0)
+	{
+		charBox[Char_PL]->Terminate();
+		charBox.erase(Char_PL);
+
+		makePL();
 	}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
@@ -71,9 +72,8 @@ bool	modeG::Process()
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
-
-	debugWardBox.emplace_back(std::to_string((std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
-
+	debugWardBox.emplace_back(std::to_string(
+		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
 	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
 	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
@@ -86,11 +86,6 @@ bool	modeG::Process()
 	// PC情報を取得します
 	getPcInf();
 
-	if (plDead)
-	{
-		makePL();
-		plDead = false;
-	}
 	return true;
 }
 
@@ -98,15 +93,8 @@ bool	modeG::Render()
 {
 	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Render(); }
 
-	//SetLightPositionHandle(LightHandle02, PLpos);
-	//ShadowMap_DrawSetup(shadowMapHandle);
 	MV1DrawModel(stage.modelHandle);
-	//ShadowMap_DrawEnd();
 
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
-	//}
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	debugWardBox.emplace_back("-------武器セット一覧-------");

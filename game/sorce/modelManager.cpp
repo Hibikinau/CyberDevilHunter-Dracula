@@ -109,12 +109,12 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed)
 }
 
 bool modelManager::modelDelete(modelInf* MI)
-{
+{//装備モデルのメモリ解放してからコンテナの消去
 	for (int i = 0; i < MI->wepons.size(); i++)
 	{
 		DeleteGraph(MI->wepons[i].weponHandle);
 	}
 	MI->wepons.clear();
-	DeleteGraph(MI->modelHandle);
+	DeleteGraph(MI->modelHandle);//キャラモデルのメモリ解放
 	return true;
 }

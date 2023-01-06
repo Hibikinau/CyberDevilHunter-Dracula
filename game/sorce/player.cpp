@@ -224,9 +224,12 @@ bool	PL::Process()
 	if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 	if (moveCheck) { isDash = false; }
 
-	for (auto i = charBox->begin(); i != charBox->end(); i++) {
-		if (i->second->getType() != 1) { Einf = i->second->getInf(); }
-	}
+	collPL.r = 30.f;
+	collPL.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
+	collPL.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+
+	Einf = charBox->find(Char_BOSS1)->second->getInf();
+
 	//boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
 	auto a = VSub(Einf->pos, _modelInf.pos);
 	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) { _statusInf.hitPoint -= 2.f; }
@@ -237,6 +240,7 @@ bool	PL::Process()
 bool	PL::Render()
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
+	DrawCapsule3D(collPL.underPos, collPL.overPos, collPL.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
