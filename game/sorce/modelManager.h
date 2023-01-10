@@ -25,7 +25,7 @@ struct modelInf
 
 struct valData
 {
-	float plAtkSpd1 = 30.f, plAtkSpd2 = 30.f, plAtkSpd3 = 30.f, plAtkSpd4 = 30.f;
+	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f;
 	std::vector<int> activateWepon, disableWepon;
 };
 
