@@ -69,13 +69,13 @@ bool	Boss::Process()
 
 
 	//•ÏX“_
-	auto x = plMI.pos.x - _modelInf.pos.x;
-	auto y = plMI.pos.y - _modelInf.pos.y;
+	auto x = plMI->pos.x - _modelInf.pos.x;
+	auto y = plMI->pos.y - _modelInf.pos.y;
 	dir=atan2(x,y);
 
 
 
-	if (_vPos.x < plMI.pos.x) {
+	if (_vPos.x < plMI->pos.x) {
 		status = STATUS::KICK;
 	}
 	else {
