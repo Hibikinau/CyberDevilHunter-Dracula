@@ -69,18 +69,26 @@ bool	Boss::Process()
 
 
 	//変更点
-	auto x = plMI->pos.x - _modelInf.pos.x;
-	auto y = plMI->pos.y - _modelInf.pos.y;
-	dir=atan2(x,y);
+	//auto x = plMI->pos.x - _modelInf.pos.x;
+	//auto y = plMI->pos.y - _modelInf.pos.y;
+	//dir=atan2(x,y);
 
+	//bossと距離一定以内でHP減少
+	auto a = VSub(plMI->pos, _modelInf.pos);
+	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f ) 
+	{ 
+	
+	}
+	else {
 
+	}
 
-	if (_vPos.x < plMI->pos.x) {
+	/*if (_vPos.x < plMI->pos.x) {
 		status = STATUS::KICK;
 	}
 	else {
 		status = STATUS::WAIT;
-	}
+	}*/
 
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {
