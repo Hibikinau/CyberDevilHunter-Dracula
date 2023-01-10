@@ -70,13 +70,7 @@ bool	Boss::Process()
 	else {
 		status = STATUS::WAIT;
 	}*/
-
-	for (auto i = charBox->begin(); i != charBox->end(); i++) {
-		if (i->second->getType() == 1)
-		{
-			plMI = i->second->getInf();
-		}
-	}
+	plMI = charBox->at(Char_PL)->getInf();
 
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {
