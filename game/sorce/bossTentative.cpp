@@ -1,4 +1,5 @@
 #include"bossTentative.h"
+#include <math.h>
 #define walkSpd 6.f
 #define runSpd 20.f
 #define motion_idel 0
@@ -59,61 +60,67 @@ bool	Boss::Process()
 	STATUS oldStatus = status;
 	status = STATUS::WAIT;
 
-	//auto plMI =_modelInf.player->getInf();
-	/*auto insPL = std::make_unique<PL>();
-	insPL->setCB(&charBox);
-	plMI = insPL->getInf();*/
+	for (auto i = charBox->begin(); i != charBox->end(); i++) {
+		if (i->second->getType() == 1)
+		{
+			plMI = i->second->getInf();
+		}
+	}
 
-	/*if (_vPos.x<plMI.pos.x) {
+
+	//変更点
+	auto x = plMI.pos.x - _modelInf.pos.x;
+	auto y = plMI.pos.y - _modelInf.pos.y;
+	dir=atan2(x,y);
+
+
+
+	if (_vPos.x < plMI.pos.x) {
 		status = STATUS::KICK;
 	}
 	else {
 		status = STATUS::WAIT;
-	}*/
-	plMI = charBox->at(Char_PL)->getInf();
+	}
 
 	// ステータスが変わっていないか？
 	if (oldStatus == status) {
 		// 再生時間を進める
-		_play_time += 0.5f;
+		//_play_time += 0.5f;
 	}
 	else {
-		// アニメーションがアタッチされていたら、デタッチする
-		if (_attach_index != -1) {
-			//MV1DetachAnim(_handle, _attach_index);
-			_attach_index = -1;
-		}
+		//// アニメーションがアタッチされていたら、デタッチする
+		//if (_attach_index != -1) {
+		//	//MV1DetachAnim(_handle, _attach_index);
+		//	_attach_index = -1;
+		//}
 		// ステータスに合わせてアニメーションのアタッチ
 		switch (status) {
 		case STATUS::WAIT:
-			//_attach_index = MV1AttachAnim(_handle, 0, Anim_handle, FALSE);
-			//_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim000"), -1, FALSE);
 			_modelManager.animChange(motion_idel, &_modelInf, true, true);
 			spd = 0.f;
 			animSpd = 0.5f;
 			break;
 		case STATUS::WALK:
-			//_attach_index = MV1AttachAnim(_handle, 0, Anim_handle2, FALSE);
-			//_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim001"), -1, FALSE);
 			_modelInf.playTime = 0.f;
 			_modelManager.animChange(1, &_modelInf, false, false);
 			animSpd = 0.5f;
 			break;
 		case STATUS::KICK:
-			//_attach_index = MV1AttachAnim(_handle, 0, Anim_handle3, FALSE);
-			//_attach_index = MV1AttachAnim(_handle, MV1GetAnimIndex(_handle, "Anim002"), -1, FALSE);
+			_modelInf.playTime = 0.f;
+			_modelManager.animChange(2, &_modelInf, false, false);
+			animSpd = 1.0f;
 			break;
 		}
 		// アタッチしたアニメーションの総再生時間を取得する
-		_total_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
+		//_total_time = MV1GetAttachAnimTotalTime(_handle, _attach_index);
 		// 再生時間を初期化
-		_play_time = 0.0f;
+		//_play_time = 0.0f;
 	}
 
 	// 再生時間がアニメーションの総再生時間に達したら再生時間を０に戻す
-	if (_play_time >= _total_time) {
-		_play_time = 0.0f;
-	}
+	//if (_play_time >= _total_time) {
+		//_play_time = 0.0f;
+	//}
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
@@ -122,18 +129,7 @@ bool	Boss::Process()
 
 bool	Boss::Render()
 {
-	// 再生時間をセットする
-	////MV1SetAttachAnimTime(_handle, _attach_index, _play_time);
-
-	// 位置
-	////MV1SetPosition(_handle, _vPos);
-	// 向きからY軸回転を算出
-	////VECTOR vRot = { 0,0,0 };
-	////vRot.y = atan2(_vDir.x * -1, _vDir.z * -1);		// モデルが標準でどちらを向いているかで式が変わる(これは-zを向いている場合)
-	////MV1SetRotationXYZ(_handle, vRot);
-	// 描画
-	////MV1DrawModel(_handle);
-
+	//DrawFormatString(600, 20, GetColor(0, 0, 0), "%f",dir);
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
 	return true;
 }
