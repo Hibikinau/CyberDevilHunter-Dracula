@@ -1,35 +1,41 @@
 #include"allMode.h"
 #include <sstream>
 
+bool modeG::makePL()
+{
+	auto insPL = std::make_unique<PL>();
+	insPL->Initialize();
+	insPL->setCB(&charBox);
+	insPL->_valData = &_valData;
+	insPL->getInputKey(&_imputInf, &cameraDir);
+	charBox.emplace(Char_PL, std::move(insPL));
+
+	return true;
+}
+
 bool	modeG::Initialize()
 {
+	DrawString(640, 360, "loading...", GetColor(255, 255, 255));
+	ScreenFlip();
 	_modelManager.modelImport("game/res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
 	SetUseLighting(true);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	countTime = GetNowCount();
 
-	/*shadowMapHandle = MakeShadowMap(2048, 2048);
-	SetShadowMapLightDirection(shadowMapHandle, VGet(-1.f, -1.f, 0.5f));
-	SetShadowMapDrawArea(2048, VGet(-1024, -1024, -1024), VGet(1024, 1024, 1024));*/
-	//SetGlobalAmbientLight(GetColorF(0.5f, 0.5f, 0.5f, 0.7f));
-
-	auto insPL = std::make_unique<PL>();
-	insPL->Initialize();
-	insPL->setCB(&charBox);
-	insPL->_valData = &_valData;
-	insPL->getInputKey(&_imputInf._gKeyp, &_imputInf._gTrgp, _imputInf._gKeyb, _imputInf._gTrgb, &cameraDir);
-	charBox.emplace(Char_PL, std::move(insPL));
+	makePL();
 
 	auto boss = std::make_unique<Boss>();
 	boss->Initialize();
 	boss->setCB(&charBox);
 	charBox.emplace(Char_BOSS1, std::move(boss));
+
 	return true;
 }
 
 bool	modeG::Process()
 {
+	statusInf plStatus = { 0.f, 0.f, 0.f };
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
 		if (i->second->getType() == 1)
@@ -37,16 +43,26 @@ bool	modeG::Process()
 			i->second->Process();
 			i->second->gravity();
 			plMI = i->second->getInf();
+			plStatus = i->second->getStatus();
 		}
-		else { i->second->Process(); }
+		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
 
-	//if (_imputInf._gKeyb[KEY_INPUT_UP]) { cameraHigh -= 7.f; }
-	//if (_imputInf._gKeyb[KEY_INPUT_DOWN]) { cameraHigh += 7.f; }
-	//if (_imputInf._gKeyb[KEY_INPUT_RIGHT]) { cameraDir += 5.f; }
-	//if (_imputInf._gKeyb[KEY_INPUT_LEFT]) { cameraDir -= 5.f; }
-	cameraDir += _imputInf.rStickX / 200;
-	cameraHigh += _imputInf.rStickY / 200;
+	if (charBox[Char_PL]->_statusInf.hitPoint <= 0)
+	{
+		charBox[Char_PL]->Terminate();
+		charBox.erase(Char_PL);
+
+		makePL();
+	}
+
+	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
+	{
+		isLockon ^= true;
+	}
+
+	cameraNtDir += _imputInf.rStickX / 5000;
+	cameraHigh -= _imputInf.rStickY / 5000;
 
 	useCommand();
 
@@ -55,14 +71,17 @@ bool	modeG::Process()
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
+	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
+	debugWardBox.emplace_back(std::to_string(
+		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
 	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
 	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
 	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
 	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
-	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI.pos.x))
-		+ "/y." + std::to_string(static_cast<int>(plMI.pos.y))
-		+ "/z." + std::to_string(static_cast<int>(plMI.pos.z)));
+	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
+		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
+		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
 	// PC情報を取得します
 	getPcInf();
@@ -74,20 +93,19 @@ bool	modeG::Render()
 {
 	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Render(); }
 
-	//SetLightPositionHandle(LightHandle02, PLpos);
-	//ShadowMap_DrawSetup(shadowMapHandle);
 	MV1DrawModel(stage.modelHandle);
-	//ShadowMap_DrawEnd();
 
-	//for (int i = 0; i < 6; i++)
-	//{
-	//	DrawSphere3D(VGet(-575 + (230 * i), 60.f, 0.f), 50.f, 32, GetColor(255, 0, 0), GetColor(255, 255, 255), true);
-	//}
+	debugWardBox.emplace_back(std::to_string(plMI->playTime));
+	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
+	debugWardBox.emplace_back("-------武器セット一覧-------");
+	debugWardBox.emplace_back("No.0 左手:SwordBreaker 右手:RabbitBunker");
+	debugWardBox.emplace_back("No.1 左手:無し　        右手:GunBlade");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/weponset^武器セットの番号^(武器セットの番号)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -105,18 +123,33 @@ bool	modeG::Render()
 
 bool	modeG::Terminate()
 {
+	int a = InitGraph();
+	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Terminate(); }
+	charBox.clear();
+	debugWardBox.clear();
 	return true;
 }
 
 void modeG::cameraMove()
 {
-	float radian = cameraDir * DX_PI_F / 180.0f;
-	auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
-	auto _pos =
-		cameraPos = VAdd(plMI.pos, InsV);
-	cameraFor = VSub(plMI.pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
-	cameraPos.y += cameraHigh;
-	cameraFor.y -= cameraHigh;
+	if (isLockon)
+	{
+		auto EtoPdir = VSub(bossMI->pos, plMI->pos);
+		cameraFor = bossMI->pos;
+		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -300.f)), VGet(0.f, 250.f, 0.f));
+		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
+		cameraDir = cameraLockDir;
+	}
+	else
+	{
+		float radian = cameraNtDir * DX_PI_F / 180.0f;
+		auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
+		auto _pos = cameraPos = VAdd(plMI->pos, InsV);
+		cameraFor = VSub(plMI->pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
+		cameraPos.y += cameraHigh;
+		cameraFor.y -= cameraHigh;
+		cameraDir = cameraNtDir;
+	}
 }
 
 float getNum(std::string data)
@@ -153,9 +186,25 @@ int modeG::useCommand()
 			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
 			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
 			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
-			if (data.find("atkFall") != std::string::npos) 
+			if (data.find("weponset") != std::string::npos)
 			{
-				auto a = getNum(data); 
+				auto weponSetNum = getNum(data);
+				if (weponSetNum == 0)
+				{
+					plMI->wepons[0].isActive = true;
+					plMI->wepons[1].isActive = true;
+					plMI->wepons[2].isActive = false;
+				}
+				else if (weponSetNum == 1)
+				{
+					plMI->wepons[0].isActive = false;
+					plMI->wepons[1].isActive = false;
+					plMI->wepons[2].isActive = true;
+				}
+			}
+			if (data.find("atkFall") != std::string::npos)
+			{
+				auto a = getNum(data);
 				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
 			}
 			if (data == "test")

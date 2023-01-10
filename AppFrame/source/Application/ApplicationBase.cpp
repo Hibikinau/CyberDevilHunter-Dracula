@@ -17,7 +17,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer *ms) {
 	if (AppWindowed()) {
 		ChangeWindowMode(true);							// ウィンドウモードに指定する
 	}
-	SetMainWindowText("kojinGAME");
+	SetMainWindowText("CyberDevilHunter-Dracula");
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);
 
 	if (DxLib_Init() == -1)
@@ -44,11 +44,15 @@ bool ApplicationBase::Terminate() {
 
 
 bool ApplicationBase::Input() {
-	// キーの入力、トリガ入力を得る
-	int keyold = _imputInf._gKeyp;
-	_imputInf._gKeyp = GetJoypadInputState(DX_INPUT_PAD1);
-	_imputInf._gTrgp = (_imputInf._gKeyp ^ keyold) & _imputInf._gKeyp;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	//-------------Dpad入力-------------
+	//_gTrgp、_gTrgpが変数の方的なアレで動かない
+	//int keyold = _imputInf._gKeyp;
+	//_imputInf._gTrgp = GetJoypadInputState(DX_INPUT_PAD1);
+	//_imputInf._gTrgp = (_imputInf._gKeyp ^ keyold) & _imputInf._gKeyp;	// キーのトリガ情報生成（押した瞬間しか反応しないキー情報）
+	//GetLstick(&_imputInf.lStickX, &_imputInf.lStickY);
+	//GetRstick(&_imputInf.rStickX, &_imputInf.rStickY);
 
+	//-------------キーボ－ド入力-------------
 	char _gTrgbOld[256] = { 0 };
 	for (int i = 0; i < 256; i++) { _gTrgbOld[i] = _imputInf._gKeyb[i]; }
 	GetHitKeyStateAll(_imputInf._gKeyb);
@@ -56,9 +60,22 @@ bool ApplicationBase::Input() {
 	{
 		_imputInf._gKeyb[i] == 1 && _gTrgbOld[i] != 1 ? _imputInf._gTrgb[i] = 1 : _imputInf._gTrgb[i] = 0;
 	}
-	_serverMode->Imput(&_imputInf);
 
-	GetRstick(&_imputInf.rStickX, &_imputInf.rStickY);
+	//-------------Xpad入力-------------
+	char _gTrgbOldX[16] = { 0 };
+	for (int i = 0; i < 16; i++) { _gTrgbOldX[i] = imputInfX.Buttons[i]; }
+	GetJoypadXInputState(DX_INPUT_PAD1, &imputInfX);
+	for (int i = 0; i < 16; i++) { _imputInf._gKeyp[i] = imputInfX.Buttons[i]; }
+	for (int i = 0; i < 16; i++)
+	{
+		_imputInf._gKeyp[i] == 1 && _gTrgbOldX[i] != 1 ? _imputInf._gTrgp[i] = 1 : _imputInf._gTrgp[i] = 0;
+	}
+	_imputInf.lStickX = imputInfX.ThumbLX;
+	_imputInf.lStickY = imputInfX.ThumbLY;
+	_imputInf.rStickX = imputInfX.ThumbRX;
+	_imputInf.rStickY = imputInfX.ThumbRY;
+
+	_serverMode->Imput(&_imputInf);
 	return true;
 }
 

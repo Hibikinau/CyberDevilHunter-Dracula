@@ -25,10 +25,11 @@ bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 	return true;
 }
 
-bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame,const float scale, bool activate)
+bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name)
 {
 	weponModelInf weponMI;
 	weponMI.isActive = activate;
+	weponMI.name = name;
 	weponMI.weponHandle = MV1LoadModel(dir);
 	if (weponMI.weponHandle == -1) { return false; }
 	weponMI.weponAttachFrameNum = MV1SearchFrame(MI->modelHandle, attachFrame);
@@ -49,7 +50,7 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attach
 
 bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend)
 {
-	if (MI->animHandleOld == _animHandle) { return true; }
+	if (MI->animHandleOld == _animHandle) { return false; }
 	MI->isBrending = isBlend;
 	MV1DetachAnim(MI->modelHandle, MI->attachIndex);
 	MV1DetachAnim(MI->modelHandle, MI->attachIndexOld);
@@ -57,6 +58,8 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 	MI->attachIndexOld = MV1AttachAnim(MI->modelHandle, MI->animHandleOld, -1, false);
 	MI->animHandleOld = _animHandle;
 	MI->animOldLoop = isLoop;
+	MI->playTimeOld = MI->playTime;
+	MI->playTime = 0.f;
 
 	MI->totalTime = MV1GetAttachAnimTotalTime(MI->modelHandle, MI->attachIndex);
 
@@ -65,32 +68,23 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 
 bool modelManager::modelRender(modelInf* MI, float animSpeed)
 {
-	bool checkAnimEnd = false;
+	MI->isAnimEnd = false;
 	if (MI->isBrending) { MI->rate = 0.f, MI->isBrending = false; }
-	if (MI->rate < 1.0f)
+	if (MI->rate <= 1.0f)
 	{
-		MI->rate > 1.0f ? MI->rate = 1.0f : MI->rate += 0.1f;
+		MI->rate >= 1.0f ? MI->rate = 1.0f : MI->rate += 0.1f;
 
-		MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndexOld, MI->playTime);
+		MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndexOld, MI->playTimeOld);
 	}
 	else
 	{
 		MI->playTime += animSpeed;
-		if (MI->playTime > MI->totalTime)
+		if (MI->playTime >= MI->totalTime)
 		{
-			checkAnimEnd = true;
+			MI->isAnimEnd = true;
 			if (MI->animOldLoop) { MI->playTime = 0.f; }
 			else { MI->playTime = MI->totalTime; }
 		}
-	}
-
-	for (auto _weponInf : MI->wepons)
-	{
-		if (!_weponInf.isActive) { continue; }
-		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
-		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
-
-		MV1DrawModel(_weponInf.weponHandle);
 	}
 
 	MV1SetAttachAnimBlendRate(MI->modelHandle, MI->attachIndexOld, 1.0f - MI->rate);
@@ -102,6 +96,25 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed)
 	MV1SetRotationXYZ(MI->modelHandle, VScale(MI->dir, (DX_PI_F / 180.0f)));
 	MV1DrawModel(MI->modelHandle);
 
-	return checkAnimEnd;
+	for (auto _weponInf : MI->wepons)
+	{
+		if (!_weponInf.isActive) { continue; }
+		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
+		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
+
+		MV1DrawModel(_weponInf.weponHandle);
+	}
+
+	return MI->isAnimEnd;
 }
 
+bool modelManager::modelDelete(modelInf* MI)
+{//装備モデルのメモリ解放してからコンテナの消去
+	for (int i = 0; i < MI->wepons.size(); i++)
+	{
+		DeleteGraph(MI->wepons[i].weponHandle);
+	}
+	MI->wepons.clear();
+	DeleteGraph(MI->modelHandle);//キャラモデルのメモリ解放
+	return true;
+}
