@@ -106,6 +106,8 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/weponset^武器セットの番号^(武器セットの番号)");
+	debugWardBox.emplace_back("/changeX^入れ替え技の名前^(charge / senpuu)");
+	debugWardBox.emplace_back("/changeY^入れ替え技の名前^(charge / senpuu)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -162,6 +164,16 @@ float getNum(std::string data)
 	return std::stof(input);
 }
 
+std::string getName(const char* data)
+{
+	std::string input;
+	std::stringstream b{ data };
+	std::getline(b, input, '^');
+	std::getline(b, input, '^');
+
+	return input.c_str();
+}
+
 int modeG::useCommand()
 {
 	if (!_imputInf._gTrgb[KEY_INPUT_RETURN]) { return 1; }
@@ -207,6 +219,15 @@ int modeG::useCommand()
 				auto a = getNum(data);
 				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
 			}
+			if (data.find("changeX") != std::string::npos)
+			{
+				charBox.find(Char_PL)->second->CA_change(getName(data.c_str()), "X");
+			}
+			if (data.find("changeY") != std::string::npos)
+			{
+				charBox.find(Char_PL)->second->CA_change(getName(data.c_str()), "Y");
+			}
+
 			if (data == "test")
 			{
 				OutputDebugString("succes");
