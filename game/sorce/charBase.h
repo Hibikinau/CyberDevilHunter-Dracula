@@ -8,6 +8,12 @@ struct statusInf
 	float hitPoint, bloodPoint, stamina;
 };
 
+struct collCapsule
+{//最大値を代入
+	VECTOR underPos, overPos;
+	float r;
+};
+
 class CB
 {
 public:
@@ -22,12 +28,13 @@ public:
 	virtual int	getType() { return type; }
 	virtual void setCB(std::map<std::string, std::shared_ptr<CB> > *_CB) { charBox = _CB; }
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
-	modelInf getInf() { return _modelInf; }
+	modelInf* getInf() { return &_modelInf; }
 	statusInf	getStatus() { return _statusInf; }
 
-	int type;//pl=1, oEnemy=2
+	int type = 0;//pl=1, oEnemy=2
 	bool isGround;
 	float g;
+	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	modelManager _modelManager;
 	modelInf _modelInf;
 	statusInf _statusInf;

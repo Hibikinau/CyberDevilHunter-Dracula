@@ -2,6 +2,7 @@
 #include<vector>
 #include<map>
 #include<string>
+#include<cmath>
 
 #pragma comment(lib,"../x64/Debug/AppFrame.lib")
 

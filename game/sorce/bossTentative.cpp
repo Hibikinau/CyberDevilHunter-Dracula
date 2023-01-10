@@ -44,7 +44,7 @@ bool Boss::Initialize()
 
 bool	Boss::Terminate()
 {
-
+	CB::Terminate();
 	return true;
 }
 
@@ -136,7 +136,7 @@ bool	Boss::Render()
 
 void Boss::charMove(float Speed, float _Dir)
 {
-	
+
 }
 
 bool Boss::step()
