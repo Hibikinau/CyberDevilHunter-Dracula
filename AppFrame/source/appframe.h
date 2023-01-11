@@ -5,6 +5,7 @@
 #include<cmath>
 
 #pragma comment(lib,"../x64/Debug/AppFrame.lib")
+//#pragma comment(lib,"../x64/Release/AppFrame.lib")
 
 #include"../../DxLib/DxLib.h"
 #include "Application/ApplicationBase.h"
