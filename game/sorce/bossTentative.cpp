@@ -73,14 +73,17 @@ bool	Boss::Process()
 	//auto y = plMI->pos.y - _modelInf.pos.y;
 	//dir=atan2(x,y);
 
-	//boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
+	auto xz = plMI->pos;
+
+	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
 	auto a = VSub(plMI->pos, _modelInf.pos);
 	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f ) 
 	{ 
-	
+		status = STATUS::KICK;
 	}
 	else {
-
+		status = STATUS::WALK;
+		Walk(xz);
 	}
 
 	/*if (_vPos.x < plMI->pos.x) {
@@ -150,4 +153,20 @@ void Boss::charMove(float Speed, float _Dir)
 bool Boss::step()
 {
 	return true;
+}
+
+void Boss::Walk(VECTOR x) {
+	if (x.x<_modelInf.pos.x) {
+		_modelInf.pos.x--;
+	}
+	else if (x.x > _modelInf.pos.x) {
+		_modelInf.pos.x++;
+	}
+
+	if (x.z < _modelInf.pos.z) {
+		_modelInf.pos.z--;
+	}
+	else if (x.z > _modelInf.pos.z) {
+		_modelInf.pos.z++;
+	}
 }

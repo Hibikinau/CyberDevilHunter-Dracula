@@ -22,6 +22,7 @@ public:
 	bool step();
 	bool checkTrgImput(int Key, int Pad) { if (_gTrgb[Key] || *_gTrgp & Pad) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_gKeyb[Key] || *_gKeyp & Pad) { return true; } else { return false; } }
+	void Walk(VECTOR x);
 
 	enum class STATUS {
 		NONE,
