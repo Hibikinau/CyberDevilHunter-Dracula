@@ -68,7 +68,7 @@ protected:
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
-	int immortalTime;
+	int immortalTime, dodgeTime;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate;
 	pushButton nextKey;

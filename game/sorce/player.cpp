@@ -85,8 +85,9 @@ bool	PL::Process()
 		Estate = _estate::DODGE;
 		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
 		animSpd = 0.5f;
-		spd = 25.f;
-		immortalTime = 99999;
+		//spd = 25.f;
+		dodgeTime = 52;
+		immortalTime = dodgeTime;
 		isCharge = 0;
 		dodgeDir = getMoveDir();
 		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
@@ -243,12 +244,13 @@ bool	PL::Process()
 		chargeLevel = 0;
 	}
 
-	if (immortalTime > 0)
+	if (dodgeTime > 0)
 	{
 		charMove(spd, dodgeDir, false);
-		immortalTime--;
+		dodgeTime--;
 	}
 
+	immortalTime > 0 ? immortalTime-- : immortalTime = 0;
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -313,7 +315,6 @@ pushButton PL::setAction()
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
-		immortalTime = 0;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && isCharge == 0) { Estate = _estate::NORMAL; }
 	}
