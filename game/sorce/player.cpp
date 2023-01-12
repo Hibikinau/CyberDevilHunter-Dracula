@@ -39,7 +39,7 @@ bool PL::Initialize()
 	maxBloodPoint = _statusInf.bloodPoint = 100;
 
 	_modelInf.importCnt = 0;
-	_modelInf.pos = VGet(0.0f, 0.0f, 18000.f);
+	_modelInf.pos = VGet(0.0f, 0.0f, 0.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
@@ -85,7 +85,7 @@ bool	PL::Process()
 		Estate = _estate::DODGE;
 		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
 		animSpd = 0.5f;
-		//spd = 25.f;
+		spd = 25.f;
 		dodgeTime = 52;
 		immortalTime = dodgeTime;
 		isCharge = 0;
@@ -255,10 +255,10 @@ bool	PL::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
-	if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
-	if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
+	//if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
+	//if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
+	//if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 
-	if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 	if (moveCheck) { isDash = false; }
 
 	collPL.r = 30.f;

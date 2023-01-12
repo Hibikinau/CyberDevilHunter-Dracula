@@ -17,11 +17,12 @@ bool	modeG::Initialize()
 {
 	DrawString(640, 360, "loading...", GetColor(255, 255, 255));
 	ScreenFlip();
-	_modelManager.modelImport("game/res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
-	SetUseLighting(true);
+	_modelManager.modelImport("game/res/kariStage/Haikei demo.mv1", 20.0f, &stage);
+	SetUseLighting(false);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	countTime = GetNowCount();
+	//LightHandle02 = CreatePointLightHandle(VGet(0.f, 0.f, 0.f), 2000.f, 0.f, 0.f, 0.f);
 
 	makePL();
 
@@ -69,7 +70,7 @@ bool	modeG::Process()
 	cameraMove();
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
-	//SetLightPositionHandle(LightHandle02, plMI.pos);
+	//SetLightPositionHandle(LightHandle02, plMI->pos);
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
 	debugWardBox.emplace_back(std::to_string(
