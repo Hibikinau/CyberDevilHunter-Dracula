@@ -73,7 +73,7 @@ bool	Boss::Process()
 		CRange();
 		status = STATUS::KICK;
 	}
-	else if(200<=c&&c<=500){
+	else if(200<=c && c<=500){
 		MRange();
 		status = STATUS::WALK;
 		Walk(xz);
@@ -82,8 +82,8 @@ bool	Boss::Process()
 	else  {
 		LRange();
 		status = STATUS::WALK;
-		Walk(xz);
 		_modelInf.dir.y = b;
+		Walk(xz);
 	}
 
 
@@ -132,11 +132,13 @@ bool Boss::step()
 
 void Boss::Walk(VECTOR x) {
 	float xz = 7.0;
-
+	auto c=VSub(x, _modelInf.pos);
+	sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
-	_modelInf.pos.x -= sin(radian) * xz;
-	_modelInf.pos.z -= cos(radian) * xz;
-
+	//for (auto i = ;) {
+		_modelInf.pos.x -= sin(radian) * xz;
+		_modelInf.pos.z -= cos(radian) * xz;
+	//}
 	/*if (x.x<_modelInf.pos.x) {
 		_modelInf.pos.x-=xz;
 	}
