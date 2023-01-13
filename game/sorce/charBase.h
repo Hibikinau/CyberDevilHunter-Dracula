@@ -5,7 +5,7 @@
 
 struct statusInf
 {//ç≈ëÂílÇë„ì¸
-	float hitPoint, bloodPoint, stamina;
+	float hitPoint, bloodPoint, vampireLevel, stamina;
 };
 
 struct collCapsule
@@ -26,8 +26,11 @@ public:
 	virtual bool	Render();
 	virtual bool gravity();
 	virtual int	getType() { return type; }
-	virtual void setCB(std::map<std::string, std::shared_ptr<CB> > *_CB) { charBox = _CB; }
+	virtual void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
+	virtual bool CA_change(std::string name, const char* XorY) { return false; };
+	virtual bool HPmath(float Num) { return false; };
+	virtual bool BPmath(float Num) { return false; };
 	modelInf* getInf() { return &_modelInf; }
 	statusInf	getStatus() { return _statusInf; }
 
@@ -38,6 +41,6 @@ public:
 	modelManager _modelManager;
 	modelInf _modelInf;
 	statusInf _statusInf;
-	std::map<std::string, std::shared_ptr<CB> > *charBox;
-	valData *_valData;
+	std::map<std::string, std::shared_ptr<CB> >* charBox;
+	valData* _valData;
 };

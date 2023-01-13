@@ -39,7 +39,7 @@ bool PL::Initialize()
 	maxBloodPoint = _statusInf.bloodPoint = 100;
 
 	_modelInf.importCnt = 0;
-	_modelInf.pos = VGet(0.0f, 0.0f, 18000.f);
+	_modelInf.pos = VGet(0.0f, 0.0f, 0.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
@@ -47,6 +47,9 @@ bool PL::Initialize()
 	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true, "RabbitBunker");
 	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true, "SwordBreaker");
 	_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+
+	changeAttackY = &CA_charge;
+	changeAttackX = &CA_senpuu;
 
 	auto a = MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
 	return true;
@@ -65,14 +68,15 @@ bool	PL::Input()
 }
 
 bool	PL::Process()
-{
+{/*
 	if (_statusInf.hitPoint <= 0 || isDead != 0)
 	{
 		_modelManager.animChange(motion_demoDead, &_modelInf, false, false);
 		if (_modelInf.isAnimEnd && isDead == 1) { isDead = 2; return false; }
-		else if(isDead != 2){ isDead = 1; }
+		else if (isDead != 2) { isDead = 1; }
 		return true;
-	}
+	}*/
+
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())
@@ -83,7 +87,8 @@ bool	PL::Process()
 		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
 		animSpd = 0.5f;
 		spd = 25.f;
-		immortalTime = 99999;
+		dodgeTime = 52;
+		immortalTime = dodgeTime;
 		isCharge = 0;
 		dodgeDir = getMoveDir();
 		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
@@ -136,32 +141,59 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://強攻撃
-		StartJoypadVibration(DX_INPUT_PAD1, 100, -1);
-		if (_modelInf.playTime >= _modelInf.totalTime / 2.f) { StartJoypadVibration(DX_INPUT_PAD1, 500, -1); }
-		if (_modelInf.playTime >= _modelInf.totalTime) { StartJoypadVibration(DX_INPUT_PAD1, 1000, -1); }
-		if (Estate != _estate::chargeATTACK)
+		Estate = _estate::slowATTACK;
+		waitNextAttack = 20;
+		if (attackNumOld == 0)
 		{
-			Estate = _estate::chargeATTACK;
-			isCharge = 1;
-			chargeLevel = 0;
-			_modelManager.animChange(motion_ZOIRUcharge, &_modelInf, false, true);
-			animSpd = 0.2f;
+			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
+			waitNextAttack += _valData->plAtkSpd1;
+			attackNumOld++;
 		}
-		if (isCharge == 2)
+		else if (attackNumOld == 1)
 		{
-			animSpd = 2.f;
-			if (chargeLevel == 0)
-			{
-				if (_modelInf.playTime >= _modelInf.totalTime / 5.f) { chargeLevel++; }
-				if (_modelInf.playTime >= _modelInf.totalTime) { chargeLevel++; }
-			}
-			if (_modelInf.playTime >= _modelInf.totalTime)
-			{
-				if (chargeLevel == 2) { _modelManager.animChange(motion_ZOIRUattack1, &_modelInf, false, true); }
-				else { _modelManager.animChange(motion_ZOIRUattack2, &_modelInf, false, true); }
-				isCharge = 0, animSpd = 0.5f;
-			}
+			_modelManager.animChange(motion_DR2, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
+			waitNextAttack += _valData->plAtkSpd2;
+			attackNumOld++;
 		}
+		else if (attackNumOld == 2)
+		{
+			_modelManager.animChange(motion_DR3, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
+			waitNextAttack += _valData->plAtkSpd3;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 3)
+		{
+			_modelManager.animChange(motion_DR4, &_modelInf, false, false);
+			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
+			waitNextAttack += _valData->plAtkSpd4;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 4)
+		{
+			_modelManager.animChange(motion_SENPUU, &_modelInf, false, false);
+			animSpd = attackMotionTotalTimeSenpu / 60.f;
+			waitNextAttack += 60.f;
+			attackNumOld++;
+		}
+		else if (attackNumOld == 5)
+		{
+			if (!_modelManager.animChange(motion_SENPUUL, &_modelInf, false, false)) { _modelInf.playTime = 0.f; }
+			animSpd = attackMotionTotalTimeSenpu / 60.f;
+			waitNextAttack += 30.f;
+			attackNumOld = 5;
+		}
+
+		break;
+	case pushButton::LBX://入れ替えX
+		Estate = _estate::changeATTACKX;
+		changeAttackX(this);
+		break;
+	case pushButton::LBY://入れ替えY
+		Estate = _estate::changeATTACKY;
+		changeAttackY(this);
 		break;
 	case pushButton::A://ジャンプ
 		if (isGround)
@@ -204,24 +236,30 @@ bool	PL::Process()
 		break;
 	}
 
-	if (Estate == _estate::chargeATTACK && chargeLevel == 2 && _modelInf.playTime < 31.f && _modelInf.playTime > 9.f)
+	if (chargeLevel == 2 && _modelInf.playTime < 31.f && _modelInf.playTime > 9.f)
 	{
-		charMove(40.f, _modelInf.dir.y + 180, true);
+		charMove(40.f, _modelInf.dir.y + 180, false);
 	}
-	if (immortalTime > 0)
+	else if (chargeLevel == 2 && _modelInf.playTime > 32.f)
 	{
-		charMove(spd, dodgeDir, false);
-		immortalTime--;
+		chargeLevel = 0;
 	}
 
+	if (dodgeTime > 0)
+	{
+		charMove(spd, dodgeDir, false);
+		dodgeTime--;
+	}
+
+	immortalTime > 0 ? immortalTime-- : immortalTime = 0;
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
-	if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
-	if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
+	//if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
+	//if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
+	//if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 
-	if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 	if (moveCheck) { isDash = false; }
 
 	collPL.r = 30.f;
@@ -232,8 +270,11 @@ bool	PL::Process()
 
 	//bossと距離一定以内でHP減少
 	auto a = VSub(Einf->pos, _modelInf.pos);
-	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) { _statusInf.hitPoint -= 2.f; }
-
+	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) 
+	{
+		HPmath(-2.f);
+	}
+	HPmath(-2.f);
 	return true;
 }
 
@@ -246,7 +287,7 @@ bool	PL::Render()
 
 void PL::charMove(float Speed, float _Dir, bool animChange)
 {
-	if (Estate != _estate::JUMP && Estate != _estate::chargeATTACK && animChange)
+	if (animChange)
 	{
 		if (isDash)
 		{
@@ -270,34 +311,66 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 
 }
 
+bool PL::HPmath(float math)
+{
+	_statusInf.hitPoint += math;
+	if (math < 0) { BPmath(std::abs(math) * 6); }
+
+	return true;
+}
+bool PL::BPmath(float math)
+{
+	_statusInf.bloodPoint += math;
+	if (_statusInf.bloodPoint >= 1000.f)
+	{
+		_statusInf.vampireLevel++;
+		_statusInf.bloodPoint -= 1000.f;
+	}
+
+	return true;
+}
+
 pushButton PL::setAction()
 {
-	if (isGround && Estate == _estate::JUMP) { Estate = _estate::NORMAL; }
 	bool isNext = false;
 	bufferedInput = false;
 	pushButton insEnum = pushButton::Neutral;
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
-		immortalTime = 0;
 		StopJoypadVibration(DX_INPUT_PAD1);
-		if (Estate != _estate::NORMAL && Estate != _estate::JUMP && (Estate != _estate::chargeATTACK && isCharge != 0)) { Estate = _estate::NORMAL; }
+		if (Estate != _estate::NORMAL && isCharge == 0) { Estate = _estate::NORMAL; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir() != 0) {
-		if (Estate != _estate::chargeATTACK) { insEnum = pushButton::Lstick; }
+		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
 	}//Lstick
 	if (isNext) { insEnum = pushButton::Irregular; }
-	if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
-	if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
-	if (checkKeyImput(-1, XINPUT_BUTTON_Y))//Y
-	{
-		if (isCharge >= 1) { insEnum = pushButton::Y; }
+
+	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_SHOULDER))
+	{//入れ替え技
+		if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
+		if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
 	}
-	else { if (isCharge > 0) { insEnum = pushButton::Y, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//Y離したとき
+	else
+	{//通常技
+		if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
+		if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
+	}
+
+	if (checkKeyImput(-1, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)//LBXチャージ
+	{
+		if (isCharge >= 1) { insEnum = pushButton::LBX; }
+	}
+	else { if (isCharge > 0 && Estate == _estate::changeATTACKX) { insEnum = pushButton::LBX, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,X離したとき
+	if (checkKeyImput(-1, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)//LBYチャージ
+	{
+		if (isCharge >= 1) { insEnum = pushButton::LBY; }
+	}
+	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y離したとき
 
 	if (checkTrgImput(-1, XINPUT_BUTTON_B))
 	{
@@ -320,4 +393,59 @@ float PL::getMoveDir()
 	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
 
 	return _addDir;
+}
+
+bool PL::CA_change(std::string name, const char* XorY)
+{//changeAttackY = &CA_charge;
+	if ("X" == XorY)
+	{
+		if ("charge" == name) { changeAttackX = &CA_charge; }
+		if ("senpuu" == name) { changeAttackX = &CA_senpuu; }
+	}
+	else if ("Y" == XorY)
+	{
+		if ("charge" == name) { changeAttackY = &CA_charge; }
+		if ("senpuu" == name) { changeAttackY = &CA_senpuu; }
+	}
+
+	return true;
+}
+
+bool PL::CA_senpuu(PL* insPL)
+{
+	insPL->_modelManager.animChange(motion_SENPUUL, &insPL->_modelInf, false, true);
+	insPL->animSpd = attackMotionTotalTimeSenpu / 60.f;
+
+	return true;
+}
+bool PL::CA_charge(PL* insPL)
+{
+	StartJoypadVibration(DX_INPUT_PAD1, 100, -1);
+	if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime / 2.f) { StartJoypadVibration(DX_INPUT_PAD1, 500, -1); }
+	if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime) { StartJoypadVibration(DX_INPUT_PAD1, 1000, -1); }
+	if (insPL->isCharge == 0)
+	{
+		insPL->isCharge = 1;
+		insPL->chargeLevel = 0;
+		insPL->_modelManager.animChange(motion_ZOIRUcharge, &insPL->_modelInf, false, true);
+		insPL->animSpd = 0.2f;
+	}
+	if (insPL->isCharge == 2)
+	{
+		StopJoypadVibration(DX_INPUT_PAD1);
+		insPL->animSpd = 2.f;
+		if (insPL->chargeLevel == 0)
+		{
+			if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime / 5.f) { insPL->chargeLevel++; }
+			if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime) { insPL->chargeLevel++; }
+		}
+		if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime)
+		{
+			if (insPL->chargeLevel == 2) { insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, true); }
+			else { insPL->_modelManager.animChange(motion_ZOIRUattack2, &insPL->_modelInf, false, true); }
+			insPL->isCharge = 0, insPL->animSpd = 0.5f;
+		}
+	}
+
+	return true;
 }

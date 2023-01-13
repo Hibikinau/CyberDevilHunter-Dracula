@@ -14,7 +14,9 @@ enum class ExclusiveState
 	NORMAL,
 	JUMP,
 	quickATTACK,
-	chargeATTACK,
+	slowATTACK,
+	changeATTACKX,
+	changeATTACKY,
 	DODGE,
 };
 
@@ -25,6 +27,8 @@ enum class pushButton
 	B,
 	X,
 	Y,
+	LBX,
+	LBY,
 	Lstick,
 	Irregular,
 };
@@ -40,7 +44,7 @@ public:
 	virtual bool Process();
 	virtual bool Render();
 	virtual void charMove(float Speed, float _Dir, bool animChange);
-	bool getInputKey(imputInf *iInf, float* cameraDir)
+	bool getInputKey(imputInf* iInf, float* cameraDir)
 	{
 		_imputInf = iInf, _cameraDir = cameraDir; return true;
 	};
@@ -48,6 +52,13 @@ public:
 	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
 	float getMoveDir();
+	bool HPmath(float math) override;
+	bool BPmath(float math) override;
+	bool CA_change(std::string name, const char* XorY) override;
+	static bool CA_senpuu(PL* insPL);
+	static bool CA_charge(PL* insPL);
+	bool (*changeAttackX)(PL* insPL);
+	bool (*changeAttackY)(PL* insPL);
 
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
@@ -59,11 +70,11 @@ protected:
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
-	int immortalTime;
+	int immortalTime, dodgeTime;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate;
 	pushButton nextKey;
-	imputInf *_imputInf;
-	modelInf *Einf;
+	imputInf* _imputInf;
+	modelInf* Einf;
 	collCapsule collPL;
 };

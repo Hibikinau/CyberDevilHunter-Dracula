@@ -48,13 +48,13 @@ bool	modeG::Process()
 		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
 
-	if (charBox[Char_PL]->_statusInf.hitPoint <= 0)
-	{
-		charBox[Char_PL]->Terminate();
-		charBox.erase(Char_PL);
+	//if (charBox[Char_PL]->_statusInf.hitPoint <= 0)
+	//{
+	//	charBox[Char_PL]->Terminate();
+	//	charBox.erase(Char_PL);
 
-		makePL();
-	}
+	//	makePL();
+	//}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
 	{
@@ -72,6 +72,8 @@ bool	modeG::Process()
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
+	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
+	debugWardBox.emplace_back("自機のVL = " + std::to_string(plStatus.vampireLevel));
 	debugWardBox.emplace_back(std::to_string(
 		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
