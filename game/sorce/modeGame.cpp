@@ -51,13 +51,13 @@ bool	modeG::Process()
 		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
 
-	//if (charBox[Char_PL]->_statusInf.hitPoint <= 0)
-	//{
-	//	charBox[Char_PL]->Terminate();
-	//	charBox.erase(Char_PL);
+	if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)
+	{
+		charBox[Char_PL]->Terminate();
+		charBox.erase(Char_PL);
 
-	//	makePL();
-	//}
+		makePL();
+	}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
 	{
