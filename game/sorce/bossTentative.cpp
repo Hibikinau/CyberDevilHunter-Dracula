@@ -71,7 +71,7 @@ bool	Boss::Process()
 	if (c < 200)
 	{
 		CRange();
-		status = STATUS::KICK;
+		
 	}
 	else if(200<=c && c<=500){
 		MRange();
@@ -158,10 +158,14 @@ void Boss::CRange(){
 
 	int AttackRand=GetRand(100);
 	if (AttackRand<=70) {
-
+		status = STATUS::KICK;
+		DrawBox(500, 500 , 510, 520 , GetColor(0, 0, 0), true);
+		DrawString(500, 500, "A", GetColor(255, 255, 255));
 	}
 	else if (AttackRand > 70) {
-
+		status = STATUS::KICK;
+		DrawBox(500, 500, 510, 520, GetColor(0, 0, 0), true);
+		DrawString(500, 500, "B", GetColor(255, 255, 255));
 	}
 	return;
 }
