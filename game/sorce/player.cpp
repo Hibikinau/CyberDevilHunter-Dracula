@@ -36,7 +36,7 @@ bool PL::Initialize()
 	Estate = _estate::NORMAL;
 	maxHitPoint = _statusInf.hitPoint = 200;
 	maxStamina = _statusInf.stamina = 100;
-	maxBloodPoint = _statusInf.bloodPoint = 100;
+	_statusInf.bloodPoint = 0;
 
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 0.f);
@@ -76,6 +76,11 @@ bool	PL::Process()
 		else if (isDead != 2) { isDead = 1; }
 		return true;
 	}*/
+	//charMove(spd, *_cameraDir + addDir, true);
+	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
+	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
+	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
+	if (CheckHitKey(KEY_INPUT_S)) { _modelInf.pos.z += 10; }
 
 	float addDir = 0.f;
 	bool moveCheck = true;

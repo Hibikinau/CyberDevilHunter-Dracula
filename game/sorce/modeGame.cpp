@@ -8,6 +8,7 @@ bool modeG::makePL()
 	insPL->setCB(&charBox);
 	insPL->_valData = &_valData;
 	insPL->getInputKey(&_imputInf, &cameraDir);
+	insPL->setGroundInf(&stage);
 	charBox.emplace(Char_PL, std::move(insPL));
 
 	return true;
@@ -17,17 +18,19 @@ bool	modeG::Initialize()
 {
 	DrawString(640, 360, "loading...", GetColor(255, 255, 255));
 	ScreenFlip();
-	_modelManager.modelImport("game/res/ZENRYOKUstage/tsStage.mv1", 7.0f, &stage);
-	SetUseLighting(true);
+	_modelManager.modelImport("game/res/kariStage/Haikei demo.mv1", 7.0f, &stage);
+	SetUseLighting(false);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	countTime = GetNowCount();
+	MV1SetupCollInfo(stage.modelHandle, -1, 32, 8, 32);
 
 	makePL();
 
 	auto boss = std::make_unique<Boss>();
 	boss->Initialize();
 	boss->setCB(&charBox);
+	boss->setGroundInf(&stage);
 	charBox.emplace(Char_BOSS1, std::move(boss));
 
 	return true;
@@ -120,11 +123,14 @@ bool	modeG::Render()
 	int nowTime = GetNowCount();
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
+
+	DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 40.f, 0.f)), GetColor(0, 255, 0));
 	return true;
 }
 
 bool	modeG::Terminate()
 {
+	MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
 	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Terminate(); }
 	charBox.clear();

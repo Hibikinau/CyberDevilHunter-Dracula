@@ -35,7 +35,7 @@ bool Boss::Initialize()
 	//_vDir = VGet(0, 0, 1);		// キャラモデルはデフォルトで-Z方向を向いている
 
 	_modelInf.importCnt = 0;
-	_modelInf.pos = VGet(0.0f, 0.0f, 15000.f);
+	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	// 腰位置の設定
 	_colSubY = 40.f;
