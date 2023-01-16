@@ -36,7 +36,7 @@ bool PL::Initialize()
 	Estate = _estate::NORMAL;
 	maxHitPoint = _statusInf.hitPoint = 200;
 	maxStamina = _statusInf.stamina = 100;
-	maxBloodPoint = _statusInf.bloodPoint = 100;
+	_statusInf.bloodPoint = 0;
 
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 0.f);
@@ -68,14 +68,20 @@ bool	PL::Input()
 }
 
 bool	PL::Process()
-{
+{/*
 	if (_statusInf.hitPoint <= 0 || isDead != 0)
 	{
 		_modelManager.animChange(motion_demoDead, &_modelInf, false, false);
 		if (_modelInf.isAnimEnd && isDead == 1) { isDead = 2; return false; }
 		else if (isDead != 2) { isDead = 1; }
 		return true;
-	}
+	}*/
+	//charMove(spd, *_cameraDir + addDir, true);
+	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
+	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
+	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
+	if (CheckHitKey(KEY_INPUT_S)) { _modelInf.pos.z += 10; }
+
 	float addDir = 0.f;
 	bool moveCheck = true;
 	switch (setAction())
@@ -269,8 +275,11 @@ bool	PL::Process()
 
 	//boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
 	auto a = VSub(Einf->pos, _modelInf.pos);
-	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) { _statusInf.hitPoint -= 2.f; }
-
+	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) 
+	{
+		HPmath(-2.f);
+	}
+	HPmath(-2.f);
 	return true;
 }
 
@@ -305,6 +314,25 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 
 	_modelInf.dir.y = _Dir + 180.f;
 
+}
+
+bool PL::HPmath(float math)
+{
+	_statusInf.hitPoint += math;
+	if (math < 0) { BPmath(std::abs(math) * 6); }
+
+	return true;
+}
+bool PL::BPmath(float math)
+{
+	_statusInf.bloodPoint += math;
+	if (_statusInf.bloodPoint >= 1000.f)
+	{
+		_statusInf.vampireLevel++;
+		_statusInf.bloodPoint -= 1000.f;
+	}
+
+	return true;
 }
 
 pushButton PL::setAction()

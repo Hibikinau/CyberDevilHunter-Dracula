@@ -52,6 +52,8 @@ public:
 	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
 	float getMoveDir();
+	bool HPmath(float math) override;
+	bool BPmath(float math) override;
 	bool CA_change(std::string name, const char* XorY) override;
 	static bool CA_senpuu(PL* insPL);
 	static bool CA_charge(PL* insPL);

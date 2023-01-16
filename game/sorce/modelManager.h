@@ -27,7 +27,6 @@ struct valData
 {
 	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f;
 	std::vector<int> activateWepon, disableWepon;
-	std::string CA_X, CA_Y;
 };
 
 class modelManager

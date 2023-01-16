@@ -8,6 +8,7 @@ bool modeG::makePL()
 	insPL->setCB(&charBox);
 	insPL->_valData = &_valData;
 	insPL->getInputKey(&_imputInf, &cameraDir);
+	insPL->setGroundInf(&stage);
 	charBox.emplace(Char_PL, std::move(insPL));
 
 	return true;
@@ -17,18 +18,19 @@ bool	modeG::Initialize()
 {
 	DrawString(640, 360, "loading...", GetColor(255, 255, 255));
 	ScreenFlip();
-	_modelManager.modelImport("game/res/kariStage/Haikei demo.mv1", 20.0f, &stage);
+	_modelManager.modelImport("game/res/kariStage/Haikei demo.mv1", 7.0f, &stage);
 	SetUseLighting(false);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	countTime = GetNowCount();
-	//LightHandle02 = CreatePointLightHandle(VGet(0.f, 0.f, 0.f), 2000.f, 0.f, 0.f, 0.f);
+	MV1SetupCollInfo(stage.modelHandle, -1, 32, 8, 32);
 
 	makePL();
 
 	auto boss = std::make_unique<Boss>();
 	boss->Initialize();
 	boss->setCB(&charBox);
+	boss->setGroundInf(&stage);
 	charBox.emplace(Char_BOSS1, std::move(boss));
 
 	return true;
@@ -49,7 +51,7 @@ bool	modeG::Process()
 		else { i->second->Process(); bossMI = i->second->getInf(); }
 	}
 
-	if (charBox[Char_PL]->_statusInf.hitPoint <= 0)
+	if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)
 	{
 		charBox[Char_PL]->Terminate();
 		charBox.erase(Char_PL);
@@ -70,9 +72,11 @@ bool	modeG::Process()
 	cameraMove();
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
-	//SetLightPositionHandle(LightHandle02, plMI->pos);
+	//SetLightPositionHandle(LightHandle02, plMI.pos);
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
+	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
+	debugWardBox.emplace_back("自機のVL = " + std::to_string(plStatus.vampireLevel));
 	debugWardBox.emplace_back(std::to_string(
 		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
@@ -107,8 +111,6 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/weponset^武器セットの番号^(武器セットの番号)");
-	debugWardBox.emplace_back("/changeX^入れ替え技の名前^(charge / senpuu)");
-	debugWardBox.emplace_back("/changeY^入れ替え技の名前^(charge / senpuu)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -121,11 +123,14 @@ bool	modeG::Render()
 	int nowTime = GetNowCount();
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
+
+	DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 40.f, 0.f)), GetColor(0, 255, 0));
 	return true;
 }
 
 bool	modeG::Terminate()
 {
+	MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
 	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Terminate(); }
 	charBox.clear();
@@ -163,16 +168,6 @@ float getNum(std::string data)
 	std::getline(b, input, '^');
 
 	return std::stof(input);
-}
-
-std::string getName(const char* data)
-{
-	std::string input;
-	std::stringstream b{ data };
-	std::getline(b, input, '^');
-	std::getline(b, input, '^');
-
-	return input.c_str();
 }
 
 int modeG::useCommand()
@@ -220,15 +215,6 @@ int modeG::useCommand()
 				auto a = getNum(data);
 				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
 			}
-			if (data.find("changeX") != std::string::npos)
-			{
-				charBox.find(Char_PL)->second->CA_change(getName(data.c_str()), "X");
-			}
-			if (data.find("changeY") != std::string::npos)
-			{
-				charBox.find(Char_PL)->second->CA_change(getName(data.c_str()), "Y");
-			}
-
 			if (data == "test")
 			{
 				OutputDebugString("succes");
