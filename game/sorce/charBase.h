@@ -45,4 +45,6 @@ public:
 	std::map<std::string, std::shared_ptr<CB> >* charBox;
 	valData* _valData;
 	MV1_COLL_RESULT_POLY hitCheckGround;
+	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
+	collCapsule collCap;
 };
