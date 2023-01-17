@@ -11,25 +11,26 @@ bool Boss::Initialize()
 {
 	_modelManager.modelImport("game/res/reimu/nigareimu/nigareimu.pmx", 10.0f, &_modelInf);
 	useAnim = 0;
-	//ó÷äsê¸ÇÃëÂÇ´Ç≥ÇèCê≥Ç∑ÇÈ
-	int MaterialNum = MV1GetMaterialNum(_handle);
-	for (int i = 0; i < MaterialNum; i++)
-	{
-		// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇéÊìæ
-		float dotwidth = MV1GetMaterialOutLineDotWidth(_handle, i);
-		// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇägëÂÇµÇΩï™è¨Ç≥Ç≠Ç∑ÇÈ
-		MV1SetMaterialOutLineDotWidth(_handle, i, dotwidth / 10);
-	}
+	////ó÷äsê¸ÇÃëÂÇ´Ç≥ÇèCê≥Ç∑ÇÈ
+	//int MaterialNum = MV1GetMaterialNum(_handle);
+	//for (int i = 0; i < MaterialNum; i++)
+	//{
+	//	// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇéÊìæ
+	//	float dotwidth = MV1GetMaterialOutLineDotWidth(_handle, i);
+	//	// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇägëÂÇµÇΩï™è¨Ç≥Ç≠Ç∑ÇÈ
+	//	MV1SetMaterialOutLineDotWidth(_handle, i, dotwidth / 10);
+	//}
 	status = STATUS::NONE;
 	// çƒê∂éûä‘ÇÃèâä˙âª
-    _total_time = 0.f;
-	_play_time = 0.0f;
+    //_total_time = 0.f;
+	//_play_time = 0.0f;
 
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 15000.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	// çòà íuÇÃê›íË
 	_colSubY = 40.f;
+	Attack = false;
 	return true;
 }
 
@@ -68,10 +69,11 @@ bool	Boss::Process()
 	auto a = VSub(plMI->pos, _modelInf.pos);
 	auto b = (std::atan2(-a.x, -a.z) * 180.f) / DX_PI_F;
 	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-	if (c < 200)
+
+
+	if (c < 200 )
 	{
 		CRange();
-		
 	}
 	else if(200<=c && c<=500){
 		MRange();
@@ -95,17 +97,19 @@ bool	Boss::Process()
 		animSpd = 0.5f;
 		break;
 	case STATUS::WALK:
-		//_modelInf.playTime = 0.f;
+		
 		_modelManager.animChange(1, &_modelInf, true, true);
 		animSpd = 0.5f;
 		break;
 	case STATUS::KICK:
-		//_modelInf.playTime = 0.f;
-		_modelManager.animChange(2, &_modelInf, false, false);
+		if (Attack == true) { break;}
+		Attack = true;
+		_modelManager.animChange(AttackNo, &_modelInf, false, true);
 		animSpd = 1.0f;
         break;
 	}
 
+	if (_modelInf.playTime >= _modelInf.totalTime) { Attack = false; status = STATUS::NONE;};
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -133,7 +137,7 @@ bool Boss::step()
 void Boss::Walk(VECTOR x) {
 	float xz = 7.0;
 	auto c=VSub(x, _modelInf.pos);
-	sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
+	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
 	//for (auto i = ;) {
 		_modelInf.pos.x -= sin(radian) * xz;
@@ -159,13 +163,11 @@ void Boss::CRange(){
 	int AttackRand=GetRand(100);
 	if (AttackRand<=70) {
 		status = STATUS::KICK;
-		DrawBox(500, 500 , 510, 520 , GetColor(0, 0, 0), true);
-		DrawString(500, 500, "A", GetColor(255, 255, 255));
+		AttackNo = 2;
 	}
 	else if (AttackRand > 70) {
 		status = STATUS::KICK;
-		DrawBox(500, 500, 510, 520, GetColor(0, 0, 0), true);
-		DrawString(500, 500, "B", GetColor(255, 255, 255));
+		AttackNo = 3;
 	}
 	return;
 }

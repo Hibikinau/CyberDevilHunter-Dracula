@@ -37,17 +37,19 @@ public:
 	STATUS status;
 
 	// 3Dモデル描画用
-	int _handle;
-	int Anim_handle;
-	int Anim_handle2;
-	int Anim_handle3;
-	int _attach_index;
-	float _total_time;
-	float _play_time;
+	//int _handle;
+	//int Anim_handle;
+	//int Anim_handle2;
+	//int Anim_handle3;
+	//int _attach_index;
+	//float _total_time;
+	//float _play_time;
 	VECTOR _vPos;		// 位置
 	VECTOR _vOldPos;	// 前フレームの位置
 	VECTOR _vDir;	// 向き
 	float _colSubY;	// コリジョン判定時のY補正(腰位置）
+	int AttackNo;
+	bool Attack;
 
 protected:
 	int _cg, useAnim;
