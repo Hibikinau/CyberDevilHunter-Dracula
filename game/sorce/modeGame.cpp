@@ -147,6 +147,7 @@ void modeG::cameraMove()
 		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -300.f)), VGet(0.f, 250.f, 0.f));
 		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
 		cameraDir = cameraLockDir;
+		charBox[Char_PL]->setCamDir(cameraLockDir);
 	}
 	else
 	{
@@ -157,6 +158,7 @@ void modeG::cameraMove()
 		cameraPos.y += cameraHigh;
 		cameraFor.y -= cameraHigh;
 		cameraDir = cameraNtDir;
+		charBox[Char_PL]->setCamDir(-1.f);
 	}
 }
 
