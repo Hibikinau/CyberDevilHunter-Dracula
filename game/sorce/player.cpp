@@ -68,6 +68,17 @@ bool	PL::Input()
 	return true;
 }
 
+bool	PL::attackHitCheck()
+{
+	for (int i = 0; i < allColl.size(); i++)
+	{
+
+	}
+	
+
+	return true;
+}
+
 bool	PL::Process()
 {/*
 	if (_statusInf.hitPoint <= 0 || isDead != 0)
@@ -78,10 +89,31 @@ bool	PL::Process()
 		return true;
 	}*/
 	//charMove(spd, *_cameraDir + addDir, true);
+
+	for (int i = 0; i < allColl.size(); i++)
+	{
+		if (allColl[i].nonActiveTimeF > 0)
+		{
+			allColl[i].nonActiveTimeF--;
+		}
+		else if (allColl[i].activeTimeF > 0)
+		{
+			allColl[i].activeTimeF--;
+
+
+		}
+		else
+		{
+			allColl.erase(allColl.begin() + i);
+		}
+	}
+
 	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
 	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
 	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
 	if (CheckHitKey(KEY_INPUT_S)) { _modelInf.pos.z += 10; }
+
+		//HitCheck_Capsule_Capsule();
 
 	float addDir = 0.f;
 	bool moveCheck = true;

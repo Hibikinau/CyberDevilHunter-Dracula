@@ -13,6 +13,14 @@ struct collCapsule
 	float r;
 };
 
+struct attackColl
+{
+	collCapsule capColl;
+	std::string attackChar;
+	float damage;
+	int nonActiveTimeF, activeTimeF;
+};
+
 class CB
 {
 public:
@@ -48,4 +56,5 @@ public:
 	MV1_COLL_RESULT_POLY hitCheckGround;
 	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
 	collCapsule collCap;
+	std::vector<attackColl> allColl;
 };

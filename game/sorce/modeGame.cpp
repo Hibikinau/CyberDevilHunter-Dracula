@@ -87,6 +87,7 @@ bool	modeG::Process()
 		isLockon ^= true;
 	}
 
+
 	cameraNtDir += _imputInf.rStickX / 5000;
 	cameraHigh -= _imputInf.rStickY / 5000;
 
