@@ -105,6 +105,10 @@ bool	Boss::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
+	collCap.r = 30.f;
+	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+
 	return true;
 }
 
@@ -112,6 +116,7 @@ bool	Boss::Render()
 {
 	//DrawFormatString(600, 20, GetColor(0, 0, 0), "%f",dir);
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
