@@ -13,6 +13,9 @@
     <Filter Include="ResourceServer">
       <UniqueIdentifier>{c93aa2ee-8ff3-48cf-9c51-1a0f26c2b845}</UniqueIdentifier>
     </Filter>
+    <Filter Include="modelManager">
+      <UniqueIdentifier>{195dc846-b15e-4ff0-9ec2-c5f0afdeb1db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application\ApplicationBase.cpp">
@@ -32,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="source\ResourceServer\ResourceServer.cpp">
       <Filter>ResourceServer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\modelManager\modelManager.cpp">
+      <Filter>modelManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -53,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="source\ResourceServer\ResourceServer.h">
       <Filter>ResourceServer</Filter>
+    </ClInclude>
+    <ClInclude Include="source\modelManager\modelManager.h">
+      <Filter>modelManager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
