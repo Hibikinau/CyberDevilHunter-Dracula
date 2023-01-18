@@ -11,19 +11,10 @@ bool Boss::Initialize()
 {
 	_modelManager.modelImport("game/res/reimu/nigareimu/nigareimu.pmx", 10.0f, &_modelInf);
 	useAnim = 0;
-	////—ÖŠsü‚Ì‘å‚«‚³‚ğC³‚·‚é
-	//int MaterialNum = MV1GetMaterialNum(_handle);
-	//for (int i = 0; i < MaterialNum; i++)
-	//{
-	//	// ƒ}ƒeƒŠƒAƒ‹‚Ì—ÖŠsü‚Ì‘¾‚³‚ğæ“¾
-	//	float dotwidth = MV1GetMaterialOutLineDotWidth(_handle, i);
-	//	// ƒ}ƒeƒŠƒAƒ‹‚Ì—ÖŠsü‚Ì‘¾‚³‚ğŠg‘å‚µ‚½•ª¬‚³‚­‚·‚é
-	//	MV1SetMaterialOutLineDotWidth(_handle, i, dotwidth / 10);
-	//}
+	
 	status = STATUS::NONE;
-	// Ä¶ŠÔ‚Ì‰Šú‰»
-    //_total_time = 0.f;
-	//_play_time = 0.0f;
+	
+	
 
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 15000.f);
