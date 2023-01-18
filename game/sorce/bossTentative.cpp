@@ -108,6 +108,10 @@ bool	Boss::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
+	collCap.r = 30.f;
+	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+
 	return true;
 }
 
