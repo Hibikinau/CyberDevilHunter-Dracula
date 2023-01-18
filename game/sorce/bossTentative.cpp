@@ -88,9 +88,9 @@ bool	Boss::Process()
 		animSpd = 0.5f;
 		break;
 	case STATUS::WALK:
-		
 		_modelManager.animChange(1, &_modelInf, true, true);
 		animSpd = 0.5f;
+		Attack = false;
 		break;
 	case STATUS::KICK:
 		if (Attack == true) { break;}
@@ -100,7 +100,7 @@ bool	Boss::Process()
         break;
 	}
 
-	if (_modelInf.playTime >= _modelInf.totalTime) { Attack = false; status = STATUS::NONE;};
+	if (status==STATUS::KICK && _modelInf.playTime >= _modelInf.totalTime) { Attack = false; status = STATUS::NONE;};
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
