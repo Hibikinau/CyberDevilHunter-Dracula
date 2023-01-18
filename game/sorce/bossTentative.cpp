@@ -65,23 +65,39 @@ bool	Boss::Process()
 	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 
 
-	if (c < 200 )
-	{
-		CRange();
-	}
-	else if(200<=c && c<=500){
-		MRange();
-		status = STATUS::WALK;
-		Walk(xz);
-		_modelInf.dir.y = b;
-	}
-	else  {
-		LRange();
-		status = STATUS::WALK;
-		_modelInf.dir.y = b;
-		Walk(xz);
+	if (status != STATUS::KICK && isAnimEnd == false) {
+		if (c < 200)
+		{
+			CRange();
+		}
+		if (200 <= c && c <= 500) {
+			MRange();
+			status = STATUS::WALK;
+			Walk(xz);
+			_modelInf.dir.y = b;
+		}
+		if (c > 500) {
+			LRange();
+			status = STATUS::WALK;
+			_modelInf.dir.y = b;
+			Walk(xz);
+		}
 	}
 
+	/*if (c < 200) { range = RANGE::CrossRange; }
+	if (c >= 200 && c <= 500) { range = RANGE::MidRange; }
+	if (c > 500) { range = RANGE::LongRange; }
+
+	if (range == RANGE::NONE) {
+		switch (range) {
+		case RANGE::CrossRange:
+			break;
+		case RANGE::MidRange:
+			break;
+		case RANGE::LongRange:
+			break;
+		}
+	}*/
 
 	// ステータスに合わせてアニメーションのアタッチ
 	switch (status) {
@@ -108,9 +124,7 @@ bool	Boss::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
-	collCap.r = 30.f;
-	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	
 
 	return true;
 }
@@ -138,23 +152,10 @@ void Boss::Walk(VECTOR x) {
 	auto c=VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
-	//for (auto i = ;) {
+
 		_modelInf.pos.x -= sin(radian) * xz;
 		_modelInf.pos.z -= cos(radian) * xz;
-	//}
-	/*if (x.x<_modelInf.pos.x) {
-		_modelInf.pos.x-=xz;
-	}
-	else if (x.x > _modelInf.pos.x) {
-		_modelInf.pos.x+=xz;
-	}
-
-	if (x.z < _modelInf.pos.z) {
-		_modelInf.pos.z-=xz;
-	}
-	else if (x.z > _modelInf.pos.z) {
-		_modelInf.pos.z+=xz;
-	}*/
+	
 }
 
 void Boss::CRange(){
@@ -194,6 +195,6 @@ void Boss::MRange() {
 }
 
 void Boss:: LRange(){
-	float e = plMI->pos.x;
+	
 	return;
 }

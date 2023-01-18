@@ -36,14 +36,14 @@ public:
 	};
 	STATUS status;
 
-	// 3Dモデル描画用
-	//int _handle;
-	//int Anim_handle;
-	//int Anim_handle2;
-	//int Anim_handle3;
-	//int _attach_index;
-	//float _total_time;
-	//float _play_time;
+	enum class RANGE {
+		NONE,
+		CrossRange,
+		MidRange,
+		LongRange
+	};
+	RANGE range;
+
 	VECTOR _vPos;		// 位置
 	VECTOR _vOldPos;	// 前フレームの位置
 	VECTOR _vDir;	// 向き
