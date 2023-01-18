@@ -8,7 +8,7 @@ bool CB::Initialize()
 
 bool	CB::Terminate()
 {
-	_modelManager.modelDelete(&_modelInf);
+	_modelManager->modelDelete(&_modelInf);
 	return true;
 }
 

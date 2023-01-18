@@ -76,5 +76,4 @@ protected:
 	pushButton nextKey;
 	imputInf* _imputInf;
 	modelInf* Einf;
-	collCapsule collPL;
 };

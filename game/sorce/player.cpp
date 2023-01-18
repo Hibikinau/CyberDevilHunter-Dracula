@@ -51,7 +51,8 @@ bool PL::Initialize()
 	changeAttackY = &CA_charge;
 	changeAttackX = &CA_senpuu;
 
-	auto a = MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
+	MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
+
 	return true;
 }
 
@@ -267,9 +268,9 @@ bool	PL::Process()
 
 	if (moveCheck) { isDash = false; }
 
-	collPL.r = 30.f;
-	collPL.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collPL.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	collCap.r = 30.f;
+	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
@@ -286,7 +287,7 @@ bool	PL::Process()
 bool	PL::Render()
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	DrawCapsule3D(collPL.underPos, collPL.overPos, collPL.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../ResourceServer/ResourceServer.h"
 #include	<string>
 
 class ModeServer;
@@ -32,7 +32,6 @@ public:
 	void SetCallOfCount(int count) { _callOfCount = count; }		// 1‰ñ‚ÌŒÄ‚Ño‚µ‚É‰½‰ñProcess()‚ğŒÄ‚Ô‚©(def:1)
 	int GetCallPerFrame() { return _callPerFrame; }
 	int GetCallOfCount() { return _callOfCount; }
-
 
 private:
 	friend	ModeServer;

@@ -1,5 +1,8 @@
 #pragma once
-#include"../../AppFrame/source/appframe.h"
+#include<memory>
+#include<string>
+#include<vector>
+#include"../../../DxLib/DxLib.h"
 
 #define Char_PL "Player"
 #define Char_BOSS1 "Boss1"
@@ -45,3 +48,22 @@ public:
 	//ƒLƒƒƒ‰ƒ‚ƒfƒ‹‚Ìƒƒ‚ƒŠ‰ð•ú
 	bool modelDelete(modelInf* MI);
 };
+
+
+
+//SetUseASyncLoadFlag(true);
+//SetUseASyncLoadFlag(false);
+//SetDrawScreen(DX_SCREEN_BACK);
+//int i = 0;
+//ProcessMessage();
+//int B = GetASyncLoadNum();
+//while (GetASyncLoadNum() > 0)
+//{
+//	ClearDrawScreen();
+//	if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
+//	else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
+//	else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
+//	else { i = 0; }
+//	i++;
+//	ScreenFlip();
+//}

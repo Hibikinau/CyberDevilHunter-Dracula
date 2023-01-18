@@ -1,6 +1,5 @@
 #pragma once
 #include"../../AppFrame/source/appframe.h"
-#include"modelManager.h"
 #include"ResourceServerIns.h"
 
 struct statusInf
@@ -27,6 +26,7 @@ public:
 	virtual bool gravity();
 	virtual int	getType() { return type; }
 	virtual void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
+
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	virtual bool CA_change(std::string name, const char* XorY) { return false; };
 	virtual bool HPmath(float Num) { return false; };
@@ -39,10 +39,11 @@ public:
 	bool isGround;
 	float g;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
-	modelManager _modelManager;
+	modelManager *_modelManager;
 	modelInf _modelInf, *_GrounfInf;
 	statusInf _statusInf;
 	std::map<std::string, std::shared_ptr<CB> >* charBox;
 	valData* _valData;
 	MV1_COLL_RESULT_POLY hitCheckGround;
+	collCapsule collCap;
 };

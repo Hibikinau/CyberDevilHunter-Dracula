@@ -1,6 +1,5 @@
 #pragma once
 #include"../../AppFrame/source/appframe.h"
-#include"modelManager.h"
 #include"player.h"
 #include"bossTentative.h"
 #include<memory>
@@ -19,7 +18,8 @@ public:
 	void cameraMove();
 	int useCommand();
 	bool getPcInf();
-	bool makePL();
+	static bool makeDefaultChar(modeG* insMG);
+	bool ASyncLoad(bool (*loadDataClass)(modeG* insMG));
 
 
 protected:
