@@ -70,7 +70,7 @@ bool	PL::Input()
 
 bool	PL::attackHitCheck()
 {
-	for (int i = 0; i < allColl.size(); i++)
+	for (int i = 0; i < allColl->size(); i++)
 	{
 
 	}
@@ -90,21 +90,27 @@ bool	PL::Process()
 	}*/
 	//charMove(spd, *_cameraDir + addDir, true);
 
-	for (int i = 0; i < allColl.size(); i++)
+	for (int i = 0; i < allColl->size(); i++)
 	{
-		if (allColl[i].nonActiveTimeF > 0)
+		if (allColl->at(i).nonActiveTimeF > 0)
 		{
-			allColl[i].nonActiveTimeF--;
+			allColl->at(i).nonActiveTimeF--;
 		}
-		else if (allColl[i].activeTimeF > 0)
+		else if (allColl->at(i).activeTimeF > 0)
 		{
-			allColl[i].activeTimeF--;
-
-
+			allColl->at(i).activeTimeF--;
+			if (allColl->at(i).attackChar != Char_PL)
+			{
+				bool insCheckHit = HitCheck_Capsule_Capsule(collCap.underPos, collCap.overPos, collCap.r, allColl->at(i).capColl.underPos, allColl->at(i).capColl.overPos, allColl->at(i).capColl.r);
+				if (insCheckHit)
+				{
+					HPmath(-allColl->at(i).damage);
+				}
+			}
 		}
 		else
 		{
-			allColl.erase(allColl.begin() + i);
+			allColl->erase(allColl->begin() + i);
 		}
 	}
 
@@ -301,13 +307,13 @@ bool	PL::Process()
 
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
-	//boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
-	auto a = VSub(Einf->pos, _modelInf.pos);
-	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0)
-	{
-		HPmath(-2.f);
-	}
-	HPmath(-2.f);
+	////boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
+	//auto a = VSub(Einf->pos, _modelInf.pos);
+	//if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0)
+	//{
+	//	HPmath(-2.f);
+	//}
+	//HPmath(-2.f);
 	return true;
 }
 

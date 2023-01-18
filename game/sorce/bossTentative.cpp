@@ -48,6 +48,9 @@ bool	Boss::Process()
 		}
 	}
 
+	collCap.r = 30.f;
+	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
 	//•ÏX“_
 	//auto x = plMI->pos.x - _modelInf.pos.x;
@@ -112,6 +115,7 @@ bool	Boss::Render()
 {
 	//DrawFormatString(600, 20, GetColor(0, 0, 0), "%f",dir);
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
@@ -159,6 +163,17 @@ void Boss::CRange(){
 	else if (AttackRand > 70) {
 		status = STATUS::KICK;
 		AttackNo = 3;
+	}
+
+	if (allColl->size() == 0)
+	{
+		attackColl Acoll;
+		Acoll.nonActiveTimeF = 0;
+		Acoll.activeTimeF = 100;
+		Acoll.attackChar = Char_BOSS1;
+		Acoll.damage = 20.f;
+		Acoll.capColl = collCap;
+		allColl->emplace_back(std::move(Acoll));
 	}
 	return;
 }

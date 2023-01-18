@@ -37,6 +37,7 @@ protected:
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;
 	valData _valData;
+	std::vector<attackColl> mAllColl;
 
 	bool debugMode = true, plDead;
 };

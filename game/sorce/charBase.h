@@ -56,5 +56,5 @@ public:
 	MV1_COLL_RESULT_POLY hitCheckGround;
 	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
 	collCapsule collCap;
-	std::vector<attackColl> allColl;
+	std::vector<attackColl> *allColl;
 };

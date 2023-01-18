@@ -9,12 +9,14 @@ bool modeG::makeDefaultChar(modeG* insMG)
 	insPL->_valData = &insMG->_valData;
 	insPL->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insPL->setGroundInf(&insMG->stage);
+	insPL->allColl = &insMG->mAllColl;
 	insMG->charBox.emplace(Char_PL, std::move(insPL));
 
 	auto boss = std::make_unique<Boss>();
 	boss->Initialize();
 	boss->setCB(&insMG->charBox);
 	boss->setGroundInf(&insMG->stage);
+	boss->allColl = &insMG->mAllColl;
 	insMG->charBox.emplace(Char_BOSS1, std::move(boss));
 
 	return true;
@@ -79,6 +81,7 @@ bool	modeG::Process()
 		insPL->_valData = &_valData;
 		insPL->getInputKey(&_imputInf, &cameraDir);
 		insPL->setGroundInf(&stage);
+		insPL->allColl = &mAllColl;
 		charBox.emplace(Char_PL, std::move(insPL));
 	}
 
