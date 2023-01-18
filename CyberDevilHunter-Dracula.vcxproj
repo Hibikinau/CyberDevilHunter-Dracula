@@ -167,7 +167,6 @@
     <ClCompile Include="game\sorce\charBase.cpp" />
     <ClCompile Include="game\sorce\gameMain.cpp" />
     <ClCompile Include="game\sorce\modeGame.cpp" />
-    <ClCompile Include="game\sorce\modelManager.cpp" />
     <ClCompile Include="game\sorce\modeMenu.cpp" />
     <ClCompile Include="game\sorce\modeTitle.cpp" />
     <ClCompile Include="game\sorce\player.cpp" />
@@ -178,7 +177,6 @@
     <ClInclude Include="game\sorce\charBase.h" />
     <ClInclude Include="game\sorce\gameMain.h" />
     <ClInclude Include="game\sorce\modeGame.h" />
-    <ClInclude Include="game\sorce\modelManager.h" />
     <ClInclude Include="game\sorce\modeMenu.h" />
     <ClInclude Include="game\sorce\modeTitle.h" />
     <ClInclude Include="game\sorce\player.h" />

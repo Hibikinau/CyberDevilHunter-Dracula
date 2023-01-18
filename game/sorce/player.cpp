@@ -51,7 +51,8 @@ bool PL::Initialize()
 	changeAttackY = &CA_charge;
 	changeAttackX = &CA_senpuu;
 
-	auto a = MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
+	MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
+
 	return true;
 }
 
@@ -95,10 +96,11 @@ bool	PL::Process()
 		dodgeTime = 52;
 		immortalTime = dodgeTime;
 		isCharge = 0;
-		dodgeDir = getMoveDir();
+		dodgeDir = getMoveDir(true);
 		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
 		break;
 	case pushButton::X://弱攻撃
+		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::quickATTACK;
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
@@ -146,6 +148,7 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://強攻撃
+		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::slowATTACK;
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
@@ -217,7 +220,7 @@ bool	PL::Process()
 		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
 
 		//移動先の角度をベクトルにして移動ベクトルに加算
-		addDir = getMoveDir();
+		addDir = getMoveDir(false);
 		if (addDir != 0) { charMove(spd, *_cameraDir + addDir, true); }
 		moveCheck = false;
 
@@ -230,14 +233,7 @@ bool	PL::Process()
 		animSpd = 0.5f;
 		break;
 	default:
-		if (Estate == _estate::JUMP)
-		{
-			//移動先の角度をベクトルにして移動ベクトルに加算
-			float addDir = getMoveDir();
-			if (addDir != 0) { charMove(spd / 2, *_cameraDir + addDir, true); }
-			moveCheck = false;
 
-		}
 		break;
 	}
 
@@ -267,15 +263,15 @@ bool	PL::Process()
 
 	if (moveCheck) { isDash = false; }
 
-	collPL.r = 30.f;
-	collPL.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collPL.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	collCap.r = 30.f;
+	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
 	//bossと距離一定以内でHP減少
 	auto a = VSub(Einf->pos, _modelInf.pos);
-	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0) 
+	if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0)
 	{
 		HPmath(-2.f);
 	}
@@ -286,7 +282,7 @@ bool	PL::Process()
 bool	PL::Render()
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	DrawCapsule3D(collPL.underPos, collPL.overPos, collPL.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
@@ -350,7 +346,7 @@ pushButton PL::setAction()
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir() != 0) {
+	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
 	}//Lstick
 	if (isNext) { insEnum = pushButton::Irregular; }
@@ -390,13 +386,16 @@ pushButton PL::setAction()
 	return insEnum;
 }
 
-float PL::getMoveDir()
+float PL::getMoveDir(bool checkUseCamDir)
 {
 	float _addDir = 0.f;
 	//移動先の角度指定
 	_addDir = (std::atan2(-_imputInf->lStickX, -_imputInf->lStickY) * 180.f) / DX_PI_F;
 	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
-
+	if (camDir != -1.f && checkUseCamDir)
+	{
+		_addDir = camDir;
+	}
 	return _addDir;
 }
 
@@ -418,6 +417,7 @@ bool PL::CA_change(std::string name, const char* XorY)
 
 bool PL::CA_senpuu(PL* insPL)
 {
+	insPL->_modelInf.dir.y = insPL->getMoveDir(true);
 	insPL->_modelManager.animChange(motion_SENPUUL, &insPL->_modelInf, false, true);
 	insPL->animSpd = attackMotionTotalTimeSenpu / 60.f;
 
@@ -446,6 +446,7 @@ bool PL::CA_charge(PL* insPL)
 		}
 		if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime)
 		{
+			insPL->_modelInf.dir.y = insPL->getMoveDir(true);
 			if (insPL->chargeLevel == 2) { insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, true); }
 			else { insPL->_modelManager.animChange(motion_ZOIRUattack2, &insPL->_modelInf, false, true); }
 			insPL->isCharge = 0, insPL->animSpd = 0.5f;

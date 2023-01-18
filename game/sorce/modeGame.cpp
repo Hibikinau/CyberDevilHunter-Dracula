@@ -1,23 +1,46 @@
 #include"allMode.h"
 #include <sstream>
 
-bool modeG::makePL()
+bool modeG::makeDefaultChar(modeG* insMG)
 {
 	auto insPL = std::make_unique<PL>();
 	insPL->Initialize();
-	insPL->setCB(&charBox);
-	insPL->_valData = &_valData;
-	insPL->getInputKey(&_imputInf, &cameraDir);
-	insPL->setGroundInf(&stage);
-	charBox.emplace(Char_PL, std::move(insPL));
+	insPL->setCB(&insMG->charBox);
+	insPL->_valData = &insMG->_valData;
+	insPL->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
+	insPL->setGroundInf(&insMG->stage);
+	insMG->charBox.emplace(Char_PL, std::move(insPL));
+
+	auto boss = std::make_unique<Boss>();
+	boss->Initialize();
+	boss->setCB(&insMG->charBox);
+	boss->setGroundInf(&insMG->stage);
+	insMG->charBox.emplace(Char_BOSS1, std::move(boss));
 
 	return true;
 }
 
+bool	modeG::ASyncLoad(bool (*loadDataClass)(modeG* insMG))
+{
+	loadDataClass(this);
+
+	int i = 0;
+	while (GetASyncLoadNum() > 0)
+	{
+		ClearDrawScreen();
+		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
+		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
+		else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
+		else { i = 0; }
+		i++;
+		ScreenFlip();
+	}
+
+	return GetASyncLoadNum();
+}
+
 bool	modeG::Initialize()
 {
-	DrawString(640, 360, "loading...", GetColor(255, 255, 255));
-	ScreenFlip();
 	_modelManager.modelImport("game/res/kariStage/Haikei demo.mv1", 7.0f, &stage);
 	SetUseLighting(false);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
@@ -25,14 +48,8 @@ bool	modeG::Initialize()
 	countTime = GetNowCount();
 	MV1SetupCollInfo(stage.modelHandle, -1, 32, 8, 32);
 
-	makePL();
-
-	auto boss = std::make_unique<Boss>();
-	boss->Initialize();
-	boss->setCB(&charBox);
-	boss->setGroundInf(&stage);
-	charBox.emplace(Char_BOSS1, std::move(boss));
-
+	int a = ASyncLoad(makeDefaultChar);
+	a += 1;
 	return true;
 }
 
@@ -56,7 +73,13 @@ bool	modeG::Process()
 		charBox[Char_PL]->Terminate();
 		charBox.erase(Char_PL);
 
-		makePL();
+		auto insPL = std::make_unique<PL>();
+		insPL->Initialize();
+		insPL->setCB(&charBox);
+		insPL->_valData = &_valData;
+		insPL->getInputKey(&_imputInf, &cameraDir);
+		insPL->setGroundInf(&stage);
+		charBox.emplace(Char_PL, std::move(insPL));
 	}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
@@ -147,6 +170,7 @@ void modeG::cameraMove()
 		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -300.f)), VGet(0.f, 250.f, 0.f));
 		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
 		cameraDir = cameraLockDir;
+		charBox[Char_PL]->setCamDir(cameraLockDir);
 	}
 	else
 	{
@@ -157,6 +181,7 @@ void modeG::cameraMove()
 		cameraPos.y += cameraHigh;
 		cameraFor.y -= cameraHigh;
 		cameraDir = cameraNtDir;
+		charBox[Char_PL]->setCamDir(-1.f);
 	}
 }
 

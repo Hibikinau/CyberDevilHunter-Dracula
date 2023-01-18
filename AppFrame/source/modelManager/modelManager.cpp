@@ -2,7 +2,26 @@
 
 bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 {
+	SetUseASyncLoadFlag(TRUE);
+
 	MI->modelHandle = MV1LoadModel(dir);
+
+	SetUseASyncLoadFlag(FALSE);
+	SetDrawScreen(DX_SCREEN_BACK);
+	int i = 0;
+	int B = GetASyncLoadNum();
+	while (GetASyncLoadNum() > 0)
+	{
+		ProcessMessage();
+		ClearDrawScreen();
+		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
+		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
+		else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
+		else { i = 0; }
+		i++;
+		ScreenFlip();
+	}
+
 	if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;
 
@@ -21,7 +40,6 @@ bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 		// ƒ}ƒeƒŠƒAƒ‹‚Ì—ÖŠsü‚Ì‘¾‚³‚ðŠg‘å‚µ‚½•ª¬‚³‚­‚·‚é
 		MV1SetMaterialOutLineDotWidth(MI->modelHandle, i, dotwidth / scale);
 	}
-
 	return true;
 }
 
