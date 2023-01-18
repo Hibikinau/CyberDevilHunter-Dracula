@@ -353,7 +353,10 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 bool PL::HPmath(float math)
 {
 	_statusInf.hitPoint += math;
-	if (math < 0) { BPmath(std::abs(math) * 6); }
+	if (math < 0)
+	{
+		BPmath(std::abs(math) * 6);
+	}
 
 	return true;
 }

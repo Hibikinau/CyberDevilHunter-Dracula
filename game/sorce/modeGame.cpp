@@ -12,12 +12,12 @@ bool modeG::makeDefaultChar(modeG* insMG)
 	insPL->allColl = &insMG->mAllColl;
 	insMG->charBox.emplace(Char_PL, std::move(insPL));
 
-	auto boss = std::make_unique<Boss>();
-	boss->Initialize();
-	boss->setCB(&insMG->charBox);
-	boss->setGroundInf(&insMG->stage);
-	boss->allColl = &insMG->mAllColl;
-	insMG->charBox.emplace(Char_BOSS1, std::move(boss));
+	//auto boss = std::make_unique<Boss>();
+	//boss->Initialize();
+	//boss->setCB(&insMG->charBox);
+	//boss->setGroundInf(&insMG->stage);
+	//boss->allColl = &insMG->mAllColl;
+	//insMG->charBox.emplace(Char_BOSS1, std::move(boss));
 
 	return true;
 }
@@ -50,6 +50,10 @@ bool	modeG::Initialize()
 	countTime = GetNowCount();
 	MV1SetupCollInfo(stage.modelHandle, -1, 32, 8, 32);
 
+	testAttackCap.underPos = VGet(0.f, 30.f, 0.f);
+	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
+	testAttackCap.r = 30.f;
+
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
 	return true;
@@ -77,6 +81,22 @@ bool	modeG::Process()
 				i->second->_modelInf.pos = VGet(0.f, 0.f, 0.f);
 			}
 		}
+	}
+
+	if (testAttackF <= 0)
+	{
+		attackColl Acoll;
+		Acoll.nonActiveTimeF = 100;
+		Acoll.activeTimeF = 100;
+		Acoll.attackChar = Char_BOSS1;
+		Acoll.damage = 20.f;
+		Acoll.capColl = testAttackCap;
+		mAllColl.emplace_back(std::move(Acoll));
+		testAttackF = 200;
+	}
+	else
+	{
+		testAttackF--;
 	}
 
 	if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)
@@ -161,6 +181,11 @@ bool	modeG::Render()
 	else { FPScount++; }
 
 	DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 40.f, 0.f)), GetColor(0, 255, 0));
+	
+	if (testAttackF <= 100)
+	{
+		DrawCapsule3D(testAttackCap.underPos, testAttackCap.overPos, testAttackCap.r, 8, GetColor(0, 255, 0), GetColor(0, 0, 0), false);
+	}
 	return true;
 }
 
