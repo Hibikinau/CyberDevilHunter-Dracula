@@ -67,7 +67,16 @@ bool	modeG::Process()
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
 		}
-		else { i->second->Process(); bossMI = i->second->getInf(); }
+		else 
+		{
+			i->second->Process();
+			bossMI = i->second->getInf();
+			i->second->gravity();
+			if (i->second->_modelInf.pos.y < -10)
+			{
+				i->second->_modelInf.pos = VGet(0.f, 0.f, 0.f);
+			}
+		}
 	}
 
 	if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)

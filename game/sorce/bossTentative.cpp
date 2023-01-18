@@ -13,7 +13,7 @@ bool Boss::Initialize()
 	useAnim = 0;
 	
 	status = STATUS::NONE;
-	
+	g = 1.f;
 	
 
 	_modelInf.importCnt = 0;
@@ -104,6 +104,9 @@ bool	Boss::Process()
 	}
 
 	if (status==STATUS::KICK && _modelInf.playTime >= _modelInf.totalTime) { Attack = false; status = STATUS::NONE;};
+
+	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
+	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
