@@ -33,20 +33,11 @@
     <ClCompile Include="game\sorce\charBase.cpp">
       <Filter>ソース ファイル\char</Filter>
     </ClCompile>
-    <ClCompile Include="game\sorce\player.cpp">
-      <Filter>ソース ファイル\char</Filter>
-    </ClCompile>
     <ClCompile Include="game\sorce\modeMenu.cpp">
-      <Filter>ソース ファイル\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="game\sorce\modeTitle.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
     <ClCompile Include="game\sorce\modeGame.cpp">
       <Filter>ソース ファイル\mode</Filter>
-    </ClCompile>
-    <ClCompile Include="game\sorce\bossTentative.cpp">
-      <Filter>ソース ファイル\char</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -55,9 +46,6 @@
     </ClInclude>
     <ClInclude Include="game\sorce\ResourceServerIns.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="game\sorce\player.h">
-      <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\charBase.h">
       <Filter>ヘッダー ファイル\char</Filter>
@@ -70,12 +58,6 @@
     </ClInclude>
     <ClInclude Include="game\sorce\modeMenu.h">
       <Filter>ヘッダー ファイル\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="game\sorce\modeTitle.h">
-      <Filter>ヘッダー ファイル\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="game\sorce\bossTentative.h">
-      <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

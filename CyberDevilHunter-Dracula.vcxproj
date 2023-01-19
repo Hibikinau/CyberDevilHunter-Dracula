@@ -163,23 +163,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="game\sorce\bossTentative.cpp" />
     <ClCompile Include="game\sorce\charBase.cpp" />
     <ClCompile Include="game\sorce\gameMain.cpp" />
     <ClCompile Include="game\sorce\modeGame.cpp" />
     <ClCompile Include="game\sorce\modeMenu.cpp" />
-    <ClCompile Include="game\sorce\modeTitle.cpp" />
-    <ClCompile Include="game\sorce\player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\allMode.h" />
-    <ClInclude Include="game\sorce\bossTentative.h" />
     <ClInclude Include="game\sorce\charBase.h" />
     <ClInclude Include="game\sorce\gameMain.h" />
     <ClInclude Include="game\sorce\modeGame.h" />
     <ClInclude Include="game\sorce\modeMenu.h" />
-    <ClInclude Include="game\sorce\modeTitle.h" />
-    <ClInclude Include="game\sorce\player.h" />
     <ClInclude Include="game\sorce\ResourceServerIns.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
