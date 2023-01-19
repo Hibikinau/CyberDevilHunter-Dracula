@@ -17,4 +17,5 @@ protected:
 	int _cg;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
+	modelInf _modelOnf;
 };
