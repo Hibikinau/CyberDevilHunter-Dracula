@@ -4,6 +4,8 @@ bool	modeM::Initialize()
 {
 	_cg = MakeGraph(1280, 720);
 	GetDrawScreenGraph(0, 0, 1280, 720, _cg);
+	_modeServer->disable(MODE_GAME);
+	SetDragFileValidFlag(TRUE);
 	return true;
 }
 
@@ -11,7 +13,20 @@ bool	modeM::Process()
 {
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
+		_modeServer->activate(MODE_GAME);
 		return false;
+	}
+
+	size_t size = 0;
+	TCHAR* path = NULL;
+
+	
+	
+	while ((size = GetDragFilePath(NULL)) != -1) {
+		if (!(path = (TCHAR*)malloc(size))) { return -1; }
+		GetDragFilePath(path, size);
+		printf("%s\n", path);
+		free(path);
 	}
 	return true;
 }
