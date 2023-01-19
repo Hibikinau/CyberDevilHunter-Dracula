@@ -23,6 +23,7 @@ public:
 	bool checkTrgImput(int Key, int Pad) { if (_gTrgb[Key] || *_gTrgp & Pad) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_gKeyb[Key] || *_gKeyp & Pad) { return true; } else { return false; } }
 	void Walk(VECTOR x);
+	void Backwalk(VECTOR x);
 	void CRange();
 	void MRange();
 	void LRange();
@@ -32,7 +33,8 @@ public:
 		WAIT,
 		WALK,
 		KICK,
-		_EOT_
+		SRASH,
+		BACK
 	};
 	STATUS status;
 
@@ -43,6 +45,8 @@ public:
 		LongRange
 	};
 	RANGE range;
+
+	bool MO;
 
 	VECTOR _vPos;		// 位置
 	VECTOR _vOldPos;	// 前フレームの位置
@@ -58,6 +62,7 @@ protected:
 	int* _gKeyp, * _gTrgp;
 	char* _gKeyb, * _gTrgb;
 	bool isUseFbx;
+	int time;
 	modelManager _modelManager;
 	bool attackFlag, isDash, isAnimEnd;
 	//modelInf _modelInf;

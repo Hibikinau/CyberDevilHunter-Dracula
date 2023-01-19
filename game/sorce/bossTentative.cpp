@@ -12,10 +12,11 @@ bool Boss::Initialize()
 	_modelManager.modelImport("game/res/reimu/nigareimu/nigareimu.pmx", 10.0f, &_modelInf);
 	useAnim = 0;
 	
-	status = STATUS::NONE;
-	
-	
+	status = STATUS::WAIT;
+	time = 100;
+	_statusInf.hitPoint = 10000;
 
+	MO = true;
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
@@ -46,16 +47,11 @@ bool	Boss::Process()
 		{
 			plMI = i->second->getInf();
 		}
-	}
+	}	
 
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
-
-	//変更点
-	//auto x = plMI->pos.x - _modelInf.pos.x;
-	//auto y = plMI->pos.y - _modelInf.pos.y;
-	//dir=atan2(x,y);
 
 	auto xz = plMI->pos;
 
@@ -65,39 +61,27 @@ bool	Boss::Process()
 	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 
 
-	if (status != STATUS::KICK && isAnimEnd == false) {
+	if(MO==true && time == 0) {
+		_modelInf.dir.y = b;
 		if (c < 200)
 		{
 			CRange();
 		}
-		if (200 <= c && c <= 500) {
+		if (200 <= c && c <= 350)
+		{
 			MRange();
-			status = STATUS::WALK;
-			Walk(xz);
-			_modelInf.dir.y = b;
 		}
-		if (c > 500) {
+		if (c > 350) 
+		{
 			LRange();
-			status = STATUS::WALK;
-			_modelInf.dir.y = b;
 			Walk(xz);
 		}
 	}
+	else if (time > 0)
+	{
+		time--;
+	}
 
-	/*if (c < 200) { range = RANGE::CrossRange; }
-	if (c >= 200 && c <= 500) { range = RANGE::MidRange; }
-	if (c > 500) { range = RANGE::LongRange; }
-
-	if (range == RANGE::NONE) {
-		switch (range) {
-		case RANGE::CrossRange:
-			break;
-		case RANGE::MidRange:
-			break;
-		case RANGE::LongRange:
-			break;
-		}
-	}*/
 
 	// ステータスに合わせてアニメーションのアタッチ
 	switch (status) {
@@ -109,17 +93,43 @@ bool	Boss::Process()
 	case STATUS::WALK:
 		_modelManager.animChange(1, &_modelInf, true, true);
 		animSpd = 0.5f;
+		
 		Attack = false;
 		break;
 	case STATUS::KICK:
 		if (Attack == true) { break;}
 		Attack = true;
-		_modelManager.animChange(AttackNo, &_modelInf, false, true);
+		_modelManager.animChange(2, &_modelInf, false, true);
 		animSpd = 1.0f;
         break;
+	case STATUS::SRASH:
+		if (Attack == true) { break; }
+		Attack = true;
+		_modelManager.animChange(3, &_modelInf, false, true);
+		animSpd = 1.0f;
+		break;
+	case STATUS::BACK:
+		_modelManager.animChange(1, &_modelInf, false, true);
+		_modelInf.totalTime = 100;
+		animSpd = 0.5f;
+		Backwalk(xz);
+		Attack = false;
+		break;
 	}
+	
 
-	if (status==STATUS::KICK && _modelInf.playTime >= _modelInf.totalTime) { Attack = false; status = STATUS::NONE;};
+	if (isAnimEnd == true) {
+		status = STATUS::WAIT;
+		Attack = false;
+		for (auto i = 0; i < 800; i++) {
+			if (i == 790) {
+				i = 0;
+				MO = true;
+				while(time < 20){ time = rand() % 40; }
+				break;
+			}
+		}
+	}
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -131,9 +141,11 @@ bool	Boss::Process()
 
 bool	Boss::Render()
 {
-	//DrawFormatString(600, 20, GetColor(0, 0, 0), "%f",dir);
+	if (isAnimEnd == true) {
+		DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	}
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
@@ -158,18 +170,28 @@ void Boss::Walk(VECTOR x) {
 	
 }
 
+void Boss::Backwalk(VECTOR x){
+	float xz = 0.5;
+	auto c = VSub(x, _modelInf.pos);
+	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
+	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
+
+	_modelInf.pos.x += sin(radian) * xz;
+	_modelInf.pos.z += cos(radian) * xz;
+}
+
 void Boss::CRange(){
 
 	int AttackRand=GetRand(100);
-	if (AttackRand<=70) {
+	if (AttackRand<=75) {
 		status = STATUS::KICK;
-		AttackNo = 2;
+		
 	}
-	else if (AttackRand > 70) {
-		status = STATUS::KICK;
-		AttackNo = 3;
+	else if (AttackRand > 75) {
+		status = STATUS::BACK;
+		
 	}
-
+	MO = false;
 	if (allColl->size() == 0)
 	{
 		attackColl Acoll;
@@ -185,16 +207,17 @@ void Boss::CRange(){
 
 void Boss::MRange() {
 	int AttackRand = GetRand(100);
-	if (AttackRand <= 70) {
+	if (AttackRand <= 80) {
+		status = STATUS::SRASH;
+	}
+	else if (AttackRand > 80) {
 
 	}
-	else if (AttackRand > 70) {
-
-	}
+	MO = false;
 	return;
 }
 
 void Boss:: LRange(){
-	
+	status = STATUS::WALK;
 	return;
 }
