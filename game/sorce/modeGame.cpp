@@ -12,12 +12,12 @@ bool modeG::makeDefaultChar(modeG* insMG)
 	insPL->allColl = &insMG->mAllColl;
 	insMG->charBox.emplace(Char_PL, std::move(insPL));
 
-	//auto boss = std::make_unique<Boss>();
-	//boss->Initialize();
-	//boss->setCB(&insMG->charBox);
-	//boss->setGroundInf(&insMG->stage);
-	//boss->allColl = &insMG->mAllColl;
-	//insMG->charBox.emplace(Char_BOSS1, std::move(boss));
+	auto boss = std::make_unique<Boss>();
+	boss->Initialize();
+	boss->setCB(&insMG->charBox);
+	boss->setGroundInf(&insMG->stage);
+	boss->allColl = &insMG->mAllColl;
+	insMG->charBox.emplace(Char_BOSS1, std::move(boss));
 
 	return true;
 }
@@ -99,20 +99,20 @@ bool	modeG::Process()
 		testAttackF--;
 	}
 
-	if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)
-	{
-		charBox[Char_PL]->Terminate();
-		charBox.erase(Char_PL);
+	//if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)
+	//{
+	//	charBox[Char_PL]->Terminate();
+	//	charBox.erase(Char_PL);
 
-		auto insPL = std::make_unique<PL>();
-		insPL->Initialize();
-		insPL->setCB(&charBox);
-		insPL->_valData = &_valData;
-		insPL->getInputKey(&_imputInf, &cameraDir);
-		insPL->setGroundInf(&stage);
-		insPL->allColl = &mAllColl;
-		charBox.emplace(Char_PL, std::move(insPL));
-	}
+	//	auto insPL = std::make_unique<PL>();
+	//	insPL->Initialize();
+	//	insPL->setCB(&charBox);
+	//	insPL->_valData = &_valData;
+	//	insPL->getInputKey(&_imputInf, &cameraDir);
+	//	insPL->setGroundInf(&stage);
+	//	insPL->allColl = &mAllColl;
+	//	charBox.emplace(Char_PL, std::move(insPL));
+	//}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
 	{
@@ -154,7 +154,7 @@ bool	modeG::Render()
 {
 	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Render(); }
 
-	MV1DrawModel(stage.modelHandle);
+	//MV1DrawModel(stage.modelHandle);
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
@@ -182,10 +182,14 @@ bool	modeG::Render()
 
 	DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 40.f, 0.f)), GetColor(0, 255, 0));
 	
-	if (testAttackF <= 100)
+	for (int i = 0; i < mAllColl.size(); i++)
 	{
-		DrawCapsule3D(testAttackCap.underPos, testAttackCap.overPos, testAttackCap.r, 8, GetColor(0, 255, 0), GetColor(0, 0, 0), false);
+		if (mAllColl[i].nonActiveTimeF <= 0.f)
+		{
+			DrawCapsule3D(mAllColl[i].capColl.underPos, mAllColl[i].capColl.overPos, mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+		}
 	}
+
 	return true;
 }
 

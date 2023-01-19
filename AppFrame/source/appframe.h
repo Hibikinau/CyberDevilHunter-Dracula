@@ -4,8 +4,8 @@
 #include<string>
 #include<cmath>
 
-//#pragma comment(lib,"../x64/Debug/AppFrame.lib")
-#pragma comment(lib,"../x64/Release/AppFrame.lib")
+#pragma comment(lib,"../x64/Debug/AppFrame.lib")
+//#pragma comment(lib,"../x64/Release/AppFrame.lib")
 
 #include "Application/ApplicationBase.h"
 #include "CFile/CFile.h"

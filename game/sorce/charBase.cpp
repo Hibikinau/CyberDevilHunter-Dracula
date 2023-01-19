@@ -53,8 +53,9 @@ bool	CB::Render()
 //}
 
 bool	CB::gravity()
-{/*
-	if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
+{
+	return true;
+	/*if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
 	else { _modelInf.pos.y = 0.f, isGround = true;}*/
 
 	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, _modelInf.pos, VAdd(_modelInf.pos, VGet(0.f, 40.f, 0.f)));
