@@ -1,6 +1,6 @@
 ﻿
 #include <cstddef>
-#include "../../../DxLib/DxLib.h"
+#include"../../../DxLib/DxLib.h"
 #include "ModeServer.h"
 
 

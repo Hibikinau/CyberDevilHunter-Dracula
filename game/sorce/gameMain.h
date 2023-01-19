@@ -1,9 +1,7 @@
 #pragma once
 #include"../../AppFrame/source/appframe.h"
-#include"player.h"
 #include<memory>
 
-#include"modeTitle.h"
 #include"modeGame.h"
 
 class gameMain : public ApplicationBase

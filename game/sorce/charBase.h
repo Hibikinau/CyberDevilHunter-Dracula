@@ -31,17 +31,12 @@ public:
 	virtual bool	Terminate();
 	virtual bool	Process();
 	virtual bool	Render();
-	virtual bool gravity();
 	virtual int	getType() { return type; }
 	virtual void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
 
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
-	virtual bool CA_change(std::string name, const char* XorY) { return false; };
-	virtual bool HPmath(float Num) { return false; };
-	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
 	modelInf* getInf() { return &_modelInf; }
-	void setGroundInf(modelInf *GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
 
 	int type = 0;//pl=1, oEnemy=2

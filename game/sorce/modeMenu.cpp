@@ -4,7 +4,6 @@ bool	modeM::Initialize()
 {
 	_cg = MakeGraph(1280, 720);
 	GetDrawScreenGraph(0, 0, 1280, 720, _cg);
-	_modeServer->disable(MODE_GAME);
 	return true;
 }
 
@@ -12,7 +11,6 @@ bool	modeM::Process()
 {
 	if (CheckHitKey(KEY_INPUT_Q))
 	{
-		_modeServer->activate(MODE_GAME);
 		return false;
 	}
 	return true;
