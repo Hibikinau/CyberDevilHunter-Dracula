@@ -57,17 +57,17 @@ bool	CB::gravity()
 	/*if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
 	else { _modelInf.pos.y = 0.f, isGround = true;}*/
 
-	//hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, _modelInf.pos, VAdd(_modelInf.pos, VGet(0.f, 40.f, 0.f)));
-	//if (hitCheckGround.HitFlag)
-	//{
-	//	_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, 1.f, 0.f));
-	//	isGround = true;
-	//}
-	//else
-	//{
-	//	_modelInf.vec.y -= g;
-	//	isGround = false;
-	//}
+	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, _modelInf.pos, VAdd(_modelInf.pos, VGet(0.f, 40.f, 0.f)));
+	if (hitCheckGround.HitFlag)
+	{
+		_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, 1.f, 0.f));
+		isGround = true;
+	}
+	else
+	{
+		_modelInf.vec.y -= g;
+		isGround = false;
+	}
 
 	//マップ(円)の中から出ないように
 	auto a = _modelInf.pos;
@@ -94,7 +94,7 @@ bool	CB::hitCheck(const char* name)
 			, VTransform(allColl->at(i).capColl.overPos, M)
 			, allColl->at(i).capColl.r);
 
-		if (insCheckHit)
+		if (insCheckHit && !isImmortal)
 		{
 			allColl->at(i).activeTimeF = 0.f;
 			HPmath(-allColl->at(i).damage);
