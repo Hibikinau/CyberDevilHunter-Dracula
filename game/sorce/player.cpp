@@ -68,17 +68,6 @@ bool	PL::Input()
 	return true;
 }
 
-bool	PL::attackHitCheck()
-{
-	for (int i = 0; i < allColl->size(); i++)
-	{
-
-	}
-
-
-	return true;
-}
-
 bool	PL::Process()
 {/*
 	if (_statusInf.hitPoint <= 0 || isDead != 0)
@@ -108,8 +97,7 @@ bool	PL::Process()
 		dodgeTime = 52;
 		immortalTime = dodgeTime;
 		isCharge = 0;
-		dodgeDir = getMoveDir(true);
-		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
+		dodgeDir = *_cameraDir + getMoveDir(false);
 		break;
 	case pushButton::X://弱攻撃
 		_modelInf.dir.y = getMoveDir(true);
@@ -281,7 +269,14 @@ bool	PL::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
-	if (_modelInf.pos.y <= -2000.f) { _modelInf.pos = VGet(0.f, 0.f, 0.f); }
+	//ボスと重ならないように
+	auto bossDisV = VSub(charBox->at(Char_BOSS1)->getInf()->pos, _modelInf.pos);
+	float bossDisF = sqrt(bossDisV.x* bossDisV.x + bossDisV.y * bossDisV.y + bossDisV.z * bossDisV.z);
+	float plzDis = charBox->at(Char_BOSS1)->collCap.r + collCap.r;
+	if (bossDisF < plzDis)
+	{
+		_modelInf.pos = VAdd(VScale(VNorm(bossDisV), -plzDis), charBox->at(Char_BOSS1)->getInf()->pos);
+	}
 
 	if (moveCheck) { isDash = false; }
 	isImmortal = immortalTime > 0;
@@ -289,6 +284,7 @@ bool	PL::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
+	//攻撃用カプセルコリジョンの作成
 	//for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
 	//{
 	//	if (_modelInf.wepons[i].isActive)
@@ -308,8 +304,6 @@ bool	PL::Process()
 	//		allColl->emplace_back(acoll);
 	//	}
 	//}
-
-	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
 	return true;
 }

@@ -54,7 +54,6 @@ public:
 	float getMoveDir(bool checkUseCamDir);
 	bool HPmath(float math) override;
 	bool BPmath(float math) override;
-	bool attackHitCheck();
 	bool CA_change(std::string name, const char* XorY) override;
 	static bool CA_senpuu(PL* insPL);
 	static bool CA_charge(PL* insPL);
