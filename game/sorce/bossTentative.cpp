@@ -5,16 +5,17 @@
 #define motion_idel 0
 #define motion_walk 1
 #define motion_run 2
+#define motion_attack1 2
 
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/reimu/nigareimu/nigareimu.pmx", 10.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/Enemy01_.mv1", 2.0f, &_modelInf);
 	useAnim = 0;
-	
+
 	status = STATUS::NONE;
 	g = 1.f;
-	
+
 
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
@@ -91,14 +92,14 @@ bool	Boss::Process()
 		animSpd = 0.5f;
 		break;
 	case STATUS::WALK:
-		_modelManager.animChange(1, &_modelInf, true, true);
+		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		animSpd = 0.5f;
 		Attack = false;
 		break;
 	case STATUS::KICK:
 		if (Attack == true) { break;}
 		Attack = true;
-		_modelManager.animChange(AttackNo, &_modelInf, false, true);
+		_modelManager.animChange(motion_attack1, &_modelInf, false, true);
 		animSpd = 1.0f;
         break;
 	}
