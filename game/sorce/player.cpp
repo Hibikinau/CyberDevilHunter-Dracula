@@ -282,12 +282,9 @@ bool	PL::Process()
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
 	if (_modelInf.pos.y <= -2000.f) { _modelInf.pos = VGet(0.f, 0.f, 0.f); }
-	//if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
-	//if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
-	//if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
 
 	if (moveCheck) { isDash = false; }
-
+	isImmortal = immortalTime > 0;
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
@@ -314,13 +311,6 @@ bool	PL::Process()
 
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
-	////boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
-	//auto a = VSub(Einf->pos, _modelInf.pos);
-	//if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0)
-	//{
-	//	HPmath(-2.f);
-	//}
-	//HPmath(-2.f);
 	return true;
 }
 
@@ -394,12 +384,12 @@ pushButton PL::setAction()
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
+	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
 	}//Lstick
 	if (isNext) { insEnum = pushButton::Irregular; }
 
-	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_SHOULDER))
+	if (checkKeyImput(KEY_INPUT_C, XINPUT_BUTTON_LEFT_SHOULDER))
 	{//“ü‚ê‘Ö‚¦‹Z
 		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
 		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
@@ -421,7 +411,7 @@ pushButton PL::setAction()
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y—£‚µ‚½‚Æ‚«
 
-	if (checkTrgImput(-1, XINPUT_BUTTON_B))
+	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))
 	{
 		if (isNext)
 		{
@@ -497,7 +487,7 @@ bool PL::CA_charge(PL* insPL)
 		{
 			insPL->_modelInf.dir.y = insPL->getMoveDir(true);
 			insPL->isCharge = 0, insPL->animSpd = 0.5f;
-			if (insPL->chargeLevel == 2) 
+			if (insPL->chargeLevel == 2)
 			{
 				insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, false);
 				insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
