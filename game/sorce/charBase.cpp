@@ -97,3 +97,23 @@ bool	CB::hitCheck(const char* name)
 
 	return true;
 }
+
+bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
+	, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName)
+{
+	attackColl acoll;
+	acoll.isUseMat = isUseMat;
+	acoll.capColl.parentModelHandle = _modelInf.modelHandle;
+	acoll.capColl.frameNum = frameNum;
+	acoll.capColl.underPos = _underPos;
+	acoll.capColl.overPos = _overPos;
+	acoll.capColl.r = r;
+	acoll.attackChar = charName;
+	acoll.activeTimeF = activeTimeF;
+	acoll.nonActiveTimeF = nonActiveTimeF;
+	acoll.damage = damage;
+
+	allColl->emplace_back(acoll);
+
+	return true;
+}

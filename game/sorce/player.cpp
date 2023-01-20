@@ -44,9 +44,9 @@ bool PL::Initialize()
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
-	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true, "RabbitBunker");
-	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true, "SwordBreaker");
-	_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, false, "RabbitBunker");
+	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
+	_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, true, "GunBlade");
 
 	changeAttackY = &CA_charge;
 	changeAttackX = &CA_senpuu;
@@ -117,10 +117,11 @@ bool	PL::Process()
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
 		{
-			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			_modelManager.animChange(motion_DR1, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -128,6 +129,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -135,6 +137,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += _valData->plAtkSpd3;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -142,6 +145,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
 			waitNextAttack += _valData->plAtkSpd4;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 4)
 		{
@@ -149,6 +153,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 60.f;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 5)
 		{
@@ -156,6 +161,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 30.f;
 			attackNumOld = 5;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 
 		break;
@@ -165,10 +171,11 @@ bool	PL::Process()
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
 		{
-			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			_modelManager.animChange(motion_DR1, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -176,6 +183,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -183,6 +191,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += _valData->plAtkSpd3;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -190,6 +199,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
 			waitNextAttack += _valData->plAtkSpd4;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 4)
 		{
@@ -197,6 +207,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 60.f;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 		else if (attackNumOld == 5)
 		{
@@ -204,6 +215,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 30.f;
 			attackNumOld = 5;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 116, Char_PL);
 		}
 
 		break;
@@ -280,27 +292,25 @@ bool	PL::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
-	for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
-	{
-		if (_modelInf.wepons[i].isActive)
-		{
-			attackColl acoll;
-			acoll.isUseMat = true;
-			acoll.capColl.parentModelHandle = _modelInf.modelHandle;
-			acoll.capColl.frameNum = _modelInf.wepons[i].weponAttachFrameNum;
-			acoll.capColl.underPos = VGet(0.f, 0.f, 0.f);
-			acoll.capColl.overPos = VGet(0.f, 0.f, -13.f);
-			acoll.capColl.r = 5.f;
-			acoll.attackChar = Char_PL;
-			acoll.activeTimeF = 1.f;
-			acoll.nonActiveTimeF = 0.f;
-			acoll.damage = 0.f;
+	//for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
+	//{
+	//	if (_modelInf.wepons[i].isActive)
+	//	{
+	//		attackColl acoll;
+	//		acoll.isUseMat = true;
+	//		acoll.capColl.parentModelHandle = _modelInf.modelHandle;
+	//		acoll.capColl.frameNum = _modelInf.wepons[i].weponAttachFrameNum;
+	//		acoll.capColl.underPos = VGet(0.f, 0.f, 0.f);
+	//		acoll.capColl.overPos = VGet(0.f, 0.f, -13.f);
+	//		acoll.capColl.r = 5.f;
+	//		acoll.attackChar = Char_PL;
+	//		acoll.activeTimeF = 1.f;
+	//		acoll.nonActiveTimeF = 0.f;
+	//		acoll.damage = 0.f;
 
-			allColl->emplace_back(acoll);
-		}
-	}
-	//
-
+	//		allColl->emplace_back(acoll);
+	//	}
+	//}
 
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
@@ -389,23 +399,23 @@ pushButton PL::setAction()
 	}//Lstick
 	if (isNext) { insEnum = pushButton::Irregular; }
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_SHOULDER))
+	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_SHOULDER))
 	{//入れ替え技
-		if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
-		if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
+		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
+		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
 	}
 	else
 	{//通常技
-		if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
-		if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
+		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
+		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
 	}
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)//LBXチャージ
+	if (checkKeyImput(KEY_INPUT_Z, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)//LBXチャージ
 	{
 		if (isCharge >= 1) { insEnum = pushButton::LBX; }
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKX) { insEnum = pushButton::LBX, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,X離したとき
-	if (checkKeyImput(-1, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)//LBYチャージ
+	if (checkKeyImput(KEY_INPUT_X, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)//LBYチャージ
 	{
 		if (isCharge >= 1) { insEnum = pushButton::LBY; }
 	}
@@ -456,8 +466,9 @@ bool PL::CA_change(std::string name, const char* XorY)
 bool PL::CA_senpuu(PL* insPL)
 {
 	insPL->_modelInf.dir.y = insPL->getMoveDir(true);
-	insPL->_modelManager.animChange(motion_SENPUUL, &insPL->_modelInf, false, true);
+	insPL->_modelManager.animChange(motion_SENPUUL, &insPL->_modelInf, false, false);
 	insPL->animSpd = attackMotionTotalTimeSenpu / 60.f;
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
 
 	return true;
 }
@@ -485,9 +496,17 @@ bool PL::CA_charge(PL* insPL)
 		if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime)
 		{
 			insPL->_modelInf.dir.y = insPL->getMoveDir(true);
-			if (insPL->chargeLevel == 2) { insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, true); }
-			else { insPL->_modelManager.animChange(motion_ZOIRUattack2, &insPL->_modelInf, false, true); }
 			insPL->isCharge = 0, insPL->animSpd = 0.5f;
+			if (insPL->chargeLevel == 2) 
+			{
+				insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, false);
+				insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
+			}
+			else
+			{
+				insPL->_modelManager.animChange(motion_ZOIRUattack2, &insPL->_modelInf, false, false);
+				insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
+			}
 		}
 	}
 
