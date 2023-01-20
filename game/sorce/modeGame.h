@@ -20,11 +20,13 @@ public:
 	bool getPcInf();
 	static bool makeDefaultChar(modeG* insMG);
 	bool ASyncLoad(bool (*loadDataClass)(modeG* insMG));
+	bool collHitCheck();
 
 
 protected:
 	ModeServer* _modeServer;
 	int _x, _y;
+	int testAttackF;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
@@ -38,6 +40,7 @@ protected:
 	imputInf _imputInf;
 	valData _valData;
 	std::vector<attackColl> mAllColl;
+	collCapsule testAttackCap;
 
 	bool debugMode = true, plDead;
 };

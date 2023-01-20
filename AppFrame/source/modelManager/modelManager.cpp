@@ -61,7 +61,7 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attach
 		// ƒ}ƒeƒŠƒAƒ‹‚Ì—ÖŠsü‚Ì‘¾‚³‚ðŠg‘å‚µ‚½•ª¬‚³‚­‚·‚é
 		MV1SetMaterialOutLineDotWidth(weponMI.weponHandle, i, dotwidth / scale);
 	}
-
+	MV1SetRotationXYZ(weponMI.weponHandle, VGet(0.f, 0.f, 0.f));
 	MI->wepons.emplace_back(weponMI);
 	return true;
 }

@@ -11,6 +11,7 @@ struct collCapsule
 {//最大値を代入
 	VECTOR underPos, overPos;
 	float r;
+	int parentModelHandle, frameNum;
 };
 
 struct attackColl
@@ -19,6 +20,7 @@ struct attackColl
 	std::string attackChar;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
+	bool isUseMat;
 };
 
 class CB
@@ -40,14 +42,18 @@ public:
 	virtual bool HPmath(float Num) { return false; };
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
+	void setName(const char* _name) { name = _name; }
+	bool hitCheck(const char* name);
 	modelInf* getInf() { return &_modelInf; }
 	void setGroundInf(modelInf *GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
+	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName);
 
 	int type = 0;//pl=1, oEnemy=2
 	bool isGround;
 	float g, camDir;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
+	std::string name;
 	modelManager *_modelManager;
 	modelInf _modelInf, *_GrounfInf;
 	statusInf _statusInf;
