@@ -305,6 +305,25 @@ bool	PL::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
+	for (int i = 0; i < _modelInf.wepons.size(); i++)
+	{
+		if (_modelInf.wepons[i].isActive)
+		{
+			VECTOR weponPos = MV1GetPosition(_modelInf.wepons[i].weponHandle);
+			attackColl acoll;
+			acoll.capColl.underPos = VTransform(weponPos, );
+			acoll.capColl.overPos = VGet(1.f, 1.f, 1.f);
+			acoll.capColl.r = 20.f;
+			acoll.attackChar = Char_PL;
+			acoll.activeTimeF = 2.f;
+			acoll.nonActiveTimeF = 0.f;
+			acoll.damage = 0.f;
+
+			allColl->emplace_back(acoll);
+		}
+	}
+
+	
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
 	////boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
