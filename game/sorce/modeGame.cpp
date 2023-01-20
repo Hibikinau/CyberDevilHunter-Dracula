@@ -43,7 +43,7 @@ bool	modeG::ASyncLoad(bool (*loadDataClass)(modeG* insMG))
 
 bool	modeG::Initialize()
 {
-	_modelManager.modelImport("game/res/kariStage/Haikei demo.mv1", 7.0f, &stage);
+	_modelManager.modelImport("game/res/EL-Studio_Field(Grass)/フィールドスタジオ-草原.pmx", 7.0f, &stage);
 	SetUseLighting(false);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
@@ -157,7 +157,7 @@ bool	modeG::Render()
 {
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(); }
 
-	//MV1DrawModel(stage.modelHandle);
+	MV1DrawModel(stage.modelHandle);
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));

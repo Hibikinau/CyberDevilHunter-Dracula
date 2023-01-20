@@ -54,22 +54,28 @@ bool	CB::Render()
 
 bool	CB::gravity()
 {
-	return true;
 	/*if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
 	else { _modelInf.pos.y = 0.f, isGround = true;}*/
 
-	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, _modelInf.pos, VAdd(_modelInf.pos, VGet(0.f, 40.f, 0.f)));
-	if (hitCheckGround.HitFlag)
-	{
-		_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, 1.f, 0.f));
-		isGround = true;
-	}
-	else
-	{
-		_modelInf.vec.y -= g;
-		isGround = false;
-	}
+	//hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, _modelInf.pos, VAdd(_modelInf.pos, VGet(0.f, 40.f, 0.f)));
+	//if (hitCheckGround.HitFlag)
+	//{
+	//	_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, 1.f, 0.f));
+	//	isGround = true;
+	//}
+	//else
+	//{
+	//	_modelInf.vec.y -= g;
+	//	isGround = false;
+	//}
 
+	//マップ(円)の中から出ないように
+	auto a = _modelInf.pos;
+	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+	if (c > 5000.f)
+	{
+		_modelInf.pos = VScale(VNorm(a), 5000.f);
+	}
 	return true;
 }
 
