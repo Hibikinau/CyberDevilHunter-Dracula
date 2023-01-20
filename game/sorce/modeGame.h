@@ -20,6 +20,7 @@ public:
 	bool getPcInf();
 	static bool makeDefaultChar(modeG* insMG);
 	bool ASyncLoad(bool (*loadDataClass)(modeG* insMG));
+	bool collHitCheck();
 
 
 protected:

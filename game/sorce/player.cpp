@@ -90,30 +90,6 @@ bool	PL::Process()
 	}*/
 	//charMove(spd, *_cameraDir + addDir, true);
 
-	for (int i = 0; i < allColl->size(); i++)
-	{
-		if (allColl->at(i).nonActiveTimeF > 0)
-		{
-			allColl->at(i).nonActiveTimeF--;
-		}
-		else if (allColl->at(i).activeTimeF > 0)
-		{
-			allColl->at(i).activeTimeF--;
-			if (allColl->at(i).attackChar != Char_PL)
-			{
-				bool insCheckHit = HitCheck_Capsule_Capsule(collCap.underPos, collCap.overPos, collCap.r, allColl->at(i).capColl.underPos, allColl->at(i).capColl.overPos, allColl->at(i).capColl.r);
-				if (insCheckHit)
-				{
-					HPmath(-allColl->at(i).damage);
-				}
-			}
-		}
-		else
-		{
-			allColl->erase(allColl->begin() + i);
-		}
-	}
-
 	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
 	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
 	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
@@ -304,17 +280,19 @@ bool	PL::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
-	for (int i = 0; i < _modelInf.wepons.size(); i++)
+	for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
 	{
 		if (_modelInf.wepons[i].isActive)
 		{
-			VECTOR weponPos = MV1GetPosition(_modelInf.wepons[i].weponHandle);
 			attackColl acoll;
-			acoll.capColl.underPos = MV1GetFramePosition(_modelInf.modelHandle, MV1SearchFrame(_modelInf.modelHandle, "âEêléwÇP"));//VTransform(weponPos, _modelInf.wepons[i].weponFrameMatrix);
-			acoll.capColl.overPos = VGet(1.f, 1.f, 1.f);
-			acoll.capColl.r = 20.f;
+			acoll.isUseMat = true;
+			acoll.capColl.parentModelHandle = _modelInf.modelHandle;
+			acoll.capColl.frameNum = _modelInf.wepons[i].weponAttachFrameNum;
+			acoll.capColl.underPos = VGet(0.f, 0.f, 0.f);
+			acoll.capColl.overPos = VGet(0.f, 0.f, -13.f);
+			acoll.capColl.r = 5.f;
 			acoll.attackChar = Char_PL;
-			acoll.activeTimeF = 2.f;
+			acoll.activeTimeF = 1.f;
 			acoll.nonActiveTimeF = 0.f;
 			acoll.damage = 0.f;
 

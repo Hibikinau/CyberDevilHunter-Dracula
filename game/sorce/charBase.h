@@ -11,6 +11,7 @@ struct collCapsule
 {//Å‘å’l‚ğ‘ã“ü
 	VECTOR underPos, overPos;
 	float r;
+	int parentModelHandle, frameNum;
 };
 
 struct attackColl
@@ -19,6 +20,7 @@ struct attackColl
 	std::string attackChar;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
+	bool isUseMat;
 };
 
 class CB
@@ -40,6 +42,7 @@ public:
 	virtual bool HPmath(float Num) { return false; };
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
+	bool hitCheck(const char* name);
 	modelInf* getInf() { return &_modelInf; }
 	void setGroundInf(modelInf *GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }

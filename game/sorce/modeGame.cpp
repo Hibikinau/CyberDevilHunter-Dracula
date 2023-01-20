@@ -86,6 +86,7 @@ bool	modeG::Process()
 	if (testAttackF <= 0)
 	{
 		attackColl Acoll;
+		Acoll.isUseMat = false;
 		Acoll.nonActiveTimeF = 100;
 		Acoll.activeTimeF = 100;
 		Acoll.attackChar = Char_BOSS1;
@@ -147,12 +148,14 @@ bool	modeG::Process()
 	// PCî•ñ‚ðŽæ“¾‚µ‚Ü‚·
 	getPcInf();
 
+	collHitCheck();
+
 	return true;
 }
 
 bool	modeG::Render()
 {
-	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Render(); }
+	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(); }
 
 	//MV1DrawModel(stage.modelHandle);
 
@@ -186,8 +189,27 @@ bool	modeG::Render()
 	{
 		if (mAllColl[i].nonActiveTimeF <= 0.f)
 		{
-			DrawCapsule3D(mAllColl[i].capColl.underPos, mAllColl[i].capColl.overPos, mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
+
+			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 		}
+	}
+
+	return true;
+}
+
+bool	modeG::collHitCheck()
+{
+	for (int i = 0; i < mAllColl.size(); i++)
+	{
+		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
+		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
+		else { mAllColl.erase(mAllColl.begin() + i); }
+	}
+
+	for (auto i = charBox.begin(); i != charBox.end(); i++)
+	{
+		i->second->hitCheck(i->first.c_str());
 	}
 
 	return true;
@@ -197,7 +219,7 @@ bool	modeG::Terminate()
 {
 	MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
-	for (auto i = charBox.begin(); i != charBox.end(); i++) { i->second->Terminate(); }
+	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }
 	charBox.clear();
 	debugWardBox.clear();
 	return true;

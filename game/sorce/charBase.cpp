@@ -72,3 +72,28 @@ bool	CB::gravity()
 
 	return true;
 }
+
+bool	CB::hitCheck(const char* name)
+{
+
+	for (int i = 0; i < allColl->size(); i++)
+	{
+		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
+
+		MATRIX M = MV1GetFrameLocalWorldMatrix(allColl->at(i).capColl.parentModelHandle, allColl->at(i).capColl.frameNum);
+
+		bool insCheckHit = HitCheck_Capsule_Capsule
+		(collCap.underPos, collCap.overPos, collCap.r
+			, VTransform(allColl->at(i).capColl.underPos, M)
+			, VTransform(allColl->at(i).capColl.overPos, M)
+			, allColl->at(i).capColl.r);
+
+		if (insCheckHit)
+		{
+			allColl->at(i).activeTimeF = 0.f;
+			HPmath(-allColl->at(i).damage);
+		}
+	}
+
+	return true;
+}
