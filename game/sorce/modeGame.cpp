@@ -71,7 +71,7 @@ bool	modeG::Process()
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
 		}
-		else 
+		else
 		{
 			i->second->Process();
 			bossMI = i->second->getInf();
@@ -181,7 +181,7 @@ bool	modeG::Render()
 	else { FPScount++; }
 
 	DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 40.f, 0.f)), GetColor(0, 255, 0));
-	
+
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
 		if (mAllColl[i].nonActiveTimeF <= 0.f)

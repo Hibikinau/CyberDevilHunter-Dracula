@@ -74,7 +74,7 @@ bool	PL::attackHitCheck()
 	{
 
 	}
-	
+
 
 	return true;
 }
@@ -310,7 +310,7 @@ bool	PL::Process()
 		{
 			VECTOR weponPos = MV1GetPosition(_modelInf.wepons[i].weponHandle);
 			attackColl acoll;
-			acoll.capColl.underPos = VTransform(weponPos, _modelInf.wepons[i].weponFrameMatrix);
+			acoll.capColl.underPos = MV1GetFramePosition(_modelInf.modelHandle, MV1SearchFrame(_modelInf.modelHandle, "‰ElŽw‚P"));//VTransform(weponPos, _modelInf.wepons[i].weponFrameMatrix);
 			acoll.capColl.overPos = VGet(1.f, 1.f, 1.f);
 			acoll.capColl.r = 20.f;
 			acoll.attackChar = Char_PL;
@@ -321,8 +321,9 @@ bool	PL::Process()
 			allColl->emplace_back(acoll);
 		}
 	}
+	//
 
-	
+
 	Einf = charBox->find(Char_BOSS1)->second->getInf();
 
 	////boss‚Æ‹——£ˆê’èˆÈ“à‚ÅHPŒ¸­
