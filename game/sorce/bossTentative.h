@@ -23,27 +23,32 @@ public:
 	bool checkTrgImput(int Key, int Pad) { if (_gTrgb[Key] || *_gTrgp & Pad) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_gKeyb[Key] || *_gKeyp & Pad) { return true; } else { return false; } }
 	void Walk(VECTOR x);
+	void Backwalk(VECTOR x);
 	void CRange();
 	void MRange();
 	void LRange();
+	bool HPmath(float math) override;
 
 	enum class STATUS {
 		NONE,
 		WAIT,
 		WALK,
 		KICK,
-		_EOT_
+		SRASH,
+		BACK
 	};
 	STATUS status;
 
-	// 3Dモデル描画用
-	//int _handle;
-	//int Anim_handle;
-	//int Anim_handle2;
-	//int Anim_handle3;
-	//int _attach_index;
-	//float _total_time;
-	//float _play_time;
+	enum class RANGE {
+		NONE,
+		CrossRange,
+		MidRange,
+		LongRange
+	};
+	RANGE range;
+
+	bool MO;
+
 	VECTOR _vPos;		// 位置
 	VECTOR _vOldPos;	// 前フレームの位置
 	VECTOR _vDir;	// 向き
@@ -58,13 +63,14 @@ protected:
 	int* _gKeyp, * _gTrgp;
 	char* _gKeyb, * _gTrgb;
 	bool isUseFbx;
+	int time;
 	modelManager _modelManager;
 	bool attackFlag, isDash, isAnimEnd;
 	//modelInf _modelInf;
 	//std::map<std::string, std::shared_ptr<CB> > charBox;
-	modelInf *plMI, stage;
+	modelInf* plMI, stage;
 	//std::vector<std::unique_ptr<PL>> player;
 	//std::vector<std::unique_ptr<modelInf>> _modelInf;
-    //PL player;
+		//PL player;
 	double dir;
 };

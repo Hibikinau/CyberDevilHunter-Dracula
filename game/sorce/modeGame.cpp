@@ -195,6 +195,8 @@ bool	modeG::Render()
 		}
 	}
 
+	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
+	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
 	return true;
 }
 
@@ -230,7 +232,7 @@ void modeG::cameraMove()
 	if (isLockon)
 	{
 		auto EtoPdir = VSub(bossMI->pos, plMI->pos);
-		cameraFor = bossMI->pos;
+		cameraFor = VAdd(bossMI->pos, VGet(0.f, 250.f, 0.f));
 		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -300.f)), VGet(0.f, 250.f, 0.f));
 		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
 		cameraDir = cameraLockDir;
