@@ -195,6 +195,8 @@ bool	modeG::Render()
 		}
 	}
 
+	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
+	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
 	return true;
 }
 
