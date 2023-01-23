@@ -146,7 +146,7 @@ bool	modeG::Process()
 		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
 	// PCî•ñ‚ğæ“¾‚µ‚Ü‚·
-	getPcInf();
+	//getPcInf();
 
 	collHitCheck();
 

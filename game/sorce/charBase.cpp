@@ -98,6 +98,7 @@ bool	CB::hitCheck(const char* name)
 		{
 			allColl->at(i).activeTimeF = 0.f;
 			HPmath(-allColl->at(i).damage);
+			charBox->at(allColl->at(i).attackChar)->isHit = true;
 		}
 	}
 

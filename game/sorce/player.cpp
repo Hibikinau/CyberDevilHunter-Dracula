@@ -53,6 +53,19 @@ bool PL::Initialize()
 
 	MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
 
+	std::vector<int> insSoundHandle;
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
+	soundHandle.emplace_back(insSoundHandle);
+	insSoundHandle.clear();
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_Finish.mp3"));
+	//insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_loop.mp3"));
+	soundHandle.emplace_back(insSoundHandle);
+	insSoundHandle.clear();
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_01.mp3"));
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_02.mp3"));
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_03.mp3"));
+	soundHandle.emplace_back(insSoundHandle);
+
 	return true;
 }
 
@@ -102,6 +115,7 @@ bool	PL::Process()
 	case pushButton::X://弱攻撃
 		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::quickATTACK;
+		lastAttackState = _estate::quickATTACK;
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
 		{
@@ -156,6 +170,7 @@ bool	PL::Process()
 	case pushButton::Y://強攻撃
 		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::slowATTACK;
+		lastAttackState = _estate::slowATTACK;
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
 		{
@@ -209,10 +224,12 @@ bool	PL::Process()
 		break;
 	case pushButton::LBX://入れ替えX
 		Estate = _estate::changeATTACKX;
+		lastAttackState = _estate::changeATTACKX;
 		changeAttackX(this);
 		break;
 	case pushButton::LBY://入れ替えY
 		Estate = _estate::changeATTACKY;
+		lastAttackState = _estate::changeATTACKY;
 		changeAttackY(this);
 		break;
 	case pushButton::A://ジャンプ
@@ -284,6 +301,22 @@ bool	PL::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
 
+	if (isHit)
+	{
+		if (lastAttackState == _estate::quickATTACK)
+		{
+			int soundNum = 0, attackType;
+			attackNumOld >= 5 ? attackType = 1 : attackType = 2;
+			do
+			{
+				soundNum = rand() % soundHandle[attackType].size();
+			} while (playSoundOld[0] == soundNum && soundHandle[attackType].size() > 1);
+			playSoundOld[0] = soundNum;
+			PlaySoundMem(soundHandle[attackType][soundNum], DX_PLAYTYPE_BACK);
+		}
+		isHit = false;
+	}
+
 	//攻撃用カプセルコリジョンの作成
 	//for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
 	//{
@@ -346,6 +379,7 @@ bool PL::HPmath(float math)
 	_statusInf.hitPoint += math;
 	if (math < 0)
 	{
+		PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
 		BPmath(std::abs(math) * 6);
 	}
 

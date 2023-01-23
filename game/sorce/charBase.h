@@ -50,7 +50,7 @@ public:
 	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName);
 
 	int type = 0;//pl=1, oEnemy=2
-	bool isGround;
+	bool isGround, isHit;
 	float g, camDir;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false;
