@@ -42,5 +42,5 @@ protected:
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
 
-	bool debugMode = true, plDead;
+	bool debugMode = false, plDead;
 };

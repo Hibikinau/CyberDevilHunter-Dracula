@@ -71,9 +71,12 @@ protected:
 	float nowActionTime;
 	bool bufferedInput;
 	int immortalTime, dodgeTime;
+	int playSoundOld[3];
+	std::vector<std::vector<int> > soundHandle;
 	modelManager _modelManager;
-	ExclusiveState Estate, oldEstate;
+	ExclusiveState Estate, oldEstate, lastAttackState;
 	pushButton nextKey;
 	imputInf* _imputInf;
 	modelInf* Einf;
+
 };

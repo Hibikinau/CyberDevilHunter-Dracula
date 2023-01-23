@@ -140,10 +140,6 @@ bool	Boss::Process()
 
 
 
-	collCap.r = 30.f;
-	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
-
 	return true;
 }
 
