@@ -20,8 +20,6 @@ bool Boss::Initialize()
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	// çòà íuÇÃê›íË
-	_colSubY = 40.f;
 	Attack = false;
 	return true;
 }
@@ -141,11 +139,11 @@ bool	Boss::Process()
 
 bool	Boss::Render()
 {
-	if (isAnimEnd == true) {
+	/*if (isAnimEnd == true) {
 		DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-	}
+	}*/
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
