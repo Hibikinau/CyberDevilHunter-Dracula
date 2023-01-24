@@ -18,6 +18,7 @@ enum class ExclusiveState
 	changeATTACKX,
 	changeATTACKY,
 	DODGE,
+	GUARD,
 };
 
 enum class pushButton
@@ -31,6 +32,7 @@ enum class pushButton
 	LBY,
 	Lstick,
 	Irregular,
+	R1,
 };
 
 class PL : public CB
@@ -54,7 +56,6 @@ public:
 	float getMoveDir(bool checkUseCamDir);
 	bool HPmath(float math) override;
 	bool BPmath(float math) override;
-	bool attackHitCheck();
 	bool CA_change(std::string name, const char* XorY) override;
 	static bool CA_senpuu(PL* insPL);
 	static bool CA_charge(PL* insPL);
@@ -72,9 +73,13 @@ protected:
 	float nowActionTime;
 	bool bufferedInput;
 	int immortalTime, dodgeTime;
+	int playSoundOld[3];
+	std::vector<std::vector<int> > soundHandle;
 	modelManager _modelManager;
-	ExclusiveState Estate, oldEstate;
+	ExclusiveState Estate, oldEstate, lastAttackState;
 	pushButton nextKey;
 	imputInf* _imputInf;
 	modelInf* Einf;
+
+	float neckDir = 0.f;
 };

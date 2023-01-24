@@ -1,5 +1,5 @@
 #include"player.h"
-#define walkSpd 6.f
+#define walkSpd 5.f
 #define runSpd 20.f
 #define attackMotionTotalTime1 14.f
 #define attackMotionTotalTime2 12.f
@@ -8,10 +8,9 @@
 #define attackMotionTotalTimeZoiru 58.f
 #define attackMotionTotalTimeSenpu 43.f
 #define attackMotionTotalTimeSenpuL 34.f
-#define motion_idel 7
-#define motion_walk 0
-#define motion_run 1
-#define motion_jump 2
+#define motion_idel 0//7
+#define motion_walk 1//0
+#define motion_run 2//1
 #define motion_DR1 3
 #define motion_DR2 4
 #define motion_DR3 5
@@ -23,6 +22,7 @@
 #define motion_SENPUUL 13
 #define motion_rollingF 14
 #define motion_demoDead 15
+#define weponParentFrame 104//116
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -43,15 +43,29 @@ bool PL::Initialize()
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
-	_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
-	_modelManager.weponAttach("game/res/RabbitBunker/RabbitBunkerKai.pmx", &_modelInf, "右人指１", 10.f, true, "RabbitBunker");
-	_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, true, "SwordBreaker");
-	_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+	//_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Player01/Player1.mv1", 1.5f, &_modelInf);
+	_modelManager.weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, "Player1_Rightweapon", 1.5f, true, "katana");
+	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, "Player1_Leftweapon", 1.5f, true, "saya");
+	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
+	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+
 
 	changeAttackY = &CA_charge;
 	changeAttackX = &CA_senpuu;
 
-	MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
+	std::vector<int> insSoundHandle;
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
+	soundHandle.emplace_back(insSoundHandle);
+	insSoundHandle.clear();
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_Finish.mp3"));
+	//insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_loop.mp3"));
+	soundHandle.emplace_back(insSoundHandle);
+	insSoundHandle.clear();
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_01.mp3"));
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_02.mp3"));
+	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_03.mp3"));
+	soundHandle.emplace_back(insSoundHandle);
 
 	return true;
 }
@@ -68,17 +82,6 @@ bool	PL::Input()
 	return true;
 }
 
-bool	PL::attackHitCheck()
-{
-	for (int i = 0; i < allColl->size(); i++)
-	{
-
-	}
-	
-
-	return true;
-}
-
 bool	PL::Process()
 {/*
 	if (_statusInf.hitPoint <= 0 || isDead != 0)
@@ -90,38 +93,12 @@ bool	PL::Process()
 	}*/
 	//charMove(spd, *_cameraDir + addDir, true);
 
-	for (int i = 0; i < allColl->size(); i++)
-	{
-		if (allColl->at(i).nonActiveTimeF > 0)
-		{
-			allColl->at(i).nonActiveTimeF--;
-		}
-		else if (allColl->at(i).activeTimeF > 0)
-		{
-			allColl->at(i).activeTimeF--;
-			if (allColl->at(i).attackChar != Char_PL)
-			{
-				bool insCheckHit = HitCheck_Capsule_Capsule(collCap.underPos, collCap.overPos, collCap.r, allColl->at(i).capColl.underPos, allColl->at(i).capColl.overPos, allColl->at(i).capColl.r);
-				if (insCheckHit)
-				{
-					HPmath(-allColl->at(i).damage);
-				}
-			}
-		}
-		else
-		{
-			allColl->erase(allColl->begin() + i);
-		}
-	}
-
 	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
 	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
 	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
 	if (CheckHitKey(KEY_INPUT_S)) { _modelInf.pos.z += 10; }
 
-		//HitCheck_Capsule_Capsule();
-
-	float addDir = 0.f;
+	float addDir = 0.f, insDir;
 	bool moveCheck = true;
 	switch (setAction())
 	{
@@ -134,19 +111,23 @@ bool	PL::Process()
 		dodgeTime = 52;
 		immortalTime = dodgeTime;
 		isCharge = 0;
-		dodgeDir = getMoveDir(true);
-		dodgeDir == 0.f ? dodgeDir = 180.f + *_cameraDir : dodgeDir += *_cameraDir;
+		dodgeDir = getMoveDir(false);
+		insDir = getMoveDir(false);
+		insDir != 0 ? dodgeDir = insDir : dodgeDir = _modelInf.dir.y;
 		break;
 	case pushButton::X://弱攻撃
-		_modelInf.dir.y = getMoveDir(true);
+		insDir = getMoveDir(true);
+		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		Estate = _estate::quickATTACK;
+		lastAttackState = _estate::quickATTACK;
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
 		{
-			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			_modelManager.animChange(motion_DR1, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -154,6 +135,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -161,6 +143,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += _valData->plAtkSpd3;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -168,6 +151,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
 			waitNextAttack += _valData->plAtkSpd4;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 4)
 		{
@@ -175,6 +159,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 60.f;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 5)
 		{
@@ -182,19 +167,22 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 30.f;
 			attackNumOld = 5;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 
 		break;
 	case pushButton::Y://強攻撃
 		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::slowATTACK;
+		lastAttackState = _estate::slowATTACK;
 		waitNextAttack = 20;
 		if (attackNumOld == 0)
 		{
-			_modelManager.animChange(motion_DR1, &_modelInf, false, true);
+			_modelManager.animChange(motion_DR1, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -202,6 +190,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -209,6 +198,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += _valData->plAtkSpd3;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -216,6 +206,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
 			waitNextAttack += _valData->plAtkSpd4;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 4)
 		{
@@ -223,6 +214,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 60.f;
 			attackNumOld++;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 5)
 		{
@@ -230,38 +222,33 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTimeSenpu / 60.f;
 			waitNextAttack += 30.f;
 			attackNumOld = 5;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 
 		break;
 	case pushButton::LBX://入れ替えX
 		Estate = _estate::changeATTACKX;
+		lastAttackState = _estate::changeATTACKX;
 		changeAttackX(this);
 		break;
 	case pushButton::LBY://入れ替えY
 		Estate = _estate::changeATTACKY;
+		lastAttackState = _estate::changeATTACKY;
 		changeAttackY(this);
-		break;
-	case pushButton::A://ジャンプ
-		if (isGround)
-		{
-			Estate = _estate::JUMP;
-			_modelInf.vec.y = 30.f;
-			_modelInf.playTime = 0.f;
-			_modelManager.animChange(motion_jump, &_modelInf, false, false);
-			animSpd = 0.5f;
-			moveCheck = false;
-
-		}
 		break;
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
 		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
-
+		isDash = true;//------------------------------------------------------------------------------------
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
-		if (addDir != 0) { charMove(spd, *_cameraDir + addDir, true); }
+		if (addDir != 0) { charMove(spd, addDir, true); }
 		moveCheck = false;
 
+		break;
+	case pushButton::R1://ガード
+		//Estate = _estate::GUARD;
+		immortalTime = 30.f;
 		break;
 	case pushButton::Neutral://入力なし
 		if (attackNumOld != 0) { break; }
@@ -277,7 +264,7 @@ bool	PL::Process()
 
 	if (chargeLevel == 2 && _modelInf.playTime < 31.f && _modelInf.playTime > 9.f)
 	{
-		charMove(40.f, _modelInf.dir.y + 180, false);
+		charMove(40.f, _modelInf.dir.y, false);
 	}
 	else if (chargeLevel == 2 && _modelInf.playTime > 32.f)
 	{
@@ -295,25 +282,65 @@ bool	PL::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
-	//if (_modelInf.pos.x > 670.f) { _modelInf.pos.x = 670.f; }
-	//if (_modelInf.pos.x < -670.f) { _modelInf.pos.x = -670.f; }
-	//if (_modelInf.pos.z > 20000.f) { _modelInf.pos.z = 20000.f; }
+	//ボスと重ならないように
+	auto bossDisV = VSub(charBox->at(Char_BOSS1)->getInf()->pos, _modelInf.pos);
+	float bossDisF = sqrt(bossDisV.x * bossDisV.x + bossDisV.y * bossDisV.y + bossDisV.z * bossDisV.z);
+	float plzDis = charBox->at(Char_BOSS1)->collCap.r + collCap.r;
+	if (bossDisF < plzDis)
+	{
+		_modelInf.pos = VAdd(VScale(VNorm(bossDisV), -plzDis), charBox->at(Char_BOSS1)->getInf()->pos);
+	}
 
 	if (moveCheck) { isDash = false; }
-
+	isImmortal = immortalTime > 0;
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
+	if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 
-	Einf = charBox->find(Char_BOSS1)->second->getInf();
+	MV1ResetFrameUserLocalMatrix(_modelInf.modelHandle, 196);
+	MATRIX neckDirMAT = MGetRotY(neckDir);
+	MATRIX neckPosMAT = MV1GetFrameLocalMatrix(_modelInf.modelHandle, 196);
+	MATRIX neckMAT = MMult(neckDirMAT, neckPosMAT);
+	MV1SetFrameUserLocalMatrix(_modelInf.modelHandle, 196, neckMAT);
+	if (isHit)
+	{
+		if (lastAttackState == _estate::quickATTACK)
+		{
+			int soundNum = 0, attackType;
+			attackNumOld >= 5 ? attackType = 1 : attackType = 2;
+			do
+			{
+				soundNum = rand() % soundHandle[attackType].size();
+			} while (playSoundOld[0] == soundNum && soundHandle[attackType].size() > 1);
+			playSoundOld[0] = soundNum;
+			PlaySoundMem(soundHandle[attackType][soundNum], DX_PLAYTYPE_BACK);
+		}
+		isHit = false;
+	}
 
-	////bossと距離一定以内でHP減少
-	//auto a = VSub(Einf->pos, _modelInf.pos);
-	//if (sqrt(a.x * a.x + a.y * a.y + a.z * a.z) < 140.f && immortalTime <= 0)
+	//攻撃用カプセルコリジョンの作成
+	//for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
 	//{
-	//	HPmath(-2.f);
+	//	if (_modelInf.wepons[i].isActive)
+	//	{
+	//		attackColl acoll;
+	//		acoll.isUseMat = true;
+	//		acoll.capColl.parentModelHandle = _modelInf.modelHandle;
+	//		acoll.capColl.frameNum = _modelInf.wepons[i].weponAttachFrameNum;
+	//		acoll.capColl.underPos = VGet(0.f, 0.f, 0.f);
+	//		acoll.capColl.overPos = VGet(0.f, 0.f, -13.f);
+	//		acoll.capColl.r = 5.f;
+	//		acoll.attackChar = Char_PL;
+	//		acoll.activeTimeF = 1.f;
+	//		acoll.nonActiveTimeF = 0.f;
+	//		acoll.damage = 0.f;
+
+	//		allColl->emplace_back(acoll);
+	//	}
 	//}
-	//HPmath(-2.f);
+
 	return true;
 }
 
@@ -332,16 +359,16 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 		{
 			_modelManager.animChange(motion_run, &_modelInf, true, true);
 			spd = runSpd;
-			animSpd = 0.5f;
+			animSpd = 1.f;
 		}
 		else
 		{
 			_modelManager.animChange(motion_walk, &_modelInf, true, true);
 			spd = walkSpd;
-			animSpd = 0.9f;
+			animSpd = 1.f;
 		}
 	}
-
+	_Dir -= 180.f;
 	float radian = _Dir * DX_PI_F / 180.0f;
 	_modelInf.vec.x += sin(radian) * Speed;
 	_modelInf.vec.z += cos(radian) * Speed;
@@ -353,7 +380,11 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 bool PL::HPmath(float math)
 {
 	_statusInf.hitPoint += math;
-	if (math < 0) { BPmath(std::abs(math) * 6); }
+	if (math < 0)
+	{
+		PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
+		BPmath(std::abs(math) * 6);
+	}
 
 	return true;
 }
@@ -384,34 +415,39 @@ pushButton PL::setAction()
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
+	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
 	}//Lstick
 	if (isNext) { insEnum = pushButton::Irregular; }
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_LEFT_SHOULDER))
+	if (checkKeyImput(KEY_INPUT_C, XINPUT_BUTTON_LEFT_SHOULDER))
 	{//入れ替え技
-		if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
-		if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
+		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
+		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
 	}
 	else
 	{//通常技
-		if (checkTrgImput(-1, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
-		if (checkTrgImput(-1, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
+		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::X : insEnum = pushButton::X; }//X
+		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
 	}
 
-	if (checkKeyImput(-1, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)//LBXチャージ
+	if (checkKeyImput(KEY_INPUT_Z, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)//LBXチャージ
 	{
 		if (isCharge >= 1) { insEnum = pushButton::LBX; }
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKX) { insEnum = pushButton::LBX, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,X離したとき
-	if (checkKeyImput(-1, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)//LBYチャージ
+	if (checkKeyImput(KEY_INPUT_X, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)//LBYチャージ
 	{
 		if (isCharge >= 1) { insEnum = pushButton::LBY; }
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y離したとき
 
-	if (checkTrgImput(-1, XINPUT_BUTTON_B))
+	if (checkTrgImput(-1, XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		isNext ? nextKey = pushButton::R1 : insEnum = pushButton::R1;
+	}
+
+	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))
 	{
 		if (isNext)
 		{
@@ -430,6 +466,7 @@ float PL::getMoveDir(bool checkUseCamDir)
 	//移動先の角度指定
 	_addDir = (std::atan2(-_imputInf->lStickX, -_imputInf->lStickY) * 180.f) / DX_PI_F;
 	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
+	if (_addDir != 0) { _addDir += *_cameraDir + 180.f; }
 	if (camDir != -1.f && checkUseCamDir)
 	{
 		_addDir = camDir;
@@ -455,9 +492,11 @@ bool PL::CA_change(std::string name, const char* XorY)
 
 bool PL::CA_senpuu(PL* insPL)
 {
-	insPL->_modelInf.dir.y = insPL->getMoveDir(true);
-	insPL->_modelManager.animChange(motion_SENPUUL, &insPL->_modelInf, false, true);
+	auto insDir = insPL->getMoveDir(true);
+	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
+	insPL->_modelManager.animChange(motion_SENPUUL, &insPL->_modelInf, false, false);
 	insPL->animSpd = attackMotionTotalTimeSenpu / 60.f;
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
 
 	return true;
 }
@@ -484,10 +523,19 @@ bool PL::CA_charge(PL* insPL)
 		}
 		if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime)
 		{
-			insPL->_modelInf.dir.y = insPL->getMoveDir(true);
-			if (insPL->chargeLevel == 2) { insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, true); }
-			else { insPL->_modelManager.animChange(motion_ZOIRUattack2, &insPL->_modelInf, false, true); }
+			auto insDir = insPL->getMoveDir(true);
+			if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 			insPL->isCharge = 0, insPL->animSpd = 0.5f;
+			if (insPL->chargeLevel == 2)
+			{
+				insPL->_modelManager.animChange(motion_ZOIRUattack1, &insPL->_modelInf, false, false);
+				insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
+			}
+			else
+			{
+				insPL->_modelManager.animChange(motion_ZOIRUattack2, &insPL->_modelInf, false, false);
+				insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 5.f, 116, Char_PL);
+			}
 		}
 	}
 

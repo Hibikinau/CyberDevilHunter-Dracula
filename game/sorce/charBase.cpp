@@ -53,8 +53,8 @@ bool	CB::Render()
 //}
 
 bool	CB::gravity()
-{/*
-	if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
+{
+	/*if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
 	else { _modelInf.pos.y = 0.f, isGround = true;}*/
 
 	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, _modelInf.pos, VAdd(_modelInf.pos, VGet(0.f, 40.f, 0.f)));
@@ -68,6 +68,59 @@ bool	CB::gravity()
 		_modelInf.vec.y -= g;
 		isGround = false;
 	}
+
+	//マップ(円)の中から出ないように
+	auto a = _modelInf.pos;
+	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+	if (c > 5000.f)
+	{
+		_modelInf.pos = VScale(VNorm(a), 5000.f);
+	}
+	return true;
+}
+
+bool	CB::hitCheck(const char* name)
+{
+
+	for (int i = 0; i < allColl->size(); i++)
+	{
+		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
+
+		MATRIX M = MV1GetFrameLocalWorldMatrix(allColl->at(i).capColl.parentModelHandle, allColl->at(i).capColl.frameNum);
+
+		bool insCheckHit = HitCheck_Capsule_Capsule
+		(collCap.underPos, collCap.overPos, collCap.r
+			, VTransform(allColl->at(i).capColl.underPos, M)
+			, VTransform(allColl->at(i).capColl.overPos, M)
+			, allColl->at(i).capColl.r);
+
+		if (insCheckHit && !isImmortal)
+		{
+			allColl->at(i).activeTimeF = 0.f;
+			HPmath(-allColl->at(i).damage);
+			charBox->at(allColl->at(i).attackChar)->isHit = true;
+		}
+	}
+
+	return true;
+}
+
+bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
+	, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName)
+{
+	attackColl acoll;
+	acoll.isUseMat = isUseMat;
+	acoll.capColl.parentModelHandle = _modelInf.modelHandle;
+	acoll.capColl.frameNum = frameNum;
+	acoll.capColl.underPos = _underPos;
+	acoll.capColl.overPos = _overPos;
+	acoll.capColl.r = r;
+	acoll.attackChar = charName;
+	acoll.activeTimeF = activeTimeF;
+	acoll.nonActiveTimeF = nonActiveTimeF;
+	acoll.damage = damage;
+
+	allColl->emplace_back(acoll);
 
 	return true;
 }

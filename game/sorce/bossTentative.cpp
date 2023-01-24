@@ -5,13 +5,14 @@
 #define motion_idel 0
 #define motion_walk 1
 #define motion_run 2
+#define motion_attack1 2
 
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/reimu/nigareimu/nigareimu.pmx", 10.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/Enemy01_.mv1", 2.0f, &_modelInf);
 	useAnim = 0;
-	
+
 	status = STATUS::WAIT;
 	time = 100;
 	_statusInf.hitPoint = 10000;
@@ -20,7 +21,10 @@ bool Boss::Initialize()
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
+	// ˜ˆÊ’u‚ÌÝ’è
+	_colSubY = 40.f;
 	Attack = false;
+	g = 1.f;
 	return true;
 }
 
@@ -45,11 +49,11 @@ bool	Boss::Process()
 		{
 			plMI = i->second->getInf();
 		}
-	}	
+	}
 
-	collCap.r = 30.f;
-	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	collCap.r = 60.f;
+	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
 	auto xz = plMI->pos;
 
@@ -59,7 +63,7 @@ bool	Boss::Process()
 	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
 
 
-	if(MO==true && time == 0) {
+	if (MO == true && time == 0) {
 		_modelInf.dir.y = b;
 		if (c < 200)
 		{
@@ -69,7 +73,7 @@ bool	Boss::Process()
 		{
 			MRange();
 		}
-		if (c > 350) 
+		if (c > 350)
 		{
 			LRange();
 			Walk(xz);
@@ -89,32 +93,35 @@ bool	Boss::Process()
 		animSpd = 0.5f;
 		break;
 	case STATUS::WALK:
-		_modelManager.animChange(1, &_modelInf, true, true);
+		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		animSpd = 0.5f;
-		
+
 		Attack = false;
 		break;
 	case STATUS::KICK:
-		if (Attack == true) { break;}
+		if (Attack == true) { break; }
 		Attack = true;
-		_modelManager.animChange(2, &_modelInf, false, true);
-		animSpd = 1.0f;
-        break;
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
+		animSpd = 0.7f;
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
+		break;
 	case STATUS::SRASH:
 		if (Attack == true) { break; }
 		Attack = true;
-		_modelManager.animChange(3, &_modelInf, false, true);
-		animSpd = 1.0f;
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
+		animSpd = 0.7f;
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1 , true, 5.f, 201, Char_BOSS1);
+
 		break;
 	case STATUS::BACK:
-		_modelManager.animChange(1, &_modelInf, false, true);
+		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		_modelInf.totalTime = 100;
 		animSpd = 0.5f;
 		Backwalk(xz);
 		Attack = false;
 		break;
 	}
-	
+
 
 	if (isAnimEnd == true) {
 		status = STATUS::WAIT;
@@ -123,7 +130,7 @@ bool	Boss::Process()
 			if (i == 790) {
 				i = 0;
 				MO = true;
-				while(time < 20){ time = rand() % 40; }
+				while (time < 20) { time = rand() % 40; }
 				break;
 			}
 		}
@@ -132,18 +139,18 @@ bool	Boss::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
-	
+
 
 	return true;
 }
 
 bool	Boss::Render()
 {
-	/*if (isAnimEnd == true) {
+	//if (isAnimEnd == true) {
 		DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-	}*/
+	//}
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
@@ -159,16 +166,16 @@ bool Boss::step()
 
 void Boss::Walk(VECTOR x) {
 	float xz = 7.0;
-	auto c=VSub(x, _modelInf.pos);
+	auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
 
-		_modelInf.pos.x -= sin(radian) * xz;
-		_modelInf.pos.z -= cos(radian) * xz;
-	
+	_modelInf.pos.x -= sin(radian) * xz;
+	_modelInf.pos.z -= cos(radian) * xz;
+
 }
 
-void Boss::Backwalk(VECTOR x){
+void Boss::Backwalk(VECTOR x) {
 	float xz = 0.5;
 	auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
@@ -178,16 +185,16 @@ void Boss::Backwalk(VECTOR x){
 	_modelInf.pos.z += cos(radian) * xz;
 }
 
-void Boss::CRange(){
+void Boss::CRange() {
 
-	int AttackRand=GetRand(100);
-	if (AttackRand<=75) {
+	int AttackRand = GetRand(100);
+	if (AttackRand <= 75) {
 		status = STATUS::KICK;
-		
+
 	}
 	else if (AttackRand > 75) {
 		status = STATUS::BACK;
-		
+
 	}
 	MO = false;
 	if (allColl->size() == 0)
@@ -215,7 +222,14 @@ void Boss::MRange() {
 	return;
 }
 
-void Boss:: LRange(){
+void Boss::LRange() {
 	status = STATUS::WALK;
 	return;
+}
+
+bool Boss::HPmath(float Num)
+{
+	_statusInf.hitPoint += Num;
+
+	return true;
 }
