@@ -79,4 +79,5 @@ protected:
 	imputInf* _imputInf;
 	modelInf* Einf;
 
+	float neckDir = 0.f;
 };

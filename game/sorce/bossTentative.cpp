@@ -24,6 +24,7 @@ bool Boss::Initialize()
 	// çòà íuÇÃê›íË
 	_colSubY = 40.f;
 	Attack = false;
+	g = 1.f;
 	return true;
 }
 
@@ -101,14 +102,14 @@ bool	Boss::Process()
 		if (Attack == true) { break; }
 		Attack = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
-		animSpd = 1.0f;
+		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
 		break;
 	case STATUS::SRASH:
 		if (Attack == true) { break; }
 		Attack = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
-		animSpd = 1.0f;
+		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1 , true, 5.f, 201, Char_BOSS1);
 
 		break;

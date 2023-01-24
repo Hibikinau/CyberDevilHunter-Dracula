@@ -48,13 +48,11 @@ bool PL::Initialize()
 	_modelManager.weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, "Player1_Rightweapon", 1.5f, true, "katana");
 	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, "Player1_Leftweapon", 1.5f, true, "saya");
 	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
-	_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
 
 
 	changeAttackY = &CA_charge;
 	changeAttackX = &CA_senpuu;
-
-	MV1SetShapeRate(_modelInf.wepons[2].weponHandle, 7, 1.0f);
 
 	std::vector<int> insSoundHandle;
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
@@ -241,7 +239,7 @@ bool	PL::Process()
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
 		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
-
+		isDash = true;//------------------------------------------------------------------------------------
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
 		if (addDir != 0) { charMove(spd, addDir, true); }
@@ -294,7 +292,14 @@ bool	PL::Process()
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
+	if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 
+	MV1ResetFrameUserLocalMatrix(_modelInf.modelHandle, 196);
+	MATRIX neckDirMAT = MGetRotY(neckDir);
+	MATRIX neckPosMAT = MV1GetFrameLocalMatrix(_modelInf.modelHandle, 196);
+	MATRIX neckMAT = MMult(neckDirMAT, neckPosMAT);
+	MV1SetFrameUserLocalMatrix(_modelInf.modelHandle, 196, neckMAT);
 	if (isHit)
 	{
 		if (lastAttackState == _estate::quickATTACK)
@@ -338,7 +343,7 @@ bool	PL::Process()
 bool	PL::Render()
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 

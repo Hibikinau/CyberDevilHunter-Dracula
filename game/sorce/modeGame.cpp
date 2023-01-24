@@ -45,7 +45,8 @@ bool	modeG::Initialize()
 {
 	_modelManager.modelImport("game/res/EL-Studio_Field(Grass)/フィールドスタジオ-草原.pmx", 7.0f, &stage);
 	SetUseLighting(true);
-	ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
+	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
+	ChangeLightTypeDir(VGet(-1.0f, -4.0f, 0.0f));
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	countTime = GetNowCount();
@@ -131,54 +132,52 @@ bool	modeG::Process()
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
-	// ＦＶキーでライトの距離減衰パラメータ０の値を変更
-	if (CheckHitKey(KEY_INPUT_F) == 1)
-	{
-		Atten0 += 0.001f;
-	}
-	if (CheckHitKey(KEY_INPUT_V) == 1)
-	{
-		Atten0 -= 0.001f;
-	}
+	//// ＦＶキーでライトの距離減衰パラメータ０の値を変更
+	//if (CheckHitKey(KEY_INPUT_F) == 1)
+	//{
+	//	Atten0 += 0.001f;
+	//}
+	//if (CheckHitKey(KEY_INPUT_V) == 1)
+	//{
+	//	Atten0 -= 0.001f;
+	//}
 
-	// ＧＢキーでライトの距離減衰パラメータ１の値を変更
-	if (CheckHitKey(KEY_INPUT_G) == 1)
-	{
-		Atten1 += 0.00001f;
-	}
-	if (CheckHitKey(KEY_INPUT_B) == 1)
-	{
-		Atten1 -= 0.00001f;
-	}
+	//// ＧＢキーでライトの距離減衰パラメータ１の値を変更
+	//if (CheckHitKey(KEY_INPUT_G) == 1)
+	//{
+	//	Atten1 += 0.00001f;
+	//}
+	//if (CheckHitKey(KEY_INPUT_B) == 1)
+	//{
+	//	Atten1 -= 0.00001f;
+	//}
 
-	// ＨＮキーでライトの距離減衰パラメータ２の値を変更
-	if (CheckHitKey(KEY_INPUT_H) == 1)
-	{
-		Atten2 += 0.0000001f;
-	}
-	if (CheckHitKey(KEY_INPUT_N) == 1)
-	{
-		Atten2 -= 0.0000001f;
-	}
+	//// ＨＮキーでライトの距離減衰パラメータ２の値を変更
+	//if (CheckHitKey(KEY_INPUT_H) == 1)
+	//{
+	//	Atten2 += 0.0000001f;
+	//}
+	//if (CheckHitKey(KEY_INPUT_N) == 1)
+	//{
+	//	Atten2 -= 0.0000001f;
+	//}
 
-	// 距離減衰パラメータの値を補正
-	if (Atten0 < 0.0f) Atten0 = 0.0f;
-	if (Atten1 < 0.0f) Atten1 = 0.0f;
-	if (Atten2 < 0.0f) Atten2 = 0.0f;
+	//// 距離減衰パラメータの値を補正
+	//if (Atten0 < 0.0f) Atten0 = 0.0f;
+	//if (Atten1 < 0.0f) Atten1 = 0.0f;
+	//if (Atten2 < 0.0f) Atten2 = 0.0f;
 
-	// モデルの上空にポイントライトを設定
-	ChangeLightTypePoint(
-		VGet(320.0f, 1000.0f, 200.0f),
-		10000,
-		Atten0,
-		Atten1,
-		Atten2);
-	// グローバルアンビエントカラーを赤色に変更
+	//// モデルの上空にポイントライトを設定
+	//ChangeLightTypePoint(
+	//	VGet(320.0f, 1000.0f, 200.0f),
+	//	10000,
+	//	Atten0,
+	//	Atten1,
+	//	Atten2);
+	// グローバルアンビエントカラーを薄い黒(?)に変更
 	SetGlobalAmbientLight(GetColorF(0.3f, 0.3f, 0.3f, 0.0f));
 
-	debugWardBox.emplace_back("Atten0  = " + std::to_string(Atten0));
-	debugWardBox.emplace_back("Atten1  = " + std::to_string(Atten1));
-	debugWardBox.emplace_back("Atten2  = " + std::to_string(Atten2));
+	debugWardBox.emplace_back("cameraHigh  = " + std::to_string(cameraHigh));
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
 	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
@@ -218,7 +217,6 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
-	debugWardBox.emplace_back("/weponset^武器セットの番号^(武器セットの番号)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -293,6 +291,8 @@ void modeG::cameraMove()
 		auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
 		auto _pos = cameraPos = VAdd(plMI->pos, InsV);
 		cameraFor = VSub(plMI->pos, VSub(InsV, VGet(0.f, 300.f, 0.f)));
+		if (cameraHigh < -260.f) { cameraHigh = -260.f; }
+		if (cameraHigh > 60.f) { cameraHigh = 60.f; }
 		cameraPos.y += cameraHigh;
 		cameraFor.y -= cameraHigh;
 		cameraDir = cameraNtDir;
@@ -334,22 +334,6 @@ int modeG::useCommand()
 			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
 			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
 			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
-			if (data.find("weponset") != std::string::npos)
-			{
-				auto weponSetNum = getNum(data);
-				if (weponSetNum == 0)
-				{
-					plMI->wepons[0].isActive = true;
-					plMI->wepons[1].isActive = true;
-					plMI->wepons[2].isActive = false;
-				}
-				else if (weponSetNum == 1)
-				{
-					plMI->wepons[0].isActive = false;
-					plMI->wepons[1].isActive = false;
-					plMI->wepons[2].isActive = true;
-				}
-			}
 			if (data.find("atkFall") != std::string::npos)
 			{
 				auto a = getNum(data);
