@@ -18,6 +18,7 @@ enum class ExclusiveState
 	changeATTACKX,
 	changeATTACKY,
 	DODGE,
+	GUARD,
 };
 
 enum class pushButton
@@ -31,6 +32,7 @@ enum class pushButton
 	LBY,
 	Lstick,
 	Irregular,
+	R1,
 };
 
 class PL : public CB

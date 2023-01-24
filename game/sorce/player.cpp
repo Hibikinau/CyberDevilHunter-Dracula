@@ -246,6 +246,10 @@ bool	PL::Process()
 		moveCheck = false;
 
 		break;
+	case pushButton::R1://ƒK[ƒh
+		//Estate = _estate::GUARD;
+		immortalTime = 30.f;
+		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
 		if (attackNumOld != 0) { break; }
 		Estate = _estate::NORMAL;
@@ -437,6 +441,11 @@ pushButton PL::setAction()
 		if (isCharge >= 1) { insEnum = pushButton::LBY; }
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y—£‚µ‚½‚Æ‚«
+
+	if (checkTrgImput(-1, XINPUT_BUTTON_RIGHT_SHOULDER))
+	{
+		isNext ? nextKey = pushButton::R1 : insEnum = pushButton::R1;
+	}
 
 	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))
 	{
