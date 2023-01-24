@@ -14,7 +14,7 @@ bool Boss::Initialize()
 	useAnim = 0;
 
 	status = STATUS::WAIT;
-	time = 100;
+	time = 300;
 	_statusInf.hitPoint = 10000;
 
 	MO = true;
@@ -63,18 +63,17 @@ bool	Boss::Process()
 
 	if (MO == true && time == 0) {
 		_modelInf.dir.y = b;
-		if (c < 200)
+		if (c < 400)
 		{
 			CRange();
 		}
-		if (200 <= c && c <= 350)
+		if (400 <= c && c <= 600)
 		{
 			MRange();
 		}
-		if (c > 350)
+		if (c > 600)
 		{
 			LRange();
-			Walk(xz);
 		}
 	}
 	else if (time > 0)
@@ -93,7 +92,7 @@ bool	Boss::Process()
 	case STATUS::WALK:
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		animSpd = 0.5f;
-
+		Walk(xz);
 		Attack = false;
 		break;
 	case STATUS::KICK:
@@ -109,12 +108,11 @@ bool	Boss::Process()
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
-
 		break;
 	case STATUS::BACK:
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
-		_modelInf.totalTime = 100;
-		animSpd = 0.5f;
+		_modelInf.totalTime = 50;
+		animSpd = 2.0f;
 		Backwalk(xz);
 		Attack = false;
 		break;
@@ -128,7 +126,7 @@ bool	Boss::Process()
 			if (i == 790) {
 				i = 0;
 				MO = true;
-				while (time < 20) { time = rand() % 40; }
+				while (time < 20 && !_modelInf.animOldLoop) { time = rand() % 40; }
 				break;
 			}
 		}
@@ -174,7 +172,7 @@ void Boss::Walk(VECTOR x) {
 }
 
 void Boss::Backwalk(VECTOR x) {
-	float xz = 0.5;
+	float xz = 5.0;
 	auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
@@ -186,11 +184,11 @@ void Boss::Backwalk(VECTOR x) {
 void Boss::CRange() {
 
 	int AttackRand = GetRand(100);
-	if (AttackRand <= 75) {
+	if (AttackRand <= 50) {
 		status = STATUS::KICK;
 
 	}
-	else if (AttackRand > 75) {
+	else if (AttackRand > 50) {
 		status = STATUS::BACK;
 
 	}
