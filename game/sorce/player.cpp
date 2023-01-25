@@ -1,10 +1,10 @@
 #include"player.h"
 #define walkSpd 5.f
 #define runSpd 20.f
-#define attackMotionTotalTime1 14.f
-#define attackMotionTotalTime2 12.f
-#define attackMotionTotalTime3 10.f
-#define attackMotionTotalTime4 14.f
+#define attackMotionTotalTime1 24.f
+#define attackMotionTotalTime2 24.f
+#define attackMotionTotalTime3 24.f
+#define attackMotionTotalTime4 30.f
 #define attackMotionTotalTimeZoiru 58.f
 #define attackMotionTotalTimeSenpu 43.f
 #define attackMotionTotalTimeSenpuL 34.f
@@ -22,7 +22,7 @@
 #define motion_SENPUUL 13
 #define motion_rollingF 14
 #define motion_demoDead 15
-#define weponParentFrame 104//116
+#define weponParentFrame 195//116
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -45,8 +45,8 @@ bool PL::Initialize()
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
 	//_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/Player01/Player1.mv1", 1.5f, &_modelInf);
-	_modelManager.weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, "Player1_Rightweapon", 1.5f, true, "katana");
-	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, "Player1_Leftweapon", 1.5f, true, "saya");
+	_modelManager.weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, "Player1_Rightweapon", 2.f, true, "katana");
+	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, "Player1_Leftweapon", 2.f, true, "saya");
 	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
 	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
 
@@ -125,31 +125,31 @@ bool	PL::Process()
 		{
 			_modelManager.animChange(motion_DR1, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
-			waitNextAttack += _valData->plAtkSpd1;
+			waitNextAttack += _valData->plAtkSpd1 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(motion_DR2, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
-			waitNextAttack += _valData->plAtkSpd2;
+			waitNextAttack += _valData->plAtkSpd2 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(motion_DR3, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
-			waitNextAttack += _valData->plAtkSpd3;
+			waitNextAttack += 0;// _valData->plAtkSpd3 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
 			_modelManager.animChange(motion_DR4, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime4 / _valData->plAtkSpd4;
-			waitNextAttack += _valData->plAtkSpd4;
+			waitNextAttack += _valData->plAtkSpd4 * 2;
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
@@ -239,7 +239,7 @@ bool	PL::Process()
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
 		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
-		isDash = true;//------------------------------------------------------------------------------------
+		//isDash = true;//------------------------------------------------------------------------------------
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
 		if (addDir != 0) { charMove(spd, addDir, true); }
@@ -295,7 +295,7 @@ bool	PL::Process()
 	isImmortal = immortalTime > 0;
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 200, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 190, 0));
 	if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
 	if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 

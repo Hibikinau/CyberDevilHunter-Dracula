@@ -49,7 +49,7 @@ bool	Boss::Process()
 		}
 	}
 
-	collCap.r = 60.f;
+	collCap.r = 70.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
@@ -100,14 +100,14 @@ bool	Boss::Process()
 		Attack = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
 		break;
 	case STATUS::SRASH:
 		if (Attack == true) { break; }
 		Attack = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
 		break;
 	case STATUS::BACK:
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
