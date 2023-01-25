@@ -58,13 +58,12 @@ bool	modeG::Initialize()
 
 	UIkari = LoadGraph("game/res/A.png");
 
-	Effekseer_Sync3DSetting();
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
 
-	effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
-	playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
-	SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
+	//effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
+	//playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
+	//SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
 	return true;
 }
 
@@ -109,20 +108,6 @@ bool	modeG::Process()
 		testAttackF--;
 	}
 
-	//if (charBox[Char_PL]->_modelInf.pos.y <= -2000.f)
-	//{
-	//	charBox[Char_PL]->Terminate();
-	//	charBox.erase(Char_PL);
-
-	//	auto insPL = std::make_unique<PL>();
-	//	insPL->Initialize();
-	//	insPL->setCB(&charBox);
-	//	insPL->_valData = &_valData;
-	//	insPL->getInputKey(&_imputInf, &cameraDir);
-	//	insPL->setGroundInf(&stage);
-	//	insPL->allColl = &mAllColl;
-	//	charBox.emplace(Char_PL, std::move(insPL));
-	//}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
 	{
@@ -163,6 +148,12 @@ bool	modeG::Process()
 
 	collHitCheck();
 
+	if (charBox[Char_PL]->isDead == 2 || charBox[Char_BOSS1]->isDead == 2)
+	{
+		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+		Terminate();
+		return false;
+	}
 	return true;
 }
 
@@ -241,6 +232,7 @@ bool	modeG::Terminate()
 	MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }
+	mAllColl.clear();
 	charBox.clear();
 	debugWardBox.clear();
 	return true;

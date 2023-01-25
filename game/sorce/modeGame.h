@@ -42,8 +42,6 @@ protected:
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
 	int UIkari;
-	int effectResourceHandle;
-	int playingEffectHandle;
 
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = false, plDead;

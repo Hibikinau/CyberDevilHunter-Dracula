@@ -51,7 +51,11 @@ int ModeServer::Release(const char* name, bool isDel) {
 	{
 		for (int i = 0; i < _vModeDel.size(); i++)
 		{
-			if (_vModeDel[i] == name) { _vModeDel.erase(_vModeDel.begin() + i); return 1; }
+			if (_vModeDel[i] == name)
+			{
+				_vModeDel.erase(_vModeDel.begin() + i); 
+				return 1; 
+			}
 		}
 		return 1;
 	}
@@ -187,7 +191,7 @@ int ModeServer::Process() {
 	}
 
 	// Effekseerにより再生中のエフェクトを更新する。
-	UpdateEffekseer3D();
+	//UpdateEffekseer3D();
 	return 0;
 }
 
@@ -211,7 +215,7 @@ int ModeServer::Render() {
 		}
 	}
 	// Effekseerにより再生中のエフェクトを描画する。
-	DrawEffekseer3D();
+	//DrawEffekseer3D();
 	return 0;
 }
 

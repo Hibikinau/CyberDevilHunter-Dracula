@@ -48,6 +48,10 @@ bool	Boss::Process()
 			plMI = i->second->getInf();
 		}
 	}
+	if (CheckHitKey(KEY_INPUT_K))
+	{
+		_statusInf.hitPoint = 1;
+	}
 
 	collCap.r = 70.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
@@ -216,8 +220,8 @@ void Boss::LRange() {
 bool Boss::HPmath(float Num)
 {
 	_statusInf.hitPoint += Num;
-	if (_statusInf.hitPoint == 0) {
-		isDead = true;
+	if (_statusInf.hitPoint <= 0) {
+		isDead = 2;
 	}
 
 	return true;
