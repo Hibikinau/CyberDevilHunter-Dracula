@@ -55,9 +55,13 @@ bool	modeG::Initialize()
 	testAttackCap.underPos = VGet(0.f, 30.f, 0.f);
 	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
 	testAttackCap.r = 30.f;
-
+	Effekseer_Sync3DSetting();
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
+
+	effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
+	playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
+	SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
 	return true;
 }
 

@@ -5,6 +5,7 @@
 #include<vector>
 #include <memory>
 #include "ModeBase.h"
+#include"EffekseerForDXLib.h"
 
 class	ModeServer
 {
