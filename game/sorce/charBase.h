@@ -16,8 +16,9 @@ struct collCapsule
 
 struct attackColl
 {
-	collCapsule capColl;
+	collCapsule capColl, capCollOld;
 	std::string attackChar;
+	std::vector<collCapsule> capCollTs;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
 	bool isUseMat;
