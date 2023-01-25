@@ -112,7 +112,7 @@ bool	Boss::Process()
 	case STATUS::BACK:
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		_modelInf.totalTime = 50;
-		animSpd = 2.0f;
+		animSpd = 1.5f;
 		Backwalk(xz);
 		Attack = false;
 		break;
@@ -184,11 +184,11 @@ void Boss::Backwalk(VECTOR x) {
 void Boss::CRange() {
 
 	int AttackRand = GetRand(100);
-	if (AttackRand <= 50) {
+	if (AttackRand <= 70) {
 		status = STATUS::KICK;
 
 	}
-	else if (AttackRand > 50) {
+	else if (AttackRand > 70) {
 		status = STATUS::BACK;
 
 	}
@@ -226,6 +226,9 @@ void Boss::LRange() {
 bool Boss::HPmath(float Num)
 {
 	_statusInf.hitPoint += Num;
+	if (_statusInf.hitPoint == 0) {
+		isDead = true;
+	}
 
 	return true;
 }

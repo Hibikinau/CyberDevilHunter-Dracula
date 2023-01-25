@@ -58,8 +58,13 @@ bool	modeG::Initialize()
 
 	UIkari = LoadGraph("game/res/A.png");
 
+	Effekseer_Sync3DSetting();
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
+
+	effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
+	playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
+	SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
 	return true;
 }
 

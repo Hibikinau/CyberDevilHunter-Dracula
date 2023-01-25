@@ -186,6 +186,8 @@ int ModeServer::Process() {
 		}
 	}
 
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
 	return 0;
 }
 
@@ -208,6 +210,8 @@ int ModeServer::Render() {
 			_vMode.at(_nowMode[i].c_str())->Render();
 		}
 	}
+	// Effekseerにより再生中のエフェクトを描画する。
+	DrawEffekseer3D();
 	return 0;
 }
 
