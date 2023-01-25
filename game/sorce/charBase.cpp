@@ -87,12 +87,33 @@ bool	CB::hitCheck(const char* name)
 		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
 
 		MATRIX M = MV1GetFrameLocalWorldMatrix(allColl->at(i).capColl.parentModelHandle, allColl->at(i).capColl.frameNum);
+		auto insUnderPos = VTransform(allColl->at(i).capColl.underPos, M);
+		auto insOverPos = VTransform(allColl->at(i).capColl.overPos, M);
 
 		bool insCheckHit = HitCheck_Capsule_Capsule
 		(collCap.underPos, collCap.overPos, collCap.r
-			, VTransform(allColl->at(i).capColl.underPos, M)
-			, VTransform(allColl->at(i).capColl.overPos, M)
+			, insUnderPos
+			, insOverPos
 			, allColl->at(i).capColl.r);
+
+		if (!insCheckHit && allColl->at(i).capCollOld.r != -1)
+		{
+			auto insUnderPosOld = allColl->at(i).capCollOld.underPos;
+			auto insOverPosOld = allColl->at(i).capCollOld.overPos;
+			auto underDis = VAdd(insUnderPos, insUnderPosOld);
+			auto overDis = VAdd(insOverPos, insOverPosOld);
+
+			auto tsUnderPos = VScale(underDis, 0.5f);
+			auto tsOverPos = VScale(overDis, 0.5f);
+			insCheckHit = HitCheck_Capsule_Capsule
+			(collCap.underPos, collCap.overPos, collCap.r
+				, tsUnderPos
+				, tsOverPos
+				, allColl->at(i).capColl.r);
+		}
+		allColl->at(i).capCollOld.underPos = insUnderPos;
+		allColl->at(i).capCollOld.overPos = insOverPos;
+		allColl->at(i).capCollOld.r = allColl->at(i).capColl.r;
 
 		if (insCheckHit && !isImmortal)
 		{
@@ -119,7 +140,7 @@ bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
 	acoll.activeTimeF = activeTimeF;
 	acoll.nonActiveTimeF = nonActiveTimeF;
 	acoll.damage = damage;
-
+	acoll.capCollOld.r = -1;
 	allColl->emplace_back(acoll);
 
 	return true;

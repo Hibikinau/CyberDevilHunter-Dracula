@@ -295,7 +295,7 @@ bool	PL::Process()
 	isImmortal = immortalTime > 0;
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
-	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 170, 0));
+	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 200, 0));
 	if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
 	if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 
