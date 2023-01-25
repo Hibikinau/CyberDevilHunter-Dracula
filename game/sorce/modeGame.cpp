@@ -59,6 +59,7 @@ bool	modeG::Initialize()
 
 	UIkari = LoadGraph("game/res/A.png");
 
+	//Effekseer_Sync3DSetting();
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
 

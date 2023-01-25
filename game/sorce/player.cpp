@@ -126,7 +126,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -134,7 +134,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -142,7 +142,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += 0;// _valData->plAtkSpd3 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -179,25 +179,25 @@ bool	PL::Process()
 		{
 			_modelManager.animChange(motion_DR1, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
-			waitNextAttack += _valData->plAtkSpd1;
+			waitNextAttack += _valData->plAtkSpd1 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(motion_DR2, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
-			waitNextAttack += _valData->plAtkSpd2;
+			waitNextAttack += _valData->plAtkSpd2 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(motion_DR3, &_modelInf, false, false);
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
-			waitNextAttack += _valData->plAtkSpd3;
+			waitNextAttack += 0;// _valData->plAtkSpd3 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -20.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
