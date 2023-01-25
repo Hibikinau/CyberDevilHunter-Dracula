@@ -55,6 +55,9 @@ bool	modeG::Initialize()
 	testAttackCap.underPos = VGet(0.f, 30.f, 0.f);
 	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
 	testAttackCap.r = 30.f;
+
+	UIkari = LoadGraph("game/res/A.png");
+
 	Effekseer_Sync3DSetting();
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
@@ -136,49 +139,7 @@ bool	modeG::Process()
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
-	//// ＦＶキーでライトの距離減衰パラメータ０の値を変更
-	//if (CheckHitKey(KEY_INPUT_F) == 1)
-	//{
-	//	Atten0 += 0.001f;
-	//}
-	//if (CheckHitKey(KEY_INPUT_V) == 1)
-	//{
-	//	Atten0 -= 0.001f;
-	//}
 
-	//// ＧＢキーでライトの距離減衰パラメータ１の値を変更
-	//if (CheckHitKey(KEY_INPUT_G) == 1)
-	//{
-	//	Atten1 += 0.00001f;
-	//}
-	//if (CheckHitKey(KEY_INPUT_B) == 1)
-	//{
-	//	Atten1 -= 0.00001f;
-	//}
-
-	//// ＨＮキーでライトの距離減衰パラメータ２の値を変更
-	//if (CheckHitKey(KEY_INPUT_H) == 1)
-	//{
-	//	Atten2 += 0.0000001f;
-	//}
-	//if (CheckHitKey(KEY_INPUT_N) == 1)
-	//{
-	//	Atten2 -= 0.0000001f;
-	//}
-
-	//// 距離減衰パラメータの値を補正
-	//if (Atten0 < 0.0f) Atten0 = 0.0f;
-	//if (Atten1 < 0.0f) Atten1 = 0.0f;
-	//if (Atten2 < 0.0f) Atten2 = 0.0f;
-
-	//// モデルの上空にポイントライトを設定
-	//ChangeLightTypePoint(
-	//	VGet(320.0f, 1000.0f, 200.0f),
-	//	10000,
-	//	Atten0,
-	//	Atten1,
-	//	Atten2);
-	// グローバルアンビエントカラーを薄い黒(?)に変更
 	SetGlobalAmbientLight(GetColorF(0.3f, 0.3f, 0.3f, 0.0f));
 
 	debugWardBox.emplace_back("cameraHigh  = " + std::to_string(cameraHigh));
@@ -243,11 +204,18 @@ bool	modeG::Render()
 			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 
 			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			if (mAllColl[i].capCollOld.r != -1)
+			{
+				DrawCapsule3D(mAllColl[i].capCollOld.underPos, mAllColl[i].capCollOld.overPos, mAllColl[i].capCollOld.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			}
 		}
 	}
 
 	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
 	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
+
+	DrawGraph(0, 0, UIkari, true);
+
 	return true;
 }
 

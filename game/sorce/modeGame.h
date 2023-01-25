@@ -41,6 +41,7 @@ protected:
 	valData _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
+	int UIkari;
 	int effectResourceHandle;
 	int playingEffectHandle;
 
