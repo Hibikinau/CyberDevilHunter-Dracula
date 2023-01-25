@@ -41,7 +41,7 @@ protected:
 	valData _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
-
+	int UIkari;
 
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = false, plDead;
