@@ -49,6 +49,7 @@ bool	modeG::Initialize()
 	ChangeLightTypeDir(VGet(-1.0f, -4.0f, 0.0f));
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
+	SetUseBackCulling(true);
 	countTime = GetNowCount();
 	MV1SetupCollInfo(stage.modelHandle, -1, 32, 8, 32);
 

@@ -22,7 +22,7 @@
 #define motion_SENPUUL 13
 #define motion_rollingF 14
 #define motion_demoDead 15
-#define weponParentFrame 195//116
+#define weponParentFrame 104//116
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -49,7 +49,6 @@ bool PL::Initialize()
 	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, "Player1_Leftweapon", 2.f, true, "saya");
 	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
 	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
-
 
 	changeAttackY = &CA_charge;
 	changeAttackX = &CA_senpuu;
@@ -127,7 +126,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -135,7 +134,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -143,7 +142,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += 0;// _valData->plAtkSpd3 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
