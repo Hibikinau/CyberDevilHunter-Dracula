@@ -184,11 +184,11 @@ void Boss::Backwalk(VECTOR x) {
 void Boss::CRange() {
 
 	int AttackRand = GetRand(100);
-	if (AttackRand <= 40) {
+	if (AttackRand <= 70) {
 		status = STATUS::KICK;
 
 	}
-	else if (AttackRand > 40) {
+	else if (AttackRand > 70) {
 		status = STATUS::BACK;
 
 	}
