@@ -14,11 +14,9 @@ public:
 	virtual bool Input();
 	virtual bool Process();
 	virtual bool Render();
-	virtual void charMove(float Speed, float _Dir);
 	bool HPmath(float Num) override;
-	bool step();
-	void Walk(VECTOR x);
-	void Backwalk(VECTOR x);
+	void Walk();
+	void Backwalk();
 	void CRange();
 	void MRange();
 	void LRange();
@@ -41,19 +39,16 @@ public:
 	};
 	RANGE range;
 
-	bool MO;
-
-	int AttackNo;
-	bool Attack;
-
+	
 protected:
-	int _cg, useAnim;
-	int _x, _y, stepChargeSec, isStep;
-	float spd, animSpd, * _cameraDir;
+	int useAnim;
+	int _x, _y;
 	bool isUseFbx;
+	float animSpd,*_cameraSpd;
 	int time;
 	modelManager _modelManager;
-	bool attackFlag, isDash, isAnimEnd;
+	bool AttackFlag, isAnimEnd;
 	modelInf* plMI, stage;
 	double dir;
+	bool MotionFlag;
 };
