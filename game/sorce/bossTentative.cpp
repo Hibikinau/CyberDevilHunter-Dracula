@@ -17,11 +17,11 @@ bool Boss::Initialize()
 	time = 300;
 	_statusInf.hitPoint = 10000;
 
-	MO = true;
+	MotionFlag = true;
 	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	Attack = false;
+	AttackFlag = false;
 	g = 1.f;
 	return true;
 }
@@ -53,25 +53,25 @@ bool	Boss::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
-	auto xz = plMI->pos;
+	//auto xz = plMI->pos;
 
 	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
-	auto a = VSub(plMI->pos, _modelInf.pos);
-	auto b = (std::atan2(-a.x, -a.z) * 180.f) / DX_PI_F;
-	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+	auto Pvector = VSub(plMI->pos, _modelInf.pos);
+	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
+	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
 
-	if (MO == true && time == 0) {
-		_modelInf.dir.y = b;
-		if (c < 400)
+	if (MotionFlag == true && time == 0) {
+		_modelInf.dir.y = Pdir;
+		if (Prange < 400)
 		{
 			CRange();
 		}
-		if (400 <= c && c <= 600)
+		if (400 <= Prange && Prange <= 600)
 		{
 			MRange();
 		}
-		if (c > 600)
+		if (Prange > 600)
 		{
 			LRange();
 		}
@@ -86,25 +86,24 @@ bool	Boss::Process()
 	switch (status) {
 	case STATUS::WAIT:
 		_modelManager.animChange(motion_idel, &_modelInf, true, true);
-		spd = 0.f;
 		animSpd = 0.5f;
 		break;
 	case STATUS::WALK:
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		animSpd = 0.5f;
-		Walk(xz);
-		Attack = false;
+		Walk();
+		AttackFlag = false;
 		break;
 	case STATUS::KICK:
-		if (Attack == true) { break; }
-		Attack = true;
+		if (AttackFlag == true) { break; }
+		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
 		break;
 	case STATUS::SRASH:
-		if (Attack == true) { break; }
-		Attack = true;
+		if (AttackFlag == true) { break; }
+		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
@@ -113,19 +112,19 @@ bool	Boss::Process()
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		_modelInf.totalTime = 50;
 		animSpd = 1.5f;
-		Backwalk(xz);
-		Attack = false;
+		Backwalk();
+		AttackFlag = false;
 		break;
 	}
 
 
 	if (isAnimEnd == true) {
 		status = STATUS::WAIT;
-		Attack = false;
+		AttackFlag = false;
 		for (auto i = 0; i < 800; i++) {
 			if (i == 790) {
 				i = 0;
-				MO = true;
+				MotionFlag = true;
 				while (time < 20 && !_modelInf.animOldLoop) { time = rand() % 40; }
 				break;
 			}
@@ -150,35 +149,26 @@ bool	Boss::Render()
 	return true;
 }
 
-void Boss::charMove(float Speed, float _Dir)
-{
 
-}
-
-bool Boss::step()
-{
-	return true;
-}
-
-void Boss::Walk(VECTOR x) {
-	float xz = 7.0;
-	auto c = VSub(x, _modelInf.pos);
+void Boss::Walk() {
+	float Speed = 7.0;
+	//auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
 
-	_modelInf.pos.x -= sin(radian) * xz;
-	_modelInf.pos.z -= cos(radian) * xz;
+	_modelInf.pos.x -= sin(radian) * Speed;
+	_modelInf.pos.z -= cos(radian) * Speed;
 
 }
 
-void Boss::Backwalk(VECTOR x) {
-	float xz = 5.0;
-	auto c = VSub(x, _modelInf.pos);
+void Boss::Backwalk() {
+	float Speed = 5.0;
+	//auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
 
-	_modelInf.pos.x += sin(radian) * xz;
-	_modelInf.pos.z += cos(radian) * xz;
+	_modelInf.pos.x += sin(radian) * Speed;
+	_modelInf.pos.z += cos(radian) * Speed;
 }
 
 void Boss::CRange() {
@@ -192,7 +182,7 @@ void Boss::CRange() {
 		status = STATUS::BACK;
 
 	}
-	MO = false;
+	MotionFlag = false;
 	if (allColl->size() == 0)
 	{
 		attackColl Acoll;
@@ -214,7 +204,7 @@ void Boss::MRange() {
 	else if (AttackRand > 80) {
 
 	}
-	MO = false;
+	MotionFlag = false;
 	return;
 }
 
