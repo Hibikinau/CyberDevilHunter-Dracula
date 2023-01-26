@@ -20,9 +20,9 @@
 #define motion_ZOIRUattack2 11
 #define motion_SENPUU 12
 #define motion_SENPUUL 13
-#define motion_rollingF 14
+#define motion_rollingF 7
 #define motion_demoDead 15
-#define weponParentFrame 104//116
+#define weponParentFrame 195//116
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -39,7 +39,7 @@ bool PL::Initialize()
 	_statusInf.bloodPoint = 0;
 
 	_modelInf.importCnt = 0;
-	_modelInf.pos = VGet(0.0f, 0.0f, 0.f);
+	_modelInf.pos = VGet(210.0f, 0.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
@@ -50,8 +50,8 @@ bool PL::Initialize()
 	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
 	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
 
-	changeAttackY = &CA_charge;
-	changeAttackX = &CA_senpuu;
+	changeAttackY = &CA_debugAttack;
+	changeAttackX = &CA_debugAttack;
 
 	std::vector<int> insSoundHandle;
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
@@ -91,6 +91,12 @@ bool	PL::Process()
 		return true;
 	}*/
 	//charMove(spd, *_cameraDir + addDir, true);
+	if (_statusInf.hitPoint <= 0)
+	{
+		isDead = 2;
+	}
+	//_modelInf.wepons[1].isActive = true;
+	_modelInf.wepons[1].weponAttachFrameNum = 169;
 
 	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
 	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
@@ -105,7 +111,7 @@ bool	PL::Process()
 		if (Estate == _estate::DODGE) { break; }
 		Estate = _estate::DODGE;
 		_modelManager.animChange(motion_rollingF, &_modelInf, false, true);
-		animSpd = 0.5f;
+		animSpd = 1.f;
 		spd = 25.f;
 		dodgeTime = 52;
 		immortalTime = dodgeTime;
@@ -126,7 +132,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -134,7 +140,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -142,7 +148,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += 0;// _valData->plAtkSpd3 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -181,7 +187,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime1 / _valData->plAtkSpd1;
 			waitNextAttack += _valData->plAtkSpd1 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -189,7 +195,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime2 / _valData->plAtkSpd2;
 			waitNextAttack += _valData->plAtkSpd2 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
@@ -197,7 +203,7 @@ bool	PL::Process()
 			animSpd = attackMotionTotalTime3 / _valData->plAtkSpd3;
 			waitNextAttack += 0;// _valData->plAtkSpd3 * 2;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, -100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, weponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -346,7 +352,7 @@ bool	PL::Process()
 bool	PL::Render()
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }
 
@@ -358,6 +364,8 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 		{
 			_modelManager.animChange(motion_run, &_modelInf, true, true);
 			spd = runSpd;
+			//_modelInf.wepons[1].isActive = false;
+			_modelInf.wepons[1].weponAttachFrameNum = 221;
 			animSpd = 1.f;
 		}
 		else
@@ -489,6 +497,16 @@ bool PL::CA_change(std::string name, const char* XorY)
 	return true;
 }
 
+bool PL::CA_debugAttack(PL* insPL)
+{
+	auto insDir = insPL->getMoveDir(true);
+	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
+	insPL->_modelManager.animChange(motion_DR1, &insPL->_modelInf, false, false);
+	insPL->animSpd = 12 / insPL->_valData->plAtkSpd1;
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->_modelInf.totalTime / insPL->animSpd + 1, true, 99999.f, weponParentFrame, Char_PL);
+
+	return true;
+}
 bool PL::CA_senpuu(PL* insPL)
 {
 	auto insDir = insPL->getMoveDir(true);

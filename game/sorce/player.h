@@ -59,6 +59,7 @@ public:
 	bool CA_change(std::string name, const char* XorY) override;
 	static bool CA_senpuu(PL* insPL);
 	static bool CA_charge(PL* insPL);
+	static bool CA_debugAttack(PL* insPL);
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
 

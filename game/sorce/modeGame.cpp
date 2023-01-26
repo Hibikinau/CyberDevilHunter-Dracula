@@ -43,7 +43,7 @@ bool	modeG::ASyncLoad(bool (*loadDataClass)(modeG* insMG))
 
 bool	modeG::Initialize()
 {
-	_modelManager.modelImport("game/res/EL-Studio_Field(Grass)/フィールドスタジオ-草原.pmx", 7.0f, &stage);
+	_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
 	SetUseLighting(true);
 	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
 	ChangeLightTypeDir(VGet(-1.0f, -4.0f, 0.0f));
@@ -51,18 +51,19 @@ bool	modeG::Initialize()
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(true);
 	countTime = GetNowCount();
-	MV1SetupCollInfo(stage.modelHandle, -1, 32, 8, 32);
+	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
 
 	testAttackCap.underPos = VGet(0.f, 30.f, 0.f);
 	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
 	testAttackCap.r = 30.f;
 
+	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
+	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 	UIkari = LoadGraph("game/res/A.png");
 
 	//Effekseer_Sync3DSetting();
 	int a = ASyncLoad(makeDefaultChar);
 	a += 1;
-
 	//effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
 	//playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
 	//SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
@@ -71,6 +72,15 @@ bool	modeG::Initialize()
 
 bool	modeG::Process()
 {
+	if (BGMdelay == 300)
+	{
+		PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
+		BGMdelay++;
+	}
+	else
+	{
+		BGMdelay++;
+	}
 	statusInf plStatus = { 0.f, 0.f, 0.f };
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
@@ -85,31 +95,13 @@ bool	modeG::Process()
 		{
 			i->second->Process();
 			bossMI = i->second->getInf();
-			i->second->gravity();
+			i->second->gravity();/*
 			if (i->second->_modelInf.pos.y < -10)
 			{
 				i->second->_modelInf.pos = VGet(0.f, 0.f, 0.f);
-			}
+			}*/
 		}
 	}
-
-	if (testAttackF <= 0)
-	{
-		attackColl Acoll;
-		Acoll.isUseMat = false;
-		Acoll.nonActiveTimeF = 100;
-		Acoll.activeTimeF = 100;
-		Acoll.attackChar = Char_BOSS1;
-		Acoll.damage = 20.f;
-		Acoll.capColl = testAttackCap;
-		mAllColl.emplace_back(std::move(Acoll));
-		testAttackF = 200;
-	}
-	else
-	{
-		testAttackF--;
-	}
-
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
 	{
@@ -150,9 +142,10 @@ bool	modeG::Process()
 
 	collHitCheck();
 
-	if (charBox[Char_PL]->isDead == 2 || charBox[Char_BOSS1]->isDead == 2)
+	if (charBox[Char_PL]->isDead == 2 || charBox[Char_BOSS1]->isDead == 2 ||
+		charBox[Char_PL]->_modelInf.pos.y < -500 || charBox[Char_BOSS1]->_modelInf.pos.y < -500)
 	{
-		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+		_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
 		Terminate();
 		return false;
 	}
@@ -167,9 +160,7 @@ bool	modeG::Render()
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
-	debugWardBox.emplace_back("-------武器セット一覧-------");
-	debugWardBox.emplace_back("No.0 左手:SwordBreaker 右手:RabbitBunker");
-	debugWardBox.emplace_back("No.1 左手:無し　        右手:GunBlade");
+	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
@@ -188,7 +179,7 @@ bool	modeG::Render()
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
 
-	DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 40.f, 0.f)), GetColor(0, 255, 0));
+	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 120.f, 0.f)), GetColor(0, 255, 0));
 
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -204,8 +195,8 @@ bool	modeG::Render()
 		}
 	}
 
-	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
-	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(0.f, 0.f, 0.f));
+	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
 
 	DrawGraph(0, 0, UIkari, true);
 
@@ -231,6 +222,7 @@ bool	modeG::collHitCheck()
 
 bool	modeG::Terminate()
 {
+	StopSoundMem(BGM);
 	MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }

@@ -3,14 +3,19 @@
 #define walkSpd 6.f
 #define runSpd 20.f
 #define motion_idel 0
-#define motion_walk 1
+#define motion_walk 2
 #define motion_run 2
-#define motion_attack1 2
+#define motion_attack1 1
+#define motion_dodgeR 3
+#define motion_dodgeF 4
+#define motion_dodgeL 5
+#define motion_dodgeB 6
+#define motion_dead 7
 
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy01/MV1/Enemy01_.mv1", 2.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/enemy kari.mv1", 2.0f, &_modelInf);
 	useAnim = 0;
 
 	status = STATUS::WAIT;
@@ -23,6 +28,8 @@ bool Boss::Initialize()
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
 	g = 1.f;
+	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
+	ChangeVolumeSoundMem(520, swingSE);
 	return true;
 }
 
@@ -67,15 +74,15 @@ bool	Boss::Process()
 
 	if (MotionFlag == true && time == 0) {
 		_modelInf.dir.y = Pdir;
-		if (Prange < 400)
+		if (Prange < 300)
 		{
 			CRange();
 		}
-		if (400 <= Prange && Prange <= 600)
+		if (300 <= Prange && Prange <= 400)
 		{
 			MRange();
 		}
-		if (Prange > 600)
+		if (Prange > 400)
 		{
 			LRange();
 		}
@@ -103,22 +110,35 @@ bool	Boss::Process()
 		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
+		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		break;
 	case STATUS::SRASH:
 		if (AttackFlag == true) { break; }
 		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 201, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
+		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+
 		break;
 	case STATUS::BACK:
+		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true);
+		//_modelInf.totalTime = 50;
+		animSpd = 1.f;
+		if(_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Backwalk();
+		}
+		AttackFlag = false;
+		break;
+	/*case STATUS::STEP:
 		_modelManager.animChange(motion_walk, &_modelInf, true, true);
 		_modelInf.totalTime = 50;
 		animSpd = 1.5f;
-		Backwalk();
+		Step();
 		AttackFlag = false;
-		break;
+		break;*/
 	}
 
 
@@ -146,7 +166,7 @@ bool	Boss::Process()
 bool	Boss::Render()
 {
 
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
 
@@ -166,6 +186,16 @@ void Boss::Walk() {
 }
 
 void Boss::Backwalk() {
+	float Speed = 40.0;
+	//auto c = VSub(x, _modelInf.pos);
+	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
+	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
+
+	_modelInf.pos.x += sin(radian) * Speed;
+	_modelInf.pos.z += cos(radian) * Speed;
+}
+
+void Boss::Step() {
 	float Speed = 5.0;
 	//auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
@@ -173,6 +203,7 @@ void Boss::Backwalk() {
 
 	_modelInf.pos.x += sin(radian) * Speed;
 	_modelInf.pos.z += cos(radian) * Speed;
+
 }
 
 void Boss::CRange() {
@@ -187,26 +218,16 @@ void Boss::CRange() {
 
 	}
 	MotionFlag = false;
-	if (allColl->size() == 0)
-	{
-		attackColl Acoll;
-		Acoll.nonActiveTimeF = 0;
-		Acoll.activeTimeF = 100;
-		Acoll.attackChar = Char_BOSS1;
-		Acoll.damage = 20.f;
-		Acoll.capColl = collCap;
-		allColl->emplace_back(std::move(Acoll));
-	}
 	return;
 }
 
 void Boss::MRange() {
 	int AttackRand = GetRand(100);
-	if (AttackRand <= 80) {
+	if (AttackRand <= 70) {
 		status = STATUS::SRASH;
 	}
-	else if (AttackRand > 80) {
-
+	else if (AttackRand > 70) {
+		//status = STATUS::STEP;
 	}
 	MotionFlag = false;
 	return;

@@ -17,6 +17,7 @@ public:
 	bool HPmath(float Num) override;
 	void Walk();
 	void Backwalk();
+	void Step();
 	void CRange();
 	void MRange();
 	void LRange();
@@ -27,7 +28,8 @@ public:
 		WALK,
 		KICK,
 		SRASH,
-		BACK
+		BACK,
+		STEP
 	};
 	STATUS status;
 
@@ -51,4 +53,5 @@ protected:
 	modelInf* plMI, stage;
 	double dir;
 	bool MotionFlag;
+	int swingSE;
 };
