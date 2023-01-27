@@ -30,6 +30,30 @@ bool	modeM::Process()
 	{
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
 	}
+
+	if (_imputInf._gTrgb[KEY_INPUT_RETURN])
+	{
+		if (picMenuNum == 0)
+		{//戦闘のやり直し
+			_modeServer->Del(MODE_GAME);
+			_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+			return false;
+		}
+		else if (picMenuNum == 1)
+		{//ブリーフィングへ
+
+		}
+		else if (picMenuNum == 2)
+		{//設定へ
+
+		}
+		else if (picMenuNum == 3)
+		{//タイトルへ
+			_modeServer->Del(MODE_GAME);
+			_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -37,6 +61,7 @@ bool	modeM::Render()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
 	DrawGraph(0, 0, _cg, false);
+	//DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	int insMenuFontSize = GetDrawStringWidth("MENU", strlen("MENU"));
 	DrawString(640 - (insMenuFontSize / 2), 20, "MENU", GetColor(255, 255, 255));
