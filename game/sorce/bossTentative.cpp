@@ -297,6 +297,9 @@ void Boss::MRange() {
 
 void Boss::LRange() {
 	status = STATUS::WALK;
+
+
+
 	return;
 }
 
