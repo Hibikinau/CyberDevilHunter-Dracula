@@ -120,25 +120,27 @@ bool	Boss::Process()
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-
 		break;
 	case STATUS::BACK:
 		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true);
 		//_modelInf.totalTime = 50;
-		animSpd = 1.f;
+		animSpd = 1.0f;
 		if(_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Backwalk();
+			BackStep();
 		}
 		AttackFlag = false;
 		break;
-	/*case STATUS::STEP:
-		_modelManager.animChange(motion_walk, &_modelInf, true, true);
-		_modelInf.totalTime = 50;
-		animSpd = 1.5f;
-		Step();
+	case STATUS::STEP:
+		_modelManager.animChange(motion_walk, &_modelInf, false, true);
+		//_modelInf.totalTime = 50;
+		animSpd = 1.0f;
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Step();
+		}
 		AttackFlag = false;
-		break;*/
+		break;
 	}
 
 
@@ -166,7 +168,7 @@ bool	Boss::Process()
 bool	Boss::Render()
 {
 
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
 
@@ -185,7 +187,7 @@ void Boss::Walk() {
 
 }
 
-void Boss::Backwalk() {
+void Boss::BackStep() {
 	float Speed = 40.0;
 	//auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
