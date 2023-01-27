@@ -16,7 +16,7 @@ public:
 	virtual bool Render(float timeSpeed);
 	bool HPmath(float Num) override;
 	void Walk();
-	void Backwalk();
+	void BackStep();
 	void Step();
 	void CRange();
 	void MRange();
