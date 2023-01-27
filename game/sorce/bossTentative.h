@@ -15,9 +15,14 @@ public:
 	virtual bool Process();
 	virtual bool Render();
 	bool HPmath(float Num) override;
+	bool UtilityJudge();
+
 	void Walk();
-	void BackStep();
 	void Step();
+	void BackStep();
+	void LeftStep();
+	void RightStep();
+
 	void CRange();
 	void MRange();
 	void LRange();
@@ -26,10 +31,12 @@ public:
 		NONE,
 		WAIT,
 		WALK,
-		KICK,
+		ATTACK,
 		SRASH,
 		BACK,
-		STEP
+		STEP,
+		LEFT,
+		RIGHT
 	};
 	STATUS status;
 
