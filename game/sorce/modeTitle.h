@@ -1,5 +1,5 @@
 #pragma once
-#include"../../AppFrame/source/appframe.h"
+#include"appframe.h"
 
 class modeT : public ModeBase
 {

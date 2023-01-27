@@ -1,3 +1,3 @@
 #pragma once
-#include"../../AppFrame/source/appframe.h"
+#include"appframe.h"
 //ResourceServer Rserver;
