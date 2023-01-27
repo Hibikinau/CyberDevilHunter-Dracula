@@ -44,7 +44,7 @@ public:
 	virtual bool Terminate();
 	virtual bool Input();
 	virtual bool Process();
-	virtual bool Render();
+	virtual bool Render(float timeSpeed);
 	virtual void charMove(float Speed, float _Dir, bool animChange);
 	bool getInputKey(imputInf* iInf, float* cameraDir)
 	{

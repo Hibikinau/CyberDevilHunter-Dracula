@@ -163,12 +163,12 @@ bool	Boss::Process()
 	return true;
 }
 
-bool	Boss::Render()
+bool	Boss::Render(float timeSpeed)
 {
 
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 
-	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
+	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 
 	return true;
 }

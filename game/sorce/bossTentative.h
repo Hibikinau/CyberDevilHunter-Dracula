@@ -13,7 +13,7 @@ public:
 	virtual bool Terminate();
 	virtual bool Input();
 	virtual bool Process();
-	virtual bool Render();
+	virtual bool Render(float timeSpeed);
 	bool HPmath(float Num) override;
 	void Walk();
 	void Backwalk();

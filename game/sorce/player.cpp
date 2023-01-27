@@ -349,9 +349,9 @@ bool	PL::Process()
 	return true;
 }
 
-bool	PL::Render()
+bool	PL::Render(float timeSpeed)
 {
-	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
+	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	return true;
 }

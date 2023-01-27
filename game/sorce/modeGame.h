@@ -43,6 +43,10 @@ protected:
 	collCapsule testAttackCap;
 	int UIkari, BGM;
 
+	int StageModelHandle;
+	int CharaModelHandle;
+	int ShadowMapHandle;
+
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = false, plDead;
 	int BGMdelay;

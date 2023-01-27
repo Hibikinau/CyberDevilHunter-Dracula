@@ -67,6 +67,13 @@ bool	modeG::Initialize()
 	//effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
 	//playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
 	//SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
+	// シャドウマップハンドルの作成
+	//ShadowMapHandle = MakeShadowMap(1024, 1024);
+	// シャドウマップが想定するライトの方向もセット
+	//SetShadowMapLightDirection(ShadowMapHandle, VGet(-1.0f, -4.0f, 0.0f));
+	// シャドウマップに描画する範囲を設定
+	//SetShadowMapDrawArea(ShadowMapHandle, VGet(-1000.0f, -1.0f, -1000.0f), VGet(1000.0f, 1000.0f, 1000.0f));
+
 	return true;
 }
 
@@ -149,14 +156,31 @@ bool	modeG::Process()
 		Terminate();
 		return false;
 	}
+	if (_imputInf._gTrgb[KEY_INPUT_M])
+	{
+		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
+	}
 	return true;
 }
 
 bool	modeG::Render()
 {
-	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(); }
+	// シャドウマップへの描画の準備
+	//ShadowMap_DrawSetup(ShadowMapHandle);
 
+	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(1.f); }
 	MV1DrawModel(stage.modelHandle);
+
+	// シャドウマップへの描画を終了
+	//ShadowMap_DrawEnd();
+	// 描画に使用するシャドウマップを設定
+	//SetUseShadowMap(0, ShadowMapHandle);
+
+	//for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(0.f); }
+	//MV1DrawModel(stage.modelHandle);
+
+	// 描画に使用するシャドウマップの設定を解除
+	//SetUseShadowMap(0, -1);
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));

@@ -33,7 +33,7 @@ public:
 	virtual bool	Initialize();
 	virtual bool	Terminate();
 	virtual bool	Process();
-	virtual bool	Render();
+	virtual bool	Render(float timeSpeed);
 	virtual bool gravity();
 	virtual int	getType() { return type; }
 	virtual void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }

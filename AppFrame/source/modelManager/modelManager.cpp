@@ -84,19 +84,19 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 	return true;
 }
 
-bool modelManager::modelRender(modelInf* MI, float animSpeed)
+bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 {
 	MI->isAnimEnd = false;
 	if (MI->isBrending) { MI->rate = 0.f, MI->isBrending = false; }
 	if (MI->rate <= 1.0f)
 	{
-		MI->rate >= 1.0f ? MI->rate = 1.0f : MI->rate += 0.1f;
+		MI->rate >= 1.0f ? MI->rate = 1.0f : MI->rate += 0.1f * timeSpead;
 
 		MV1SetAttachAnimTime(MI->modelHandle, MI->attachIndexOld, MI->playTimeOld);
 	}
 	else
 	{
-		MI->playTime += animSpeed;
+		MI->playTime += animSpeed * timeSpead;
 		if (MI->playTime >= MI->totalTime)
 		{
 			MI->isAnimEnd = true;

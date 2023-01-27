@@ -40,9 +40,9 @@ public:
 	bool modelImport(const char* dir, const float scale, modelInf* MI);
 	//再生しているアニメーションの変更(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
 	bool animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend);
-	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード)
+	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード, 再生速度)
 	//アニメーションの再生が終わったらtrueを返す
-	bool modelRender(modelInf* MI, float animSpeed);
+	bool modelRender(modelInf* MI, float animSpeed, float timeSpead);
 	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの名前, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前)
 	bool weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name);
 	//キャラモデルのメモリ解放

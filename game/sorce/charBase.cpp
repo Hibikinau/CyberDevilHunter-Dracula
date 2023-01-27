@@ -18,7 +18,7 @@ bool	CB::Process()
 	return true;
 }
 
-bool	CB::Render()
+bool	CB::Render(float timeSpeed)
 {
 
 	return true;
