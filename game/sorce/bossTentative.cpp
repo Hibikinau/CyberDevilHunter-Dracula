@@ -105,7 +105,7 @@ bool	Boss::Process()
 		Walk();
 		AttackFlag = false;
 		break;
-	case STATUS::KICK:
+	case STATUS::ATTACK:
 		if (AttackFlag == true) { break; }
 		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
@@ -123,7 +123,6 @@ bool	Boss::Process()
 		break;
 	case STATUS::BACK:
 		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true);
-		//_modelInf.totalTime = 50;
 		animSpd = 1.0f;
 		if(_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
@@ -132,8 +131,7 @@ bool	Boss::Process()
 		AttackFlag = false;
 		break;
 	case STATUS::STEP:
-		_modelManager.animChange(motion_walk, &_modelInf, false, true);
-		//_modelInf.totalTime = 50;
+		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
@@ -141,17 +139,41 @@ bool	Boss::Process()
 		}
 		AttackFlag = false;
 		break;
+	case STATUS::LEFT:
+		_modelManager.animChange(motion_dodgeL, &_modelInf, false, true);
+		animSpd = 1.0f;
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Step();
+		}
+		AttackFlag = false;
+		break;
+	case STATUS::RIGHT:
+		_modelManager.animChange(motion_dodgeR, &_modelInf, false, true);
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Step();
+		}
+		AttackFlag = false;
+		break;
+	case STATUS::DEAD:
+		_modelManager.animChange(motion_dead, &_modelInf, false, true);
+		break;
 	}
 
 
 	if (isAnimEnd == true) {
+		if (status == STATUS::DEAD) { 
+			isDead = 2;
+			return true;
+		}
 		status = STATUS::WAIT;
 		AttackFlag = false;
 		for (auto i = 0; i < 800; i++) {
 			if (i == 790) {
 				i = 0;
 				MotionFlag = true;
-				while (time < 20 && !_modelInf.animOldLoop) { time = rand() % 40; }
+				while (time < 30 && !_modelInf.animOldLoop) { time = rand() % 40; }
 				break;
 			}
 		}
@@ -175,6 +197,36 @@ bool	Boss::Render()
 	return true;
 }
 
+bool Boss::UtilityJudge() {
+	int J = 0;
+	int Wt =0 ;
+	int Wk = 0;
+	if(J>Wt){
+		status = STATUS::WAIT;
+	}
+	if (J>Wk) {
+		status = STATUS::WALK;
+	}
+	if (J == 0) {
+		status = STATUS::ATTACK;
+	}
+	if (J == 0) {
+		status = STATUS::SRASH;
+	}
+	if (J == 0) {
+		status = STATUS::BACK;
+	}
+	if (J == 0) {
+		status = STATUS::STEP;
+	}
+	if (J == 0) {
+		status = STATUS::LEFT;
+	}
+	if (J == 0) {
+		status = STATUS::RIGHT;
+	}
+	return;
+}
 
 void Boss::Walk() {
 	float Speed = 7.0;
@@ -203,8 +255,16 @@ void Boss::Step() {
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
 
-	_modelInf.pos.x += sin(radian) * Speed;
-	_modelInf.pos.z += cos(radian) * Speed;
+	_modelInf.pos.x -= sin(radian) * Speed;
+	_modelInf.pos.z -= cos(radian) * Speed;
+
+}
+
+void Boss::LeftStep() {
+
+}
+
+void Boss::RightStep() {
 
 }
 
@@ -212,7 +272,7 @@ void Boss::CRange() {
 
 	int AttackRand = GetRand(100);
 	if (AttackRand <= 70) {
-		status = STATUS::KICK;
+		status = STATUS::ATTACK;
 
 	}
 	else if (AttackRand > 70) {
@@ -244,7 +304,7 @@ bool Boss::HPmath(float Num)
 {
 	_statusInf.hitPoint += Num;
 	if (_statusInf.hitPoint <= 0) {
-		isDead = 2;
+		status = STATUS::DEAD;
 	}
 
 	return true;
