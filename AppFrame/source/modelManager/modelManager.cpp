@@ -118,7 +118,7 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 	{
 		if (!_weponInf.isActive) { continue; }
 		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
-		
+
 		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
 
 		MV1DrawModel(_weponInf.weponHandle);

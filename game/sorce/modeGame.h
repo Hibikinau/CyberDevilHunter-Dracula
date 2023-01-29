@@ -18,8 +18,8 @@ public:
 	void cameraMove();
 	int useCommand();
 	bool getPcInf();
-	static bool makeDefaultChar(modeG* insMG);
-	bool ASyncLoad(bool (*loadDataClass)(modeG* insMG));
+	static bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA);
+	bool ASyncLoadAnim();
 	bool collHitCheck();
 
 

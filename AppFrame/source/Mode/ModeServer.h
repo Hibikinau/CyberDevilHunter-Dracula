@@ -45,9 +45,9 @@ private:
 
 public:
 	imputInf* _imputInf;
+	lstModeBase		_vMode;			// モードリスト
 
 private:
-	lstModeBase		_vMode;			// モードリスト
 	int				_uid_count;		// uidカウンタ
 	lstModeBase		_vModeAdd;		// 追加予約
 	std::vector<std::string> _vModeDel;		// 削除予約

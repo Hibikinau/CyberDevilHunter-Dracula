@@ -301,6 +301,7 @@ bool	PL::Process()
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 190, 0));
+	//éÒêUÇË-------------
 	if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
 	if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 
@@ -309,6 +310,7 @@ bool	PL::Process()
 	MATRIX neckPosMAT = MV1GetFrameLocalMatrix(_modelInf.modelHandle, 196);
 	MATRIX neckMAT = MMult(neckDirMAT, neckPosMAT);
 	MV1SetFrameUserLocalMatrix(_modelInf.modelHandle, 196, neckMAT);
+	//------------------
 	if (isHit)
 	{
 		if (lastAttackState == _estate::quickATTACK)
