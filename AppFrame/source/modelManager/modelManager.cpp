@@ -86,7 +86,7 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 
 bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 {
-	MI->isAnimEnd = false;
+	if (timeSpead != 0) { MI->isAnimEnd = false; }
 	if (MI->isBrending) { MI->rate = 0.f, MI->isBrending = false; }
 	if (MI->rate <= 1.0f)
 	{
