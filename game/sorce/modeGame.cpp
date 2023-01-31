@@ -147,13 +147,25 @@ bool	modeG::Process()
 
 	collHitCheck();
 
-	if (charBox[Char_PL]->isDead == 2 || charBox[Char_BOSS1]->isDead == 2 ||
-		charBox[Char_PL]->_modelInf.pos.y < -500 || charBox[Char_BOSS1]->_modelInf.pos.y < -500)
+
+	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
-		_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
-		Terminate();
-		return false;
+		if (i->second->isDead == 2 || i->second->_modelInf.pos.y < -500)
+		{
+			if (i->second->type == 1)
+			{//Ž©‹@‚ÌŽ€
+				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+				Terminate();
+				return false;
+			}
+			else
+			{//‚»‚êˆÈŠO‚ÌŽ€
+				i->second->Terminate();
+				i = charBox.erase(i);
+			}
+		}
 	}
+
 	if (_imputInf._gTrgb[KEY_INPUT_M])
 	{
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
@@ -232,8 +244,16 @@ bool	modeG::Render()
 		}
 	}
 
-	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
-	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	if (charBox.find(Char_PL) != charBox.end())
+	{
+		DrawString(1000, 0, "Ž©‹@‚ÌHP", GetColor(255.f, 0.f, 0.f));
+		DrawString(1000, 20, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	}
+	if (charBox.find(Char_BOSS1) != charBox.end())
+	{
+		DrawString(1000, 50, "‹RŽm‚ÌHP", GetColor(255.f, 0.f, 0.f));
+		DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	}
 
 	DrawGraph(0, 0, UIkari, true);
 

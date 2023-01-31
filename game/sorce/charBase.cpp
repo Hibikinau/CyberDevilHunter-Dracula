@@ -119,8 +119,9 @@ bool	CB::hitCheck(const char* name)
 		if (insCheckHit && !isImmortal)
 		{
 			allColl->at(i).activeTimeF = 0.f;
-			HPmath(-allColl->at(i).damage);
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
+			attackChar = allColl->at(i).attackChar;
+			HPmath(-allColl->at(i).damage);
 		}
 	}
 

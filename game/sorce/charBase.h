@@ -56,7 +56,7 @@ public:
 	float g, camDir, * _cameraDir;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false;
-	std::string name;
+	std::string name, attackChar;
 	modelManager* _modelManager;
 	modelInf _modelInf, * _GrounfInf;
 	statusInf _statusInf;
