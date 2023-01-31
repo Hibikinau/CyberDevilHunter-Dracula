@@ -26,7 +26,7 @@ public:
 protected:
 	ModeServer* _modeServer;
 	int _x, _y;
-	int testAttackF;
+	int testAttackF, lockOnMarkerHandle;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;

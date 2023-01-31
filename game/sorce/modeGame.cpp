@@ -39,8 +39,8 @@ bool	modeG::ASyncLoadAnim()
 bool	modeG::Initialize()
 {
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
-	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.fbx", 20.f, &stage);
-	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	SetUseLighting(true);
 	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
@@ -56,7 +56,7 @@ bool	modeG::Initialize()
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 	UIkari = LoadGraph("game/res/A.png");
-
+	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 	//Effekseer_Sync3DSetting();
 	makeChar(this, std::make_unique<PL>(), Char_PL);
 	makeChar(this, std::make_unique<Boss>(), Char_BOSS1);
@@ -188,6 +188,13 @@ bool	modeG::Render()
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
 
+	if (isLockon)
+	{
+		SetUseZBuffer3D(FALSE);
+		auto a = DrawBillboard3D(VSub(cameraFor, VGet(0, 40, 0)), .5, .5, 120, 0, lockOnMarkerHandle, true);
+		SetUseZBuffer3D(TRUE);
+	}
+
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	//debugWardBox.emplace_back("-------武器セット一覧-------");
@@ -209,7 +216,7 @@ bool	modeG::Render()
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
 
-	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 120.f, 0.f)), GetColor(0, 255, 0));
+	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 140.f, 0.f)), GetColor(0, 255, 0));
 
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
