@@ -1,9 +1,9 @@
 #include"allMode.h"
 #include <sstream>
 
-bool modeG::makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
+bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 {
-	SetUseASyncLoadFlag(true);
+	//SetUseASyncLoadFlag(true);
 	charPoint->Initialize();
 	charPoint->setCB(&insMG->charBox);
 	charPoint->setGroundInf(&insMG->stage);
@@ -11,15 +11,13 @@ bool modeG::makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* na
 	charPoint->_valData = &insMG->_valData;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insMG->charBox.emplace(nameA, std::move(charPoint));
-
 	return true;
 }
 
-bool	modeG::ASyncLoadAnim()
+bool loadAnimTs(bool *endSignal)
 {
-	SetUseASyncLoadFlag(false);
-	SetDrawScreen(DX_SCREEN_BACK);
 	int i = 0;
+	int B = GetASyncLoadNum();
 	while (GetASyncLoadNum() > 0)
 	{
 		ProcessMessage();
@@ -31,13 +29,22 @@ bool	modeG::ASyncLoadAnim()
 		i++;
 		ScreenFlip();
 	}
+	*endSignal = true;
+	return true;
+}
 
-
+bool	modeG::ASyncLoadAnim()
+{
+	SetDrawScreen(DX_SCREEN_BACK);
+	OutputDebugString("a");
 	return GetASyncLoadNum();
 }
 
 bool	modeG::Initialize()
 {
+	bool _endSignal = false;
+	std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
+	SetUseASyncLoadFlag(true);
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
 	_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
 	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
@@ -57,7 +64,7 @@ bool	modeG::Initialize()
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 	UIkari = LoadGraph("game/res/A.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
-	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
+	//ASyncLoadAnim();
 	makeChar(this, std::make_unique<PL>(), Char_PL);
 	makeChar(this, std::make_unique<Boss>(), Char_BOSS1);
 	// シャドウマップハンドルの作成
@@ -69,6 +76,8 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
+	SetUseASyncLoadFlag(false);
+	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 	return true;
 }
 

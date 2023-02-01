@@ -3,6 +3,8 @@
 #include<map>
 #include<string>
 #include<cmath>
+#include <thread>
+#include <future>
 
 #pragma comment(lib,"../x64/Debug/AppFrame.lib")
 //#pragma comment(lib,"../x64/Release/AppFrame.lib")

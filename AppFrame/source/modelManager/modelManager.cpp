@@ -2,25 +2,21 @@
 
 bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 {
-	SetUseASyncLoadFlag(TRUE);
-
 	MI->modelHandle = MV1LoadModel(dir);
-
-	SetUseASyncLoadFlag(FALSE);
-	SetDrawScreen(DX_SCREEN_BACK);
-	int i = 0;
-	int B = GetASyncLoadNum();
-	while (GetASyncLoadNum() > 0)
-	{
-		ProcessMessage();
-		ClearDrawScreen();
-		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
-		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
-		else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
-		else { i = 0; }
-		i++;
-		ScreenFlip();
-	}
+	//SetDrawScreen(DX_SCREEN_BACK);
+	//int i = 0;
+	//int B = GetASyncLoadNum();
+	//while ()
+	//{
+	//	ProcessMessage();
+	//	ClearDrawScreen();
+	//	if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
+	//	else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
+	//	else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
+	//	else { i = 0; }
+	//	i++;
+	//	ScreenFlip();
+	//}
 
 	if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;
@@ -61,7 +57,6 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attach
 		// ƒ}ƒeƒŠƒAƒ‹‚Ì—ÖŠsü‚Ì‘¾‚³‚ðŠg‘å‚µ‚½•ª¬‚³‚­‚·‚é
 		MV1SetMaterialOutLineDotWidth(weponMI.weponHandle, i, dotwidth / scale);
 	}
-	MV1SetRotationXYZ(weponMI.weponHandle, VGet(0.f, 0.f, 0.f));
 	MI->wepons.emplace_back(weponMI);
 	return true;
 }
