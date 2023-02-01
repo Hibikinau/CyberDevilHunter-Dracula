@@ -49,8 +49,8 @@ bool	modeG::Initialize()
 	std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
 	SetUseASyncLoadFlag(true);
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
-	_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	SetUseLighting(true);
 	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
