@@ -14,7 +14,7 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 	return true;
 }
 
-bool loadAnimTs(bool *endSignal)
+bool loadAnimTs(bool* endSignal)
 {
 	int i = 0;
 	while (!*endSignal && ProcessMessage() == 0)
@@ -28,7 +28,7 @@ bool loadAnimTs(bool *endSignal)
 		i++;*/
 		i++;
 		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
-		
+
 		ScreenFlip();
 	}
 	*endSignal = true;
@@ -48,12 +48,12 @@ bool	modeG::ASyncLoadAnim()
 
 bool	modeG::Initialize()
 {
-	bool _endSignal = false;
-	std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
+	//bool _endSignal = false;
+	//std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
 	SetUseASyncLoadFlag(true);
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
-	_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	SetUseLighting(true);
 	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
@@ -81,10 +81,10 @@ bool	modeG::Initialize()
 	ChangeLightTypeDir(lightDir);
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
-	_endSignal = true;
-	f.get();
+	//_endSignal = true;
+	//f.get();
 	SetUseASyncLoadFlag(false);
-	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
+	insEfcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f);
 	return true;
 }
 
@@ -189,7 +189,7 @@ bool	modeG::Process()
 	{
 		PlayEffekseer3DEffect(insEfcHandle);
 	}
-	auto EFK2 = SetPosPlayingEffekseer3DEffect(insEfcHandle, 0, 20, 0);
+	auto EFK2 = SetPosPlayingEffekseer3DEffect(insEfcHandle, 0, 120, 0);
 
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
