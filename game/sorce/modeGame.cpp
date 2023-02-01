@@ -17,15 +17,18 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 bool loadAnimTs(bool *endSignal)
 {
 	int i = 0;
-	while (!*endSignal)
+	while (!*endSignal && ProcessMessage() == 0)
 	{
 		ProcessMessage();
-		ClearDrawScreen();
+		ClearDrawScreen();/*
 		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
 		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
 		else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
 		else { i = 0; }
+		i++;*/
 		i++;
+		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
+		
 		ScreenFlip();
 	}
 	*endSignal = true;
