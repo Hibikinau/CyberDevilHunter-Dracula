@@ -29,6 +29,10 @@ bool loadAnimTs(bool *endSignal)
 		ScreenFlip();
 	}
 	*endSignal = true;
+	for (int i = 0; i < 100; i++)
+	{
+		OutputDebugString(std::to_string(i).c_str());
+	}
 	return true;
 }
 
@@ -75,7 +79,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 	_endSignal = true;
-	auto a = f.get();
+	f.get();
 	SetUseASyncLoadFlag(false);
 	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 	return true;
