@@ -3,20 +3,20 @@
 bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 {
 	MI->modelHandle = MV1LoadModel(dir);
-	SetDrawScreen(DX_SCREEN_BACK);/*
-	int i = 0;
-	int B = GetASyncLoadNum();
-	while (GetASyncLoadNum() > 0)
-	{
-		ProcessMessage();
-		ClearDrawScreen();
-		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
-		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
-		else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
-		else { i = 0; }
-		i++;
-		ScreenFlip();
-	}*/
+	//SetDrawScreen(DX_SCREEN_BACK);
+	//int i = 0;
+	//int B = GetASyncLoadNum();
+	//while ()
+	//{
+	//	ProcessMessage();
+	//	ClearDrawScreen();
+	//	if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
+	//	else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
+	//	else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
+	//	else { i = 0; }
+	//	i++;
+	//	ScreenFlip();
+	//}
 
 	if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;

@@ -82,7 +82,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 	_endSignal = true;
-	f.wait();
+	f.get();
 	SetUseASyncLoadFlag(false);
 	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 	return true;
