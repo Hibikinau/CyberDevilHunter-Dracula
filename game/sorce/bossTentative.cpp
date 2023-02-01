@@ -197,32 +197,37 @@ bool	Boss::Render()
 	return true;
 }
 
+#define Jkkkkkkkk 0;
+
 bool Boss::UtilityJudge() {
-	int J = 0;
-	int Wt =0 ;
+	//int J = 0;
+	int Wt = 0;
 	int Wk = 0;
-	if(J>Wt){
+
+	int J[100] = { 0 };
+
+	if (J[Jkkkkkkkk] > Wt) {
 		status = STATUS::WAIT;
 	}
-	if (J>Wk) {
+	if (J[Jkkkkkkkk] >Wk) {
 		status = STATUS::WALK;
 	}
-	if (J == 0) {
+	if (J[Jkkkkkkkk] == 0) {
 		status = STATUS::ATTACK;
 	}
-	if (J == 0) {
+	if (J[Jkkkkkkkk] == 0) {
 		status = STATUS::SRASH;
 	}
-	if (J == 0) {
+	if (J[Jkkkkkkkk] == 0) {
 		status = STATUS::BACK;
 	}
-	if (J == 0) {
+	if (J[Jkkkkkkkk] == 0) {
 		status = STATUS::STEP;
 	}
-	if (J == 0) {
+	if (J[Jkkkkkkkk] == 0) {
 		status = STATUS::LEFT;
 	}
-	if (J == 0) {
+	if (J[Jkkkkkkkk] == 0) {
 		status = STATUS::RIGHT;
 	}
 	return;
