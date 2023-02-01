@@ -57,11 +57,12 @@ bool	CB::gravity()
 	/*if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
 	else { _modelInf.pos.y = 0.f, isGround = true;}*/
 
-	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, VAdd(_modelInf.pos, VGet(0.f, 120.f, 0.f)), _modelInf.pos);
+	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, VAdd(_modelInf.pos, VGet(0.f, 140.f, 0.f)), _modelInf.pos);
 	if (hitCheckGround.HitFlag)
 	{
 		_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, 1.f, 0.f));
 		isGround = true;
+		if (_modelInf.vec.y < 0) { _modelInf.vec.y = 0; }
 	}
 	else
 	{
@@ -118,8 +119,9 @@ bool	CB::hitCheck(const char* name)
 		if (insCheckHit && !isImmortal)
 		{
 			allColl->at(i).activeTimeF = 0.f;
-			HPmath(-allColl->at(i).damage);
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
+			attackChar = allColl->at(i).attackChar;
+			HPmath(-allColl->at(i).damage);
 		}
 	}
 

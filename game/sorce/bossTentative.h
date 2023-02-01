@@ -41,7 +41,6 @@ public:
 	};
 	RANGE range;
 
-	
 protected:
 	int useAnim;
 	int _x, _y;

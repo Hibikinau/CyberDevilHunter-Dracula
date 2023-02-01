@@ -1,34 +1,25 @@
 #include"allMode.h"
 #include <sstream>
 
-bool modeG::makeDefaultChar(modeG* insMG)
+bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 {
-	auto insPL = std::make_unique<PL>();
-	insPL->Initialize();
-	insPL->setCB(&insMG->charBox);
-	insPL->_valData = &insMG->_valData;
-	insPL->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
-	insPL->setGroundInf(&insMG->stage);
-	insPL->allColl = &insMG->mAllColl;
-	insMG->charBox.emplace(Char_PL, std::move(insPL));
-
-	auto boss = std::make_unique<Boss>();
-	boss->Initialize();
-	boss->setCB(&insMG->charBox);
-	boss->setGroundInf(&insMG->stage);
-	boss->allColl = &insMG->mAllColl;
-	insMG->charBox.emplace(Char_BOSS1, std::move(boss));
-
+	//SetUseASyncLoadFlag(true);
+	charPoint->Initialize();
+	charPoint->setCB(&insMG->charBox);
+	charPoint->setGroundInf(&insMG->stage);
+	charPoint->allColl = &insMG->mAllColl;
+	charPoint->_valData = &insMG->_valData;
+	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
+	insMG->charBox.emplace(nameA, std::move(charPoint));
 	return true;
 }
 
-bool	modeG::ASyncLoad(bool (*loadDataClass)(modeG* insMG))
+bool loadAnimTs(bool *endSignal)
 {
-	loadDataClass(this);
-
 	int i = 0;
-	while (GetASyncLoadNum() > 0)
+	while (!*endSignal)
 	{
+		ProcessMessage();
 		ClearDrawScreen();
 		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
 		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
@@ -37,16 +28,31 @@ bool	modeG::ASyncLoad(bool (*loadDataClass)(modeG* insMG))
 		i++;
 		ScreenFlip();
 	}
+	*endSignal = true;
+	for (int i = 0; i < 100; i++)
+	{
+		OutputDebugString(std::to_string(i).c_str());
+	}
+	return true;
+}
 
+bool	modeG::ASyncLoadAnim()
+{
+	SetDrawScreen(DX_SCREEN_BACK);
+	OutputDebugString("a");
 	return GetASyncLoadNum();
 }
 
 bool	modeG::Initialize()
 {
-	_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
+	bool _endSignal = false;
+	std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
+	SetUseASyncLoadFlag(true);
+	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
+	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	SetUseLighting(true);
 	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
-	ChangeLightTypeDir(VGet(-1.0f, -4.0f, 0.0f));
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(true);
@@ -60,20 +66,22 @@ bool	modeG::Initialize()
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 	UIkari = LoadGraph("game/res/A.png");
-
-	//Effekseer_Sync3DSetting();
-	int a = ASyncLoad(makeDefaultChar);
-	a += 1;
-	//effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
-	//playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
-	//SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
+	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
+	//ASyncLoadAnim();
+	makeChar(this, std::make_unique<PL>(), Char_PL);
+	makeChar(this, std::make_unique<Boss>(), Char_BOSS1);
 	// シャドウマップハンドルの作成
-	//ShadowMapHandle = MakeShadowMap(1024, 1024);
+	ShadowMapHandle = MakeShadowMap(16384, 16384);
 	// シャドウマップが想定するライトの方向もセット
-	//SetShadowMapLightDirection(ShadowMapHandle, VGet(-1.0f, -4.0f, 0.0f));
+	VECTOR lightDir = VGet(-3.0f, -4.0f, 0.0f);
+	SetShadowMapLightDirection(ShadowMapHandle, lightDir);
+	ChangeLightTypeDir(lightDir);
 	// シャドウマップに描画する範囲を設定
-	//SetShadowMapDrawArea(ShadowMapHandle, VGet(-1000.0f, -1.0f, -1000.0f), VGet(1000.0f, 1000.0f, 1000.0f));
-
+	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
+	_endSignal = true;
+	f.wait();
+	SetUseASyncLoadFlag(false);
+	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 	return true;
 }
 
@@ -125,6 +133,7 @@ bool	modeG::Process()
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
+	Effekseer_Sync3DSetting();
 
 	SetGlobalAmbientLight(GetColorF(0.3f, 0.3f, 0.3f, 0.0f));
 
@@ -149,38 +158,76 @@ bool	modeG::Process()
 
 	collHitCheck();
 
-	if (charBox[Char_PL]->isDead == 2 || charBox[Char_BOSS1]->isDead == 2 ||
-		charBox[Char_PL]->_modelInf.pos.y < -500 || charBox[Char_BOSS1]->_modelInf.pos.y < -500)
+
+	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
-		_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
-		Terminate();
-		return false;
+		if (i->second->isDead == 2 || i->second->_modelInf.pos.y < -500)
+		{
+			if (i->second->type == 1)
+			{//自機の死
+				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+				Terminate();
+				return false;
+			}
+			else
+			{//それ以外の死
+				i->second->Terminate();
+				i = charBox.erase(i);
+			}
+		}
 	}
+
 	if (_imputInf._gTrgb[KEY_INPUT_M])
 	{
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
 	}
+
+	if (_imputInf._gTrgb[KEY_INPUT_E])
+	{
+		PlayEffekseer3DEffect(insEfcHandle);
+	}
+	auto EFK2 = SetPosPlayingEffekseer3DEffect(insEfcHandle, 0, 20, 0);
+
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
 	return true;
 }
 
 bool	modeG::Render()
 {
-	// シャドウマップへの描画の準備
-	//ShadowMap_DrawSetup(ShadowMapHandle);
 
-	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(1.f); }
+	// シャドウマップへの描画の準備
+	ShadowMap_DrawSetup(ShadowMapHandle);
+
+	for (auto i = charBox.begin(); i != charBox.end(); ++i)
+	{
+		i->second->Render(1);
+		//i->second->_modelInf.isAnimEnd = _modelManager.modelRender(&i->second->_modelInf, 1, 1);
+	}
 	MV1DrawModel(stage.modelHandle);
 
 	// シャドウマップへの描画を終了
-	//ShadowMap_DrawEnd();
+	ShadowMap_DrawEnd();
 	// 描画に使用するシャドウマップを設定
-	//SetUseShadowMap(0, ShadowMapHandle);
+	SetUseShadowMap(0, ShadowMapHandle);
 
-	//for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Render(0.f); }
-	//MV1DrawModel(stage.modelHandle);
+	for (auto i = charBox.begin(); i != charBox.end(); ++i)
+	{
+		i->second->Render(0);
+		//i->second->_modelInf.isAnimEnd = _modelManager.modelRender(&i->second->_modelInf, 1, 0);
+	}
+	MV1DrawModel(stage.modelHandle);
 
 	// 描画に使用するシャドウマップの設定を解除
-	//SetUseShadowMap(0, -1);
+	SetUseShadowMap(0, -1);
+
+
+	if (isLockon)
+	{
+		SetUseZBuffer3D(FALSE);
+		auto a = DrawBillboard3D(VSub(cameraFor, VGet(0, 40, 0)), .5, .5, 120, 0, lockOnMarkerHandle, true);
+		SetUseZBuffer3D(TRUE);
+	}
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
@@ -203,7 +250,7 @@ bool	modeG::Render()
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
 
-	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 120.f, 0.f)), GetColor(0, 255, 0));
+	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 140.f, 0.f)), GetColor(0, 255, 0));
 
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -219,10 +266,19 @@ bool	modeG::Render()
 		}
 	}
 
-	DrawString(1000, 0, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
-	DrawString(1000, 50, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	if (charBox.find(Char_PL) != charBox.end())
+	{
+		DrawString(1000, 0, "自機のHP", GetColor(255.f, 0.f, 0.f));
+		DrawString(1000, 20, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	}
+	if (charBox.find(Char_BOSS1) != charBox.end())
+	{
+		DrawString(1000, 50, "騎士のHP", GetColor(255.f, 0.f, 0.f));
+		DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	}
 
 	DrawGraph(0, 0, UIkari, true);
+	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 
 	return true;
 }

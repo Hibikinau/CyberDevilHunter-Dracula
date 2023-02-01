@@ -46,23 +46,25 @@ public:
 	void setName(const char* _name) { name = _name; }
 	bool hitCheck(const char* name);
 	modelInf* getInf() { return &_modelInf; }
-	void setGroundInf(modelInf *GE) { _GrounfInf = GE; }
+	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
+	void getInputKey(imputInf* iInf, float* cameraDir) { _imputInf = iInf, _cameraDir = cameraDir; };
 	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName);
 
 	int type = 0;//pl=1, oEnemy=2
 	bool isGround, isHit;
-	float g, camDir;
+	float g, camDir, * _cameraDir;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false;
-	std::string name;
-	modelManager *_modelManager;
-	modelInf _modelInf, *_GrounfInf;
+	std::string name, attackChar;
+	modelManager* _modelManager;
+	modelInf _modelInf, * _GrounfInf;
 	statusInf _statusInf;
 	std::map<std::string, std::shared_ptr<CB> >* charBox;
 	valData* _valData;
 	MV1_COLL_RESULT_POLY hitCheckGround;
 	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
 	collCapsule collCap;
-	std::vector<attackColl> *allColl;
+	std::vector<attackColl>* allColl;
+	imputInf* _imputInf;
 };

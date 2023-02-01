@@ -18,15 +18,15 @@ public:
 	void cameraMove();
 	int useCommand();
 	bool getPcInf();
-	static bool makeDefaultChar(modeG* insMG);
-	bool ASyncLoad(bool (*loadDataClass)(modeG* insMG));
+	//bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA);
+	bool ASyncLoadAnim();
 	bool collHitCheck();
 
 
-protected:
+public:
 	ModeServer* _modeServer;
 	int _x, _y;
-	int testAttackF;
+	int testAttackF, lockOnMarkerHandle;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
@@ -41,7 +41,7 @@ protected:
 	valData _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
-	int UIkari, BGM;
+	int UIkari, BGM, insEfcHandle, efcTime;
 
 	int StageModelHandle;
 	int CharaModelHandle;

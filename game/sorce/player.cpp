@@ -288,12 +288,16 @@ bool	PL::Process()
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
 	//ƒ{ƒX‚Æd‚È‚ç‚È‚¢‚æ‚¤‚É
-	auto bossDisV = VSub(charBox->at(Char_BOSS1)->getInf()->pos, _modelInf.pos);
-	float bossDisF = sqrt(bossDisV.x * bossDisV.x + bossDisV.y * bossDisV.y + bossDisV.z * bossDisV.z);
-	float plzDis = charBox->at(Char_BOSS1)->collCap.r + collCap.r;
-	if (bossDisF < plzDis)
+	for (auto i = charBox->begin(); i != charBox->end(); ++i)
 	{
-		_modelInf.pos = VAdd(VScale(VNorm(bossDisV), -plzDis), charBox->at(Char_BOSS1)->getInf()->pos);
+		if (i->second->type == 1) { continue; }
+		auto bossDisV = VSub(i->second->getInf()->pos, _modelInf.pos);
+		float bossDisF = sqrt(bossDisV.x * bossDisV.x + bossDisV.y * bossDisV.y + bossDisV.z * bossDisV.z);
+		float plzDis = i->second->collCap.r + collCap.r;
+		if (bossDisF < plzDis)
+		{
+			_modelInf.pos = VAdd(VScale(VNorm(bossDisV), -plzDis), i->second->getInf()->pos);
+		}
 	}
 
 	if (moveCheck) { isDash = false; }
@@ -301,6 +305,7 @@ bool	PL::Process()
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 190, 0));
+	//ŽñU‚è-------------
 	if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
 	if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 
@@ -309,6 +314,7 @@ bool	PL::Process()
 	MATRIX neckPosMAT = MV1GetFrameLocalMatrix(_modelInf.modelHandle, 196);
 	MATRIX neckMAT = MMult(neckDirMAT, neckPosMAT);
 	MV1SetFrameUserLocalMatrix(_modelInf.modelHandle, 196, neckMAT);
+	//------------------
 	if (isHit)
 	{
 		if (lastAttackState == _estate::quickATTACK)
@@ -321,6 +327,7 @@ bool	PL::Process()
 			} while (playSoundOld[0] == soundNum && soundHandle[attackType].size() > 1);
 			playSoundOld[0] = soundNum;
 			PlaySoundMem(soundHandle[attackType][soundNum], DX_PLAYTYPE_BACK);
+
 		}
 		isHit = false;
 	}
@@ -359,21 +366,21 @@ bool	PL::Render(float timeSpeed)
 void PL::charMove(float Speed, float _Dir, bool animChange)
 {
 	if (animChange)
-	{
-		if (isDash)
+	{/*
+		if (isDash)*/
 		{
 			_modelManager.animChange(motion_run, &_modelInf, true, true);
 			spd = runSpd;
 			//_modelInf.wepons[1].isActive = false;
 			_modelInf.wepons[1].weponAttachFrameNum = 221;
 			animSpd = 1.f;
-		}
+		}/*
 		else
 		{
 			_modelManager.animChange(motion_walk, &_modelInf, true, true);
 			spd = walkSpd;
 			animSpd = 1.f;
-		}
+		}*/
 	}
 	_Dir -= 180.f;
 	float radian = _Dir * DX_PI_F / 180.0f;
@@ -391,6 +398,10 @@ bool PL::HPmath(float math)
 	{
 		PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
 		BPmath(std::abs(math) * 6);
+
+		auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
+		ACDisV = VNorm(ACDisV);
+		_modelInf.vec = VScale(ACDisV, 50);
 	}
 
 	return true;

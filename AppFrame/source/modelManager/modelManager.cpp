@@ -2,12 +2,8 @@
 
 bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 {
-	SetUseASyncLoadFlag(TRUE);
-
 	MI->modelHandle = MV1LoadModel(dir);
-
-	SetUseASyncLoadFlag(FALSE);
-	SetDrawScreen(DX_SCREEN_BACK);
+	SetDrawScreen(DX_SCREEN_BACK);/*
 	int i = 0;
 	int B = GetASyncLoadNum();
 	while (GetASyncLoadNum() > 0)
@@ -20,7 +16,7 @@ bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 		else { i = 0; }
 		i++;
 		ScreenFlip();
-	}
+	}*/
 
 	if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;
@@ -61,7 +57,6 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attach
 		// ƒ}ƒeƒŠƒAƒ‹‚Ì—ÖŠsü‚Ì‘¾‚³‚ðŠg‘å‚µ‚½•ª¬‚³‚­‚·‚é
 		MV1SetMaterialOutLineDotWidth(weponMI.weponHandle, i, dotwidth / scale);
 	}
-	MV1SetRotationXYZ(weponMI.weponHandle, VGet(0.f, 0.f, 0.f));
 	MI->wepons.emplace_back(weponMI);
 	return true;
 }
@@ -86,7 +81,7 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 
 bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 {
-	MI->isAnimEnd = false;
+	if (timeSpead != 0) { MI->isAnimEnd = false; }
 	if (MI->isBrending) { MI->rate = 0.f, MI->isBrending = false; }
 	if (MI->rate <= 1.0f)
 	{
@@ -118,7 +113,7 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 	{
 		if (!_weponInf.isActive) { continue; }
 		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
-		
+
 		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
 
 		MV1DrawModel(_weponInf.weponHandle);

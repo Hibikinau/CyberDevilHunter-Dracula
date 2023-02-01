@@ -46,10 +46,6 @@ public:
 	virtual bool Process();
 	virtual bool Render(float timeSpeed);
 	virtual void charMove(float Speed, float _Dir, bool animChange);
-	bool getInputKey(imputInf* iInf, float* cameraDir)
-	{
-		_imputInf = iInf, _cameraDir = cameraDir; return true;
-	};
 	pushButton setAction();
 	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
@@ -68,7 +64,7 @@ protected:
 	int _x, _y, stepChargeSec, isStep;
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
 	int chargeLevel;
-	float spd, animSpd, * _cameraDir, dodgeDir;
+	float spd, animSpd, dodgeDir;
 	bool isUseFbx, attackFlag, isDash, isAnimEnd;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
@@ -79,7 +75,6 @@ protected:
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate, lastAttackState;
 	pushButton nextKey;
-	imputInf* _imputInf;
 	modelInf* Einf;
 
 	float neckDir = 0.f;

@@ -82,7 +82,7 @@ bool	Boss::Process()
 		{
 			MRange();
 		}
-		if (Prange > 400)
+	 if (Prange > 400)
 		{
 			LRange();
 		}
@@ -229,6 +229,7 @@ void Boss::MRange() {
 		status = STATUS::SRASH;
 	}
 	else if (AttackRand > 70) {
+		status = STATUS::WAIT;
 		//status = STATUS::STEP;
 	}
 	MotionFlag = false;
@@ -237,6 +238,7 @@ void Boss::MRange() {
 
 void Boss::LRange() {
 	status = STATUS::WALK;
+	MotionFlag = true;
 	return;
 }
 

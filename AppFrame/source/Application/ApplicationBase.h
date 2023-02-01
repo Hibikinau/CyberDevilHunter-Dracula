@@ -1,5 +1,6 @@
 
 #include "DxLib.h"
+#include "EffekseerForDXLib.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,7 +8,6 @@
 #include <memory>
 #include <string>
 #include "../Mode//ModeServer.h"
-// EffekseerForDXLib.hをインクルードします。
 
 class ApplicationBase
 {
