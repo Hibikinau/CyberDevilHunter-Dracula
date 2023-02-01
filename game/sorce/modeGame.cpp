@@ -57,12 +57,9 @@ bool	modeG::Initialize()
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 	UIkari = LoadGraph("game/res/A.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
-	//Effekseer_Sync3DSetting();
+	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 	makeChar(this, std::make_unique<PL>(), Char_PL);
 	makeChar(this, std::make_unique<Boss>(), Char_BOSS1);
-	//effectResourceHandle = LoadEffekseerEffect("game/res/effect_test.efk", 1.0f);
-	//playingEffectHandle = PlayEffekseer3DEffect(effectResourceHandle);
-	//SetPosPlayingEffekseer3DEffect(playingEffectHandle, 0, 0, 0);
 	// シャドウマップハンドルの作成
 	ShadowMapHandle = MakeShadowMap(16384, 16384);
 	// シャドウマップが想定するライトの方向もセット
@@ -123,6 +120,7 @@ bool	modeG::Process()
 	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	//SetLightPositionHandle(LightHandle02, plMI.pos);
+	Effekseer_Sync3DSetting();
 
 	SetGlobalAmbientLight(GetColorF(0.3f, 0.3f, 0.3f, 0.0f));
 
@@ -170,11 +168,21 @@ bool	modeG::Process()
 	{
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
 	}
+
+	if (_imputInf._gTrgb[KEY_INPUT_E])
+	{
+		PlayEffekseer3DEffect(insEfcHandle);
+	}
+	auto EFK2 = SetPosPlayingEffekseer3DEffect(insEfcHandle, 0, 20, 0);
+
+	// Effekseerにより再生中のエフェクトを更新する。
+	UpdateEffekseer3D();
 	return true;
 }
 
 bool	modeG::Render()
 {
+
 	// シャドウマップへの描画の準備
 	ShadowMap_DrawSetup(ShadowMapHandle);
 
@@ -199,6 +207,7 @@ bool	modeG::Render()
 
 	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
+
 
 	if (isLockon)
 	{
@@ -256,6 +265,7 @@ bool	modeG::Render()
 	}
 
 	DrawGraph(0, 0, UIkari, true);
+	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 
 	return true;
 }

@@ -366,21 +366,21 @@ bool	PL::Render(float timeSpeed)
 void PL::charMove(float Speed, float _Dir, bool animChange)
 {
 	if (animChange)
-	{
-		if (isDash)
+	{/*
+		if (isDash)*/
 		{
 			_modelManager.animChange(motion_run, &_modelInf, true, true);
 			spd = runSpd;
 			//_modelInf.wepons[1].isActive = false;
 			_modelInf.wepons[1].weponAttachFrameNum = 221;
 			animSpd = 1.f;
-		}
+		}/*
 		else
 		{
 			_modelManager.animChange(motion_walk, &_modelInf, true, true);
 			spd = walkSpd;
 			animSpd = 1.f;
-		}
+		}*/
 	}
 	_Dir -= 180.f;
 	float radian = _Dir * DX_PI_F / 180.0f;

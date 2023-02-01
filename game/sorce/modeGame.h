@@ -41,7 +41,7 @@ protected:
 	valData _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
-	int UIkari, BGM;
+	int UIkari, BGM, insEfcHandle, efcTime;
 
 	int StageModelHandle;
 	int CharaModelHandle;
