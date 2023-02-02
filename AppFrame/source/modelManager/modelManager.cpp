@@ -3,60 +3,47 @@
 bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 {
 	MI->modelHandle = MV1LoadModel(dir);
-	//SetDrawScreen(DX_SCREEN_BACK);
-	//int i = 0;
-	//int B = GetASyncLoadNum();
-	//while ()
-	//{
-	//	ProcessMessage();
-	//	ClearDrawScreen();
-	//	if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
-	//	else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
-	//	else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
-	//	else { i = 0; }
-	//	i++;
-	//	ScreenFlip();
-	//}
 
-	if (MI->modelHandle == -1) { return false; }
+	//if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;
+	MI->scale = scale;
 
-	MV1SetPosition(MI->modelHandle, MI->pos);
-	MV1SetRotationXYZ(MI->modelHandle, MI->dir);
-
-	MV1SetScale(MI->modelHandle, VGet(scale, scale, scale));
-	//ó÷äsê¸ÇÃëÂÇ´Ç≥ÇèCê≥Ç∑ÇÈ
-	//í èÌMV1SetScaleÇ≈ägëÂÇ∑ÇÈÇ∆ÅCó÷äsê¸ÇÃëÂÇ´Ç≥Ç‡ägëÂÇ≥ÇÍÇƒÇµÇ‹Ç§
-	//ëSÇƒÇÃó÷äsê¸Ç…ÉAÉNÉZÉXÇµÅCMV1SetScaleÇ≈ägëÂÇµÇΩílÇ≈äÑÇÈÇ±Ç∆Ç≈ÅCëæÇ≥ÇÇ‡Ç∆Ç…ñﬂÇ∑
-	int MaterialNum = MV1GetMaterialNum(MI->modelHandle);
-	for (int i = 0; i < MaterialNum; i++)
-	{
-		// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇéÊìæ
-		float dotwidth = MV1GetMaterialOutLineDotWidth(MI->modelHandle, i);
-		// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇägëÂÇµÇΩï™è¨Ç≥Ç≠Ç∑ÇÈ
-		MV1SetMaterialOutLineDotWidth(MI->modelHandle, i, dotwidth / scale);
-	}
 	return true;
 }
 
-bool modelManager::weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name)
+bool modelManager::changeScale(modelInf* MI)
+{
+	MV1SetScale(MI->modelHandle, VGet(MI->scale, MI->scale, MI->scale));
+
+	int MaterialNum = MV1GetMaterialNum(MI->modelHandle);
+	for (int i = 0; i < MaterialNum; i++)
+	{
+		float dotwidth = MV1GetMaterialOutLineDotWidth(MI->modelHandle, i);
+		MV1SetMaterialOutLineDotWidth(MI->modelHandle, i, dotwidth / MI->scale);
+	}
+	for (int j = 0; j < MI->wepons.size(); j++)
+	{
+		int MaterialNumW = MV1GetMaterialNum(MI->wepons[j].weponHandle);
+		for (int k = 0; k < MaterialNumW; k++)
+		{
+			float dotwidthW = MV1GetMaterialOutLineDotWidth(MI->wepons[j].weponHandle, k);
+			MV1SetMaterialOutLineDotWidth(MI->wepons[j].weponHandle, k, dotwidthW / MI->wepons[j].scale);
+		}
+	}
+
+	return true;
+}
+
+bool modelManager::weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name)
 {
 	weponModelInf weponMI;
 	weponMI.isActive = activate;
 	weponMI.name = name;
+	weponMI.scale = scale;
 	weponMI.weponHandle = MV1LoadModel(dir);
-	if (weponMI.weponHandle == -1) { return false; }
-	weponMI.weponAttachFrameNum = MV1SearchFrame(MI->modelHandle, attachFrame);
-	MV1SetScale(weponMI.weponHandle, VGet(scale, scale, scale));
-	//ó÷äsê¸ÇÃëÂÇ´Ç≥ÇèCê≥Ç∑ÇÈ
-	int MaterialNum = MV1GetMaterialNum(weponMI.weponHandle);
-	for (int i = 0; i < MaterialNum; i++)
-	{
-		// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇéÊìæ
-		float dotwidth = MV1GetMaterialOutLineDotWidth(weponMI.weponHandle, i);
-		// É}ÉeÉäÉAÉãÇÃó÷äsê¸ÇÃëæÇ≥ÇägëÂÇµÇΩï™è¨Ç≥Ç≠Ç∑ÇÈ
-		MV1SetMaterialOutLineDotWidth(weponMI.weponHandle, i, dotwidth / scale);
-	}
+	//if (weponMI.weponHandle == -1) { return false; }
+	weponMI.weponAttachFrameNum = attachFrameNum;
+	
 	MI->wepons.emplace_back(weponMI);
 	return true;
 }

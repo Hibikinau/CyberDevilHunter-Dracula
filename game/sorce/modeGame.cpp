@@ -37,42 +37,59 @@ bool loadAnimTs(bool* endSignal)
 		OutputDebugString(std::to_string(i).c_str());
 	}
 	return true;
+
+
+	//bool _endSignal = false;
+	//std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
+	// 
+	//_endSignal = true;
+	//f.get();
 }
 
 bool	modeG::ASyncLoadAnim()
 {
+	SetUseASyncLoadFlag(false);
 	SetDrawScreen(DX_SCREEN_BACK);
-	OutputDebugString("a");
+	int i = 0;
+	while (GetASyncLoadNum() > 0)
+	{
+		ProcessMessage();
+		ClearDrawScreen();
+		i++;
+		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
+
+		ScreenFlip();
+	}
+
 	return GetASyncLoadNum();
 }
 
 bool	modeG::Initialize()
 {
-	//bool _endSignal = false;
-	//std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
-	SetUseASyncLoadFlag(true);
-	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
-	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	SetUseLighting(true);
-	//ChangeLightTypePoint(VGet(0.f, 200.f, 0.f), 700.f, 0.0002f, 0.f, 0.f);
 	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(true);
+	SetUseASyncLoadFlag(true);
+
+	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
+	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	makeChar(this, std::make_shared<PL>(), Char_PL);
+	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
+
 	countTime = GetNowCount();
-	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
 
 	testAttackCap.underPos = VGet(0.f, 30.f, 0.f);
 	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
 	testAttackCap.r = 30.f;
 
-	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
-	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 	UIkari = LoadGraph("game/res/A.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
-	//ASyncLoadAnim();
-	makeChar(this, std::make_unique<PL>(), Char_PL);
-	makeChar(this, std::make_unique<Boss>(), Char_BOSS1);
+	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
+
+	//ここまで非同期ロード-------------------------------------------------------------------
+	ASyncLoadAnim();
 	// シャドウマップハンドルの作成
 	ShadowMapHandle = MakeShadowMap(16384, 16384);
 	// シャドウマップが想定するライトの方向もセット
@@ -81,10 +98,19 @@ bool	modeG::Initialize()
 	ChangeLightTypeDir(lightDir);
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
-	//_endSignal = true;
-	//f.get();
-	SetUseASyncLoadFlag(false);
-	insEfcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f);
+
+	//ステージの当たり判定作成
+	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
+
+	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
+	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
+
+	//読み込んだ3dモデルのサイズ調整
+	for (auto i = charBox.begin(); i != charBox.end(); i++)
+	{
+		_modelManager.changeScale(&i->second->_modelInf);
+	}
+	_modelManager.changeScale(&stage);
 	return true;
 }
 

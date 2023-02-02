@@ -6,6 +6,7 @@
 #include <thread>
 #include <future>
 
+//#pragma comment(lib,"AppFrame.lib")
 #pragma comment(lib,"../x64/Debug/AppFrame.lib")
 //#pragma comment(lib,"../x64/Release/AppFrame.lib")
 
