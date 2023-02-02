@@ -71,10 +71,12 @@ bool	modeG::Initialize()
 	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(true);
 	SetUseASyncLoadFlag(true);
+	SetAlwaysRunFlag(TRUE);
+	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
-	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
 
@@ -86,10 +88,10 @@ bool	modeG::Initialize()
 
 	UIkari = LoadGraph("game/res/A.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
-	insEfcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
+
 	// シャドウマップハンドルの作成
 	ShadowMapHandle = MakeShadowMap(16384, 16384);
 	// シャドウマップが想定するライトの方向もセット
@@ -99,9 +101,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	//ステージの当たり判定作成
-	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
-
+	efcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 
@@ -111,6 +111,10 @@ bool	modeG::Initialize()
 		_modelManager.changeScale(&i->second->_modelInf);
 	}
 	_modelManager.changeScale(&stage);
+
+	//ステージの当たり判定作成
+	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
+
 	return true;
 }
 
@@ -139,34 +143,32 @@ bool	modeG::Process()
 		{
 			i->second->Process();
 			bossMI = i->second->getInf();
-			i->second->gravity();/*
-			if (i->second->_modelInf.pos.y < -10)
-			{
-				i->second->_modelInf.pos = VGet(0.f, 0.f, 0.f);
-			}*/
+			i->second->gravity();
 		}
 	}
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
-	{
+	{//ロックオン
 		isLockon ^= true;
 	}
 
-
-	cameraNtDir += _imputInf.rStickX / 5000;
-	cameraHigh -= _imputInf.rStickY / 5000;
-
+	//コマンド呼び出し部分
 	useCommand();
 
+	//カメラ制御---------------------------------------------
+	cameraNtDir += _imputInf.rStickX / 5000;
+	cameraHigh -= _imputInf.rStickY / 5000;
 	cameraMove();
-	//cameraFor = VAdd(plMI.pos, VGet(0.f, 20.f, 0.f));
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
-	//SetLightPositionHandle(LightHandle02, plMI.pos);
 	Effekseer_Sync3DSetting();
 
-	SetGlobalAmbientLight(GetColorF(0.3f, 0.3f, 0.3f, 0.0f));
-
-	debugWardBox.emplace_back("cameraHigh  = " + std::to_string(cameraHigh));
+	//影の明るさ調整-----------------------------------------
+	if (CheckHitKey(KEY_INPUT_UP)) { bright += .01f; }
+	if (CheckHitKey(KEY_INPUT_DOWN)) { bright -= .01f; }
+	if (bright < 0) { bright = 0; }
+	if (bright > 1) { bright = 1; }
+	SetGlobalAmbientLight(GetColorF(bright, bright, bright, 0.0f));
+	debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
 	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
@@ -213,10 +215,9 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
-		PlayEffekseer3DEffect(insEfcHandle);
+		int a = PlayEffekseer3DEffect(efcHandle);
+		SetPosPlayingEffekseer3DEffect(a, 0, 120 + rand() % 5, 0);
 	}
-	auto EFK2 = SetPosPlayingEffekseer3DEffect(insEfcHandle, 0, 120, 0);
-
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
 	return true;
@@ -224,32 +225,26 @@ bool	modeG::Process()
 
 bool	modeG::Render()
 {
-
-	// シャドウマップへの描画の準備
+	//シャドウマップココカラ-----------------------------------------
 	ShadowMap_DrawSetup(ShadowMapHandle);
-
+	//3dモデルの描画
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(1);
-		//i->second->_modelInf.isAnimEnd = _modelManager.modelRender(&i->second->_modelInf, 1, 1);
 	}
 	MV1DrawModel(stage.modelHandle);
 
-	// シャドウマップへの描画を終了
 	ShadowMap_DrawEnd();
-	// 描画に使用するシャドウマップを設定
 	SetUseShadowMap(0, ShadowMapHandle);
-
+	//影用の3dモデルの描画
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(0);
-		//i->second->_modelInf.isAnimEnd = _modelManager.modelRender(&i->second->_modelInf, 1, 0);
 	}
 	MV1DrawModel(stage.modelHandle);
 
-	// 描画に使用するシャドウマップの設定を解除
 	SetUseShadowMap(0, -1);
-
+	//シャドウマップここまで-----------------------------------------
 
 	if (isLockon)
 	{
@@ -257,23 +252,6 @@ bool	modeG::Render()
 		auto a = DrawBillboard3D(VSub(cameraFor, VGet(0, 40, 0)), .5, .5, 120, 0, lockOnMarkerHandle, true);
 		SetUseZBuffer3D(TRUE);
 	}
-
-	debugWardBox.emplace_back(std::to_string(plMI->playTime));
-	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
-	//debugWardBox.emplace_back("-------武器セット一覧-------");
-	debugWardBox.emplace_back("-------コマンド一覧-------");
-	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
-	debugWardBox.emplace_back("/menu(メニュー画面表示)");
-	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
-	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
-	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
-	{
-		int sizeX, sizeY, lineCount;
-		GetDrawStringSize(&sizeX, &sizeY, &lineCount, debugWardBox[i].c_str(), debugWardBox[i].length());
-		DrawBox(10, 10 + 20 * i, 10 + sizeX, 10 + 20 * i + sizeY, GetColor(0, 0, 0), true);
-		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
-	}
-	debugWardBox.clear();
 
 	int nowTime = GetNowCount();
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
@@ -306,9 +284,24 @@ bool	modeG::Render()
 		DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
 	}
 
-	DrawGraph(0, 0, UIkari, true);
 	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 
+	debugWardBox.emplace_back(std::to_string(plMI->playTime));
+	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
+	//debugWardBox.emplace_back("-------武器セット一覧-------");
+	debugWardBox.emplace_back("-------コマンド一覧-------");
+	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
+	debugWardBox.emplace_back("/menu(メニュー画面表示)");
+	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
+	{
+		int sizeX, sizeY, lineCount;
+		GetDrawStringSize(&sizeX, &sizeY, &lineCount, debugWardBox[i].c_str(), debugWardBox[i].length());
+		DrawBox(10, 10 + 20 * i, 10 + sizeX, 10 + 20 * i + sizeY, GetColor(0, 0, 0), true);
+		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
+	}
+	debugWardBox.clear();
 	return true;
 }
 
@@ -413,10 +406,7 @@ int modeG::useCommand()
 			}
 		}
 	}
-	catch (std::exception)
-	{
-		return -1;
-	}
+	catch (std::exception) { return -1; }
 	return -1;
 }
 

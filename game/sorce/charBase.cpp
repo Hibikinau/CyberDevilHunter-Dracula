@@ -60,7 +60,7 @@ bool	CB::gravity()
 	hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, VAdd(_modelInf.pos, VGet(0.f, 140.f, 0.f)), _modelInf.pos);
 	if (hitCheckGround.HitFlag)
 	{
-		_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, 1.f, 0.f));
+		_modelInf.pos = VSub(hitCheckGround.HitPosition, VGet(0.f, .1f, 0.f));
 		isGround = true;
 		if (_modelInf.vec.y < 0) { _modelInf.vec.y = 0; }
 	}
