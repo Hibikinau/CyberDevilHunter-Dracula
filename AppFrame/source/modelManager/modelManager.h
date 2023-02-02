@@ -14,6 +14,7 @@ struct weponModelInf
 	int weponHandle, weponAttachFrameNum;
 	MATRIX weponFrameMatrix;
 	bool isActive;
+	float scale;
 	std::string name;
 };
 
@@ -21,7 +22,7 @@ struct weponModelInf
 struct modelInf
 {
 	int modelHandle, animHandleOld = -1, importCnt, attachIndex, attachIndexOld = -1;
-	float playTime, playTimeOld, totalTime, rate;
+	float playTime, playTimeOld, totalTime, rate, scale;
 	bool isBrending = false, animOldLoop, isAnimEnd;
 	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
 	std::vector<weponModelInf> wepons;
@@ -44,10 +45,12 @@ public:
 	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード, 再生速度)
 	//アニメーションの再生が終わったらtrueを返す
 	bool modelRender(modelInf* MI, float animSpeed, float timeSpead);
-	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの名前, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前)
-	bool weponAttach(const char* dir, modelInf* MI, const char* attachFrame, const float scale, bool activate, const char* name);
+	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの番号, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前)
+	bool weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name);
 	//キャラモデルのメモリ解放
 	bool modelDelete(modelInf* MI);
+	//ロードした3dモデルのサイズ変更
+	bool changeScale(modelInf* MI);
 };
 
 

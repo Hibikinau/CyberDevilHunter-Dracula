@@ -41,12 +41,12 @@ public:
 	valData _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
-	int UIkari, BGM, insEfcHandle, efcTime;
+	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
 
 	int StageModelHandle;
 	int CharaModelHandle;
 	int ShadowMapHandle;
-
+	float bright = 0.f;
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = false, plDead;
 	int BGMdelay;
