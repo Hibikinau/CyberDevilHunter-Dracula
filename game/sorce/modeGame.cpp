@@ -216,7 +216,7 @@ bool	modeG::Process()
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
 		int a = PlayEffekseer3DEffect(efcHandle);
-		SetPosPlayingEffekseer3DEffect(a, 0, 120 + rand() % 5, 0);
+		SetPosPlayingEffekseer3DEffect(a, 0, 120, 0);
 	}
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
@@ -294,6 +294,7 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -360,14 +361,30 @@ void modeG::cameraMove()
 	}
 }
 
-float getNum(std::string data)
+float getNum(std::string data, int Num)
 {
 	std::string input;
 	std::stringstream b{ data };
-	std::getline(b, input, '^');
-	std::getline(b, input, '^');
+	for (int i = 0; i < Num; i++)
+	{
+		std::getline(b, input, '^');
+		std::getline(b, input, '^');
+	}
 
 	return std::stof(input);
+}
+
+std::string getChar(std::string data, int Num)
+{
+	std::string input;
+	std::stringstream b{ data };
+	for (int i = 0; i < Num; i++)
+	{
+		std::getline(b, input, '^');
+		std::getline(b, input, '^');
+	}
+
+	return input;
 }
 
 int modeG::useCommand()
@@ -390,14 +407,20 @@ int modeG::useCommand()
 
 			if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
 			if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
-			if (data.find("atkF1") != std::string::npos) { _valData.plAtkSpd1 = getNum(data); }
-			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data); }
-			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data); }
-			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data); }
+			if (data.find("atkF1") != std::string::npos) { _valData.plAtkSpd1 = getNum(data, 1); }
+			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data, 1); }
+			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data, 1); }
+			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data, 1); }
 			if (data.find("atkFall") != std::string::npos)
 			{
-				auto a = getNum(data);
+				auto a = getNum(data, 1);
 				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
+			}
+			if (data.find("effectChange") != std::string::npos)
+			{
+				auto comEfcDir = "game/res/" + getChar(data, 1) + ".efkefc";
+				auto efcScale = getNum(data, 2);
+				efcHandle = LoadEffekseerEffect(comEfcDir.c_str(), efcScale);
 			}
 			if (data == "test")
 			{
