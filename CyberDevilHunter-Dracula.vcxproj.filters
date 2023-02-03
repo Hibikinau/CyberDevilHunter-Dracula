@@ -83,5 +83,8 @@
     <ClInclude Include="game\sorce\modeResult.h">
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
+    <ClInclude Include="game\sorce\motionDefineList.h">
+      <Filter>ヘッダー ファイル\char</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

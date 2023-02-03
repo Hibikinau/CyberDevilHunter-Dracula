@@ -53,12 +53,11 @@ public:
 	bool HPmath(float math) override;
 	bool BPmath(float math) override;
 	bool CA_change(std::string name, const char* XorY) override;
-	static bool CA_senpuu(PL* insPL);
 	static bool CA_charge(PL* insPL);
 	static bool CA_debugAttack(PL* insPL);
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
-
+	
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
 	int _x, _y, stepChargeSec, isStep;
@@ -69,7 +68,7 @@ protected:
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
-	int immortalTime, dodgeTime;
+	int immortalTime;//, dodgeTime;
 	int playSoundOld[3];
 	std::vector<std::vector<int> > soundHandle;
 	modelManager _modelManager;

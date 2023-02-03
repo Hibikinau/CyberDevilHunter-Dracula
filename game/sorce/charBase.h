@@ -1,6 +1,7 @@
 #pragma once
 #include"appframe.h"
 #include"ResourceServerIns.h"
+#include"motionDefineList.h"
 
 struct statusInf
 {//最大値を代入
@@ -55,7 +56,7 @@ public:
 	bool isGround, isHit;
 	float g, camDir, * _cameraDir;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
-	int isImmortal = false;
+	int isImmortal = false, dodgeTime;
 	std::string name, attackChar;
 	modelManager* _modelManager;
 	modelInf _modelInf, * _GrounfInf;

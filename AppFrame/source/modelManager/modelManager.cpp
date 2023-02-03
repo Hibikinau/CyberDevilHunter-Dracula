@@ -66,6 +66,15 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 	return true;
 }
 
+bool modelManager::setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool isBlend)
+{
+	MI->isBrendingNext = isBlend;
+	MI->animHandleNext = _animHandle;
+	MI->animLoopNext = isLoop;
+
+	return true;
+}
+
 bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 {
 	if (timeSpead != 0) { MI->isAnimEnd = false; }
@@ -81,9 +90,17 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 		MI->playTime += animSpeed * timeSpead;
 		if (MI->playTime >= MI->totalTime)
 		{
-			MI->isAnimEnd = true;
-			if (MI->animOldLoop) { MI->playTime = 0.f; }
-			else { MI->playTime = MI->totalTime; }
+			if (MI->animHandleNext != -1)
+			{
+				animChange(MI->animHandleNext, MI, MI->animLoopNext, MI->isBrendingNext);
+				MI->animHandleNext = -1;
+			}
+			else
+			{
+				MI->isAnimEnd = true;
+				if (MI->animOldLoop) { MI->playTime = 0.f; }
+				else { MI->playTime = MI->totalTime; }
+			}
 		}
 	}
 

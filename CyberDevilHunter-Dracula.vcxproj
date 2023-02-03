@@ -181,6 +181,7 @@
     <ClInclude Include="game\sorce\modeMenu.h" />
     <ClInclude Include="game\sorce\modeResult.h" />
     <ClInclude Include="game\sorce\modeTitle.h" />
+    <ClInclude Include="game\sorce\motionDefineList.h" />
     <ClInclude Include="game\sorce\player.h" />
     <ClInclude Include="game\sorce\ResourceServerIns.h" />
   </ItemGroup>

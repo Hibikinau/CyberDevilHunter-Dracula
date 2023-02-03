@@ -21,9 +21,9 @@ struct weponModelInf
 //3dモデル用
 struct modelInf
 {
-	int modelHandle, animHandleOld = -1, importCnt, attachIndex, attachIndexOld = -1;
+	int modelHandle, animHandleOld = -1, importCnt, attachIndex, attachIndexOld = -1, animHandleNext = -1;
 	float playTime, playTimeOld, totalTime, rate, scale;
-	bool isBrending = false, animOldLoop, isAnimEnd;
+	bool isBrending, isBrendingNext, animOldLoop, animLoopNext, isAnimEnd;
 	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
 	std::vector<weponModelInf> wepons;
 };
@@ -42,6 +42,8 @@ public:
 	bool modelImport(const char* dir, const float scale, modelInf* MI);
 	//再生しているアニメーションの変更(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
 	bool animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend);
+	//次に再生するアニメーションの設定(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
+	bool setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool isBlend);
 	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード, 再生速度)
 	//アニメーションの再生が終わったらtrueを返す
 	bool modelRender(modelInf* MI, float animSpeed, float timeSpead);

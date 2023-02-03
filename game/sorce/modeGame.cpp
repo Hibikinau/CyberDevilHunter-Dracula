@@ -288,6 +288,7 @@ bool	modeG::Render()
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
+	debugWardBox.emplace_back(std::to_string(charBox[Char_PL]->dodgeTime));
 	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");

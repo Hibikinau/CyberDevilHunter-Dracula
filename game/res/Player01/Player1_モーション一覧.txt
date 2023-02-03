@@ -1,0 +1,42 @@
+Player1_idol   待機
+Player1_run    移動
+Player1_damage 被弾
+Player1_death  死亡
+Player1_dodge_Front   回避　前
+Player1_dodge_Right   回避　右  
+Player1_dodge_Left    回避　左
+Player1_dodge_Back    回避　後
+
+弱攻撃
+Player_jaku_1　 弱 1段目
+Player_jaku_2 　弱 2段目
+Player_jaku_3 　弱 3段目
+Player_jaku_4_1 納刀
+Player_jaku_4_2 納刀待機
+Player_jaku_4_3 連打切り　ループ
+Player_jaku_4_4 フィニッシュ切り
+
+強攻撃
+Player_kyou_1   強 1段目
+Player_kyou_2   強 2段目
+Player_kyou_3   強 3段目
+Player_kyou_4_1 納刀
+Player_kyou_4_2 納刀待機
+Player_kyou_4_3 抜刀切り
+
+ガード
+Player1_guard_1　ガード
+Player1_guard_2  ガードループモーション
+Player1_counter  カウンター抜刀切り
+
+アーツ
+Player1_arts_tsuki_1  貯め
+Player1_arts_tsuki_2　貯めループ
+Player1_arts_tsuki_3  攻撃
+Player1_arts_nagi_Right  薙ぎ払い　右
+Player1_arts_nagi_Left   薙ぎ払い　左
+Player1_arts_kirinuke    切り抜け　
+Player1_arts_enkaku      遠隔
+
+Player1_hissatsu 必殺技　仮モーション
+
