@@ -96,11 +96,11 @@ bool	Boss::Process()
 	// ステータスに合わせてアニメーションのアタッチ
 	switch (status) {
 	case STATUS::WAIT:
-		_modelManager.animChange(motion_idel, &_modelInf, true, true);
+		_modelManager.animChange(motion_idel, &_modelInf, true, true, false);
 		animSpd = 0.5f;
 		break;
 	case STATUS::WALK:
-		_modelManager.animChange(motion_walk, &_modelInf, true, true);
+		_modelManager.animChange(motion_walk, &_modelInf, true, true, false);
 		animSpd = 0.5f;
 		Walk();
 		AttackFlag = false;
@@ -108,7 +108,7 @@ bool	Boss::Process()
 	case STATUS::KICK:
 		if (AttackFlag == true) { break; }
 		AttackFlag = true;
-		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
@@ -116,13 +116,13 @@ bool	Boss::Process()
 	case STATUS::SRASH:
 		if (AttackFlag == true) { break; }
 		AttackFlag = true;
-		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		break;
 	case STATUS::BACK:
-		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true);
+		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true, true);
 		//_modelInf.totalTime = 50;
 		animSpd = 1.0f;
 		if(_modelInf.playTime > 5 && _modelInf.playTime < 27)
@@ -132,7 +132,7 @@ bool	Boss::Process()
 		AttackFlag = false;
 		break;
 	case STATUS::STEP:
-		_modelManager.animChange(motion_walk, &_modelInf, false, true);
+		_modelManager.animChange(motion_walk, &_modelInf, false, true, true);
 		//_modelInf.totalTime = 50;
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)

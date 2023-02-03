@@ -41,7 +41,7 @@ public:
 	//3dモデルの読み込み(3dモデルのパス, モデルの拡大率, modelInfのポインタ)
 	bool modelImport(const char* dir, const float scale, modelInf* MI);
 	//再生しているアニメーションの変更(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
-	bool animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend);
+	bool animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride);
 	//次に再生するアニメーションの設定(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
 	bool setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool isBlend);
 	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード, 再生速度)

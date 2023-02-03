@@ -64,7 +64,7 @@ protected:
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
 	int chargeLevel;
 	float spd, animSpd, dodgeDir;
-	bool isUseFbx, attackFlag, isDash, isAnimEnd;
+	bool isUseFbx, attackFlag, isDash, isAnimEnd, isPushButtonAct, isGuard, isFastGuard;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;

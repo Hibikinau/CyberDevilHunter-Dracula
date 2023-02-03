@@ -48,9 +48,9 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, int attachFrameNum
 	return true;
 }
 
-bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend)
+bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride)
 {
-	if (MI->animHandleOld == _animHandle) { return false; }
+	if (MI->animHandleOld == _animHandle && !isOverride) { return false; }
 	MI->isBrending = isBlend;
 	MV1DetachAnim(MI->modelHandle, MI->attachIndex);
 	MV1DetachAnim(MI->modelHandle, MI->attachIndexOld);
@@ -90,14 +90,14 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 		MI->playTime += animSpeed * timeSpead;
 		if (MI->playTime >= MI->totalTime)
 		{
+			MI->isAnimEnd = true;
 			if (MI->animHandleNext != -1)
 			{
-				animChange(MI->animHandleNext, MI, MI->animLoopNext, MI->isBrendingNext);
+				animChange(MI->animHandleNext, MI, MI->animLoopNext, MI->isBrendingNext, true);
 				MI->animHandleNext = -1;
 			}
 			else
 			{
-				MI->isAnimEnd = true;
 				if (MI->animOldLoop) { MI->playTime = 0.f; }
 				else { MI->playTime = MI->totalTime; }
 			}
