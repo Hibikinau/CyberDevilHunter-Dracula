@@ -204,6 +204,7 @@ bool	PL::Process()
 			animSpd = 1.f;
 			waitNextAttack += 60;
 			attackNumOld = 0;
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, rWeponParentFrame, Char_PL);
 		}
 
 		break;
