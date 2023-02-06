@@ -90,6 +90,7 @@ bool ApplicationBase::Input() {
 	for (int i = 0; i < 16; i++)
 	{
 		_imputInf._gKeyp[i] == 1 && _gTrgbOldX[i] != 1 ? _imputInf._gTrgp[i] = 1 : _imputInf._gTrgp[i] = 0;
+		_imputInf._gKeyp[i] == 0 && _gTrgbOldX[i] != 0 ? _imputInf._gRelp[i] = 1 : _imputInf._gRelp[i] = 0;
 	}
 	_imputInf.lStickX = imputInfX.ThumbLX;
 	_imputInf.lStickY = imputInfX.ThumbLY;

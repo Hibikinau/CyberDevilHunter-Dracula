@@ -19,6 +19,7 @@ enum class ExclusiveState
 	changeATTACKY,
 	DODGE,
 	GUARD,
+	DAMAGE,
 };
 
 enum class pushButton
@@ -32,6 +33,7 @@ enum class pushButton
 	LBY,
 	Lstick,
 	Irregular,
+	Damage,
 	R1,
 };
 
@@ -49,6 +51,7 @@ public:
 	pushButton setAction();
 	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
+	bool checkRelImput(int Key, int Pad) { if (_imputInf->_gRelp[Pad]) { return true; } else { return false; } }
 	float getMoveDir(bool checkUseCamDir);
 	bool HPmath(float math) override;
 	bool BPmath(float math) override;
@@ -62,14 +65,15 @@ protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
 	int _x, _y, stepChargeSec, isStep;
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
-	int chargeLevel;
+	//int isAttackFinishXorY;//1.弱納刀 2.強納刀
+	int chargeLevel, chargeTime;
 	float spd, animSpd, dodgeDir;
 	bool isUseFbx, attackFlag, isDash, isAnimEnd, isPushButtonAct, isGuard, isFastGuard;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
 	int immortalTime;//, dodgeTime;
-	int playSoundOld[3];
+	int playSoundOld[3], walkTime;
 	std::vector<std::vector<int> > soundHandle;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate, lastAttackState;

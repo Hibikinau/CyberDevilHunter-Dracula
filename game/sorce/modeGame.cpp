@@ -265,10 +265,10 @@ bool	modeG::Render()
 		{
 			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 
-			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			//DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 			if (mAllColl[i].capCollOld.r != -1)
 			{
-				DrawCapsule3D(mAllColl[i].capCollOld.underPos, mAllColl[i].capCollOld.overPos, mAllColl[i].capCollOld.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+				//DrawCapsule3D(mAllColl[i].capCollOld.underPos, mAllColl[i].capCollOld.overPos, mAllColl[i].capCollOld.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 			}
 		}
 	}
@@ -288,7 +288,10 @@ bool	modeG::Render()
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
-	debugWardBox.emplace_back(std::to_string(charBox[Char_PL]->dodgeTime));
+	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
+	if (insDirY > 360) { insDirY -= 360; }
+	else if (insDirY < 0) { insDirY += 360; }
+	debugWardBox.emplace_back(std::to_string(insDirY));
 	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
@@ -422,6 +425,10 @@ int modeG::useCommand()
 				auto comEfcDir = "game/res/" + getChar(data, 1) + ".efkefc";
 				auto efcScale = getNum(data, 2);
 				efcHandle = LoadEffekseerEffect(comEfcDir.c_str(), efcScale);
+			}
+			if (data == "kill")
+			{
+				charBox[Char_PL]->_statusInf.hitPoint = 0;
 			}
 			if (data == "test")
 			{

@@ -75,7 +75,11 @@ bool	PL::Process()
 	//charMove(spd, *_cameraDir + addDir, true);
 	if (_statusInf.hitPoint <= 0)
 	{
-		isDead = 2;
+		isDead = 1;
+		animSpd = 1.f;
+		_modelManager.animChange(PL_death, &_modelInf, false, false, false);
+		if (_modelInf.isAnimEnd) { isDead = 2; }
+		return true;
 	}
 	//_modelInf.wepons[1].isActive = true;
 	//_modelInf.wepons[1].weponAttachFrameNum = 169;
@@ -89,18 +93,34 @@ bool	PL::Process()
 	bool moveCheck = true;
 	switch (setAction())
 	{
+	case pushButton::Damage:
+		dodgeTime = 0, chargeLevel = 0;
+		_modelManager.animChange(PL_damage, &_modelInf, false, false, false);
+		if (_modelInf.playTime > 25.f)
+		{
+			Estate = _estate::NORMAL;
+		}
+		break;
 	case pushButton::B://回避
-		if (Estate == _estate::DODGE) { break; }
-		Estate = _estate::DODGE;
 		_modelInf.animHandleNext = -1;
-		_modelManager.animChange(PL_dodge_F, &_modelInf, false, true, true);
 		animSpd = 1.f;
 		spd = 25.f;
+		isCharge = 0;
+
+		insDir = getMoveDir(false);
+		if (insDir == 0) { insDir = _modelInf.dir.y; }
+		dodgeDir = _modelInf.dir.y - insDir;
+		if (dodgeDir > 360) { dodgeDir -= 360; }
+		else if (dodgeDir < 0) { dodgeDir += 360; }
+
+		if (dodgeDir >= 45 && 135 > dodgeDir) { _modelManager.animChange(PL_dodge_L, &_modelInf, false, true, false); }
+		else if (dodgeDir >= 135 && 225 > dodgeDir) { _modelManager.animChange(PL_dodge_B, &_modelInf, false, true, false); }
+		else if (dodgeDir >= 225 && 315 > dodgeDir) { _modelManager.animChange(PL_dodge_R, &_modelInf, false, true, false); }
+		else { _modelManager.animChange(PL_dodge_F, &_modelInf, false, true, false); }
+
 		dodgeTime = _modelInf.totalTime;
 		immortalTime = dodgeTime;
-		isCharge = 0;
-		//dodgeDir = getMoveDir(false);
-		insDir = getMoveDir(false);
+
 		insDir != 0 ? dodgeDir = insDir : dodgeDir = _modelInf.dir.y;
 		break;
 	case pushButton::X://弱攻撃
@@ -225,7 +245,7 @@ bool	PL::Process()
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
 		spd = runSpd;
-		if (addDir != 0) { charMove(spd, addDir, true); }
+		if (addDir != 0 && walkTime > 5) { charMove(spd, addDir, true); }
 		moveCheck = false;
 
 		break;
@@ -343,29 +363,17 @@ bool	PL::Render(float timeSpeed)
 
 void PL::charMove(float Speed, float _Dir, bool animChange)
 {
-	if (animChange)
-	{/*
-		if (isDash)*/
-		{
-			_modelManager.animChange(PL_run, &_modelInf, true, true, false);
-			//_modelInf.wepons[1].isActive = false;
-			//_modelInf.wepons[1].weponAttachFrameNum = 221;
-			animSpd = 1.f;
-		}/*
-		else
-		{
-			_modelManager.animChange(motion_walk, &_modelInf, true, true);
-			spd = walkSpd;
-			animSpd = 1.f;
-		}*/
-	}
 	_Dir -= 180.f;
 	float radian = _Dir * DX_PI_F / 180.0f;
 	_modelInf.vec.x += sin(radian) * Speed;
 	_modelInf.vec.z += cos(radian) * Speed;
 
-	_modelInf.dir.y = _Dir + 180.f;
-
+	if (animChange)
+	{
+		_modelManager.animChange(PL_run, &_modelInf, true, true, false);
+		animSpd = 1.f;
+		_modelInf.dir.y = _Dir + 180.f;
+	}
 }
 
 bool PL::HPmath(float math)
@@ -379,6 +387,7 @@ bool PL::HPmath(float math)
 		auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
 		ACDisV = VNorm(ACDisV);
 		_modelInf.vec = VScale(ACDisV, 50);
+		Estate = _estate::DAMAGE;
 	}
 
 	return true;
@@ -401,6 +410,7 @@ pushButton PL::setAction()
 	bufferedInput = false;
 	isPushButtonAct = false;
 	pushButton insEnum = pushButton::Neutral;
+	if (Estate == _estate::DAMAGE) { return pushButton::Damage; }
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
@@ -409,11 +419,13 @@ pushButton PL::setAction()
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
+		walkTime++;
 	}//Lstick
+	else { walkTime = 0; }
 	if (isNext) { insEnum = pushButton::Irregular; }
 
 	if (checkKeyImput(KEY_INPUT_C, XINPUT_BUTTON_LEFT_SHOULDER))
@@ -455,16 +467,20 @@ pushButton PL::setAction()
 		insEnum = pushButton::X;
 	}
 
-	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))
+	if (checkRelImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//B
 	{
 		attackNumOld = 0;
+		Estate = _estate::DODGE;
 		if (isNext)
 		{
-			if (_modelInf.playTime < 10.0f) { insEnum = pushButton::B, nextKey = pushButton::Neutral; }
+			if (_modelInf.playTime < 10.0f)
+			{
+				insEnum = pushButton::B, nextKey = pushButton::Neutral;
+			}
 			else { nextKey = pushButton::B; }
 		}
 		else { insEnum = pushButton::B; }
-	}//B
+	}
 
 	return insEnum;
 }
@@ -513,19 +529,21 @@ bool PL::CA_debugAttack(PL* insPL)
 bool PL::CA_charge(PL* insPL)
 {
 	insPL->animSpd = 1.f;
-	//StartJoypadVibration(DX_INPUT_PAD1, 100, -1);
-	//if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime / 2.f) { StartJoypadVibration(DX_INPUT_PAD1, 500, -1); }
-	//if (insPL->_modelInf.playTime >= insPL->_modelInf.totalTime) { StartJoypadVibration(DX_INPUT_PAD1, 1000, -1); }
+	insPL->chargeTime < 1000 ? insPL->chargeTime += 12 : insPL->chargeTime = 100;
+	auto insDir = insPL->getMoveDir(true);
+	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
+	StartJoypadVibration(DX_INPUT_PAD1, insPL->chargeTime, -1);
 	if (insPL->isCharge == 0)
 	{
 		insPL->isCharge = 1;
 		insPL->chargeLevel = 0;
+		insPL->chargeTime = 0;
 		insPL->_modelManager.animChange(PL_arts_tsuki_1, &insPL->_modelInf, false, false, true);
 		insPL->_modelManager.setNextAnim(PL_arts_tsuki_2, &insPL->_modelInf, true, true);
 	}
 	if (insPL->isCharge == 2)
 	{
-		//StopJoypadVibration(DX_INPUT_PAD1);
+		StopJoypadVibration(DX_INPUT_PAD1);
 		if (insPL->_modelInf.animHandleNext == -1)
 		{
 			insPL->chargeLevel = 2;
