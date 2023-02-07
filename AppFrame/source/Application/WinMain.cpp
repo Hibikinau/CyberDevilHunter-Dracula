@@ -28,7 +28,7 @@ int WINAPI WinMain(
 	// 1フレームループを組む ----------------------------------------------------------
 	while (ProcessMessage() == 0)		// プログラムが終了するまでループ
 	{
-		while (setTime > GetNowCount()) {};
+		while (setTime >= GetNowCount()) {};
 		setTime = static_cast<int>(1000 / FPS) + GetNowCount();
 
 		appBase->Input();

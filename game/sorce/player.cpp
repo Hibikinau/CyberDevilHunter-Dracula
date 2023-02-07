@@ -2,8 +2,8 @@
 #define walkSpd 5.f
 #define runSpd 20.f
 
-#define rWeponParentFrame 192
-#define lWeponParentFrame 167
+#define rWeponParentFrame 102
+#define lWeponParentFrame 77
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -65,7 +65,7 @@ bool	PL::Input()
 }
 
 //isIO‚ªtrue‚Å”²“false‚Å”[“
-bool KATANAIO(modelInf *MI, bool isIO)
+bool KATANAIO(modelInf* MI, bool isIO)
 {
 	MI->wepons[0].isActive = isIO;
 	MI->wepons[1].isActive = isIO;
@@ -94,7 +94,7 @@ bool	PL::Process()
 	}
 	//_modelInf.wepons[1].isActive = true;
 	//_modelInf.wepons[1].weponAttachFrameNum = 169;
-	
+
 	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
 	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
 	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
