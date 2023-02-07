@@ -73,7 +73,7 @@ protected:
 	float nowActionTime;
 	bool bufferedInput;
 	int immortalTime;//, dodgeTime;
-	int playSoundOld[3], walkTime;
+	int playSoundOld[3], walkTime, counterTime;
 	std::vector<std::vector<int> > soundHandle;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate, lastAttackState;

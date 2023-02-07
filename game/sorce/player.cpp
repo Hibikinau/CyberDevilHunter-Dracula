@@ -251,13 +251,12 @@ bool	PL::Process()
 		break;
 	case pushButton::R1://ÉKÅ[Éh
 		Estate = _estate::GUARD;
-		immortalTime = 2;
 		animSpd = 1.f;
-		if(isCounter)
+		if (isCounter)
 		{
 			_modelManager.animChange(PL_counter, &_modelInf, false, false, true);
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, rWeponParentFrame, Char_PL);
-			isFastGuard = false, isGuard = false, isCounter = false;
+			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
 			immortalTime = _modelInf.totalTime / animSpd + 1;
 		}
 		else if (isFastGuard) { _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
@@ -364,6 +363,10 @@ bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+
+	std::string insPrint = "ÉJÉEÉìÉ^Å[óPó\éûä‘ = ";
+	insPrint += std::to_string(counterTime);
+	DrawString(600, 0, insPrint.c_str(), GetColor(255.f, 0.f, 0.f));
 	return true;
 }
 
@@ -384,22 +387,25 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 
 bool PL::HPmath(float math)
 {
-	if (math < 0 && immortalTime <= 0)
+	if (math < 0)
 	{
-		if(isFastGuard)
+		if (counterTime > 0)
 		{
 			isCounter = true;
 		}
-		else
+		else if (immortalTime <= 0)
 		{
-			_statusInf.hitPoint += math;
-			PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
-			BPmath(std::abs(math) * 6);
+			if (!isGuard || isFastGuard)
+			{
+				_statusInf.hitPoint += math;
+				PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
+				BPmath(std::abs(math) * 6);
+				Estate = _estate::DAMAGE;
+			}
 
 			auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
 			ACDisV = VNorm(ACDisV);
 			_modelInf.vec = VScale(ACDisV, 50);
-			Estate = _estate::DAMAGE;
 		}
 	}
 	else
@@ -435,7 +441,10 @@ pushButton PL::setAction()
 		isAnimEnd = false;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
-		if (isFastGuard) { isFastGuard = false; }
+		if (isFastGuard)
+		{
+			isFastGuard = false, counterTime = 200;
+		}
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
@@ -479,8 +488,9 @@ pushButton PL::setAction()
 	{
 		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && !isNext) { isFastGuard = true, isGuard = true; }
 		if (isGuard && !isNext) { insEnum = pushButton::R1; }
+		counterTime > 0 ? counterTime-- : counterTime = 0;
 	}
-	else { isGuard = false; }
+	else { isGuard = false, counterTime = 0; }
 
 	if (waitNextAttack <= 0 && lastAttackState == _estate::quickATTACK && attackNumOld == 4)
 	{
