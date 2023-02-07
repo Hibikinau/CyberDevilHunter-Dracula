@@ -93,7 +93,7 @@ bool	PL::Process()
 	bool moveCheck = true;
 	switch (setAction())
 	{
-	case pushButton::Damage:
+	case pushButton::Damage://îÌíe
 		dodgeTime = 0, chargeLevel = 0;
 		_modelManager.animChange(PL_damage, &_modelInf, false, false, false);
 		if (_modelInf.playTime > 25.f)
@@ -251,9 +251,16 @@ bool	PL::Process()
 		break;
 	case pushButton::R1://ÉKÅ[Éh
 		Estate = _estate::GUARD;
-		isGuard = true;
 		immortalTime = 2;
-		if (isFastGuard) { _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
+		animSpd = 1.f;
+		if(isCounter)
+		{
+			_modelManager.animChange(PL_counter, &_modelInf, false, false, true);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, rWeponParentFrame, Char_PL);
+			isFastGuard = false, isGuard = false, isCounter = false;
+			immortalTime = _modelInf.totalTime / animSpd + 1;
+		}
+		else if (isFastGuard) { _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
 		else { _modelManager.animChange(PL_guard_2, &_modelInf, true, false, false); Estate = _estate::NORMAL; }
 		break;
 	case pushButton::Neutral://ì¸óÕÇ»Çµ
@@ -261,7 +268,6 @@ bool	PL::Process()
 		Estate = _estate::NORMAL;
 		_modelManager.animChange(PL_idel, &_modelInf, true, true, false);
 		spd = 0.f;
-		animSpd = 0.5f;
 		break;
 	default:
 
@@ -378,16 +384,28 @@ void PL::charMove(float Speed, float _Dir, bool animChange)
 
 bool PL::HPmath(float math)
 {
-	_statusInf.hitPoint += math;
-	if (math < 0)
+	if (math < 0 && immortalTime <= 0)
 	{
-		PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
-		BPmath(std::abs(math) * 6);
+		if(isFastGuard)
+		{
+			isCounter = true;
+		}
+		else
+		{
+			_statusInf.hitPoint += math;
+			PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
+			BPmath(std::abs(math) * 6);
 
-		auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
-		ACDisV = VNorm(ACDisV);
-		_modelInf.vec = VScale(ACDisV, 50);
-		Estate = _estate::DAMAGE;
+			auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
+			ACDisV = VNorm(ACDisV);
+			_modelInf.vec = VScale(ACDisV, 50);
+			Estate = _estate::DAMAGE;
+		}
+	}
+	else
+	{
+		_statusInf.hitPoint += math;
+
 	}
 
 	return true;
@@ -411,11 +429,13 @@ pushButton PL::setAction()
 	isPushButtonAct = false;
 	pushButton insEnum = pushButton::Neutral;
 	if (Estate == _estate::DAMAGE) { return pushButton::Damage; }
+	if (isCounter) { return pushButton::R1; }
 	if (isAnimEnd)
 	{
 		isAnimEnd = false;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
+		if (isFastGuard) { isFastGuard = false; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
@@ -457,8 +477,8 @@ pushButton PL::setAction()
 
 	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
-		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER)) { isFastGuard = true; }
-		if (!isNext) { insEnum = pushButton::R1; }
+		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && !isNext) { isFastGuard = true, isGuard = true; }
+		if (isGuard && !isNext) { insEnum = pushButton::R1; }
 	}
 	else { isGuard = false; }
 

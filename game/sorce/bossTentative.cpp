@@ -216,7 +216,7 @@ void Boss::CRange() {
 
 	}
 	else if (AttackRand > 70) {
-		status = STATUS::BACK;
+		status = STATUS::KICK;
 
 	}
 	MotionFlag = false;
@@ -229,7 +229,7 @@ void Boss::MRange() {
 		status = STATUS::SRASH;
 	}
 	else if (AttackRand > 70) {
-		status = STATUS::WAIT;
+		status = STATUS::SRASH;
 		//status = STATUS::STEP;
 	}
 	MotionFlag = false;

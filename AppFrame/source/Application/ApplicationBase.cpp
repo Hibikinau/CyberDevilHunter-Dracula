@@ -80,6 +80,7 @@ bool ApplicationBase::Input() {
 	for (int i = 0; i < 256; i++)
 	{
 		_imputInf._gKeyb[i] == 1 && _gTrgbOld[i] != 1 ? _imputInf._gTrgb[i] = 1 : _imputInf._gTrgb[i] = 0;
+		_imputInf._gKeyb[i] == 0 && _gTrgbOld[i] != 0 ? _imputInf._gRelb[i] = 1 : _imputInf._gRelb[i] = 0;
 	}
 
 	//-------------Xpad“ü—Í-------------

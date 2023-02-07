@@ -51,7 +51,7 @@ public:
 	pushButton setAction();
 	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
-	bool checkRelImput(int Key, int Pad) { if (_imputInf->_gRelp[Pad]) { return true; } else { return false; } }
+	bool checkRelImput(int Key, int Pad) { if (_imputInf->_gRelb[Key] || _imputInf->_gRelp[Pad]) { return true; } else { return false; } }
 	float getMoveDir(bool checkUseCamDir);
 	bool HPmath(float math) override;
 	bool BPmath(float math) override;
@@ -68,7 +68,7 @@ protected:
 	//int isAttackFinishXorY;//1.é„î[ìÅ 2.ã≠î[ìÅ
 	int chargeLevel, chargeTime;
 	float spd, animSpd, dodgeDir;
-	bool isUseFbx, attackFlag, isDash, isAnimEnd, isPushButtonAct, isGuard, isFastGuard;
+	bool isUseFbx, attackFlag, isDash, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isCounter = false;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
 	bool bufferedInput;
