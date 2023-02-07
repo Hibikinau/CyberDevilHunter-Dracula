@@ -259,7 +259,7 @@ bool	PL::Process()
 			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
 			immortalTime = _modelInf.totalTime / animSpd + 1;
 		}
-		else if (isFastGuard) { animSpd = 2.f; _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
+		else if (isFastGuard) { animSpd = _valData->counterSpd; _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
 		else { _modelManager.animChange(PL_guard_2, &_modelInf, true, false, false); Estate = _estate::NORMAL; }
 		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
@@ -355,6 +355,7 @@ bool	PL::Process()
 	//		allColl->emplace_back(acoll);
 	//	}
 	//}
+	_valData->plCTimeN = counterTime;
 
 	return true;
 }
@@ -364,9 +365,6 @@ bool	PL::Render(float timeSpeed)
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 
-	std::string insPrint = "ƒJƒEƒ“ƒ^[—P—\ŽžŠÔ = ";
-	insPrint += std::to_string(counterTime);
-	DrawString(600, 0, insPrint.c_str(), GetColor(255.f, 0.f, 0.f));
 	return true;
 }
 
@@ -443,7 +441,7 @@ pushButton PL::setAction()
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
 		if (isFastGuard)
 		{
-			isFastGuard = false, counterTime = 50;
+			isFastGuard = false, counterTime = _valData->_counterTime;
 		}
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }

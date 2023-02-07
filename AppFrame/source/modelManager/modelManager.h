@@ -30,7 +30,8 @@ struct modelInf
 
 struct valData
 {
-	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f;
+	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f, counterSpd = 1.f;
+	int _counterTime = 40, plCTimeN = 0;
 	std::vector<int> activateWepon, disableWepon;
 };
 

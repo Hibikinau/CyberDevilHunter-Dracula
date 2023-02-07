@@ -180,6 +180,9 @@ bool	modeG::Process()
 	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
 	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
 	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
+	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData.counterSpd));
+	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData._counterTime));
+	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData.plCTimeN));
 	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
 		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
@@ -285,7 +288,6 @@ bool	modeG::Render()
 	}
 
 	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
-
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
@@ -298,6 +300,8 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
 	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
+	debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
 	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
@@ -415,6 +419,8 @@ int modeG::useCommand()
 			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data, 1); }
 			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data, 1); }
 			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data, 1); }
+			if (data.find("GSpd") != std::string::npos) { _valData.counterSpd = getNum(data, 1); }
+			if (data.find("CTime") != std::string::npos) { _valData._counterTime = getNum(data, 1); }
 			if (data.find("atkFall") != std::string::npos)
 			{
 				auto a = getNum(data, 1);
