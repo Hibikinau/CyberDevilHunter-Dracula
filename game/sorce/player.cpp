@@ -29,6 +29,7 @@ bool PL::Initialize()
 	_modelManager.modelImport("game/res/Player01/Player1.mv1", 1.5f, &_modelInf);
 	_modelManager.weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana");
 	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya");
+	_modelManager.weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou");
 	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
 	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
 
@@ -63,6 +64,16 @@ bool	PL::Input()
 	return true;
 }
 
+//isIOがtrueで抜刀falseで納刀
+bool KATANAIO(modelInf *MI, bool isIO)
+{
+	MI->wepons[0].isActive = isIO;
+	MI->wepons[1].isActive = isIO;
+	MI->wepons[2].isActive = !isIO;
+
+	return true;
+}
+
 bool	PL::Process()
 {/*
 	if (_statusInf.hitPoint <= 0 || isDead != 0)
@@ -83,7 +94,7 @@ bool	PL::Process()
 	}
 	//_modelInf.wepons[1].isActive = true;
 	//_modelInf.wepons[1].weponAttachFrameNum = 169;
-
+	
 	if (CheckHitKey(KEY_INPUT_D)) { _modelInf.pos.x -= 10; }
 	if (CheckHitKey(KEY_INPUT_A)) { _modelInf.pos.x += 10; }
 	if (CheckHitKey(KEY_INPUT_W)) { _modelInf.pos.z -= 10; }
@@ -254,13 +265,21 @@ bool	PL::Process()
 		animSpd = 1.f;
 		if (isCounter)
 		{
+			KATANAIO(&_modelInf, true);
 			_modelManager.animChange(PL_counter, &_modelInf, false, false, true);
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, rWeponParentFrame, Char_PL);
 			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
 			immortalTime = _modelInf.totalTime / animSpd + 1;
 		}
-		else if (isFastGuard) { animSpd = _valData->counterSpd; _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
-		else { _modelManager.animChange(PL_guard_2, &_modelInf, true, false, false); Estate = _estate::NORMAL; }
+		else if (isFastGuard)
+		{
+			animSpd = _valData->counterSpd;
+			_modelManager.animChange(PL_guard_1, &_modelInf, false, false, false);
+		}
+		else {
+			_modelManager.animChange(PL_guard_2, &_modelInf, true, false, false);
+			Estate = _estate::NORMAL;
+		}
 		break;
 	case pushButton::Neutral://入力なし
 		if (attackNumOld != 0) { break; }
@@ -484,11 +503,16 @@ pushButton PL::setAction()
 
 	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER))
 	{
+		if (isFastGuard && _modelInf.playTime > 17.5f) { KATANAIO(&_modelInf, false); }
 		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && !isNext) { isFastGuard = true, isGuard = true; }
 		if (isGuard && !isNext) { insEnum = pushButton::R1; }
 		counterTime > 0 ? counterTime-- : counterTime = 0;
 	}
-	else { isGuard = false, counterTime = 0; }
+	else
+	{
+		KATANAIO(&_modelInf, true);
+		isGuard = false, counterTime = 0;
+	}
 
 	if (waitNextAttack <= 0 && lastAttackState == _estate::quickATTACK && attackNumOld == 4)
 	{
