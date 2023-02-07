@@ -259,7 +259,7 @@ bool	PL::Process()
 			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
 			immortalTime = _modelInf.totalTime / animSpd + 1;
 		}
-		else if (isFastGuard) { _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
+		else if (isFastGuard) { animSpd = 2.f; _modelManager.animChange(PL_guard_1, &_modelInf, false, false, false); }
 		else { _modelManager.animChange(PL_guard_2, &_modelInf, true, false, false); Estate = _estate::NORMAL; }
 		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
@@ -443,7 +443,7 @@ pushButton PL::setAction()
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
 		if (isFastGuard)
 		{
-			isFastGuard = false, counterTime = 200;
+			isFastGuard = false, counterTime = 50;
 		}
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
