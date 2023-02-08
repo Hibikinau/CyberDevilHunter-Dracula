@@ -73,7 +73,7 @@ protected:
 	bool isUseFbx, attackFlag, isDash, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isCounter = false;
 	float maxHitPoint, maxBloodPoint, maxStamina;
 	float nowActionTime;
-	bool bufferedInput;
+	bool bufferedInput, isGhost;
 	int immortalTime;//, dodgeTime;
 	int playSoundOld[3], walkTime, counterTime, waitCAChargeTime, CAChargeTime, CAChargeSpd;
 	std::vector<std::vector<int> > soundHandle;

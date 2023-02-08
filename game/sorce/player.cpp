@@ -1,5 +1,4 @@
 #include"player.h"
-#define walkSpd 5.f
 #define runSpd 20.f
 
 #define rWeponParentFrame 102
@@ -11,7 +10,7 @@ bool PL::Initialize()
 	useAnim = 0;
 	_x = 0;
 	_y = 0;
-	spd = walkSpd;
+	spd = runSpd;
 	type = 1;
 	g = 1.f;
 	isCharge = 0;
@@ -102,7 +101,7 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::Damage://”í’e
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
 		_modelManager.animChange(PL_damage, &_modelInf, false, false, false);
 		if (_modelInf.playTime > 25.f)
 		{
@@ -300,7 +299,7 @@ bool	PL::Process()
 	}
 
 	//ƒ{ƒX‚Æd‚È‚ç‚È‚¢‚æ‚¤‚É
-	for (auto i = charBox->begin(); i != charBox->end(); ++i)
+	for (auto i = charBox->begin(); i != charBox->end() && !isGhost; ++i)
 	{
 		if (i->second->type == 1) { continue; }
 		auto bossDisV = VSub(i->second->getInf()->pos, _modelInf.pos);
@@ -454,7 +453,7 @@ pushButton PL::setAction()
 	if (isCounter) { return pushButton::R1; }
 	if (isAnimEnd)
 	{
-		isAnimEnd = false;
+		isAnimEnd = false, isGhost = false;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
 		if (isFastGuard)
@@ -555,11 +554,13 @@ bool PL::CA_change(std::string name, const char* XorY)
 	if ("X" == XorY)
 	{
 		if ("charge" == name) { changeAttackX = &CA_charge; }
+		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
 		//if ("senpuu" == name) { changeAttackX = &CA_senpuu; }
 	}
 	else if ("Y" == XorY)
 	{
 		if ("charge" == name) { changeAttackY = &CA_charge; }
+		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
 		//if ("senpuu" == name) { changeAttackY = &CA_senpuu; }
 	}
 
@@ -625,6 +626,7 @@ bool PL::CA_charge(PL* insPL)
 		}
 		insPL->isCharge = 0;
 		insPL->chargeLevel = 0;
+		insPL->isGhost = true;
 	}
 
 	return true;
@@ -641,6 +643,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	insPL->waitCAChargeTime = 12.f;
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
 	insPL->CAChargeSpd = 40.f;
+	insPL->isGhost = true;
 
 	return true;
 }
