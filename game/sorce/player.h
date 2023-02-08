@@ -57,9 +57,11 @@ public:
 	bool BPmath(float math) override;
 	bool CA_change(std::string name, const char* XorY) override;
 	static bool CA_charge(PL* insPL);
+	static bool CA_kirinuke(PL* insPL);
 	static bool CA_debugAttack(PL* insPL);
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
+	float getAnimPlayTotalTime() { return _modelInf.totalTime / animSpd + 1; };
 	
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
@@ -73,7 +75,7 @@ protected:
 	float nowActionTime;
 	bool bufferedInput;
 	int immortalTime;//, dodgeTime;
-	int playSoundOld[3], walkTime, counterTime;
+	int playSoundOld[3], walkTime, counterTime, waitCAChargeTime, CAChargeTime, CAChargeSpd;
 	std::vector<std::vector<int> > soundHandle;
 	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate, lastAttackState;

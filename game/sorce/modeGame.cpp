@@ -75,8 +75,8 @@ bool	modeG::Initialize()
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
-	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
+	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
 
@@ -156,6 +156,8 @@ bool	modeG::Process()
 	useCommand();
 
 	//カメラ制御---------------------------------------------
+	if (CheckHitKey(KEY_INPUT_RIGHT)) { cameraNtDir += 1.f; }
+	if (CheckHitKey(KEY_INPUT_LEFT)) { cameraNtDir -= 1.f; }
 	cameraNtDir += _imputInf.rStickX / 5000;
 	cameraHigh -= _imputInf.rStickY / 5000;
 	cameraMove();
