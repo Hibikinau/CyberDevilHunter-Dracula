@@ -67,11 +67,11 @@ bool	modeG::ASyncLoadAnim()
 bool	modeG::Initialize()
 {
 	SetUseLighting(true);
-	SetUseZBuffer3D(TRUE);// Ｚバッファを有効にする
-	SetWriteZBuffer3D(TRUE);// Ｚバッファへの書き込みを有効にする
+	SetUseZBuffer3D(true);// Ｚバッファを有効にする
+	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(true);
 	SetUseASyncLoadFlag(true);
-	SetAlwaysRunFlag(TRUE);
+	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
 	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
@@ -88,6 +88,7 @@ bool	modeG::Initialize()
 
 	UIkari = LoadGraph("game/res/A.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
+
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -342,6 +343,8 @@ bool	modeG::Terminate()
 	mAllColl.clear();
 	charBox.clear();
 	debugWardBox.clear();
+	InitGraph();
+	InitSoundMem();
 	return true;
 }
 

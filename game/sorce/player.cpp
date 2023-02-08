@@ -55,6 +55,13 @@ bool PL::Initialize()
 bool	PL::Terminate()
 {
 	CB::Terminate();
+	for (int i = 0; i < soundHandle.size(); i++)
+	{
+		for (int j = 0; j < soundHandle[i].size(); j++)
+		{
+			DeleteSoundMem(soundHandle[i][j]);
+		}
+	}
 	return true;
 }
 
