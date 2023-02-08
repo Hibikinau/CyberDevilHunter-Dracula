@@ -46,7 +46,7 @@ public:
 	int StageModelHandle;
 	int CharaModelHandle;
 	int ShadowMapHandle;
-	float bright = 0.f;
+	float bright = 0.6f;
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = true, plDead;
 	int BGMdelay;
