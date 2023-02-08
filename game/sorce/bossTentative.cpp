@@ -15,7 +15,7 @@
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy01/MV1/enemy kari.mv1", 2.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_0_0.mv1", 2.0f, &_modelInf);
 	useAnim = 0;
 
 	status = STATUS::WAIT;
