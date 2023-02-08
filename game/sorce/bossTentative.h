@@ -27,7 +27,7 @@ public:
 	void MRange();
 	void LRange();
 
-	enum class STATUS {
+	/*enum class STATUS {
 		NONE,
 		WAIT,
 		WALK,
@@ -39,15 +39,23 @@ public:
 		RIGHT,
 		DEAD
 	};
-	STATUS status;
+	STATUS status;*/
 
-	{
-		NONE,
+	enum class STATUS {
+		    NONE,
 			WAIT,
+			DEAD,
 			RUN,
+			FSTEP,
+			BSTEP,
+			RSTEP,
+			LSTEP,
 			SRASH,
-			
+			SLAM,
+			STAB,
+            JAMPA,
 	};
+	STATUS status;
 
 	enum class RANGE {
 		NONE,
