@@ -41,6 +41,14 @@ public:
 	};
 	STATUS status;
 
+	{
+		NONE,
+			WAIT,
+			RUN,
+			SRASH,
+			
+	};
+
 	enum class RANGE {
 		NONE,
 		CrossRange,

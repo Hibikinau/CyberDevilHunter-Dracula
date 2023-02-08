@@ -197,7 +197,7 @@ bool	Boss::Render()
 	return true;
 }
 
-#define Jkkkkkkkk 0;
+#define Jkkkkkkkk 0
 
 bool Boss::UtilityJudge() {
 	//int J = 0;
