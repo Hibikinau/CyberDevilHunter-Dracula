@@ -87,6 +87,8 @@ bool	modeG::Initialize()
 	testAttackCap.r = 30.f;
 
 	UIkari = LoadGraph("game/res/A.png");
+	HPgaugeHandle = LoadGraph("game/res/GameUI_HP.png");
+	BPgaugeHandle = LoadGraph("game/res/c.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
 
@@ -130,7 +132,7 @@ bool	modeG::Process()
 	{
 		BGMdelay++;
 	}
-	statusInf plStatus = { 0.f, 0.f, 0.f };
+	plStatus = { 0.f };
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
 		if (i->second->getType() == 1)
@@ -264,6 +266,7 @@ bool	modeG::Render()
 	else { FPScount++; }
 
 	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 140.f, 0.f)), GetColor(0, 255, 0));
+	drawUI();
 
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -465,5 +468,20 @@ bool modeG::getPcInf() {
 	debugWardBox.emplace(debugWardBox.begin() + 5, "CPUspeed " + std::to_string(i));
 	debugWardBox.emplace(debugWardBox.begin() + 6, "freeMemorySize " + std::to_string(f[0]));
 	debugWardBox.emplace(debugWardBox.begin() + 7, "totalMemorySize " + std::to_string(f[1]));
+	return true;
+}
+
+bool modeG::drawUI()
+{
+	//HPバー
+	int barPposX = 10, barPosY = 10, barLength = 660;
+	int gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxHitPoint)) * static_cast<float>(plStatus.hitPoint));
+	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 30, HPgaugeHandle, true, false);
+
+	//BPバー
+	barLength = 315, barPposX = 640 - barLength / 2, barPosY = 600;
+	gauge = barLength - static_cast<int>((barLength / static_cast<float>(1000)) * static_cast<float>(plStatus.bloodPoint));
+	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 37, BPgaugeHandle, true, false);
+
 	return true;
 }

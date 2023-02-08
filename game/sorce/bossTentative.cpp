@@ -75,15 +75,15 @@ bool	Boss::Process()
 		_modelInf.dir.y = Pdir;
 		if (Prange < 300)
 		{
-			//CRange();
+			CRange();
 		}
 		if (300 <= Prange && Prange <= 400)
 		{
-			//MRange();
+			MRange();
 		}
 	 if (Prange > 400)
 		{
-			//LRange();
+			LRange();
 		}
 	}
 	else if (time > 0)

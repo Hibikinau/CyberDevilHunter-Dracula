@@ -15,9 +15,10 @@ bool PL::Initialize()
 	g = 1.f;
 	isCharge = 0;
 	Estate = _estate::NORMAL;
-	maxHitPoint = _statusInf.hitPoint = 200;
-	maxStamina = _statusInf.stamina = 100;
+	_statusInf.maxHitPoint = _statusInf.hitPoint = 200;
+	_statusInf.maxStamina = _statusInf.stamina = 100;
 	_statusInf.bloodPoint = 0;
+	_statusInf.vampireLevel = 0;
 
 	_modelInf.pos = VGet(210.0f, 0.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
@@ -88,6 +89,11 @@ bool	PL::Process()
 		_modelManager.animChange(PL_death, &_modelInf, false, false, false);
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
+	}
+	if (_statusInf.bloodPoint >= 1000.f)
+	{
+		_statusInf.vampireLevel++;
+		_statusInf.bloodPoint -= 1000.f;
 	}
 	//_addDir += *_cameraDir + 180.f;
 
@@ -381,7 +387,7 @@ bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-
+	_statusInf.bloodPoint++;
 	return true;
 }
 
@@ -434,11 +440,6 @@ bool PL::HPmath(float math)
 bool PL::BPmath(float math)
 {
 	_statusInf.bloodPoint += math;
-	if (_statusInf.bloodPoint >= 1000.f)
-	{
-		_statusInf.vampireLevel++;
-		_statusInf.bloodPoint -= 1000.f;
-	}
 
 	return true;
 }
