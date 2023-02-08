@@ -20,7 +20,6 @@ bool PL::Initialize()
 	maxStamina = _statusInf.stamina = 100;
 	_statusInf.bloodPoint = 0;
 
-	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(210.0f, 0.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
@@ -144,21 +143,21 @@ bool	PL::Process()
 			_modelManager.animChange(PL_jaku_1, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_jaku_2, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_jaku_3, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -174,14 +173,14 @@ bool	PL::Process()
 			_modelManager.setNextAnim(PL_jaku_4_2, &_modelInf, true, false);
 			waitNextAttack += 60;
 			attackNumOld = 4;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 4 && !isPushButtonAct)
 		{
 			_modelInf.animHandleNext = -1;
 			_modelManager.animChange(PL_jaku_4_4, &_modelInf, false, false, true);
 			waitNextAttack = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 
 		break;
@@ -196,21 +195,21 @@ bool	PL::Process()
 			_modelManager.animChange(PL_kyou_1, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_kyou_2, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_kyou_3, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -224,7 +223,7 @@ bool	PL::Process()
 			_modelManager.animChange(PL_kyou_4_3, &_modelInf, false, false, true);
 			waitNextAttack += 60;
 			attackNumOld = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
 
 		break;
@@ -256,7 +255,7 @@ bool	PL::Process()
 		{
 			KATANAIO(&_modelInf, true);
 			_modelManager.animChange(PL_counter, &_modelInf, false, false, true);
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 200.f, rWeponParentFrame, Char_PL);
 			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
 		}
@@ -582,9 +581,8 @@ bool PL::CA_charge(PL* insPL)
 {
 	insPL->animSpd = 1.f;
 	insPL->chargeTime < 1000 ? insPL->chargeTime += 12 : insPL->chargeTime = 100;
-	auto insDir = insPL->getMoveDir(true);
-	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
-	//StartJoypadVibration(DX_INPUT_PAD1, insPL->chargeTime, -1);
+
+	StartJoypadVibration(DX_INPUT_PAD1, insPL->chargeTime, -1);
 	if (insPL->isCharge == 0)
 	{
 		insPL->isCharge = 1;
@@ -612,7 +610,7 @@ bool PL::CA_charge(PL* insPL)
 		if (insPL->chargeLevel == 2)
 		{
 			insPL->_modelManager.animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, 5.f, rWeponParentFrame, Char_PL);
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, 160.f, rWeponParentFrame, Char_PL);
 			insPL->waitCAChargeTime = 16.f;
 			insPL->CAChargeTime = 41.f;
 			insPL->CAChargeSpd = 40.f;
@@ -620,7 +618,9 @@ bool PL::CA_charge(PL* insPL)
 		else
 		{
 			insPL->_modelManager.animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, 5.f, rWeponParentFrame, Char_PL);
+			float insDamage;
+			insPL->chargeLevel == 1 ? insDamage = 100.f : insDamage = 160.f;
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, insDamage, rWeponParentFrame, Char_PL);
 
 		}
 		insPL->isCharge = 0;
@@ -637,7 +637,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	insPL->_modelManager.animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), true, 5.f, rWeponParentFrame, Char_PL);
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), true, 80.f, rWeponParentFrame, Char_PL);
 	insPL->waitCAChargeTime = 12.f;
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
 	insPL->CAChargeSpd = 40.f;

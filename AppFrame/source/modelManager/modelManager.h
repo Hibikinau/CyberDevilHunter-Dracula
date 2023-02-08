@@ -21,7 +21,7 @@ struct weponModelInf
 //3dƒ‚ƒfƒ‹—p
 struct modelInf
 {
-	int modelHandle, animHandleOld = -1, importCnt, attachIndex, attachIndexOld = -1, animHandleNext = -1;
+	int modelHandle, animHandleOld = -1, attachIndex, attachIndexOld = -1, animHandleNext = -1;
 	float playTime, playTimeOld, totalTime, rate, scale;
 	bool isBrending, isBrendingNext, animOldLoop, animLoopNext, isAnimEnd;
 	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
