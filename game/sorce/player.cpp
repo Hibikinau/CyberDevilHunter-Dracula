@@ -17,8 +17,8 @@ bool PL::Initialize()
 	Estate = _estate::NORMAL;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 200;
 	_statusInf.maxStamina = _statusInf.stamina = 100;
+	_statusInf.maxBloodPoint = 1500;
 	_statusInf.bloodPoint = 0;
-	_statusInf.vampireLevel = 0;
 
 	_modelInf.pos = VGet(210.0f, 0.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
@@ -90,12 +90,12 @@ bool	PL::Process()
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
-	if (_statusInf.bloodPoint >= 1000.f)
+	if (_statusInf.bloodPoint > 1500.f)
 	{
-		_statusInf.vampireLevel++;
-		_statusInf.bloodPoint -= 1000.f;
+		_statusInf.bloodPoint = 1500.f;
 	}
-	//_addDir += *_cameraDir + 180.f;
+	
+	//if()
 
 	if (CheckHitKey(KEY_INPUT_W)) { spd = runSpd; charMove(spd, *_cameraDir, false); }
 	if (CheckHitKey(KEY_INPUT_A)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f + 90.f, false); }
@@ -117,7 +117,7 @@ bool	PL::Process()
 	case pushButton::B://回避
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
 		_modelInf.animHandleNext = -1;
-		animSpd = 1.f;
+		animSpd = 2.f;
 		spd = 25.f;
 		isCharge = 0;
 
@@ -142,26 +142,26 @@ bool	PL::Process()
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		Estate = _estate::quickATTACK;
 		lastAttackState = _estate::quickATTACK;
-		waitNextAttack = 20;
-		animSpd = 1.f;
+		waitNextAttack = 40;
+		animSpd = 2.f;
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_jaku_1, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_jaku_2, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_jaku_3, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
@@ -169,7 +169,7 @@ bool	PL::Process()
 		{
 			_modelManager.animChange(PL_jaku_4_1, &_modelInf, false, false, true);
 			_modelManager.setNextAnim(PL_jaku_4_2, &_modelInf, true, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 		}
 		else if (attackNumOld == 4 && isPushButtonAct)
@@ -177,7 +177,7 @@ bool	PL::Process()
 			_modelInf.animHandleNext = -1;
 			_modelManager.animChange(PL_jaku_4_3, &_modelInf, false, false, true);
 			_modelManager.setNextAnim(PL_jaku_4_2, &_modelInf, true, false);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 4;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
 		}
@@ -194,26 +194,26 @@ bool	PL::Process()
 		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::slowATTACK;
 		lastAttackState = _estate::slowATTACK;
-		waitNextAttack = 20;
-		animSpd = 1.f;
+		waitNextAttack = 40;
+		animSpd = 2.f;
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_kyou_1, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_kyou_2, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_kyou_3, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
@@ -221,13 +221,13 @@ bool	PL::Process()
 		{
 			_modelManager.animChange(PL_kyou_4_1, &_modelInf, false, false, true);
 			_modelManager.setNextAnim(PL_kyou_4_2, &_modelInf, true, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 		}
 		else if (attackNumOld == 4)
 		{
 			_modelManager.animChange(PL_kyou_4_3, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 0;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
 		}
@@ -245,7 +245,6 @@ bool	PL::Process()
 		break;
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
-		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
 		//isDash = true;//------------------------------------------------------------------------------------
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
@@ -260,6 +259,7 @@ bool	PL::Process()
 		animSpd = 1.f;
 		if (isCounter)
 		{
+			animSpd = 3.f;
 			KATANAIO(&_modelInf, true);
 			_modelManager.animChange(PL_counter, &_modelInf, false, false, true);
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 200.f, rWeponParentFrame, Char_PL);
@@ -274,6 +274,7 @@ bool	PL::Process()
 		else {
 			_modelManager.animChange(PL_guard_2, &_modelInf, true, false, false);
 			Estate = _estate::NORMAL;
+			BPmath(-1);
 		}
 		break;
 	case pushButton::Neutral://入力なし
@@ -324,7 +325,6 @@ bool	PL::Process()
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
-	if (moveCheck) { isDash = false; }
 	isImmortal = immortalTime > 0;
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
@@ -344,6 +344,7 @@ bool	PL::Process()
 	//攻撃ヒット時のSE再生
 	if (isHit)
 	{
+		BPmath(100);
 		if (lastAttackState == _estate::quickATTACK)
 		{
 			int soundNum = 0, attackType;
@@ -354,7 +355,6 @@ bool	PL::Process()
 			} while (playSoundOld[0] == soundNum && soundHandle[attackType].size() > 1);
 			playSoundOld[0] = soundNum;
 			PlaySoundMem(soundHandle[attackType][soundNum], DX_PLAYTYPE_BACK);
-
 		}
 		isHit = false;
 	}
@@ -389,7 +389,6 @@ bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-	_statusInf.bloodPoint++;
 	return true;
 }
 
@@ -434,7 +433,7 @@ bool PL::HPmath(float math)
 	else
 	{
 		_statusInf.hitPoint += math;
-
+		if (_statusInf.hitPoint > _statusInf.maxHitPoint) { _statusInf.hitPoint = _statusInf.maxHitPoint; }
 	}
 
 	return true;
@@ -442,6 +441,8 @@ bool PL::HPmath(float math)
 bool PL::BPmath(float math)
 {
 	_statusInf.bloodPoint += math;
+	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
+	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
 
 	return true;
 }
@@ -479,6 +480,7 @@ pushButton PL::setAction()
 	{//入れ替え技
 		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
 		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
+		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f) { HPmath(100); BPmath(-500); }//LBA
 	}
 	else
 	{//通常技

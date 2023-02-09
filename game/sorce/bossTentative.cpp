@@ -20,7 +20,7 @@ bool Boss::Initialize()
 
 	status = STATUS::WAIT;
 	time = 300;
-	_statusInf.hitPoint = 10000;
+	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 
 	MotionFlag = true;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
@@ -109,7 +109,7 @@ bool	Boss::Process()
 		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		break;
 	case STATUS::SRASH:
@@ -117,7 +117,7 @@ bool	Boss::Process()
 		AttackFlag = true;
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		break;
 	case STATUS::BACK:

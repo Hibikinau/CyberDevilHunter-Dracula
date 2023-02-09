@@ -88,6 +88,7 @@ bool	modeG::Initialize()
 
 	UIkari = LoadGraph("game/res/A.png");
 	HPgaugeHandle = LoadGraph("game/res/GameUI_HP.png");
+	HPgaugeHandle2 = LoadGraph("game/res/GameUI_HPB.png");
 	BPgaugeHandle = LoadGraph("game/res/c.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
@@ -148,6 +149,7 @@ bool	modeG::Process()
 			i->second->Process();
 			bossMI = i->second->getInf();
 			i->second->gravity();
+			bossStatus = i->second->getStatus();
 		}
 	}
 
@@ -178,7 +180,6 @@ bool	modeG::Process()
 
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
 	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
-	debugWardBox.emplace_back("自機のVL = " + std::to_string(plStatus.vampireLevel));
 	debugWardBox.emplace_back(std::to_string(
 		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
@@ -205,14 +206,15 @@ bool	modeG::Process()
 		{
 			if (i->second->type == 1)
 			{//自機の死
-				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+				_modeServer->Add(std::make_unique<modeGO>(_modeServer), 1, MODE_GO);
 				Terminate();
 				return false;
 			}
 			else
 			{//それ以外の死
-				i->second->Terminate();
-				i = charBox.erase(i);
+				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+				Terminate();
+				return false;
 			}
 		}
 	}
@@ -480,9 +482,13 @@ bool modeG::drawUI()
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 30, HPgaugeHandle, true, false);
 
 	//BPバー
-	barLength = 315, barPposX = 640 - barLength / 2, barPosY = 600;
-	gauge = barLength - static_cast<int>((barLength / static_cast<float>(1000)) * static_cast<float>(plStatus.bloodPoint));
-	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 37, BPgaugeHandle, true, false);
+	barLength = 600, barPposX = 640 - barLength / 2, barPosY = 600;
+	gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxBloodPoint)) * static_cast<float>(plStatus.bloodPoint));
+	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 23, BPgaugeHandle, true, false);
 
+	//bossHPバー
+	barPposX = 600, barPosY = 10, barLength = 660;
+	gauge = barLength - static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
+	auto J = DrawRectGraph(barPposX + gauge, barPosY, gauge, 0, barLength, 30, HPgaugeHandle2, true, false);
 	return true;
 }

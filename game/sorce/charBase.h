@@ -5,7 +5,7 @@
 
 struct statusInf
 {//Å‘å’l‚ğ‘ã“ü
-	float hitPoint, maxHitPoint, bloodPoint, vampireLevel, stamina, maxStamina;
+	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina;
 };
 
 struct collCapsule

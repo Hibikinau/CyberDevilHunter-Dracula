@@ -26,7 +26,7 @@ public:
 public:
 	ModeServer* _modeServer;
 	int _x, _y;
-	int testAttackF, lockOnMarkerHandle, HPgaugeHandle, BPgaugeHandle;
+	int testAttackF, lockOnMarkerHandle, HPgaugeHandle, HPgaugeHandle2, BPgaugeHandle;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
@@ -41,14 +41,14 @@ public:
 	valData _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
-	statusInf plStatus;
+	statusInf plStatus, bossStatus;
 	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
 	int keepout[180] = { -1 }, keepoutNum;
 
 	int StageModelHandle;
 	int CharaModelHandle;
 	int ShadowMapHandle;
-	float bright = 0.f;
+	float bright = .6f;
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = true, plDead;
 	int BGMdelay;

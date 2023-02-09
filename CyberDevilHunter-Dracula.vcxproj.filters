@@ -51,6 +51,15 @@
     <ClCompile Include="game\sorce\modeResult.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
+    <ClCompile Include="game\sorce\modeGameOver.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="game\sorce\modeMainMenu.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="game\sorce\modeBossChoose.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\gameMain.h">
@@ -85,6 +94,15 @@
     </ClInclude>
     <ClInclude Include="game\sorce\motionDefineList.h">
       <Filter>ヘッダー ファイル\char</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\modeGameOver.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\modeMainMenu.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\modeBossChoose.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
