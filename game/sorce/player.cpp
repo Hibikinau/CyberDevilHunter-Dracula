@@ -1,6 +1,15 @@
 #include"player.h"
 #define runSpd 20.f
 
+#define jakuATK 50.f
+#define kyouATK 70.f
+#define counterATK 200.f
+#define debugATK 99999.f
+#define kirinukeATK 80.f
+#define charge1ATK 100.f
+#define charge2ATK 160.f
+#define charge3ATK 160.f
+
 #define rWeponParentFrame 102
 #define lWeponParentFrame 77
 typedef ExclusiveState _estate;
@@ -15,8 +24,9 @@ bool PL::Initialize()
 	g = 1.f;
 	isCharge = 0;
 	Estate = _estate::NORMAL;
-	maxHitPoint = _statusInf.hitPoint = 200;
-	maxStamina = _statusInf.stamina = 100;
+	_statusInf.maxHitPoint = _statusInf.hitPoint = 200;
+	_statusInf.maxStamina = _statusInf.stamina = 100;
+	_statusInf.maxBloodPoint = 1500;
 	_statusInf.bloodPoint = 0;
 
 	_modelInf.pos = VGet(210.0f, 0.0f, 3100.f);
@@ -89,7 +99,13 @@ bool	PL::Process()
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
-	//_addDir += *_cameraDir + 180.f;
+	if (_statusInf.bloodPoint > 1500.f)
+	{
+		_statusInf.bloodPoint = 1500.f;
+	}
+
+	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100) { isAwakening = true, atkBuff = 100.f, _modelInf.animSpdBuff = .5f; }
+	if (isAwakening) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = false, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
 
 	if (CheckHitKey(KEY_INPUT_W)) { spd = runSpd; charMove(spd, *_cameraDir, false); }
 	if (CheckHitKey(KEY_INPUT_A)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f + 90.f, false); }
@@ -109,8 +125,9 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::B://‰ñ”ð
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
 		_modelInf.animHandleNext = -1;
-		animSpd = 1.f;
+		animSpd = 2.f;
 		spd = 25.f;
 		isCharge = 0;
 
@@ -120,10 +137,10 @@ bool	PL::Process()
 		if (dodgeDir > 360) { dodgeDir -= 360; }
 		else if (dodgeDir < 0) { dodgeDir += 360; }
 
-		if (dodgeDir >= 45 && 135 > dodgeDir) { _modelManager.animChange(PL_dodge_L, &_modelInf, false, true, false); }
-		else if (dodgeDir >= 135 && 225 > dodgeDir) { _modelManager.animChange(PL_dodge_B, &_modelInf, false, true, false); }
-		else if (dodgeDir >= 225 && 315 > dodgeDir) { _modelManager.animChange(PL_dodge_R, &_modelInf, false, true, false); }
-		else { _modelManager.animChange(PL_dodge_F, &_modelInf, false, true, false); }
+		if (dodgeDir >= 45 && 135 > dodgeDir) { _modelManager.animChange(PL_dodge_L, &_modelInf, false, false, false); }
+		else if (dodgeDir >= 135 && 225 > dodgeDir) { _modelManager.animChange(PL_dodge_B, &_modelInf, false, false, false); }
+		else if (dodgeDir >= 225 && 315 > dodgeDir) { _modelManager.animChange(PL_dodge_R, &_modelInf, false, false, false); }
+		else { _modelManager.animChange(PL_dodge_F, &_modelInf, false, false, false); }
 
 		dodgeTime = getAnimPlayTotalTime();
 		immortalTime = dodgeTime;
@@ -135,34 +152,34 @@ bool	PL::Process()
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		Estate = _estate::quickATTACK;
 		lastAttackState = _estate::quickATTACK;
-		waitNextAttack = 20;
-		animSpd = 1.f;
+		waitNextAttack = 40;
+		animSpd = 2.f;
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_jaku_1, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_jaku_2, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_jaku_3, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
 			_modelManager.animChange(PL_jaku_4_1, &_modelInf, false, false, true);
 			_modelManager.setNextAnim(PL_jaku_4_2, &_modelInf, true, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 		}
 		else if (attackNumOld == 4 && isPushButtonAct)
@@ -170,16 +187,16 @@ bool	PL::Process()
 			_modelInf.animHandleNext = -1;
 			_modelManager.animChange(PL_jaku_4_3, &_modelInf, false, false, true);
 			_modelManager.setNextAnim(PL_jaku_4_2, &_modelInf, true, false);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 4;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 4 && !isPushButtonAct)
 		{
 			_modelInf.animHandleNext = -1;
 			_modelManager.animChange(PL_jaku_4_4, &_modelInf, false, false, true);
 			waitNextAttack = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 50.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 
 		break;
@@ -187,42 +204,42 @@ bool	PL::Process()
 		_modelInf.dir.y = getMoveDir(true);
 		Estate = _estate::slowATTACK;
 		lastAttackState = _estate::slowATTACK;
-		waitNextAttack = 20;
-		animSpd = 1.f;
+		waitNextAttack = 40;
+		animSpd = 2.f;
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_kyou_1, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_kyou_2, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_kyou_3, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 3)
 		{
 			_modelManager.animChange(PL_kyou_4_1, &_modelInf, false, false, true);
 			_modelManager.setNextAnim(PL_kyou_4_2, &_modelInf, true, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 		}
 		else if (attackNumOld == 4)
 		{
 			_modelManager.animChange(PL_kyou_4_3, &_modelInf, false, false, true);
-			waitNextAttack += 60;
+			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 70.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 
 		break;
@@ -238,7 +255,6 @@ bool	PL::Process()
 		break;
 	case pushButton::Lstick://ƒ_ƒbƒVƒ…
 		Estate = _estate::NORMAL;
-		if (_imputInf->_gTrgp[XINPUT_BUTTON_LEFT_THUMB]) { isDash ^= true; }
 		//isDash = true;//------------------------------------------------------------------------------------
 		//ˆÚ“®æ‚ÌŠp“x‚ðƒxƒNƒgƒ‹‚É‚µ‚ÄˆÚ“®ƒxƒNƒgƒ‹‚É‰ÁŽZ
 		addDir = getMoveDir(false);
@@ -248,13 +264,15 @@ bool	PL::Process()
 
 		break;
 	case pushButton::R1://ƒK[ƒh
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
 		Estate = _estate::GUARD;
 		animSpd = 1.f;
 		if (isCounter)
 		{
+			animSpd = 3.f;
 			KATANAIO(&_modelInf, true);
 			_modelManager.animChange(PL_counter, &_modelInf, false, false, true);
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), true, 200.f, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), true, counterATK + atkBuff, rWeponParentFrame, Char_PL);
 			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
 		}
@@ -266,6 +284,7 @@ bool	PL::Process()
 		else {
 			_modelManager.animChange(PL_guard_2, &_modelInf, true, false, false);
 			Estate = _estate::NORMAL;
+			BPmath(-1);
 		}
 		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
@@ -280,11 +299,11 @@ bool	PL::Process()
 	}
 
 	//“ü‚ê‘Ö‚¦‹Z‚â‰ñ”ð‚È‚Ç‚ÌˆÚ“®ˆ—
-	if (waitCAChargeTime > 0) { waitCAChargeTime -= animSpd; }
+	if (waitCAChargeTime > 0) { waitCAChargeTime -= animSpd + _modelInf.animSpdBuff; }
 	else if (CAChargeTime > 0)
 	{
 		waitCAChargeTime = 0;
-		CAChargeTime -= animSpd;
+		CAChargeTime -= animSpd + _modelInf.animSpdBuff;
 		charMove(CAChargeSpd, _modelInf.dir.y, false);
 	}
 	else { CAChargeTime = 0; }
@@ -316,7 +335,6 @@ bool	PL::Process()
 	waitNextAttack > 0 ? waitNextAttack-- : attackNumOld = 0;
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
-	if (moveCheck) { isDash = false; }
 	isImmortal = immortalTime > 0;
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
@@ -336,6 +354,7 @@ bool	PL::Process()
 	//UŒ‚ƒqƒbƒgŽž‚ÌSEÄ¶
 	if (isHit)
 	{
+		BPmath(100);
 		if (lastAttackState == _estate::quickATTACK)
 		{
 			int soundNum = 0, attackType;
@@ -346,7 +365,6 @@ bool	PL::Process()
 			} while (playSoundOld[0] == soundNum && soundHandle[attackType].size() > 1);
 			playSoundOld[0] = soundNum;
 			PlaySoundMem(soundHandle[attackType][soundNum], DX_PLAYTYPE_BACK);
-
 		}
 		isHit = false;
 	}
@@ -381,7 +399,6 @@ bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-
 	return true;
 }
 
@@ -412,9 +429,8 @@ bool PL::HPmath(float math)
 		{
 			if (!isGuard || isFastGuard)
 			{
-				_statusInf.hitPoint += math;
+				if (!isAwakening) { _statusInf.hitPoint += math; BPmath(std::abs(math) * 6); }
 				PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
-				BPmath(std::abs(math) * 6);
 				Estate = _estate::DAMAGE;
 			}
 
@@ -426,7 +442,7 @@ bool PL::HPmath(float math)
 	else
 	{
 		_statusInf.hitPoint += math;
-
+		if (_statusInf.hitPoint > _statusInf.maxHitPoint) { _statusInf.hitPoint = _statusInf.maxHitPoint; }
 	}
 
 	return true;
@@ -434,11 +450,8 @@ bool PL::HPmath(float math)
 bool PL::BPmath(float math)
 {
 	_statusInf.bloodPoint += math;
-	if (_statusInf.bloodPoint >= 1000.f)
-	{
-		_statusInf.vampireLevel++;
-		_statusInf.bloodPoint -= 1000.f;
-	}
+	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
+	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
 
 	return true;
 }
@@ -463,7 +476,7 @@ pushButton PL::setAction()
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+	//if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
@@ -476,6 +489,7 @@ pushButton PL::setAction()
 	{//“ü‚ê‘Ö‚¦‹Z
 		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
 		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
+		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f) { HPmath(100); BPmath(-500); }//LBA
 	}
 	else
 	{//’Êí‹Z
@@ -499,11 +513,11 @@ pushButton PL::setAction()
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y—£‚µ‚½‚Æ‚«
 
-	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER))
+	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)
 	{
 		if (isFastGuard && _modelInf.playTime > 17.5f) { KATANAIO(&_modelInf, false); }
-		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && !isNext) { isFastGuard = true, isGuard = true; }
-		if (isGuard && !isNext) { insEnum = pushButton::R1; }
+		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER)) { isFastGuard = true, isGuard = true; }
+		if (isGuard) { insEnum = pushButton::R1; }
 		counterTime > 0 ? counterTime-- : counterTime = 0;
 	}
 	else
@@ -521,15 +535,7 @@ pushButton PL::setAction()
 	{
 		attackNumOld = 0;
 		Estate = _estate::DODGE;
-		if (isNext)
-		{
-			if (_modelInf.playTime < 10.0f)
-			{
-				insEnum = pushButton::B, nextKey = pushButton::Neutral;
-			}
-			else { nextKey = pushButton::B; }
-		}
-		else { insEnum = pushButton::B; }
+		insEnum = pushButton::B;
 	}
 
 	return insEnum;
@@ -611,7 +617,7 @@ bool PL::CA_charge(PL* insPL)
 		if (insPL->chargeLevel == 2)
 		{
 			insPL->_modelManager.animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, 160.f, rWeponParentFrame, Char_PL);
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, charge3ATK + insPL->atkBuff, rWeponParentFrame, Char_PL);
 			insPL->waitCAChargeTime = 16.f;
 			insPL->CAChargeTime = 41.f;
 			insPL->CAChargeSpd = 40.f;
@@ -619,8 +625,8 @@ bool PL::CA_charge(PL* insPL)
 		else
 		{
 			insPL->_modelManager.animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
-			float insDamage;
-			insPL->chargeLevel == 1 ? insDamage = 100.f : insDamage = 160.f;
+			float insDamage = insPL->atkBuff;
+			insPL->chargeLevel == 1 ? insDamage += charge2ATK  : insDamage += charge1ATK;
 			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, insDamage, rWeponParentFrame, Char_PL);
 
 		}
@@ -639,7 +645,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	insPL->_modelManager.animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), true, 80.f, rWeponParentFrame, Char_PL);
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), true, kirinukeATK + insPL->atkBuff, rWeponParentFrame, Char_PL);
 	insPL->waitCAChargeTime = 12.f;
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
 	insPL->CAChargeSpd = 40.f;

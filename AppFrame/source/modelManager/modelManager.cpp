@@ -87,7 +87,7 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 	}
 	else
 	{
-		MI->playTime += animSpeed * timeSpead;
+		MI->playTime += (animSpeed + MI->animSpdBuff) * timeSpead;
 		if (MI->playTime >= MI->totalTime)
 		{
 			MI->isAnimEnd = true;

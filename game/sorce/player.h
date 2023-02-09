@@ -31,6 +31,7 @@ enum class pushButton
 	Y,
 	LBX,
 	LBY,
+	LBA,
 	Lstick,
 	Irregular,
 	Damage,
@@ -61,17 +62,17 @@ public:
 	static bool CA_debugAttack(PL* insPL);
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
-	float getAnimPlayTotalTime() { return _modelInf.totalTime / animSpd + 1; };
+	float getAnimPlayTotalTime() { return _modelInf.totalTime / (animSpd + _modelInf.animSpdBuff)+1; };
 	
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
-	int _x, _y, stepChargeSec, isStep;
+	int _x, _y, stepChargeSec, isStep = false;
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
 	//int isAttackFinishXorY;//1.弱納刀 2.強納刀
 	int chargeLevel, chargeTime;
 	float spd, animSpd, dodgeDir;
-	bool isUseFbx, attackFlag, isDash, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isCounter = false;
-	float maxHitPoint, maxBloodPoint, maxStamina;
+	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isCounter = false, isAwakening = false;
+	float maxHitPoint, maxBloodPoint, maxStamina, atkBuff = 0.f;
 	float nowActionTime;
 	bool bufferedInput, isGhost;
 	int immortalTime;//, dodgeTime;

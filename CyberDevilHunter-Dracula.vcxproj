@@ -166,7 +166,10 @@
     <ClCompile Include="game\sorce\bossTentative.cpp" />
     <ClCompile Include="game\sorce\charBase.cpp" />
     <ClCompile Include="game\sorce\gameMain.cpp" />
+    <ClCompile Include="game\sorce\modeBossChoose.cpp" />
     <ClCompile Include="game\sorce\modeGame.cpp" />
+    <ClCompile Include="game\sorce\modeGameOver.cpp" />
+    <ClCompile Include="game\sorce\modeMainMenu.cpp" />
     <ClCompile Include="game\sorce\modeMenu.cpp" />
     <ClCompile Include="game\sorce\modeResult.cpp" />
     <ClCompile Include="game\sorce\modeTitle.cpp" />
@@ -177,7 +180,10 @@
     <ClInclude Include="game\sorce\bossTentative.h" />
     <ClInclude Include="game\sorce\charBase.h" />
     <ClInclude Include="game\sorce\gameMain.h" />
+    <ClInclude Include="game\sorce\modeBossChoose.h" />
     <ClInclude Include="game\sorce\modeGame.h" />
+    <ClInclude Include="game\sorce\modeGameOver.h" />
+    <ClInclude Include="game\sorce\modeMainMenu.h" />
     <ClInclude Include="game\sorce\modeMenu.h" />
     <ClInclude Include="game\sorce\modeResult.h" />
     <ClInclude Include="game\sorce\modeTitle.h" />

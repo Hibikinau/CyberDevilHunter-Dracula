@@ -41,7 +41,9 @@ bool	modeM::Process()
 		}
 		else if (picMenuNum == 1)
 		{//ブリーフィングへ
-
+			_modeServer->Del(MODE_GAME);
+			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+			return false;
 		}
 		else if (picMenuNum == 2)
 		{//設定へ
