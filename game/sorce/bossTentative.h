@@ -16,6 +16,7 @@ public:
 	virtual bool Render();
 	bool HPmath(float Num) override;
 	bool UtilityJudge();
+	bool RangeJ();
 
 	void Walk();
 	void Step();
@@ -78,4 +79,5 @@ protected:
 	double dir;
 	bool MotionFlag;
 	int swingSE;
+	float PrangeA,PrangeB;
 };

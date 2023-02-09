@@ -69,24 +69,15 @@ bool	Boss::Process()
 	//bossと距離一定以内行動変更
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
+	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
+	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
 
 	if (MotionFlag == true && time == 0) {
+		PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 		_modelInf.dir.y = Pdir;
 		UtilityJudge();
-		/*if (Prange < 300)
-		{
-			CRange();
-		}
-		if (300 <= Prange && Prange <= 400)
-		{
-			MRange();
-		}
-		if (Prange > 400)
-		{
-			LRange();
-		}*/
+		
 	}
 	else if (time > 0)
 	{
@@ -95,19 +86,48 @@ bool	Boss::Process()
 
 
 	switch (status) {
-	case STATUS::NONE:
+	case STATUS::NONE:break;
 	case STATUS::WAIT:
-	case STATUS::DEAD:
+		_modelManager.animChange(motion_idel, &_modelInf, true, true);
+		animSpd = 0.5f;
+		break;
+	case STATUS::DEAD:break;
 	case STATUS::RUN:
+		_modelInf.dir.y = Pdir;
+		_modelManager.animChange(motion_run, &_modelInf, true, true);
+		animSpd = 0.5f;
+		Walk();
+		if (PrangeA < 150) { UtilityJudge(); }
+		/*if(Prange>100) { Walk(); }
+		else {
+			int j;
+		}*/
+		//AttackFlag = false;
+		break;
 	case STATUS::FSTEP:
-	case STATUS::BSTEP:
-	case STATUS::RSTEP:
-	case STATUS::LSTEP:
+		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true);
+		animSpd = 1.0f;
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Step();
+		}
+		if (isAnimEnd == true) { UtilityJudge(); }
+		break;
+	case STATUS::BSTEP:break;
+	case STATUS::RSTEP:break;
+	case STATUS::LSTEP:break;
 	case STATUS::SRASH:
-	case STATUS::SLAM:
-	case STATUS::STAB:
-	case STATUS::JAMPA:
-	}
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
+		animSpd = 0.7f;
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
+		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		if (isAnimEnd == true) { 
+			UtilityJudge(); }
+		break;
+	case STATUS::SLAM:break;
+	case STATUS::STAB:break;
+	case STATUS::JAMPA:break;
+	};
 
 	//// ステータスに合わせてアニメーションのアタッチ
 	//switch (status) {
@@ -178,7 +198,7 @@ bool	Boss::Process()
 	//}
 
 
-	if (isAnimEnd == true) {
+	/*if (isAnimEnd == true) {
 		if (status == STATUS::DEAD) { 
 			isDead = 2;
 			return true;
@@ -193,7 +213,7 @@ bool	Boss::Process()
 				break;
 			}
 		}
-	}
+	}*/
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -219,21 +239,41 @@ bool Boss::UtilityJudge() {
 	//int J = 0;
 	//int Wt = 0;
 	//int Wk = 0;
-
+	int Rand=GetRand(100);
 	switch (status) {
 	case STATUS::NONE:
 	case STATUS::WAIT:
-	case STATUS::DEAD:
+		RangeJ();
+		if (range == RANGE::CrossRange) {
+			if (Rand < 40) { status = STATUS::SRASH; }
+			if (Rand >= 40) { status = STATUS::SLAM; }
+			break;
+		}
+		if (range == RANGE::MidRange || range == RANGE::LongRange) {
+			status = STATUS::RUN;
+			break;
+		}
+		break;
+	case STATUS::DEAD:break;
 	case STATUS::RUN:
-	case STATUS::FSTEP:
-	case STATUS::BSTEP:
-	case STATUS::RSTEP:
-	case STATUS::LSTEP:
+		RangeJ();
+		if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
+		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
+		if (range == RANGE::LongRange) { break; }
+		break;
+	case STATUS::FSTEP:break;
+	case STATUS::BSTEP:break;
+	case STATUS::RSTEP:break;
+	case STATUS::LSTEP:break;
 	case STATUS::SRASH:
-	case STATUS::SLAM:
-	case STATUS::STAB:
-	case STATUS::JAMPA:
-	}
+		if (Rand > 60) { 
+			break; }
+		if (Rand <= 60) { status = STATUS::BSTEP; break; }
+		break;
+	case STATUS::SLAM:break;
+	case STATUS::STAB:break;
+	case STATUS::JAMPA:break;
+	};
 
 	/*int J[100] = { 0 };
 
@@ -242,30 +282,34 @@ bool Boss::UtilityJudge() {
 	}
 	if (J[Jkkkkkkkk] >Wk) {
 		status = STATUS::WALK;
-	}
-	if (J[Jkkkkkkkk] == 0) {
-		status = STATUS::ATTACK;
-	}
-	if (J[Jkkkkkkkk] == 0) {
-		status = STATUS::SRASH;
-	}
-	if (J[Jkkkkkkkk] == 0) {
-		status = STATUS::BACK;
-	}
-	if (J[Jkkkkkkkk] == 0) {
-		status = STATUS::STEP;
-	}
-	if (J[Jkkkkkkkk] == 0) {
-		status = STATUS::LEFT;
-	}
-	if (J[Jkkkkkkkk] == 0) {
-		status = STATUS::RIGHT;
 	}*/
-	//return;
+
+	time = 1000;
+
+	return true;
+}
+
+bool Boss::RangeJ() {
+	auto Pvector = VSub(plMI->pos, _modelInf.pos);
+	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
+	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
+	if(Prange < 300)
+	{
+		range = RANGE::CrossRange;
+	}
+	if (300 <= Prange && Prange <= 400)
+	{
+		range = RANGE::MidRange;
+	}
+	if (Prange > 400)
+	{
+	    range = RANGE::LongRange;
+	}
+	return true;
 }
 
 void Boss::Walk() {
-	float Speed = 7.0;
+	float Speed = 8.5;
 	//auto c = VSub(x, _modelInf.pos);
 	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
 	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
