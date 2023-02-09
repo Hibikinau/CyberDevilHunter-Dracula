@@ -91,6 +91,7 @@ bool	modeG::Initialize()
 	BPgaugeHandle = LoadGraph("game/res/c.png");
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
+	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 
 	//‚±‚±‚Ü‚Å”ñ“¯Šúƒ[ƒh-------------------------------------------------------------------
 	ASyncLoadAnim();

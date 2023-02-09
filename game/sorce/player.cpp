@@ -115,6 +115,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::B://‰ñ”ð
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
 		_modelInf.animHandleNext = -1;
 		animSpd = 1.f;
 		spd = 25.f;
@@ -126,10 +127,10 @@ bool	PL::Process()
 		if (dodgeDir > 360) { dodgeDir -= 360; }
 		else if (dodgeDir < 0) { dodgeDir += 360; }
 
-		if (dodgeDir >= 45 && 135 > dodgeDir) { _modelManager.animChange(PL_dodge_L, &_modelInf, false, true, false); }
-		else if (dodgeDir >= 135 && 225 > dodgeDir) { _modelManager.animChange(PL_dodge_B, &_modelInf, false, true, false); }
-		else if (dodgeDir >= 225 && 315 > dodgeDir) { _modelManager.animChange(PL_dodge_R, &_modelInf, false, true, false); }
-		else { _modelManager.animChange(PL_dodge_F, &_modelInf, false, true, false); }
+		if (dodgeDir >= 45 && 135 > dodgeDir) { _modelManager.animChange(PL_dodge_L, &_modelInf, false, false, false); }
+		else if (dodgeDir >= 135 && 225 > dodgeDir) { _modelManager.animChange(PL_dodge_B, &_modelInf, false, false, false); }
+		else if (dodgeDir >= 225 && 315 > dodgeDir) { _modelManager.animChange(PL_dodge_R, &_modelInf, false, false, false); }
+		else { _modelManager.animChange(PL_dodge_F, &_modelInf, false, false, false); }
 
 		dodgeTime = getAnimPlayTotalTime();
 		immortalTime = dodgeTime;
@@ -254,6 +255,7 @@ bool	PL::Process()
 
 		break;
 	case pushButton::R1://ƒK[ƒh
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
 		Estate = _estate::GUARD;
 		animSpd = 1.f;
 		if (isCounter)
@@ -464,7 +466,7 @@ pushButton PL::setAction()
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+	//if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
@@ -500,11 +502,11 @@ pushButton PL::setAction()
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y—£‚µ‚½‚Æ‚«
 
-	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER))
+	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)
 	{
 		if (isFastGuard && _modelInf.playTime > 17.5f) { KATANAIO(&_modelInf, false); }
-		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && !isNext) { isFastGuard = true, isGuard = true; }
-		if (isGuard && !isNext) { insEnum = pushButton::R1; }
+		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER)) { isFastGuard = true, isGuard = true; }
+		if (isGuard) { insEnum = pushButton::R1; }
 		counterTime > 0 ? counterTime-- : counterTime = 0;
 	}
 	else
@@ -522,15 +524,7 @@ pushButton PL::setAction()
 	{
 		attackNumOld = 0;
 		Estate = _estate::DODGE;
-		if (isNext)
-		{
-			if (_modelInf.playTime < 10.0f)
-			{
-				insEnum = pushButton::B, nextKey = pushButton::Neutral;
-			}
-			else { nextKey = pushButton::B; }
-		}
-		else { insEnum = pushButton::B; }
+		insEnum = pushButton::B;
 	}
 
 	return insEnum;

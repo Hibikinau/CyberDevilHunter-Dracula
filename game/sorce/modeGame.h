@@ -43,6 +43,7 @@ public:
 	collCapsule testAttackCap;
 	statusInf plStatus;
 	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
+	int keepout[180] = { -1 }, keepoutNum;
 
 	int StageModelHandle;
 	int CharaModelHandle;
