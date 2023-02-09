@@ -449,6 +449,7 @@ bool PL::HPmath(float math)
 }
 bool PL::BPmath(float math)
 {
+	if (isAwakening && math > 0) { return false; }
 	_statusInf.bloodPoint += math;
 	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
 	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
