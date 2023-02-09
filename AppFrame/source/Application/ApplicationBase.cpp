@@ -97,6 +97,8 @@ bool ApplicationBase::Input() {
 	_imputInf.lStickY = imputInfX.ThumbLY;
 	_imputInf.rStickX = imputInfX.ThumbRX;
 	_imputInf.rStickY = imputInfX.ThumbRY;
+	_imputInf.rTriggerX = imputInfX.RightTrigger;
+	_imputInf.lTriggerX = imputInfX.LeftTrigger;
 
 	_serverMode->Imput(&_imputInf);
 	return true;

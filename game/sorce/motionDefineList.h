@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 //PL
 #define PL_idel 0
@@ -40,3 +39,4 @@
 #define PL_arts_enkaku 30
 //•KŽE
 #define motion_hissatsu 31
+
