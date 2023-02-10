@@ -15,6 +15,7 @@ Player_jaku_4_1 納刀
 Player_jaku_4_2 納刀待機
 Player_jaku_4_3 連打切り　ループ
 Player_jaku_4_4 フィニッシュ切り
+○○_〇_end 武器振り終わり
 
 強攻撃
 Player_kyou_1   強 1段目
@@ -23,6 +24,7 @@ Player_kyou_3   強 3段目
 Player_kyou_4_1 納刀
 Player_kyou_4_2 納刀待機
 Player_kyou_4_3 抜刀切り
+○○_〇_end 武器振り終わり
 
 ガード
 Player1_guard_1　ガード

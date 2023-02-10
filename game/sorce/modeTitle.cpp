@@ -11,6 +11,7 @@ bool	modeT::Process()
 {
 	if (CheckHitKeyAll())
 	{
+		//_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
 		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 		return false;
 	}

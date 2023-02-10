@@ -31,7 +31,7 @@ bool	modeM::Process()
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
 	}
 
-	if (_imputInf._gTrgb[KEY_INPUT_RETURN])
+	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
 		if (picMenuNum == 0)
 		{//êÌì¨ÇÃÇ‚ÇËíºÇµ
