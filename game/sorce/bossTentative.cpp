@@ -15,7 +15,7 @@
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_0_0.mv1", 2.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.0f, &_modelInf);
 	useAnim = 0;
 
 	status = STATUS::WAIT;
@@ -46,7 +46,11 @@ bool	Boss::Input()
 
 bool	Boss::Process()
 {
-	float addDir = 0.f;
+	if (status == STATUS::DEAD) {
+		_modelManager.animChange(motion_dead, &_modelInf, false, true,false);
+		if (isAnimEnd) { isDead = 2; }
+		return true;
+	}
 
 	for (auto i = charBox->begin(); i != charBox->end(); i++) {
 		if (i->second->getType() == 1)
@@ -90,12 +94,25 @@ bool	Boss::Process()
 		_modelManager.animChange(motion_idel, &_modelInf, true, true, false);
 		animSpd = 0.5f;
 		break;
+	case STATUS::DAMEGE:
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			UtilityJudge();
+		}
+		if (ActionFlag == true) {
+			break;
+		}
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
+		animSpd = 0.7f;
+		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		ActionFlag = true;
+		break;
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
 		_modelManager.animChange(motion_run, &_modelInf, true, true,false);
 		animSpd = 0.5f;
-		Walk();
+		Move(8.5,0);
 		if (PrangeA < 150) { UtilityJudge(); }
 		/*if(Prange>100) { Walk(); }
 		else {
@@ -104,120 +121,63 @@ bool	Boss::Process()
 		//AttackFlag = false;
 		break;
 	case STATUS::FSTEP:
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			UtilityJudge();
+		}
+		if (ActionFlag == true) {
+			break;
+		}
 		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true,true);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Step();
+			Move(40.0,0.0);
 		}
-		if (isAnimEnd == true) { UtilityJudge(); }
 		break;
-	case STATUS::BSTEP:break;
-	case STATUS::RSTEP:break;
-	case STATUS::LSTEP:break;
+	case STATUS::BSTEP:
+		if (isAnimEnd == true) { 
+			ActionFlag = false;
+			UtilityJudge();
+		}
+		if (ActionFlag == true) {
+			break;
+		}
+		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true, true);
+		animSpd = 1.0f;
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Move(40.0, 180.0);
+		}
+		break;
+	case STATUS::RSTEP:
+		Move(40.0 , 90.0);
+		break;
+	case STATUS::LSTEP:
+		Move(40.0,270.0);
+		break;
 	case STATUS::SRASH:
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			UtilityJudge();
+		}
+		if (ActionFlag == true) {
+			break;
+		}
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false,true);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-		if (isAnimEnd == true) { 
-			UtilityJudge(); }
+		ActionFlag = true;
 		break;
 	case STATUS::SLAM:break;
 	case STATUS::STAB:break;
-	case STATUS::JAMPA:break;
+	case STATUS::JAMPACT:break;
 	};
 
-	//// ステータスに合わせてアニメーションのアタッチ
-	//switch (status) {
-	//case STATUS::WAIT:
-	//	_modelManager.animChange(motion_idel, &_modelInf, true, true);
-	//	animSpd = 0.5f;
-	//	break;
-	//case STATUS::WALK:
-	//	_modelManager.animChange(motion_walk, &_modelInf, true, true);
-	//	animSpd = 0.5f;
-	//	Walk();
-	//	AttackFlag = false;
-	//	break;
-	//case STATUS::ATTACK:
-	//	if (AttackFlag == true) { break; }
-	//	AttackFlag = true;
-	//	_modelManager.animChange(motion_attack1, &_modelInf, false, false);
-	//	animSpd = 0.7f;
-	//	makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
-	//	PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	break;
-	//case STATUS::SRASH:
-	//	if (AttackFlag == true) { break; }
-	//	AttackFlag = true;
-	//	_modelManager.animChange(motion_attack1, &_modelInf, false, false);
-	//	animSpd = 0.7f;
-	//	makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
-	//	PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	break;
-	//case STATUS::BACK:
-	//	_modelManager.animChange(motion_dodgeB, &_modelInf, false, true);
-	//	animSpd = 1.0f;
-	//	if(_modelInf.playTime > 5 && _modelInf.playTime < 27)
-	//	{
-	//		BackStep();
-	//	}
-	//	AttackFlag = false;
-	//	break;
-	//case STATUS::STEP:
-	//	_modelManager.animChange(motion_dodgeF, &_modelInf, false, true);
-	//	animSpd = 1.0f;
-	//	if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
-	//	{
-	//		Step();
-	//	}
-	//	AttackFlag = false;
-	//	break;
-	//case STATUS::LEFT:
-	//	_modelManager.animChange(motion_dodgeL, &_modelInf, false, true);
-	//	animSpd = 1.0f;
-	//	if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
-	//	{
-	//		Step();
-	//	}
-	//	AttackFlag = false;
-	//	break;
-	//case STATUS::RIGHT:
-	//	_modelManager.animChange(motion_dodgeR, &_modelInf, false, true);
-	//	if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
-	//	{
-	//		Step();
-	//	}
-	//	AttackFlag = false;
-	//	break;
-	//case STATUS::DEAD:
-	//	_modelManager.animChange(motion_dead, &_modelInf, false, true);
-	//	break;
-	//}
-
-
-	/*if (isAnimEnd == true) {
-		if (status == STATUS::DEAD) { 
-			isDead = 2;
-			return true;
-		}
-		status = STATUS::WAIT;
-		AttackFlag = false;
-		for (auto i = 0; i < 800; i++) {
-			if (i == 790) {
-				i = 0;
-				MotionFlag = true;
-				while (time < 30 && !_modelInf.animOldLoop) { time = rand() % 40; }
-				break;
-			}
-		}
-	}*/
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
-
-
 
 	return true;
 }
@@ -232,12 +192,9 @@ bool	Boss::Render(float timeSpeed)
 	return true;
 }
 
-#define Jkkkkkkkk 0
 
 bool Boss::UtilityJudge() {
-	//int J = 0;
-	//int Wt = 0;
-	//int Wk = 0;
+	
 	int Rand=GetRand(100);
 	switch (status) {
 	case STATUS::NONE:
@@ -248,42 +205,67 @@ bool Boss::UtilityJudge() {
 			if (Rand >= 40) { status = STATUS::SLAM; }
 			break;
 		}
-		if (range == RANGE::MidRange || range == RANGE::LongRange) {
-			status = STATUS::RUN;
+		if(range==RANGE::MidRange){
+			if (Rand < 80) { status = STATUS::STAB; }
+			if (Rand >= 80) { status = STATUS::RUN; }
+		}
+		if (range == RANGE::LongRange) {
+			if (Rand < 70) { status = STATUS::RUN; }
+			if (Rand >= 70) { status = STATUS::JAMPACT; }
 			break;
 		}
+		break;
+	case STATUS::DAMEGE:
+		status = STATUS::WAIT;
 		break;
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		RangeJ();
+		if (range == RANGE::CrossRange) { 
+			if (Rand < 65) { status = STATUS::SRASH; }
+			if (Rand >= 65) { status = STATUS::SLAM; }
+			break; }
+		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
+		if (range == RANGE::LongRange) { time = 300; break; }
+		break;
+	case STATUS::FSTEP:
+		status = STATUS::SRASH;
+		break;
+	case STATUS::BSTEP:
+		RangeJ();
 		if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
 		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
-		if (range == RANGE::LongRange) { break; }
+		if (range == RANGE::LongRange) { status = STATUS::WAIT; time = 50; break; }
 		break;
-	case STATUS::FSTEP:break;
-	case STATUS::BSTEP:break;
-	case STATUS::RSTEP:break;
-	case STATUS::LSTEP:break;
+	case STATUS::RSTEP:
+		status = STATUS::SLAM;
+		break;
+	case STATUS::LSTEP:
+		status = STATUS::SLAM;
+		break;
 	case STATUS::SRASH:
 		if (Rand > 60) { 
-			break; }
+			break; 
+		}
 		if (Rand <= 60) { status = STATUS::BSTEP; break; }
 		break;
-	case STATUS::SLAM:break;
-	case STATUS::STAB:break;
-	case STATUS::JAMPA:break;
+	case STATUS::SLAM:
+		status = STATUS::WAIT;
+		break;
+	case STATUS::STAB:
+		if (Rand < 25) { status = STATUS::FSTEP; }
+		if (25 <= Rand || Rand < 50) { status = STATUS::BSTEP; }
+		if (50 <= Rand || Rand < 75) { status = STATUS::RSTEP; }
+		if (75 <= Rand) { status = STATUS::LSTEP; }
+		break;
+	case STATUS::JAMPACT:
+		if (Rand < 25) { status = STATUS::FSTEP; }
+		if (25 <= Rand || Rand < 50) { status = STATUS::BSTEP; }
+		if (50 <= Rand || Rand < 75) { status = STATUS::RSTEP; }
+		if (75 <= Rand) { status = STATUS::LSTEP; }
+		break;
 	};
 
-	/*int J[100] = { 0 };
-
-	if (J[Jkkkkkkkk] > Wt) {
-		status = STATUS::WAIT;
-	}
-	if (J[Jkkkkkkkk] >Wk) {
-		status = STATUS::WALK;
-	}*/
-
-	time = 1000;
 
 	return true;
 }
@@ -292,59 +274,28 @@ bool Boss::RangeJ() {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	if(Prange < 300)
+	if(Prange < 350)
 	{
 		range = RANGE::CrossRange;
 	}
-	if (300 <= Prange && Prange <= 400)
+	if (350 <= Prange && Prange <= 450)
 	{
 		range = RANGE::MidRange;
 	}
-	if (Prange > 400)
+	if (Prange > 450)
 	{
 	    range = RANGE::LongRange;
 	}
 	return true;
 }
 
-void Boss::Walk() {
-	float Speed = 8.5;
-	//auto c = VSub(x, _modelInf.pos);
-	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
-	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
 
-	_modelInf.pos.x -= sin(radian) * Speed;
-	_modelInf.pos.z -= cos(radian) * Speed;
+void Boss::Move(float speed, float radian) {
+	float Speed = speed;
+	float Radian = (_modelInf.dir.y+radian) * DX_PI_F / 180.0f;
 
-}
-
-void Boss::BackStep() {
-	float Speed = 40.0;
-	//auto c = VSub(x, _modelInf.pos);
-	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
-	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
-
-	_modelInf.pos.x += sin(radian) * Speed;
-	_modelInf.pos.z += cos(radian) * Speed;
-}
-
-void Boss::Step() {
-	float Speed = 5.0;
-	//auto c = VSub(x, _modelInf.pos);
-	//sqrt(c.x * c.x + c.y * c.y + c.z * c.z);
-	float radian = _modelInf.dir.y * DX_PI_F / 180.0f;
-
-	_modelInf.pos.x -= sin(radian) * Speed;
-	_modelInf.pos.z -= cos(radian) * Speed;
-
-}
-
-void Boss::LeftStep() {
-
-}
-
-void Boss::RightStep() {
-
+	_modelInf.pos.x -= sin(Radian) * Speed;
+	_modelInf.pos.z -= cos(Radian) * Speed;
 }
 
 void Boss::CRange() {
@@ -385,7 +336,12 @@ void Boss::LRange() {
 
 bool Boss::HPmath(float Num)
 {
+
 	_statusInf.hitPoint += Num;
+	if (Num <= -200) {
+		status = STATUS::DAMEGE;
+		ActionFlag = false;
+	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
 	}
