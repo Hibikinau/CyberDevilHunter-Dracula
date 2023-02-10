@@ -93,7 +93,7 @@ bool	Boss::Process()
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
-		_modelManager.animChange(motion_run, &_modelInf, true, true);
+		_modelManager.animChange(motion_run, &_modelInf, true, true,false);
 		animSpd = 0.5f;
 		Walk();
 		if (PrangeA < 150) { UtilityJudge(); }
@@ -104,7 +104,7 @@ bool	Boss::Process()
 		//AttackFlag = false;
 		break;
 	case STATUS::FSTEP:
-		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true);
+		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true,true);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
@@ -116,7 +116,7 @@ bool	Boss::Process()
 	case STATUS::RSTEP:break;
 	case STATUS::LSTEP:break;
 	case STATUS::SRASH:
-		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false,true);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
