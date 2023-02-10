@@ -8,7 +8,7 @@ bool	modeBC::Initialize()
 
 bool	modeBC::Process()
 {
-	if (_imputInf._gTrgb[KEY_INPUT_RETURN])
+	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
 		_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
 		return false;

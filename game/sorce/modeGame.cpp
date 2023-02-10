@@ -74,9 +74,9 @@ bool	modeG::Initialize()
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
-	//_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
+	_modelManager.modelImport("game/res/mapkari2/Heliport.mv1", 20.f, &stage);
 	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
+	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
 

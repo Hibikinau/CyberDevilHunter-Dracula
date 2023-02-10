@@ -63,7 +63,7 @@ public:
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
 	float getAnimPlayTotalTime() { return _modelInf.totalTime / (animSpd + _modelInf.animSpdBuff)+1; };
-	
+
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
 	int _x, _y, stepChargeSec, isStep = false;
@@ -71,7 +71,7 @@ protected:
 	//int isAttackFinishXorY;//1.é„î[ìÅ 2.ã≠î[ìÅ
 	int chargeLevel, chargeTime;
 	float spd, animSpd, dodgeDir;
-	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isCounter = false, isAwakening = false;
+	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isAttackEnd, isCounter = false, isAwakening = false;
 	float maxHitPoint, maxBloodPoint, maxStamina, atkBuff = 0.f;
 	float nowActionTime;
 	bool bufferedInput, isGhost;

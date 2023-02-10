@@ -10,8 +10,8 @@
 #define charge2ATK 160.f
 #define charge3ATK 160.f
 
-#define rWeponParentFrame 102
-#define lWeponParentFrame 77
+#define rWeponParentFrame 192
+#define lWeponParentFrame 167
 typedef ExclusiveState _estate;
 
 bool PL::Initialize()
@@ -95,7 +95,7 @@ bool	PL::Process()
 	{
 		isDead = 1;
 		animSpd = 1.f;
-		_modelManager.animChange(PL_death, &_modelInf, false, false, false);
+		_modelManager.animChange(PL_death, &_modelInf, false, true, false);
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -117,7 +117,7 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::Damage://”í’e
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
 		_modelManager.animChange(PL_damage, &_modelInf, false, false, false);
 		if (_modelInf.playTime > 25.f)
 		{
@@ -125,8 +125,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::B://‰ñ”ð
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
-		_modelInf.animHandleNext = -1;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
 		animSpd = 2.f;
 		spd = 25.f;
 		isCharge = 0;
@@ -157,6 +156,7 @@ bool	PL::Process()
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_jaku_1, &_modelInf, false, false, true);
+			//_modelManager.setNextAnim(PL_jaku_1E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -164,6 +164,7 @@ bool	PL::Process()
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_jaku_2, &_modelInf, false, false, true);
+			//_modelManager.setNextAnim(PL_jaku_2E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -171,6 +172,7 @@ bool	PL::Process()
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_jaku_3, &_modelInf, false, false, true);
+			//_modelManager.setNextAnim(PL_jaku_3E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -201,7 +203,8 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://‹­UŒ‚
-		_modelInf.dir.y = getMoveDir(true);
+		insDir = getMoveDir(true);
+		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		Estate = _estate::slowATTACK;
 		lastAttackState = _estate::slowATTACK;
 		waitNextAttack = 40;
@@ -209,6 +212,7 @@ bool	PL::Process()
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_kyou_1, &_modelInf, false, false, true);
+			//_modelManager.setNextAnim(PL_kyou_1E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -216,6 +220,7 @@ bool	PL::Process()
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_kyou_2, &_modelInf, false, false, true);
+			//_modelManager.setNextAnim(PL_kyou_2E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -223,6 +228,7 @@ bool	PL::Process()
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_kyou_3, &_modelInf, false, false, true);
+			//_modelManager.setNextAnim(PL_kyou_3E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -237,6 +243,7 @@ bool	PL::Process()
 		else if (attackNumOld == 4)
 		{
 			_modelManager.animChange(PL_kyou_4_3, &_modelInf, false, false, true);
+			_modelInf.animHandleNext = -1;
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 0;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -264,7 +271,7 @@ bool	PL::Process()
 
 		break;
 	case pushButton::R1://ƒK[ƒh
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
 		Estate = _estate::GUARD;
 		animSpd = 1.f;
 		if (isCounter)
@@ -288,13 +295,12 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::Neutral://“ü—Í‚È‚µ
-		if (attackNumOld != 0) { break; }
+		if (attackNumOld > 0) { break; }
 		Estate = _estate::NORMAL;
 		_modelManager.animChange(PL_idel, &_modelInf, true, true, false);
 		spd = 0.f;
 		break;
 	default:
-
 		break;
 	}
 
