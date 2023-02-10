@@ -18,33 +18,15 @@ public:
 	bool UtilityJudge();
 	bool RangeJ();
 
-	void Walk();
-	void Step();
-	void BackStep();
-	void LeftStep();
-	void RightStep();
+	//キャラクターの移動(1.移動速度,2.移動方向)
+	void Move(float speed,float radian); 
 
-	void CRange();
-	void MRange();
-	void LRange();
 
-	/*enum class STATUS {
-		NONE,
-		WAIT,
-		WALK,
-		ATTACK,
-		SRASH,
-		BACK,
-		STEP,
-		LEFT,
-		RIGHT,
-		DEAD
-	};
-	STATUS status;*/
 
 	enum class STATUS {
 		    NONE,
 			WAIT,
+			DAMEGE,
 			DEAD,
 			RUN,
 			FSTEP,
@@ -54,7 +36,7 @@ public:
 			SRASH,
 			SLAM,
 			STAB,
-            JAMPA,
+            JAMPACT,
 	};
 	STATUS status;
 
@@ -77,6 +59,7 @@ protected:
 	modelInf* plMI, stage;
 	double dir;
 	bool MotionFlag;
+	bool ActionFlag;
 	int swingSE;
 	float PrangeA,PrangeB;
 };
