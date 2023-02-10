@@ -15,15 +15,14 @@
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy01/MV1/enemy kari.mv1", 2.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_0_0.mv1", 2.0f, &_modelInf);
 	useAnim = 0;
 
 	status = STATUS::WAIT;
 	time = 300;
-	_statusInf.hitPoint = 10000;
+	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 
 	MotionFlag = true;
-	_modelInf.importCnt = 0;
 	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
@@ -88,7 +87,7 @@ bool	Boss::Process()
 	switch (status) {
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
-		_modelManager.animChange(motion_idel, &_modelInf, true, true);
+		_modelManager.animChange(motion_idel, &_modelInf, true, true, false);
 		animSpd = 0.5f;
 		break;
 	case STATUS::DEAD:break;
@@ -119,7 +118,7 @@ bool	Boss::Process()
 	case STATUS::SRASH:
 		_modelManager.animChange(motion_attack1, &_modelInf, false, false);
 		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 112, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		if (isAnimEnd == true) { 
 			UtilityJudge(); }
@@ -223,12 +222,12 @@ bool	Boss::Process()
 	return true;
 }
 
-bool	Boss::Render()
+bool	Boss::Render(float timeSpeed)
 {
 
 	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 
-	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd);
+	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 
 	return true;
 }
@@ -369,6 +368,7 @@ void Boss::MRange() {
 		//status = STATUS::SRASH;
 	}
 	else if (AttackRand > 70) {
+		status = STATUS::SRASH;
 		//status = STATUS::STEP;
 	}
 	MotionFlag = false;
