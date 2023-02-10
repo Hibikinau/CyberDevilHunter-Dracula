@@ -15,21 +15,46 @@ public:
 	virtual bool Process();
 	virtual bool Render(float timeSpeed);
 	bool HPmath(float Num) override;
+	bool UtilityJudge();
+	bool RangeJ();
+
 	void Walk();
-	void BackStep();
 	void Step();
+	void BackStep();
+	void LeftStep();
+	void RightStep();
+
 	void CRange();
 	void MRange();
 	void LRange();
 
-	enum class STATUS {
+	/*enum class STATUS {
 		NONE,
 		WAIT,
 		WALK,
-		KICK,
+		ATTACK,
 		SRASH,
 		BACK,
-		STEP
+		STEP,
+		LEFT,
+		RIGHT,
+		DEAD
+	};
+	STATUS status;*/
+
+	enum class STATUS {
+		    NONE,
+			WAIT,
+			DEAD,
+			RUN,
+			FSTEP,
+			BSTEP,
+			RSTEP,
+			LSTEP,
+			SRASH,
+			SLAM,
+			STAB,
+            JAMPA,
 	};
 	STATUS status;
 
@@ -53,4 +78,5 @@ protected:
 	double dir;
 	bool MotionFlag;
 	int swingSE;
+	float PrangeA,PrangeB;
 };
