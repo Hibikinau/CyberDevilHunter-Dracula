@@ -257,6 +257,13 @@ bool	modeG::Render()
 	SetUseShadowMap(0, -1);
 	//シャドウマップここまで-----------------------------------------
 
+	//ブラー、いつかやる
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
+	//DrawGraph(0, 0, inscg, true);
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	//inscg = MakeGraph(1280, 720);
+	//GetDrawScreenGraph(0, 0, 1280, 720, inscg);
+
 	if (isLockon)
 	{
 		SetUseZBuffer3D(FALSE);
