@@ -66,7 +66,7 @@ bool	Boss::Process()
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
-	if (time == 0) { MotionFlag = true; }
+	//if (time == 0) { MotionFlag = true; }
 	if (MotionFlag == true || time == 0) {
 		PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 		_modelInf.dir.y = Pdir;
@@ -247,7 +247,10 @@ bool Boss::UtilityJudge() {
 			break;
 		}
 		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
-		if (range == RANGE::LongRange) { time = 300; break; }
+		if (range == RANGE::LongRange) {
+			status = STATUS::JAMPACT;
+			break;
+		}
 		break;
 	case STATUS::FSTEP:
 		status = STATUS::SRASH;
@@ -265,10 +268,16 @@ bool Boss::UtilityJudge() {
 		status = STATUS::WAIT;
 		break;
 	case STATUS::SRASH:
-		if (Rand > 60) {
+		if (Rand > 80) {
 			break;
 		}
-		if (Rand <= 60) { status = STATUS::BSTEP; break; }
+		if (80>=Rand||Rand>40) { 
+			status = STATUS::BSTEP; 
+			break; }
+		if (40 >= Rand) {
+			status = STATUS::ROBES;
+			break;
+		}
 		break;
 	case STATUS::SLAM:
 		status = STATUS::WAIT;
@@ -280,7 +289,7 @@ bool Boss::UtilityJudge() {
 		if (75 <= Rand) { status = STATUS::LSTEP; }
 		break;
 	case STATUS::ROBES:
-
+		status = STATUS::WAIT;
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; }
@@ -290,6 +299,7 @@ bool Boss::UtilityJudge() {
 		break;
 	};
 
+	time = 300;
 
 	return true;
 }
@@ -302,11 +312,11 @@ bool Boss::RangeJ() {
 	{
 		range = RANGE::CrossRange;
 	}
-	if (300 <= Prange && Prange <= 500)
+	if (300 <= Prange && Prange <= 600)
 	{
 		range = RANGE::MidRange;
 	}
-	if (Prange > 500)
+	if (Prange > 600)
 	{
 		range = RANGE::LongRange;
 	}
