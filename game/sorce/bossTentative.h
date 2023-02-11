@@ -22,7 +22,6 @@ public:
 	void Move(float speed,float radian); 
 
 
-
 	enum class STATUS {
 		    NONE,
 			WAIT,

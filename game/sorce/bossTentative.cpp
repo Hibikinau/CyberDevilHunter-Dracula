@@ -290,41 +290,6 @@ void Boss::Move(float speed, float radian) {
 	_modelInf.pos.z -= cos(Radian) * Speed;
 }
 
-void Boss::CRange() {
-
-	int AttackRand = GetRand(100);
-	if (AttackRand <= 70) {
-		//status = STATUS::ATTACK;
-
-	}
-	else if (AttackRand > 70) {
-		//status = STATUS::BACK;
-
-	}
-	MotionFlag = false;
-	return;
-}
-
-void Boss::MRange() {
-	int AttackRand = GetRand(100);
-	if (AttackRand <= 70) {
-		//status = STATUS::SRASH;
-	}
-	else if (AttackRand > 70) {
-		status = STATUS::SRASH;
-		//status = STATUS::STEP;
-	}
-	MotionFlag = false;
-	return;
-}
-
-void Boss::LRange() {
-	//status = STATUS::WALK;
-
-
-
-	return;
-}
 
 bool Boss::HPmath(float Num)
 {
