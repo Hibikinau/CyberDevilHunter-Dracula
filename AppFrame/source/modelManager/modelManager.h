@@ -54,6 +54,8 @@ public:
 	bool modelDelete(modelInf* MI);
 	//ロードした3dモデルのサイズ変更
 	bool changeScale(modelInf* MI);
+
+	bool drawBPolygon();
 };
 
 
