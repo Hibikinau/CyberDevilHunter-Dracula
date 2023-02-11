@@ -55,7 +55,7 @@ public:
 	//ロードした3dモデルのサイズ変更
 	bool changeScale(modelInf* MI);
 
-	bool drawBPolygon();
+	bool drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle);
 };
 
 

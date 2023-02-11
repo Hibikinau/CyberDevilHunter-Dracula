@@ -57,6 +57,7 @@ bool PL::Initialize()
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_03.mp3"));
 	soundHandle.emplace_back(insSoundHandle);
 
+	insEfcHamdle = LoadGraph("game/res/soumen64.bmp");
 	return true;
 }
 
@@ -404,7 +405,7 @@ bool	PL::Process()
 bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//if (timeSpeed == 0) { _modelManager.drawBPolygon(VGet(0, 0, 0), VGet(0, 220, 0), _modelInf.pos, VAdd(_modelInf.pos, VGet(0, 220, 0)), insEfcHamdle); }
 	return true;
 }
 

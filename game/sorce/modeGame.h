@@ -25,7 +25,7 @@ public:
 
 public:
 	ModeServer* _modeServer;
-	int _x, _y, insEfcHamdle;
+	int _x, _y;
 	int testAttackF, lockOnMarkerHandle, HPgaugeHandle, HPgaugeHandle2, BPgaugeHandle;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;

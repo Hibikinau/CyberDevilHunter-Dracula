@@ -69,7 +69,7 @@ protected:
 	int _x, _y, stepChargeSec, isStep = false;
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
 	//int isAttackFinishXorY;//1.弱納刀 2.強納刀
-	int chargeLevel, chargeTime;
+	int chargeLevel, chargeTime, insEfcHamdle;
 	float spd, animSpd, dodgeDir;
 	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isAttackEnd, isCounter = false, isAwakening = false;
 	float maxHitPoint, maxBloodPoint, maxStamina, atkBuff = 0.f;

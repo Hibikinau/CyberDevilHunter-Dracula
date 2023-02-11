@@ -120,7 +120,6 @@ bool	modeG::Initialize()
 	//ステージの当たり判定作成
 	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
 
-	insEfcHamdle = LoadGraph("game/res/soumen64.bmp");
 	return true;
 }
 
