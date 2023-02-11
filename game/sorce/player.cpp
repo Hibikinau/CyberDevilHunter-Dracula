@@ -42,7 +42,7 @@ bool PL::Initialize()
 	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
 
 	changeAttackY = &CA_kirinuke;
-	changeAttackX = &CA_charge;
+	changeAttackX = &CA_debugAttack;
 
 	std::vector<int> insSoundHandle;
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));

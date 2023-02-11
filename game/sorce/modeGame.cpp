@@ -66,10 +66,10 @@ bool	modeG::ASyncLoadAnim()
 
 bool	modeG::Initialize()
 {
-	SetUseLighting(true);
+	SetUseLighting(false);
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
-	SetUseBackCulling(true);
+	SetUseBackCulling(false);
 	SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
@@ -120,6 +120,7 @@ bool	modeG::Initialize()
 	//ステージの当たり判定作成
 	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
 
+	insEfcHamdle = LoadGraph("game/res/soumen64.bmp");
 	return true;
 }
 
@@ -234,6 +235,12 @@ bool	modeG::Process()
 	return true;
 }
 
+bool insDrawPolygon(int _cg/*float lupX, float lupY, float ldownX, float ldownY, float rupX, float rupY, float rdownX, float rdownY*/)
+{
+	// ２ポリゴンの描画
+	return false;
+}
+
 bool	modeG::Render()
 {
 	//シャドウマップココカラ-----------------------------------------
@@ -327,6 +334,58 @@ bool	modeG::Render()
 		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
 	}
 	debugWardBox.clear();
+
+	VERTEX3D Vertex[4];
+	WORD Index[6];
+
+	// ４頂点分のデータをセット
+	Vertex[0].pos = VGet(100.0f, 100.0f, 0.0f);//右下
+	Vertex[0].norm = VGet(0.0f, 0.0f, -1.0f);
+	Vertex[0].dif = GetColorU8(255, 255, 255, 255);
+	Vertex[0].spc = GetColorU8(0, 0, 0, 0);
+	Vertex[0].u = 1.f;
+	Vertex[0].v = 1.f;
+	Vertex[0].su = 0.0f;
+	Vertex[0].sv = 0.0f;
+
+	Vertex[1].pos = VGet(400.0f, 100.0f, 0.0f);//左下
+	Vertex[1].norm = VGet(0.0f, 0.0f, -1.0f);
+	Vertex[1].dif = GetColorU8(255, 255, 255, 255);
+	Vertex[1].spc = GetColorU8(0, 0, 0, 0);
+	Vertex[1].u = 0.f;
+	Vertex[1].v = 1.0f;
+	Vertex[1].su = 0.0f;
+	Vertex[1].sv = 0.0f;
+
+	Vertex[2].pos = VGet(100.0f, 200.0f, 0.0f);//右上
+	Vertex[2].norm = VGet(0.0f, 0.0f, -1.0f);
+	Vertex[2].dif = GetColorU8(255, 255, 255, 255);
+	Vertex[2].spc = GetColorU8(0, 0, 0, 0);
+	Vertex[2].u = 1.0f;
+	Vertex[2].v = 0.f;
+	Vertex[2].su = 0.0f;
+	Vertex[2].sv = 0.0f;
+
+	Vertex[3].pos = VGet(400.0f, 200.0f, 0.0f);//左上
+	Vertex[3].norm = VGet(0.0f, 0.0f, -1.0f);
+	Vertex[3].dif = GetColorU8(255, 255, 255, 255);
+	Vertex[3].spc = GetColorU8(0, 0, 0, 0);
+	Vertex[3].u = 0.0f;
+	Vertex[3].v = 0.0f;
+	Vertex[3].su = 0.0f;
+	Vertex[3].sv = 0.0f;
+
+	// ２ポリゴン分のインデックスデータをセット
+	Index[0] = 0;//右下
+	Index[1] = 1;//左下
+	Index[2] = 3;//右上
+	Index[3] = 0;//左上
+	Index[4] = 3;//右上
+	Index[5] = 2;//左下
+
+	auto K = DrawPolygonIndexed3D(Vertex, 4, Index, 2, insEfcHamdle, true);
+	DrawBillboard3D(VGet(300, 150, 0), .5f, .5f, 64, 0.f, insEfcHamdle, false);
+	OutputDebugString("a");
 	return true;
 }
 
