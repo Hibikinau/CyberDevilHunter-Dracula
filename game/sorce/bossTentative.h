@@ -19,7 +19,7 @@ public:
 	bool RangeJ();
 
 	//キャラクターの移動(1.移動速度,2.移動方向)
-	void Move(float speed,float radian); 
+	void Move(float speed,float radian);
 
 
 	enum class STATUS {
@@ -53,7 +53,7 @@ protected:
 	int _x, _y;
 	bool isUseFbx;
 	float animSpd,*_cameraSpd;
-	int time;
+	int time, attackStep;
 	modelManager _modelManager;
 	bool AttackFlag, isAnimEnd;
 	modelInf* plMI, stage;

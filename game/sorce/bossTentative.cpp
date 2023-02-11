@@ -88,7 +88,7 @@ bool	Boss::Process()
 	case STATUS::DAMEGE:
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
-			UtilityJudge(); 
+			UtilityJudge();
 			if (status != STATUS::DAMEGE) { break; }
 		}
 		if (ActionFlag == true) {
@@ -137,7 +137,7 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(BOSS1_dodgeB, &_modelInf, false, true, true);
+		_modelManager.animChange(BOSS1_dodgeB, &_modelInf, false, true, false);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
@@ -156,7 +156,7 @@ bool	Boss::Process()
 			UtilityJudge();
 			if (status != STATUS::SRASH) { break; }
 		}
-		if (ActionFlag == true ) {
+		if (ActionFlag == true) {
 			break;
 		}
 		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, false, true);
@@ -166,7 +166,24 @@ bool	Boss::Process()
 		ActionFlag = true;
 		break;
 	case STATUS::SLAM:
-		UtilityJudge();
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			if (attackStep < 8) { attackStep++; }
+			else {
+				UtilityJudge();
+				if (status != STATUS::SRASH) { break; }
+			}
+		}
+		if (ActionFlag == true) { break; }
+
+		_modelManager.animChange(BOSS1_tatakituke_l1 + attackStep, &_modelInf, false, false, true);
+		animSpd = 0.7f;
+		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
+		{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		}
+		ActionFlag = true;
 		break;
 	case STATUS::STAB:break;
 	case STATUS::ROBES:break;
@@ -192,7 +209,7 @@ bool	Boss::Render(float timeSpeed)
 
 
 bool Boss::UtilityJudge() {
-
+	attackStep = 0;
 	int Rand = GetRand(100);
 	switch (status) {
 	case STATUS::NONE:
@@ -200,8 +217,8 @@ bool Boss::UtilityJudge() {
 		RangeJ();
 		if (range == RANGE::CrossRange) {
 			if (Rand < 40) { status = STATUS::SRASH; }
-			if (Rand >= 40) { 
-				status = STATUS::SLAM; 
+			if (Rand >= 40) {
+				status = STATUS::SLAM;
 			}
 			break;
 		}
@@ -223,8 +240,9 @@ bool Boss::UtilityJudge() {
 		RangeJ();
 		if (range == RANGE::CrossRange) {
 			if (Rand < 65) { status = STATUS::SRASH; }
-			if (Rand >= 65) { 
-				status = STATUS::SLAM; }
+			if (Rand >= 65) {
+				status = STATUS::SLAM;
+			}
 			break;
 		}
 		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
@@ -261,7 +279,7 @@ bool Boss::UtilityJudge() {
 		if (75 <= Rand) { status = STATUS::LSTEP; }
 		break;
 	case STATUS::ROBES:
-		
+
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; }
