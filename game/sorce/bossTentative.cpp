@@ -66,18 +66,19 @@ bool	Boss::Process()
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
-
-	if (MotionFlag == true && time == 0) {
+	if (time == 0) { MotionFlag = true; }
+	if (MotionFlag == true || time == 0) {
 		PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 		_modelInf.dir.y = Pdir;
 		UtilityJudge();
-
+		MotionFlag = false;
 	}
 	else if (time > 0)
 	{
 		time--;
 	}
 
+	
 
 	switch (status) {
 	case STATUS::NONE:break;
