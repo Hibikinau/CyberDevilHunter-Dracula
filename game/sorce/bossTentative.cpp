@@ -152,7 +152,7 @@ bool	Boss::Process()
 			ActionFlag = false;
 			UtilityJudge();
 		}
-		if (ActionFlag == true) {
+		if (ActionFlag == true ) {
 			break;
 		}
 		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, false, true);
@@ -161,7 +161,9 @@ bool	Boss::Process()
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
-	case STATUS::SLAM:break;
+	case STATUS::SLAM:
+		UtilityJudge();
+		break;
 	case STATUS::STAB:break;
 	case STATUS::ROBES:break;
 	case STATUS::JAMPACT:break;
@@ -194,7 +196,9 @@ bool Boss::UtilityJudge() {
 		RangeJ();
 		if (range == RANGE::CrossRange) {
 			if (Rand < 40) { status = STATUS::SRASH; }
-			if (Rand >= 40) { status = STATUS::SLAM; }
+			if (Rand >= 40) { 
+				status = STATUS::SLAM; 
+			}
 			break;
 		}
 		if (range == RANGE::MidRange) {
@@ -215,7 +219,8 @@ bool Boss::UtilityJudge() {
 		RangeJ();
 		if (range == RANGE::CrossRange) {
 			if (Rand < 65) { status = STATUS::SRASH; }
-			if (Rand >= 65) { status = STATUS::SLAM; }
+			if (Rand >= 65) { 
+				status = STATUS::SLAM; }
 			break;
 		}
 		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
@@ -252,6 +257,7 @@ bool Boss::UtilityJudge() {
 		if (75 <= Rand) { status = STATUS::LSTEP; }
 		break;
 	case STATUS::ROBES:
+		
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; }
@@ -269,11 +275,11 @@ bool Boss::RangeJ() {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	if (Prange < 350)
+	if (Prange < 300)
 	{
 		range = RANGE::CrossRange;
 	}
-	if (350 <= Prange && Prange <= 450)
+	if (300 <= Prange && Prange <= 450)
 	{
 		range = RANGE::MidRange;
 	}
