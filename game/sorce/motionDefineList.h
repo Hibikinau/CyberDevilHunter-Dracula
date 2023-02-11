@@ -45,6 +45,8 @@
 #define BOSS1_run 26
 #define BOSS1_dead 2
 #define BOSS1_hidan 27
+//UŒ‚(“ã‚¬•¥‚¢
+#define BOSS1_nagiharai 1
 //UŒ‚(‚½‚½‚«‚Â‚¯
 #define BOSS1_tatakituke_l1 7
 #define BOSS1_tatakituke_l2 8
