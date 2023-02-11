@@ -21,9 +21,6 @@ public:
 	//キャラクターの移動(1.移動速度,2.移動方向)
 	void Move(float speed,float radian); 
 
-	void CRange();
-	void MRange();
-	void LRange();
 
 
 	enum class STATUS {
