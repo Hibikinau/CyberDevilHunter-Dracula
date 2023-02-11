@@ -35,6 +35,7 @@ public:
 			SRASH,
 			SLAM,
 			STAB,
+			ROBES,
             JAMPACT,
 	};
 	STATUS status;

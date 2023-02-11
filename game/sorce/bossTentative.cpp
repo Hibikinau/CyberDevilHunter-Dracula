@@ -163,6 +163,7 @@ bool	Boss::Process()
 		break;
 	case STATUS::SLAM:break;
 	case STATUS::STAB:break;
+	case STATUS::ROBES:break;
 	case STATUS::JAMPACT:break;
 	};
 
@@ -249,6 +250,8 @@ bool Boss::UtilityJudge() {
 		if (25 <= Rand || Rand < 50) { status = STATUS::BSTEP; }
 		if (50 <= Rand || Rand < 75) { status = STATUS::RSTEP; }
 		if (75 <= Rand) { status = STATUS::LSTEP; }
+		break;
+	case STATUS::ROBES:
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; }
