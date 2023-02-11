@@ -2,15 +2,6 @@
 #include <math.h>
 #define walkSpd 6.f
 #define runSpd 20.f
-#define motion_idel 0
-#define motion_walk 2
-#define motion_run 2
-#define motion_attack1 1
-#define motion_dodgeR 3
-#define motion_dodgeF 4
-#define motion_dodgeL 5
-#define motion_dodgeB 6
-#define motion_dead 7
 
 
 bool Boss::Initialize()
@@ -47,7 +38,7 @@ bool	Boss::Input()
 bool	Boss::Process()
 {
 	if (status == STATUS::DEAD) {
-		_modelManager.animChange(motion_dead, &_modelInf, false, true,false);
+		_modelManager.animChange(motion_dead, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -80,7 +71,7 @@ bool	Boss::Process()
 		PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 		_modelInf.dir.y = Pdir;
 		UtilityJudge();
-		
+
 	}
 	else if (time > 0)
 	{
@@ -110,9 +101,9 @@ bool	Boss::Process()
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
-		_modelManager.animChange(motion_run, &_modelInf, true, true,false);
+		_modelManager.animChange(motion_run, &_modelInf, true, true, false);
 		animSpd = 0.5f;
-		Move(8.5,0);
+		Move(8.5, 0);
 		if (PrangeA < 150) { UtilityJudge(); }
 		/*if(Prange>100) { Walk(); }
 		else {
@@ -128,15 +119,15 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true,true);
+		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true, true);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Move(40.0,0.0);
+			Move(40.0, 0.0);
 		}
 		break;
 	case STATUS::BSTEP:
-		if (isAnimEnd == true) { 
+		if (isAnimEnd == true) {
 			ActionFlag = false;
 			UtilityJudge();
 		}
@@ -151,10 +142,10 @@ bool	Boss::Process()
 		}
 		break;
 	case STATUS::RSTEP:
-		Move(40.0 , 90.0);
+		Move(40.0, 90.0);
 		break;
 	case STATUS::LSTEP:
-		Move(40.0,270.0);
+		Move(40.0, 270.0);
 		break;
 	case STATUS::SRASH:
 		if (isAnimEnd == true) {
@@ -164,7 +155,7 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(motion_attack1, &_modelInf, false, false,true);
+		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
@@ -194,8 +185,8 @@ bool	Boss::Render(float timeSpeed)
 
 
 bool Boss::UtilityJudge() {
-	
-	int Rand=GetRand(100);
+
+	int Rand = GetRand(100);
 	switch (status) {
 	case STATUS::NONE:
 	case STATUS::WAIT:
@@ -205,7 +196,7 @@ bool Boss::UtilityJudge() {
 			if (Rand >= 40) { status = STATUS::SLAM; }
 			break;
 		}
-		if(range==RANGE::MidRange){
+		if (range == RANGE::MidRange) {
 			if (Rand < 80) { status = STATUS::STAB; }
 			if (Rand >= 80) { status = STATUS::RUN; }
 		}
@@ -221,10 +212,11 @@ bool Boss::UtilityJudge() {
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		RangeJ();
-		if (range == RANGE::CrossRange) { 
+		if (range == RANGE::CrossRange) {
 			if (Rand < 65) { status = STATUS::SRASH; }
 			if (Rand >= 65) { status = STATUS::SLAM; }
-			break; }
+			break;
+		}
 		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
 		if (range == RANGE::LongRange) { time = 300; break; }
 		break;
@@ -244,8 +236,8 @@ bool Boss::UtilityJudge() {
 		status = STATUS::SLAM;
 		break;
 	case STATUS::SRASH:
-		if (Rand > 60) { 
-			break; 
+		if (Rand > 60) {
+			break;
 		}
 		if (Rand <= 60) { status = STATUS::BSTEP; break; }
 		break;
@@ -274,7 +266,7 @@ bool Boss::RangeJ() {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	if(Prange < 350)
+	if (Prange < 350)
 	{
 		range = RANGE::CrossRange;
 	}
@@ -284,7 +276,7 @@ bool Boss::RangeJ() {
 	}
 	if (Prange > 450)
 	{
-	    range = RANGE::LongRange;
+		range = RANGE::LongRange;
 	}
 	return true;
 }
@@ -292,13 +284,47 @@ bool Boss::RangeJ() {
 
 void Boss::Move(float speed, float radian) {
 	float Speed = speed;
-	float Radian = (_modelInf.dir.y+radian) * DX_PI_F / 180.0f;
+	float Radian = (_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
 
 	_modelInf.pos.x -= sin(Radian) * Speed;
 	_modelInf.pos.z -= cos(Radian) * Speed;
 }
 
+void Boss::CRange() {
 
+	int AttackRand = GetRand(100);
+	if (AttackRand <= 70) {
+		//status = STATUS::ATTACK;
+
+	}
+	else if (AttackRand > 70) {
+		//status = STATUS::BACK;
+
+	}
+	MotionFlag = false;
+	return;
+}
+
+void Boss::MRange() {
+	int AttackRand = GetRand(100);
+	if (AttackRand <= 70) {
+		//status = STATUS::SRASH;
+	}
+	else if (AttackRand > 70) {
+		status = STATUS::SRASH;
+		//status = STATUS::STEP;
+	}
+	MotionFlag = false;
+	return;
+}
+
+void Boss::LRange() {
+	//status = STATUS::WALK;
+
+
+
+	return;
+}
 
 bool Boss::HPmath(float Num)
 {
