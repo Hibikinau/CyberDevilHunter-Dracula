@@ -38,7 +38,7 @@ bool	Boss::Input()
 bool	Boss::Process()
 {
 	if (status == STATUS::DEAD) {
-		_modelManager.animChange(motion_dead, &_modelInf, false, true, false);
+		_modelManager.animChange(BOSS1_dead, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -82,7 +82,7 @@ bool	Boss::Process()
 	switch (status) {
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
-		_modelManager.animChange(motion_idel, &_modelInf, true, true, false);
+		_modelManager.animChange(BOSS1_idel, &_modelInf, true, true, false);
 		animSpd = 0.5f;
 		break;
 	case STATUS::DAMEGE:
@@ -93,7 +93,7 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
+		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, false, true);
 		animSpd = 0.7f;
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
@@ -101,7 +101,7 @@ bool	Boss::Process()
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
-		_modelManager.animChange(motion_run, &_modelInf, true, true, false);
+		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
 		animSpd = 0.5f;
 		Move(8.5, 0);
 		if (PrangeA < 150) { UtilityJudge(); }
@@ -119,7 +119,7 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(motion_dodgeF, &_modelInf, false, true, true);
+		_modelManager.animChange(BOSS1_dodgeF, &_modelInf, false, true, true);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
@@ -134,7 +134,7 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(motion_dodgeB, &_modelInf, false, true, true);
+		_modelManager.animChange(BOSS1_dodgeB, &_modelInf, false, true, true);
 		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
@@ -155,7 +155,7 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(motion_attack1, &_modelInf, false, false, true);
+		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, false, true);
 		animSpd = 0.7f;
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
