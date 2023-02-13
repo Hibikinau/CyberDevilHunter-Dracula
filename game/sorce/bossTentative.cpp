@@ -188,7 +188,7 @@ bool	Boss::Process()
 		animSpd = 0.7f;
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
 		ActionFlag = true;
