@@ -19,24 +19,24 @@ public:
 	bool RangeJ();
 
 	//キャラクターの移動(1.移動速度,2.移動方向)
-	void Move(float speed,float radian);
+	void Move(float speed, float radian);
 
 
 	enum class STATUS {
-		    NONE,
-			WAIT,
-			DAMEGE,
-			DEAD,
-			RUN,
-			FSTEP,
-			BSTEP,
-			RSTEP,
-			LSTEP,
-			SRASH,
-			SLAM,
-			STAB,
-			ROBES,
-            JAMPACT,
+		NONE,
+		WAIT,
+		DAMEGE,
+		DEAD,
+		RUN,
+		FSTEP,
+		BSTEP,
+		RSTEP,
+		LSTEP,
+		SRASH,
+		SLAM,
+		STAB,
+		ROBES,
+		JAMPACT,
 	};
 	STATUS status;
 
@@ -52,7 +52,7 @@ protected:
 	int useAnim;
 	int _x, _y;
 	bool isUseFbx;
-	float animSpd,*_cameraSpd;
+	float animSpd, * _cameraSpd;
 	int time, attackStep;
 	modelManager _modelManager;
 	bool AttackFlag, isAnimEnd;
@@ -61,5 +61,5 @@ protected:
 	bool MotionFlag;
 	bool ActionFlag;
 	int swingSE;
-	float PrangeA,PrangeB;
+	float PrangeA, PrangeB, Pdir;
 };

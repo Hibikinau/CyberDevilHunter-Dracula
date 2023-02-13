@@ -62,7 +62,7 @@ bool	Boss::Process()
 
 	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
-	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
+	Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
@@ -79,12 +79,13 @@ bool	Boss::Process()
   //}
 
 	int insAddNum = 0;
+	bool insFreeBool = false;
 
 	switch (status) {
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
+		animSpd = .5f;
 		_modelManager.animChange(BOSS1_idel, &_modelInf, true, true, false);
-		animSpd = 0.5f;
 		if (time == 0) { 
 			UtilityJudge(); }
 		else if (time > 0) { 
@@ -99,16 +100,17 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, false, true);
-		animSpd = 0.7f;
+		animSpd = .7f;
+		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
+		animSpd = .7f;
 		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
-		animSpd = 0.5f;
 		Move(8.5, 0);
 		if (PrangeA < 150) { UtilityJudge(); }
 		/*if(Prange>100) { Walk(); }
@@ -126,8 +128,8 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(BOSS1_dodgeF, &_modelInf, false, true, true);
-		animSpd = 1.0f;
+		animSpd = 1.f;
+		_modelManager.animChange(BOSS1_dodgeF, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0, 0.0);
@@ -142,8 +144,8 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
+		animSpd = 1.f;
 		_modelManager.animChange(BOSS1_dodgeB, &_modelInf, false, true, false);
-		animSpd = 1.0f;
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0, 180.0);
@@ -167,9 +169,9 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, false, true);
-		animSpd = 0.7f;
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+		animSpd = .7f;
+		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 5.f, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -183,14 +185,14 @@ bool	Boss::Process()
 			}
 		}
 		if (ActionFlag == true) { break; }
-		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
-		_modelManager.animChange(BOSS1_tatakituke_r1 + attackStep + insAddNum, &_modelInf, false, false, true);
-		animSpd = 0.7f;
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
+		animSpd = .7f;
+		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
+		_modelManager.animChange(BOSS1_tatakituke_r1 + attackStep + insAddNum, &_modelInf, false, false, true);
 		ActionFlag = true;
 		break;
 	case STATUS::STAB:
@@ -215,7 +217,7 @@ bool	Boss::Render(float timeSpeed)
 {
 
 	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-
+	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 
 	return true;
@@ -224,6 +226,7 @@ bool	Boss::Render(float timeSpeed)
 
 bool Boss::UtilityJudge() {
 	attackStep = 0;
+	_modelInf.dir.y = Pdir;
 	int Rand = GetRand(100);
 	switch (status) {
 	case STATUS::NONE:
@@ -320,7 +323,7 @@ bool Boss::UtilityJudge() {
 
 bool Boss::RangeJ() {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
-	auto Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
+	Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	if (Prange < 300)
 	{
