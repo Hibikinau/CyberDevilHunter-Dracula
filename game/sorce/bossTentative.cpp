@@ -297,9 +297,9 @@ bool Boss::UtilityJudge() {
 		time = 50;
 		break;
 	case STATUS::STAB:
-		if (Rand < 25) { status = STATUS::FSTEP; }
-		if (25 <= Rand && Rand < 50) { status = STATUS::BSTEP; }
-		if (50 <= Rand && Rand < 75) { status = STATUS::RSTEP; }
+		if (Rand < 25) { status = STATUS::FSTEP; break; }
+		if (25 <= Rand && Rand < 50) { status = STATUS::BSTEP; break; }
+		if (50 <= Rand && Rand < 75) { status = STATUS::RSTEP; break; }
 		if (75 <= Rand) { status = STATUS::LSTEP; }
 		break;
 	case STATUS::ROBES:
@@ -307,10 +307,10 @@ bool Boss::UtilityJudge() {
 		time = 50;
 		break;
 	case STATUS::JAMPACT:
-		if (Rand < 25) { status = STATUS::FSTEP; }
-		if (25 <= Rand && Rand < 50) { status = STATUS::BSTEP; }
-		if (50 <= Rand && Rand < 75) { status = STATUS::RSTEP; }
-		if (75 <= Rand) { status = STATUS::LSTEP; }
+		if (Rand < 25) { status = STATUS::FSTEP; break; }
+		if (25 <= Rand && Rand < 50) { status = STATUS::BSTEP; break; }
+		if (50 <= Rand && Rand < 75) { status = STATUS::RSTEP; break; }
+		if (75 <= Rand) { status = STATUS::LSTEP; break; }
 		break;
 	};
 
