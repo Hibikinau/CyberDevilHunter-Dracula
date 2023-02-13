@@ -29,7 +29,7 @@ bool PL::Initialize()
 	_statusInf.maxBloodPoint = 1500;
 	_statusInf.bloodPoint = 0;
 
-	_modelInf.pos = VGet(210.0f, 0.0f, 3100.f);
+	_modelInf.pos = VGet(210.0f, 2200.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
 	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);

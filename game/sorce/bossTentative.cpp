@@ -23,7 +23,7 @@ bool Boss::Initialize()
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 
 	MotionFlag = true;
-	_modelInf.pos = VGet(0.0f, 0.0f, 100.f);
+	_modelInf.pos = VGet(0.0f, 2200.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
 	g = 1.f;
