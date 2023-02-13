@@ -66,17 +66,17 @@ bool	Boss::Process()
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
-	//if (time == 0) { MotionFlag = true; }
-	if (MotionFlag == true || time == 0) {
-		PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-		_modelInf.dir.y = Pdir;
-		UtilityJudge();
-		MotionFlag = false;
-	}
-	else if (time > 0)
-	{
-		time--;
-	}
+	////if (time == 0) { MotionFlag = true; }
+	//if (MotionFlag == true || time == 0) {
+	//	PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
+	//	_modelInf.dir.y = Pdir;
+	//	UtilityJudge();
+	//	MotionFlag = false;
+	//}
+	//else if (time > 0)
+	//{
+	//	time--;
+  //}
 
 	
 
@@ -85,6 +85,10 @@ bool	Boss::Process()
 	case STATUS::WAIT:
 		_modelManager.animChange(BOSS1_idel, &_modelInf, true, true, false);
 		animSpd = 0.5f;
+		if (time == 0) { 
+			UtilityJudge(); }
+		else if (time > 0) { 
+			time--; }
 		break;
 	case STATUS::DAMEGE:
 		if (_modelInf.isAnimEnd == true) {
@@ -147,15 +151,18 @@ bool	Boss::Process()
 		break;
 	case STATUS::RSTEP:
 		Move(40.0, 90.0);
+		UtilityJudge();
 		break;
 	case STATUS::LSTEP:
 		Move(40.0, 270.0);
+		UtilityJudge();
 		break;
 	case STATUS::SRASH:
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
 			UtilityJudge();
-			if (status != STATUS::SRASH) { break; }
+			if (status != STATUS::SRASH) { 
+				break; }
 		}
 		if (ActionFlag == true) {
 			break;
@@ -186,9 +193,15 @@ bool	Boss::Process()
 		}
 		ActionFlag = true;
 		break;
-	case STATUS::STAB:break;
-	case STATUS::ROBES:break;
-	case STATUS::JAMPACT:break;
+	case STATUS::STAB:
+		UtilityJudge();
+		break;
+	case STATUS::ROBES:
+		UtilityJudge();
+		break;
+	case STATUS::JAMPACT:
+		UtilityJudge();
+		break;
 	};
 
 
@@ -281,6 +294,7 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::SLAM:
 		status = STATUS::WAIT;
+		time = 50;
 		break;
 	case STATUS::STAB:
 		if (Rand < 25) { status = STATUS::FSTEP; }
@@ -290,6 +304,7 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::ROBES:
 		status = STATUS::WAIT;
+		time = 50;
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; }
@@ -299,7 +314,6 @@ bool Boss::UtilityJudge() {
 		break;
 	};
 
-	time = 300;
 
 	return true;
 }
