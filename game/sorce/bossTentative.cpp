@@ -78,7 +78,7 @@ bool	Boss::Process()
 	//	time--;
   //}
 
-	
+	int insAddNum = 0;
 
 	switch (status) {
 	case STATUS::NONE:break;
@@ -183,8 +183,8 @@ bool	Boss::Process()
 			}
 		}
 		if (ActionFlag == true) { break; }
-
-		_modelManager.animChange(BOSS1_tatakituke_l1 + attackStep, &_modelInf, false, false, true);
+		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
+		_modelManager.animChange(BOSS1_tatakituke_r1 + attackStep + insAddNum, &_modelInf, false, false, true);
 		animSpd = 0.7f;
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
