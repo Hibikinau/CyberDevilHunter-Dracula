@@ -3,7 +3,6 @@
 
 bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 {
-	//SetUseASyncLoadFlag(true);
 	charPoint->Initialize();
 	charPoint->setCB(&insMG->charBox);
 	charPoint->setGroundInf(&insMG->stage);
@@ -20,12 +19,7 @@ bool loadAnimTs(bool* endSignal)
 	while (!*endSignal && ProcessMessage() == 0)
 	{
 		ProcessMessage();
-		ClearDrawScreen();/*
-		if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
-		else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
-		else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
-		else { i = 0; }
-		i++;*/
+		ClearDrawScreen();
 		i++;
 		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
 
@@ -37,13 +31,6 @@ bool loadAnimTs(bool* endSignal)
 		OutputDebugString(std::to_string(i).c_str());
 	}
 	return true;
-
-
-	//bool _endSignal = false;
-	//std::future<bool> f = std::async(std::launch::async, std::bind(loadAnimTs, &_endSignal));
-	//
-	//_endSignal = true;
-	//f.get();
 }
 
 bool	modeG::ASyncLoadAnim()
@@ -75,8 +62,6 @@ bool	modeG::Initialize()
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
 	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 20.f, &stage);
-	//_modelManager.modelImport("game/res/Bitch Slap Scene/BitchSlapHeliPort.mv1", 10.f, &stage);
-	//_modelManager.modelImport("game/res/karimap/Haikei demo2.mv1", 20.f, &stage);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
 
@@ -193,9 +178,6 @@ bool	modeG::Process()
 	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
 		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
-
-	// PC情報を取得します
-	//getPcInf();
 
 	collHitCheck();
 
@@ -470,22 +452,6 @@ int modeG::useCommand()
 	}
 	catch (std::exception) { return -1; }
 	return -1;
-}
-
-bool modeG::getPcInf() {
-	char s[5][256];
-	int i;
-	double f[4];
-	int A = GetPcInfo(s[0], s[1], s[2], &i, f, f + 1, s[3], s[4], f + 2, f + 3);
-	for (int i = 0; i < 5; i++)
-	{
-		std::string a = s[i];
-		debugWardBox.emplace(debugWardBox.begin() + i, a);
-	}
-	debugWardBox.emplace(debugWardBox.begin() + 5, "CPUspeed " + std::to_string(i));
-	debugWardBox.emplace(debugWardBox.begin() + 6, "freeMemorySize " + std::to_string(f[0]));
-	debugWardBox.emplace(debugWardBox.begin() + 7, "totalMemorySize " + std::to_string(f[1]));
-	return true;
 }
 
 bool modeG::drawUI()

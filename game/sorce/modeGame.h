@@ -17,8 +17,6 @@ public:
 	virtual bool	Render();
 	void cameraMove();
 	int useCommand();
-	bool getPcInf();
-	//bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA);
 	bool ASyncLoadAnim();
 	bool collHitCheck();
 	bool drawUI();

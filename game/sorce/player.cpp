@@ -32,17 +32,14 @@ bool PL::Initialize()
 	_modelInf.pos = VGet(210.0f, 2200.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
-	//_modelManager.modelImport("game/res/mv1sample/rockbone.mv1", 10.0f, &_modelInf);
-	//_modelManager.modelImport("game/res/yukarisanMMD/yukarisan.pmd", 10.0f, &_modelInf);
 	_modelManager.modelImport("game/res/Player01/Player1.mv1", 1.5f, &_modelInf);
 	_modelManager.weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana");
 	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya");
 	_modelManager.weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou");
-	//_modelManager.weponAttach("game/res/ゆかりんロボ用の武器/ソードブレイカー位置調整.pmx", &_modelInf, "左人指１", 10.f, false, "SwordBreaker");
-	//_modelManager.weponAttach("game/res/gunBlade/blade.pmx", &_modelInf, "右人指１", 10.f, false, "GunBlade");
+
 
 	changeAttackY = &CA_kirinuke;
-	changeAttackX = &CA_debugAttack;
+	changeAttackX = &CA_charge;
 
 	std::vector<int> insSoundHandle;
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
@@ -157,7 +154,6 @@ bool	PL::Process()
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_jaku_1, &_modelInf, false, false, true);
-			//_modelManager.setNextAnim(PL_jaku_1E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -165,7 +161,6 @@ bool	PL::Process()
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_jaku_2, &_modelInf, false, false, true);
-			//_modelManager.setNextAnim(PL_jaku_2E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -173,7 +168,6 @@ bool	PL::Process()
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_jaku_3, &_modelInf, false, false, true);
-			//_modelManager.setNextAnim(PL_jaku_3E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -213,7 +207,6 @@ bool	PL::Process()
 		if (attackNumOld == 0)
 		{
 			_modelManager.animChange(PL_kyou_1, &_modelInf, false, false, true);
-			//_modelManager.setNextAnim(PL_kyou_1E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -221,7 +214,6 @@ bool	PL::Process()
 		else if (attackNumOld == 1)
 		{
 			_modelManager.animChange(PL_kyou_2, &_modelInf, false, false, true);
-			//_modelManager.setNextAnim(PL_kyou_2E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -229,7 +221,6 @@ bool	PL::Process()
 		else if (attackNumOld == 2)
 		{
 			_modelManager.animChange(PL_kyou_3, &_modelInf, false, false, true);
-			//_modelManager.setNextAnim(PL_kyou_3E, &_modelInf, false, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, kyouATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -376,26 +367,6 @@ bool	PL::Process()
 		isHit = false;
 	}
 
-	//攻撃用カプセルコリジョンの作成
-	//for (int i = 0; i < _modelInf.wepons.size() && allColl->size() > 0; i++)
-	//{
-	//	if (_modelInf.wepons[i].isActive)
-	//	{
-	//		attackColl acoll;
-	//		acoll.isUseMat = true;
-	//		acoll.capColl.parentModelHandle = _modelInf.modelHandle;
-	//		acoll.capColl.frameNum = _modelInf.wepons[i].weponAttachFrameNum;
-	//		acoll.capColl.underPos = VGet(0.f, 0.f, 0.f);
-	//		acoll.capColl.overPos = VGet(0.f, 0.f, -13.f);
-	//		acoll.capColl.r = 5.f;
-	//		acoll.attackChar = Char_PL;
-	//		acoll.activeTimeF = 1.f;
-	//		acoll.nonActiveTimeF = 0.f;
-	//		acoll.damage = 0.f;
-
-	//		allColl->emplace_back(acoll);
-	//	}
-	//}
 	//modeGameでのカウンター受付時間再生用
 	_valData->plCTimeN = counterTime;
 
@@ -569,13 +540,11 @@ bool PL::CA_change(std::string name, const char* XorY)
 	{
 		if ("charge" == name) { changeAttackX = &CA_charge; }
 		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
-		//if ("senpuu" == name) { changeAttackX = &CA_senpuu; }
 	}
 	else if ("Y" == XorY)
 	{
 		if ("charge" == name) { changeAttackY = &CA_charge; }
 		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
-		//if ("senpuu" == name) { changeAttackY = &CA_senpuu; }
 	}
 
 	return true;
@@ -649,7 +618,6 @@ bool PL::CA_charge(PL* insPL)
 bool PL::CA_kirinuke(PL* insPL)
 {
 	insPL->animSpd = 1.f;
-	//insPL->isCharge = 1;
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	insPL->_modelManager.animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);
