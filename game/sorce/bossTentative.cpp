@@ -123,12 +123,8 @@ bool	Boss::Process()
 		break;
 	case STATUS::FSTEP:
 		if (_modelInf.isAnimEnd == true) {
-			ActionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::FSTEP) { break; }
-		}
-		if (ActionFlag == true) {
-			break;
 		}
 		animSpd = 1.f;
 		_modelManager.animChange(BOSS1_dodgeF, &_modelInf, false, true, false);
@@ -139,12 +135,8 @@ bool	Boss::Process()
 		break;
 	case STATUS::BSTEP:
 		if (_modelInf.isAnimEnd == true) {
-			ActionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::BSTEP) { break; }
-		}
-		if (ActionFlag == true) {
-			break;
 		}
 		animSpd = 1.f;
 		_modelManager.animChange(BOSS1_dodgeB, &_modelInf, false, true, false);
@@ -155,12 +147,8 @@ bool	Boss::Process()
 		break;
 	case STATUS::RSTEP:
 		if (_modelInf.isAnimEnd == true) {
-			ActionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::RSTEP) { break; }
-		}
-		if (ActionFlag == true) {
-			break;
 		}
 		animSpd = 1.f;
 		_modelManager.animChange(BOSS1_dodgeR, &_modelInf, false, true, false);
@@ -171,12 +159,8 @@ bool	Boss::Process()
 		break;
 	case STATUS::LSTEP:
 		if (_modelInf.isAnimEnd == true) {
-			ActionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::LSTEP) { break; }
-		}
-		if (ActionFlag == true) {
-			break;
 		}
 		animSpd = 1.f;
 		_modelManager.animChange(BOSS1_dodgeL, &_modelInf, false, true, false);
@@ -187,7 +171,6 @@ bool	Boss::Process()
 		break;
 	case STATUS::SRASH:
 		if (_modelInf.isAnimEnd == true) {
-			ActionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::SRASH) {
 				break;
