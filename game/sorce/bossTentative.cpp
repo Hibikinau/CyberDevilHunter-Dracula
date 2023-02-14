@@ -76,7 +76,7 @@ bool	Boss::Process()
 	//else if (time > 0)
 	//{
 	//	time--;
-  //}
+	//}
 
 	int insAddNum = 0;
 	bool insFreeBool = false;
@@ -86,10 +86,12 @@ bool	Boss::Process()
 	case STATUS::WAIT:
 		animSpd = .5f;
 		_modelManager.animChange(BOSS1_idel, &_modelInf, true, true, false);
-		if (time == 0) { 
-			UtilityJudge(); }
-		else if (time > 0) { 
-			time--; }
+		if (time == 0) {
+			UtilityJudge();
+		}
+		else if (time > 0) {
+			time--;
+		}
 		break;
 	case STATUS::DAMEGE:
 		if (_modelInf.isAnimEnd == true) {
@@ -163,8 +165,9 @@ bool	Boss::Process()
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
 			UtilityJudge();
-			if (status != STATUS::SRASH) { 
-				break; }
+			if (status != STATUS::SRASH) {
+				break;
+			}
 		}
 		if (ActionFlag == true) {
 			break;
@@ -196,10 +199,46 @@ bool	Boss::Process()
 		ActionFlag = true;
 		break;
 	case STATUS::STAB:
-		UtilityJudge();
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			if (attackStep < 4) { attackStep++; }
+			else {
+				UtilityJudge();
+				if (status != STATUS::SRASH) { break; }
+			}
+		}
+		if (ActionFlag == true)
+		{
+			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(60.0f, .0f); }
+			break;
+		}
+
+		animSpd = 0.7f;
+		_modelManager.animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
+		if (attackStep == 2 || attackStep == 3)
+		{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+		}
+		ActionFlag = true;
 		break;
 	case STATUS::ROBES:
-		UtilityJudge();
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			if (attackStep < 3) { attackStep++; }
+			else {
+				UtilityJudge();
+				if (status != STATUS::SRASH) { break; }
+			}
+		}
+		if (ActionFlag == true) { break; }
+
+		animSpd = 0.7f;
+		_modelManager.animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
+		if (attackStep == 2)
+		{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+		}
+		ActionFlag = true;
 		break;
 	case STATUS::JAMPACT:
 		UtilityJudge();
@@ -272,6 +311,7 @@ bool Boss::UtilityJudge() {
 		status = STATUS::SRASH;
 		break;
 	case STATUS::BSTEP:
+		//status = STATUS::ROBES; break;
 		RangeJ();
 		if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
 		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
@@ -287,9 +327,10 @@ bool Boss::UtilityJudge() {
 		if (Rand > 80) {
 			break;
 		}
-		if (80>=Rand&&Rand>40) { 
-			status = STATUS::BSTEP; 
-			break; }
+		if (80 >= Rand && Rand > 40) {
+			status = STATUS::BSTEP;
+			break;
+		}
 		if (40 >= Rand) {
 			status = STATUS::ROBES;
 			break;
