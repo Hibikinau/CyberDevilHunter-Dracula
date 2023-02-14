@@ -269,6 +269,7 @@ bool	Boss::Process()
 				if (!jumpActFlag) { _modelInf.vec.y = 15, jumpActFlag = true; }
 				Move(Prange / 40, .0f);
 			}
+			else if (attackStep == 1 && _modelInf.playTime <= 5) { _modelInf.dir.y = Pdir; RangeJ(); }
 			break;
 		}
 
