@@ -96,7 +96,7 @@ bool	Boss::Process()
 	case STATUS::DAMEGE:
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
-			UtilityJudge();
+			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::DAMEGE) { break; }
 		}
 		if (ActionFlag == true) {
@@ -124,7 +124,7 @@ bool	Boss::Process()
 	case STATUS::FSTEP:
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
-			UtilityJudge();
+			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::FSTEP) { break; }
 		}
 		if (ActionFlag == true) {
@@ -140,7 +140,7 @@ bool	Boss::Process()
 	case STATUS::BSTEP:
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
-			UtilityJudge();
+			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::BSTEP) { break; }
 		}
 		if (ActionFlag == true) {
@@ -154,17 +154,41 @@ bool	Boss::Process()
 		}
 		break;
 	case STATUS::RSTEP:
-		Move(40.0, 90.0);
-		UtilityJudge();
+		if (_modelInf.isAnimEnd == true) {
+			ActionFlag = false;
+			attackStep == 0 ? attackStep++ : UtilityJudge();
+			if (status != STATUS::RSTEP) { break; }
+		}
+		if (ActionFlag == true) {
+			break;
+		}
+		animSpd = 1.f;
+		_modelManager.animChange(BOSS1_dodgeR, &_modelInf, false, true, false);
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Move(40.0, 90.0);
+		}
 		break;
 	case STATUS::LSTEP:
-		Move(40.0, 270.0);
-		UtilityJudge();
+		if (_modelInf.isAnimEnd == true) {
+			ActionFlag = false;
+			attackStep == 0 ? attackStep++ : UtilityJudge();
+			if (status != STATUS::LSTEP) { break; }
+		}
+		if (ActionFlag == true) {
+			break;
+		}
+		animSpd = 1.f;
+		_modelManager.animChange(BOSS1_dodgeL, &_modelInf, false, true, false);
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		{
+			Move(40.0, 270.0);
+		}
 		break;
 	case STATUS::SRASH:
 		if (_modelInf.isAnimEnd == true) {
 			ActionFlag = false;
-			UtilityJudge();
+			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::SRASH) {
 				break;
 			}
@@ -184,7 +208,7 @@ bool	Boss::Process()
 			if (attackStep < 8) { attackStep++; }
 			else {
 				UtilityJudge();
-				if (status != STATUS::SRASH) { break; }
+				if (status != STATUS::SLAM) { break; }
 			}
 		}
 		if (ActionFlag == true) { break; }
@@ -204,7 +228,7 @@ bool	Boss::Process()
 			if (attackStep < 4) { attackStep++; }
 			else {
 				UtilityJudge();
-				if (status != STATUS::SRASH) { break; }
+				if (status != STATUS::STAB) { break; }
 			}
 		}
 		if (ActionFlag == true)
@@ -227,7 +251,7 @@ bool	Boss::Process()
 			if (attackStep < 3) { attackStep++; }
 			else {
 				UtilityJudge();
-				if (status != STATUS::SRASH) { break; }
+				if (status != STATUS::ROBES) { break; }
 			}
 		}
 		if (ActionFlag == true) { break; }
@@ -252,7 +276,7 @@ bool	Boss::Process()
 			}
 			else {
 				UtilityJudge();
-				if (status != STATUS::SRASH) { break; }
+				if (status != STATUS::JAMPACT) { break; }
 			}
 		}
 		if (ActionFlag == true)
@@ -303,9 +327,9 @@ bool Boss::UtilityJudge() {
 	case STATUS::WAIT:
 		RangeJ();
 		if (range == RANGE::CrossRange) {
-			if (Rand < 40) { status = STATUS::SRASH; }
+			if (Rand < 40) { status = STATUS::FSTEP; }
 			if (Rand >= 40) {
-				status = STATUS::SLAM;
+				status = STATUS::FSTEP;
 			}
 			break;
 		}
