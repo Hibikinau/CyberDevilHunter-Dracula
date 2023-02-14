@@ -60,6 +60,7 @@ protected:
 	double dir;
 	bool MotionFlag;
 	bool ActionFlag;
+	bool jumpActFlag;
 	int swingSE;
-	float PrangeA, PrangeB, Pdir;
+	float PrangeA, PrangeB, Pdir, Prange, atkDir;
 };

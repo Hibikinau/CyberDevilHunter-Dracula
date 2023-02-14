@@ -241,7 +241,38 @@ bool	Boss::Process()
 		ActionFlag = true;
 		break;
 	case STATUS::JAMPACT:
-		UtilityJudge();
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			if (attackStep < 3)
+			{
+				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
+				else if (!isGround && attackStep == 2) { ActionFlag = true; }
+				else { attackStep++; }
+
+			}
+			else {
+				UtilityJudge();
+				if (status != STATUS::SRASH) { break; }
+			}
+		}
+		if (ActionFlag == true)
+		{
+			if ((attackStep == 1 && _modelInf.playTime > 5) || attackStep == 2)
+			{
+				if (!jumpActFlag) { _modelInf.vec.y = 15, jumpActFlag = true; }
+				Move(Prange / 40, .0f);
+			}
+			break;
+		}
+
+		animSpd = 0.7f;
+		_modelManager.animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
+		if (attackStep == 2 || attackStep == 3)
+		{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+		}
+		if (attackStep == 1) { RangeJ(); }
+		ActionFlag = true;
 		break;
 	};
 
@@ -264,7 +295,7 @@ bool	Boss::Render(float timeSpeed)
 
 
 bool Boss::UtilityJudge() {
-	attackStep = 0;
+	attackStep = 0, jumpActFlag = false;
 	_modelInf.dir.y = Pdir;
 	int Rand = GetRand(100);
 	switch (status) {
@@ -365,7 +396,7 @@ bool Boss::UtilityJudge() {
 bool Boss::RangeJ() {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-	float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
+	Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	if (Prange < 300)
 	{
 		range = RANGE::CrossRange;
