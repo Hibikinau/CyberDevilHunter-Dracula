@@ -37,6 +37,7 @@ public:
 		STAB,
 		ROBES,
 		JAMPACT,
+		ONESLASH,
 	};
 	STATUS status;
 

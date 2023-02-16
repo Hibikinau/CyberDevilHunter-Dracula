@@ -36,6 +36,7 @@ int WINAPI WinMain(
 
 		ClearDrawScreen();		// 画面を初期化する
 		appBase->Render();
+		DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 		ScreenFlip();			// 裏画面の内容を表画面に反映させる
 	}
 	appBase->Terminate();

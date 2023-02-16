@@ -53,8 +53,6 @@ bool PL::Initialize()
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_02.mp3"));
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_03.mp3"));
 	soundHandle.emplace_back(insSoundHandle);
-
-	insEfcHamdle = LoadGraph("game/res/soumen64.bmp");
 	return true;
 }
 
@@ -110,13 +108,15 @@ bool	PL::Process()
 	if (CheckHitKey(KEY_INPUT_S)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f, false); }
 	if (CheckHitKey(KEY_INPUT_D)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f + -90.f, false); }
 
-	float addDir = 0.f, insDir;
+	float addDir = 0.f, insDir, a;
 	bool moveCheck = true;
 	switch (setAction())
 	{
 	case pushButton::Damage://被弾
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
+		isCharge = 0;
 		_modelManager.animChange(PL_damage, &_modelInf, false, false, false);
+
 		if (_modelInf.playTime > 25.f)
 		{
 			Estate = _estate::NORMAL;
@@ -378,7 +378,6 @@ bool	PL::Process()
 bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
-	//if (timeSpeed == 0) { _modelManager.drawBPolygon(VGet(0, 0, 0), VGet(0, 220, 0), _modelInf.pos, VAdd(_modelInf.pos, VGet(0, 220, 0)), insEfcHamdle); }
 	return true;
 }
 
@@ -412,6 +411,8 @@ bool PL::HPmath(float math)
 				if (!isAwakening) { _statusInf.hitPoint += math; BPmath(std::abs(math) * 6); }
 				PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;
+				auto a = PlayEffekseer3DEffect(_valData->efcHandle);
+				SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
 			}
 
 			auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);

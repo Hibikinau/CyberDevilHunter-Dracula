@@ -1,0 +1,13 @@
+++skies; 029
+
+[Resolution]
+ 16k: 16384x8192
+ 8k: 8192x4096
+
+[Sunlight Elevation]
+ -0.24 degrees
+
+[Sunlight Direction]
+ +0.0 degrees
+
+Copyright (c) 2016, aokcub

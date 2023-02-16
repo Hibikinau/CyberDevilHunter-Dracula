@@ -45,9 +45,9 @@ bool	CB::gravity()
 	//マップ(円)の中から出ないように
 	auto a = _modelInf.pos;
 	float c = sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
-	if (c > 5000.f)
+	if (c > 4700.f)
 	{
-		_modelInf.pos = VScale(VNorm(a), 5000.f);
+		_modelInf.pos = VScale(VNorm(a), 4700.f);
 	}
 	return true;
 }

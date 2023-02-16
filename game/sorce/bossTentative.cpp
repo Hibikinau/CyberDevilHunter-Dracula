@@ -17,7 +17,7 @@ bool Boss::Initialize()
 	_modelInf.pos = VGet(0.0f, 2200.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
-	g = 1.f;
+	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
 	ChangeVolumeSoundMem(520, swingSE);
 	return true;
@@ -113,7 +113,7 @@ bool	Boss::Process()
 		_modelInf.dir.y = Pdir;
 		animSpd = .7f;
 		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
-		Move(8.5, 0);
+		Move(runSpd, 0);
 		if (PrangeA < 150) { UtilityJudge(); }
 		/*if(Prange>100) { Walk(); }
 		else {
@@ -188,7 +188,17 @@ bool	Boss::Process()
 	case STATUS::SLAM:
 		if (isAnimEnd == true) {
 			ActionFlag = false;
-			if (attackStep < 8) { attackStep++; }
+			if (attackStep < 8)
+			{
+				if (attackStep == 1 && (rand() % 100) < 50)
+				{
+					attackStep++;
+					status = STATUS::ONESLASH;
+					UtilityJudge();
+					break;
+				}
+				attackStep++;
+			}
 			else {
 				UtilityJudge();
 				if (status != STATUS::SLAM) { break; }
@@ -200,7 +210,7 @@ bool	Boss::Process()
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
-		animSpd = .7f;
+		attackStep > 3 ? animSpd = 1.3f : animSpd = .7f;
 		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
 		_modelManager.animChange(BOSS1_tatakituke_r1 + attackStep + insAddNum, &_modelInf, false, false, true);
 		ActionFlag = true;
@@ -216,7 +226,7 @@ bool	Boss::Process()
 		}
 		if (ActionFlag == true)
 		{
-			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(60.0f, .0f); }
+			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f, .0f); }
 			break;
 		}
 
@@ -266,7 +276,7 @@ bool	Boss::Process()
 		{
 			if ((attackStep == 1 && _modelInf.playTime > 5) || attackStep == 2)
 			{
-				if (!jumpActFlag) { _modelInf.vec.y = 15, jumpActFlag = true; }
+				if (!jumpActFlag) { _modelInf.vec.y = 45, jumpActFlag = true; }
 				Move(Prange / 40, .0f);
 			}
 			else if (attackStep == 1 && _modelInf.playTime <= 5) { _modelInf.dir.y = Pdir; RangeJ(); }
@@ -277,7 +287,7 @@ bool	Boss::Process()
 		_modelManager.animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -1300.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
 		}
 		if (attackStep == 1) { RangeJ(); }
 		ActionFlag = true;
@@ -322,8 +332,8 @@ bool Boss::UtilityJudge() {
 			if (Rand >= 80) { status = STATUS::RUN; }
 		}
 		if (range == RANGE::LongRange) {
-			if (Rand < 70) { status = STATUS::RUN; }
-			if (Rand >= 70) { status = STATUS::JAMPACT; }
+			if (Rand < 70) { status = STATUS::JAMPACT; }
+			if (Rand >= 70) { status = STATUS::RUN; }
 			break;
 		}
 		break;
@@ -348,14 +358,14 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::FSTEP:
 		if (Rand < 70) { status = STATUS::SRASH; }
-		if (Rand >= 70) { status = STATUS::BSTEP; }
+		if (Rand >= 70) { status = STATUS::SLAM; }
 		break;
 	case STATUS::BSTEP:
 		//status = STATUS::ROBES; break;
 		RangeJ();
 		if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
-		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
-		if (range == RANGE::LongRange) { status = STATUS::WAIT; time = 50; break; }
+		if (range == RANGE::MidRange) { status = STATUS::STAB; break; }
+		if (range == RANGE::LongRange) { status = STATUS::JAMPACT; break; }
 		break;
 	case STATUS::RSTEP:
 		status = STATUS::WAIT;
@@ -382,9 +392,7 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::STAB:
 		if (Rand < 25) { status = STATUS::FSTEP; break; }
-		if (25 <= Rand && Rand < 50) { status = STATUS::BSTEP; break; }
-		if (50 <= Rand && Rand < 75) { status = STATUS::RSTEP; break; }
-		if (75 <= Rand) { status = STATUS::LSTEP; }
+		if (25 <= Rand) { status = STATUS::JAMPACT; break; }
 		break;
 	case STATUS::ROBES:
 		status = STATUS::WAIT;
@@ -392,9 +400,10 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; break; }
-		if (25 <= Rand && Rand < 50) { status = STATUS::BSTEP; break; }
-		if (50 <= Rand && Rand < 75) { status = STATUS::RSTEP; break; }
-		if (75 <= Rand) { status = STATUS::LSTEP; break; }
+		if (25 <= Rand) { status = STATUS::ROBES; break; }
+		break;
+	case STATUS::ONESLASH:
+		status = STATUS::BSTEP; break;
 		break;
 	};
 
@@ -410,11 +419,11 @@ bool Boss::RangeJ() {
 	{
 		range = RANGE::CrossRange;
 	}
-	if (300 <= Prange && Prange <= 600)
+	if (300 <= Prange && Prange <= 2000)
 	{
 		range = RANGE::MidRange;
 	}
-	if (Prange > 600)
+	if (Prange > 2000)
 	{
 		range = RANGE::LongRange;
 	}
@@ -442,6 +451,8 @@ bool Boss::HPmath(float Num)
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
 	}
+	int a = PlayEffekseer3DEffect(_valData->efcHandle);
+	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
 
 	return true;
 }

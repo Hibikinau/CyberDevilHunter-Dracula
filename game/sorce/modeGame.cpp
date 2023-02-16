@@ -62,6 +62,7 @@ bool	modeG::Initialize()
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
 	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
+	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
 
@@ -78,6 +79,7 @@ bool	modeG::Initialize()
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
+	insEfcHamdle = LoadGraph("game/res/soumen64.png");
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -91,7 +93,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	efcHandle = LoadEffekseerEffect("game/res/Laser01.efkefc", 20.f);
+	_valData.efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f);
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 
@@ -101,6 +103,9 @@ bool	modeG::Initialize()
 		_modelManager.changeScale(&i->second->_modelInf);
 	}
 	_modelManager.changeScale(&stage);
+	_modelManager.changeScale(&skyDoom);
+	MV1SetFrameVisible(stage.modelHandle, 84, false);
+	MV1SetFrameVisible(stage.modelHandle, 85, false);
 
 	//ステージの当たり判定作成
 	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
@@ -224,6 +229,7 @@ bool insDrawPolygon(int _cg/*float lupX, float lupY, float ldownX, float ldownY,
 
 bool	modeG::Render()
 {
+	MV1DrawModel(skyDoom.modelHandle);
 	//シャドウマップココカラ-----------------------------------------
 	ShadowMap_DrawSetup(ShadowMapHandle);
 	//3dモデルの描画
@@ -245,6 +251,19 @@ bool	modeG::Render()
 	SetUseShadowMap(0, -1);
 	//シャドウマップここまで-----------------------------------------
 
+	SetUseLighting(false);
+	for (int i = 0; i < mAllColl.size(); i++)
+	{
+
+		MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
+		auto insUnderPos = VTransform(mAllColl.at(i).capColl.underPos, M);
+		auto insOverPos = VTransform(mAllColl.at(i).capColl.overPos, M);
+		auto insUnderPosOld = mAllColl.at(i).capCollOld.underPos;
+		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
+
+		auto a = _modelManager.drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+	}
+	SetUseLighting(true);
 	//ブラー、いつかやる
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
 	//DrawGraph(0, 0, inscg, true);
@@ -291,7 +310,7 @@ bool	modeG::Render()
 		DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
 	}
 
-	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
+	
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
