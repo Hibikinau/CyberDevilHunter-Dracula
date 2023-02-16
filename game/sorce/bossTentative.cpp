@@ -111,10 +111,10 @@ bool	Boss::Process()
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
-		animSpd = .7f;
+		animSpd = .8f;
 		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
 		Move(8.5, 0);
-		if (PrangeA < 150) { UtilityJudge(); }
+		if (PrangeA < 250) { UtilityJudge(); }
 		/*if(Prange>100) { Walk(); }
 		else {
 			int j;
