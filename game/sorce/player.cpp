@@ -1,5 +1,5 @@
 #include"player.h"
-#define runSpd 20.f
+#define runSpd 40.f
 
 #define jakuATK 50.f
 #define kyouATK 70.f
@@ -125,7 +125,7 @@ bool	PL::Process()
 	case pushButton::B://‰ñ”ð
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
 		animSpd = 2.f;
-		spd = 25.f;
+		spd = 50.f;
 		isCharge = 0;
 
 		insDir = getMoveDir(false);
@@ -310,8 +310,10 @@ bool	PL::Process()
 	{
 		if (_modelInf.playTime < _modelInf.totalTime - (_modelInf.totalTime / 6.f) && _modelInf.playTime > _modelInf.totalTime / 6.f)
 		{
+			animSpd = 1.5f;
 			charMove(spd, dodgeDir, false);
 		}
+		else { animSpd = 3.f; }
 		dodgeTime--;
 	}
 
@@ -455,7 +457,7 @@ pushButton PL::setAction()
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
-	//if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
 	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
@@ -510,7 +512,7 @@ pushButton PL::setAction()
 		insEnum = pushButton::X;
 	}
 
-	if (checkRelImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//B
+	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//B
 	{
 		attackNumOld = 0;
 		Estate = _estate::DODGE;
@@ -603,7 +605,7 @@ bool PL::CA_charge(PL* insPL)
 		{
 			insPL->_modelManager.animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
 			float insDamage = insPL->atkBuff;
-			insPL->chargeLevel == 1 ? insDamage += charge2ATK  : insDamage += charge1ATK;
+			insPL->chargeLevel == 1 ? insDamage += charge2ATK : insDamage += charge1ATK;
 			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, insDamage, rWeponParentFrame, Char_PL);
 
 		}

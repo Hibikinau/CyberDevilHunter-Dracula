@@ -61,7 +61,7 @@ bool	modeG::Initialize()
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
-	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 20.f, &stage);
+	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
 

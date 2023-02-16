@@ -6,7 +6,7 @@
 
 bool Boss::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf);
 	useAnim = 0;
 
 	status = STATUS::WAIT;
@@ -54,7 +54,7 @@ bool	Boss::Process()
 		_statusInf.hitPoint = 1;
 	}
 
-	collCap.r = 70.f;
+	collCap.r = 80.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
