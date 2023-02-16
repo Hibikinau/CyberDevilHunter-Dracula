@@ -14,7 +14,7 @@ bool Boss::Initialize()
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 
 	MotionFlag = true;
-	_modelInf.pos = VGet(0.0f, 2200.0f, 100.f);
+	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
 	g = 3.f;
@@ -304,7 +304,7 @@ bool	Boss::Process()
 bool	Boss::Render(float timeSpeed)
 {
 
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
 

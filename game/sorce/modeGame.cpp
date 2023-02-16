@@ -108,7 +108,7 @@ bool	modeG::Initialize()
 	MV1SetFrameVisible(stage.modelHandle, 85, false);
 
 	//ステージの当たり判定作成
-	MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
+	//MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
 
 	return true;
 }
@@ -166,23 +166,23 @@ bool	modeG::Process()
 	if (bright < 0) { bright = 0; }
 	if (bright > 1) { bright = 1; }
 	SetGlobalAmbientLight(GetColorF(bright, bright, bright, 0.0f));
-	debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
+	//debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
 
-	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
-	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
-	debugWardBox.emplace_back(std::to_string(
-		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
-	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
-	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
-	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
-	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
-	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
-	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData.counterSpd));
-	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData._counterTime));
-	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData.plCTimeN));
-	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
-		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
-		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
+	//debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
+	//debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
+	//debugWardBox.emplace_back(std::to_string(
+	//	(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
+	//debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
+	//debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
+	//debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
+	//debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
+	//debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
+	//debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData.counterSpd));
+	//debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData._counterTime));
+	//debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData.plCTimeN));
+	//debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
+	//	+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
+	//	+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
 	collHitCheck();
 
@@ -291,24 +291,24 @@ bool	modeG::Render()
 		{
 			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 
-			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			//DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 			if (mAllColl[i].capCollOld.r != -1)
 			{
-				DrawCapsule3D(mAllColl[i].capCollOld.underPos, mAllColl[i].capCollOld.overPos, mAllColl[i].capCollOld.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+				//DrawCapsule3D(mAllColl[i].capCollOld.underPos, mAllColl[i].capCollOld.overPos, mAllColl[i].capCollOld.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 			}
 		}
 	}
 
-	if (charBox.find(Char_PL) != charBox.end())
-	{
-		DrawString(1000, 0, "自機のHP", GetColor(255.f, 0.f, 0.f));
-		DrawString(1000, 20, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
-	}
-	if (charBox.find(Char_BOSS1) != charBox.end())
-	{
-		DrawString(1000, 50, "騎士のHP", GetColor(255.f, 0.f, 0.f));
-		DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
-	}
+	//if (charBox.find(Char_PL) != charBox.end())
+	//{
+	//	DrawString(1000, 0, "自機のHP", GetColor(255.f, 0.f, 0.f));
+	//	DrawString(1000, 20, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	//}
+	//if (charBox.find(Char_BOSS1) != charBox.end())
+	//{
+	//	DrawString(1000, 50, "騎士のHP", GetColor(255.f, 0.f, 0.f));
+	//	DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
+	//}
 
 	
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
@@ -316,23 +316,23 @@ bool	modeG::Render()
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
 	if (insDirY > 360) { insDirY -= 360; }
 	else if (insDirY < 0) { insDirY += 360; }
-	debugWardBox.emplace_back(std::to_string(insDirY));
-	//debugWardBox.emplace_back("-------武器セット一覧-------");
-	debugWardBox.emplace_back("-------コマンド一覧-------");
-	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
-	debugWardBox.emplace_back("/menu(メニュー画面表示)");
-	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
-	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
-	debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
-	debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
-	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
-	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
+	//debugWardBox.emplace_back(std::to_string(insDirY));
+	////debugWardBox.emplace_back("-------武器セット一覧-------");
+	//debugWardBox.emplace_back("-------コマンド一覧-------");
+	//debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
+	//debugWardBox.emplace_back("/menu(メニュー画面表示)");
+	//debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
+	//debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	//debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
+	//debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
+	//debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
+	/*for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
 		GetDrawStringSize(&sizeX, &sizeY, &lineCount, debugWardBox[i].c_str(), debugWardBox[i].length());
 		DrawBox(10, 10 + 20 * i, 10 + sizeX, 10 + 20 * i + sizeY, GetColor(0, 0, 0), true);
 		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
-	}
+	}*/
 	debugWardBox.clear();
 
 	return true;
@@ -358,7 +358,7 @@ bool	modeG::collHitCheck()
 bool	modeG::Terminate()
 {
 	StopSoundMem(BGM);
-	MV1TerminateCollInfo(stage.modelHandle, -1);
+	//MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }
 	mAllColl.clear();
