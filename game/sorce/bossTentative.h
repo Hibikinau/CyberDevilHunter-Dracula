@@ -11,7 +11,7 @@ public:
 	~Boss() {};
 	virtual bool Initialize();
 	virtual bool Terminate();
-	virtual bool Input();
+	virtual bool Input(){ return true; }
 	virtual bool Process();
 	virtual bool Render(float timeSpeed);
 	bool HPmath(float Num) override;

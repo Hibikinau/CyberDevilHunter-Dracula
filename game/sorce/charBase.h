@@ -15,6 +15,13 @@ struct collCapsule
 	int parentModelHandle, frameNum;
 };
 
+struct weaponEffect
+{
+	std::vector<VECTOR> upCornerPos, downCornerPos;
+	float lifeTime, overrideTime, nonOverrideTime;
+	int efcPicHandle;
+};
+
 struct attackColl
 {
 	collCapsule capColl, capCollOld;
@@ -22,8 +29,9 @@ struct attackColl
 	std::vector<collCapsule> capCollTs;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
-	bool isUseMat;
-};
+	bool isUseMat, isAlive;
+	weaponEffect rightingEfc;
+}; 
 
 class CB
 {
@@ -35,6 +43,7 @@ public:
 	virtual bool	Terminate();
 	virtual bool	Process();
 	virtual bool	Render(float timeSpeed);
+	//virtual bool	atkEfcRender(float timeSpeed);
 	virtual bool gravity();
 	virtual int	getType() { return type; }
 	virtual void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }

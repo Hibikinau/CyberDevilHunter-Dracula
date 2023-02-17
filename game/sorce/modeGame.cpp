@@ -56,7 +56,7 @@ bool	modeG::Initialize()
 	SetUseLighting(true);
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
-	SetUseBackCulling(false);
+	//SetUseBackCulling(false);
 	SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
@@ -79,7 +79,7 @@ bool	modeG::Initialize()
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
-	insEfcHamdle = LoadGraph("game/res/soumen64.png");
+	insEfcHamdle = LoadGraph("game/res/soumenB.png");
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -262,7 +262,33 @@ bool	modeG::Render()
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
 		auto a = _modelManager.drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+	
 	}
+	for (int i = 0; i < mAllColl.size(); i++)
+	{
+		if (mAllColl[i].nonActiveTimeF <= 0.f)
+		{
+			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
+
+			mAllColl[i].rightingEfc.downCornerPos.push_back(VTransform(mAllColl.at(i).capColl.underPos, M));
+			mAllColl[i].rightingEfc.upCornerPos.push_back(VTransform(mAllColl.at(i).capColl.overPos, M));
+
+			for (int j = 1; j < mAllColl[i].rightingEfc.downCornerPos.size(); ++j)
+			{
+				auto A = _modelManager.drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+			}
+		}
+	}
+
+	for (int i = 0; i < atkEfc.size(); i++)
+	{
+		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
+		{
+			auto A = _modelManager.drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+		}
+	}
+
+	while (atkEfc.size() > 20) { atkEfc.erase(atkEfc.begin()); }
 	SetUseLighting(true);
 	//ブラー、いつかやる
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
@@ -285,19 +311,6 @@ bool	modeG::Render()
 	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 140.f, 0.f)), GetColor(0, 255, 0));
 	drawUI();
 
-	for (int i = 0; i < mAllColl.size(); i++)
-	{
-		if (mAllColl[i].nonActiveTimeF <= 0.f)
-		{
-			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
-
-			//DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
-			if (mAllColl[i].capCollOld.r != -1)
-			{
-				//DrawCapsule3D(mAllColl[i].capCollOld.underPos, mAllColl[i].capCollOld.overPos, mAllColl[i].capCollOld.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
-			}
-		}
-	}
 
 	//if (charBox.find(Char_PL) != charBox.end())
 	//{
@@ -344,7 +357,11 @@ bool	modeG::collHitCheck()
 	{
 		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
 		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
-		else { mAllColl.erase(mAllColl.begin() + i); }
+		else 
+		{
+			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
+			mAllColl.erase(mAllColl.begin() + i);
+		}
 	}
 
 	for (auto i = charBox.begin(); i != charBox.end(); i++)

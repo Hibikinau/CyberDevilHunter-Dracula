@@ -45,7 +45,7 @@ public:
 	~PL() {};
 	virtual bool Initialize();
 	virtual bool Terminate();
-	virtual bool Input();
+	virtual bool Input() { return true; }
 	virtual bool Process();
 	virtual bool Render(float timeSpeed);
 	virtual void charMove(float Speed, float _Dir, bool animChange);

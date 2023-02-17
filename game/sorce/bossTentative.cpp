@@ -29,12 +29,6 @@ bool	Boss::Terminate()
 	return true;
 }
 
-bool	Boss::Input()
-{
-
-	return true;
-}
-
 bool	Boss::Process()
 {
 	if (status == STATUS::DEAD) {

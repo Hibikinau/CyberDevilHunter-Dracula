@@ -69,12 +69,6 @@ bool	PL::Terminate()
 	return true;
 }
 
-bool	PL::Input()
-{
-
-	return true;
-}
-
 //isIO‚ªtrue‚Å”²“false‚Å”[“
 bool KATANAIO(modelInf* MI, bool isIO)
 {

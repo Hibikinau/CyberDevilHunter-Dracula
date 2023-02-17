@@ -40,6 +40,7 @@ public:
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
 	statusInf plStatus, bossStatus;
+	std::vector<weaponEffect> atkEfc;
 	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
 	int keepout[180] = { -1 }, keepoutNum;
 

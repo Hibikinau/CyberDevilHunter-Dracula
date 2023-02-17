@@ -88,9 +88,9 @@ bool	CB::hitCheck(const char* name)
 		allColl->at(i).capCollOld.overPos = insOverPos;
 		allColl->at(i).capCollOld.r = allColl->at(i).capColl.r;
 
-		if (insCheckHit)
+		if (insCheckHit && allColl->at(i).isAlive)
 		{
-			allColl->at(i).activeTimeF = 0.f;
+			allColl->at(i).isAlive = false;
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
 			attackChar = allColl->at(i).attackChar;
 			HPmath(-allColl->at(i).damage);

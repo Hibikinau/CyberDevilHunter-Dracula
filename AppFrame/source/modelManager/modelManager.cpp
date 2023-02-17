@@ -147,7 +147,7 @@ bool modelManager::drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR r
 	Vertex[0].norm = VGet(0.0f, 0.0f, -1.0f);
 	Vertex[0].dif = GetColorU8(255, 255, 255, 255);
 	Vertex[0].spc = GetColorU8(0, 0, 0, 0);
-	Vertex[0].u = 1.f;
+	Vertex[0].u = .7f;
 	Vertex[0].v = 1.f;
 	Vertex[0].su = 0.0f;
 	Vertex[0].sv = 0.0f;
@@ -165,7 +165,7 @@ bool modelManager::drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR r
 	Vertex[2].norm = VGet(0.0f, 0.0f, -1.0f);
 	Vertex[2].dif = GetColorU8(255, 255, 255, 255);
 	Vertex[2].spc = GetColorU8(0, 0, 0, 0);
-	Vertex[2].u = 1.0f;
+	Vertex[2].u = .7f;
 	Vertex[2].v = 0.f;
 	Vertex[2].su = 0.0f;
 	Vertex[2].sv = 0.0f;
