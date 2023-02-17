@@ -79,7 +79,7 @@ bool	modeG::Initialize()
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
-	insEfcHamdle = LoadGraph("game/res/kari2.bmp");
+	insEfcHamdle = LoadGraph("game/res/kari2.png");
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -213,8 +213,8 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
-		int a = PlayEffekseer3DEffect(efcHandle);
-		SetPosPlayingEffekseer3DEffect(a, 0, 120, 0);
+		int a = PlayEffekseer3DEffect(_valData.efcHandle);
+		SetPosPlayingEffekseer3DEffect(a, 0, 1300, 0);
 	}
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
@@ -475,7 +475,7 @@ int modeG::useCommand()
 			{
 				auto comEfcDir = "game/res/" + getChar(data, 1) + ".efkefc";
 				auto efcScale = getNum(data, 2);
-				efcHandle = LoadEffekseerEffect(comEfcDir.c_str(), efcScale);
+				_valData.efcHandle = LoadEffekseerEffect(comEfcDir.c_str(), efcScale);
 			}
 			if (data == "kill")
 			{

@@ -30,7 +30,7 @@ int WINAPI WinMain(
 	{
 		if (two) { if (ProcessMessage() != 0) { break; } }
 		two = !two;
-		//while (setTime >= GetNowCount()) {};
+		while (setTime >= GetNowCount()) {};
 		setTime = static_cast<int>(1000 / FPS) + GetNowCount();
 
 		appBase->Input();
