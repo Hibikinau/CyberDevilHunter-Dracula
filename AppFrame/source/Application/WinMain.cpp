@@ -24,11 +24,13 @@ int WINAPI WinMain(
 
 	int FPS = 60;
 	int setTime = GetNowCount();//1000=1秒
-
+	bool two = false;
 	// 1フレームループを組む ----------------------------------------------------------
-	while (ProcessMessage() == 0)		// プログラムが終了するまでループ
+	while ( true)		// プログラムが終了するまでループ
 	{
-		while (setTime >= GetNowCount()) {};
+		if (two) { if (ProcessMessage() != 0) { break; } }
+		two = !two;
+		//while (setTime >= GetNowCount()) {};
 		setTime = static_cast<int>(1000 / FPS) + GetNowCount();
 
 		appBase->Input();
@@ -36,7 +38,6 @@ int WINAPI WinMain(
 
 		ClearDrawScreen();		// 画面を初期化する
 		appBase->Render();
-		DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 		ScreenFlip();			// 裏画面の内容を表画面に反映させる
 	}
 	appBase->Terminate();

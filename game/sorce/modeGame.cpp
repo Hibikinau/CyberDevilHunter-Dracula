@@ -79,7 +79,7 @@ bool	modeG::Initialize()
 	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
-	insEfcHamdle = LoadGraph("game/res/soumenB.png");
+	insEfcHamdle = LoadGraph("game/res/kari2.bmp");
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -143,7 +143,7 @@ bool	modeG::Process()
 		}
 	}
 
-	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] == 1)
+	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] || _imputInf._gTrgb[KEY_INPUT_L])
 	{//ロックオン
 		isLockon ^= true;
 	}
@@ -166,23 +166,23 @@ bool	modeG::Process()
 	if (bright < 0) { bright = 0; }
 	if (bright > 1) { bright = 1; }
 	SetGlobalAmbientLight(GetColorF(bright, bright, bright, 0.0f));
-	//debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
+	debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
 
-	//debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
-	//debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
-	//debugWardBox.emplace_back(std::to_string(
-	//	(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
-	//debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
-	//debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
-	//debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
-	//debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
-	//debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
-	//debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData.counterSpd));
-	//debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData._counterTime));
-	//debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData.plCTimeN));
-	//debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
-	//	+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
-	//	+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
+	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
+	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
+	debugWardBox.emplace_back(std::to_string(
+		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
+	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
+	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
+	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
+	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
+	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
+	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData.counterSpd));
+	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData._counterTime));
+	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData.plCTimeN));
+	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
+		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
+		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
 	collHitCheck();
 
@@ -275,7 +275,7 @@ bool	modeG::Render()
 
 			for (int j = 1; j < mAllColl[i].rightingEfc.downCornerPos.size(); ++j)
 			{
-				auto A = _modelManager.drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+				_modelManager.drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
 			}
 		}
 	}
@@ -284,11 +284,12 @@ bool	modeG::Render()
 	{
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
-			auto A = _modelManager.drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+			_modelManager.drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
 		}
-	}
 
-	while (atkEfc.size() > 20) { atkEfc.erase(atkEfc.begin()); }
+		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }
+		else { atkEfc.erase(atkEfc.begin() + i); }
+	}
 	SetUseLighting(true);
 	//ブラー、いつかやる
 	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
@@ -300,17 +301,13 @@ bool	modeG::Render()
 	if (isLockon)
 	{
 		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VSub(cameraFor, VGet(0, 40, 0)), .5, .5, 120, 0, lockOnMarkerHandle, true);
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 120, 0, lockOnMarkerHandle, true);
 		SetUseZBuffer3D(TRUE);
 	}
 
 	int nowTime = GetNowCount();
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
-
-	//DrawLine3D(plMI->pos, VAdd(plMI->pos, VGet(0.f, 140.f, 0.f)), GetColor(0, 255, 0));
-	drawUI();
-
 
 	//if (charBox.find(Char_PL) != charBox.end())
 	//{
@@ -323,29 +320,31 @@ bool	modeG::Render()
 	//	DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
 	//}
 
+	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
+	drawUI();
 	
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
 	if (insDirY > 360) { insDirY -= 360; }
 	else if (insDirY < 0) { insDirY += 360; }
-	//debugWardBox.emplace_back(std::to_string(insDirY));
-	////debugWardBox.emplace_back("-------武器セット一覧-------");
-	//debugWardBox.emplace_back("-------コマンド一覧-------");
-	//debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
-	//debugWardBox.emplace_back("/menu(メニュー画面表示)");
-	//debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
-	//debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
-	//debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
-	//debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
-	//debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
-	/*for (int i = 0; i < debugWardBox.size() && debugMode; i++)
+	debugWardBox.emplace_back(std::to_string(insDirY));
+	//debugWardBox.emplace_back("-------武器セット一覧-------");
+	debugWardBox.emplace_back("-------コマンド一覧-------");
+	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
+	debugWardBox.emplace_back("/menu(メニュー画面表示)");
+	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
+	debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
+	debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
+	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
+	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
 		GetDrawStringSize(&sizeX, &sizeY, &lineCount, debugWardBox[i].c_str(), debugWardBox[i].length());
 		DrawBox(10, 10 + 20 * i, 10 + sizeX, 10 + 20 * i + sizeY, GetColor(0, 0, 0), true);
 		DrawString(10, 10 + 20 * i, debugWardBox[i].c_str(), GetColor(255, 255, 255));
-	}*/
+	}
 	debugWardBox.clear();
 
 	return true;
@@ -359,6 +358,7 @@ bool	modeG::collHitCheck()
 		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
 		else 
 		{
+			mAllColl.at(i).rightingEfc.lifeTime = 10;
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
 			mAllColl.erase(mAllColl.begin() + i);
 		}
@@ -377,6 +377,7 @@ bool	modeG::Terminate()
 	StopSoundMem(BGM);
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
+
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }
 	mAllColl.clear();
 	charBox.clear();
@@ -391,8 +392,9 @@ void modeG::cameraMove()
 	if (isLockon)
 	{
 		auto EtoPdir = VSub(bossMI->pos, plMI->pos);
-		cameraFor = VAdd(bossMI->pos, VGet(0.f, 250.f, 0.f));
-		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -300.f)), VGet(0.f, 250.f, 0.f));
+		cameraFor = VAdd(bossMI->pos, VGet(0.f, 100.f, 0.f));
+		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -350.f)), VGet(0.f, 250.f, 0.f));
+		if (cameraPos.y < 0) { cameraPos.y = 0; }
 		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
 		cameraDir = cameraLockDir;
 		charBox[Char_PL]->setCamDir(cameraLockDir);

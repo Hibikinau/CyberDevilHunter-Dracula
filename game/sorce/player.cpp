@@ -107,7 +107,7 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::Damage://被弾
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0;;
 		isCharge = 0;
 		_modelManager.animChange(PL_damage, &_modelInf, false, false, false);
 
@@ -117,7 +117,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::B://回避
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0;
 		animSpd = 2.f;
 		spd = 50.f;
 		isCharge = 0;
@@ -239,15 +239,18 @@ bool	PL::Process()
 	case pushButton::LBX://入れ替えX
 		Estate = _estate::changeATTACKX;
 		lastAttackState = _estate::changeATTACKX;
+		attackNumOld = 0;
 		changeAttackX(this);
 		break;
 	case pushButton::LBY://入れ替えY
 		Estate = _estate::changeATTACKY;
 		lastAttackState = _estate::changeATTACKY;
+		attackNumOld = 0;
 		changeAttackY(this);
 		break;
 	case pushButton::Lstick://ダッシュ
 		Estate = _estate::NORMAL;
+		attackNumOld = 0;
 		//isDash = true;//------------------------------------------------------------------------------------
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
