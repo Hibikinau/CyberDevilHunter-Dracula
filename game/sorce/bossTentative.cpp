@@ -91,8 +91,8 @@ bool	Boss::Process(){
 		if (ActionFlag == true) {
 			break;
 		}
-		animSpd = .7f;
-		_modelManager.animChange(BOSS1_hidan, &_modelInf, false, true, true);
+		animSpd = 1.f;
+		_modelManager.animChange(BOSS1_hidan, &_modelInf, false, true, false);
 		//PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
