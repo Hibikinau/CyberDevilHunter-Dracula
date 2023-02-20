@@ -426,6 +426,9 @@ bool Boss::HPmath(float Num)
 		status = STATUS::DAMEGE;
 		ActionFlag = false;
 	}
+	if (_statusInf.hitPoint <=10000) {
+
+	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
 	}
