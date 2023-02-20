@@ -97,12 +97,7 @@ bool	Boss::Process()
 		animSpd = .8f;
 		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
 		Move(runSpd, 0);
-		if (PrangeA < 150) { UtilityJudge(); }
-		/*if(Prange>100) { Walk(); }
-		else {
-			int j;
-		}*/
-		//AttackFlag = false;
+		if (PrangeA < 200) { UtilityJudge(); }
 		break;
 	case STATUS::FSTEP:
 		if (_modelInf.isAnimEnd == true) {
