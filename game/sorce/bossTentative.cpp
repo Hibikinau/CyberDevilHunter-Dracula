@@ -60,17 +60,7 @@ bool	Boss::Process()
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
-	////if (time == 0) { MotionFlag = true; }
-	//if (MotionFlag == true || time == 0) {
-	//	PrangeB = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	//	_modelInf.dir.y = Pdir;
-	//	UtilityJudge();
-	//	MotionFlag = false;
-	//}
-	//else if (time > 0)
-	//{
-	//	time--;
-	//}
+
 
 	int insAddNum = 0;
 	bool insFreeBool = false;
@@ -96,16 +86,15 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		animSpd = .7f;
-		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 5.f, 100, Char_BOSS1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		animSpd = 1.f;
+		_modelManager.animChange(BOSS1_hidan, &_modelInf, false, true, false);
+		//PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
-		animSpd = .7f;
+		animSpd = .8f;
 		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
 		Move(runSpd, 0);
 		if (PrangeA < 150) { UtilityJudge(); }
