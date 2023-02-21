@@ -18,7 +18,7 @@ struct collCapsule
 struct weaponEffect
 {
 	std::vector<VECTOR> upCornerPos, downCornerPos;
-	float lifeTime, overrideTime, nonOverrideTime;
+	float lifeTime = 10, maxLifeTime = 10, overrideTime, nonOverrideTime;
 	int efcPicHandle;
 };
 

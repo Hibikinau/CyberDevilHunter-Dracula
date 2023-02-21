@@ -257,7 +257,7 @@ bool	modeG::Render()
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
 		auto a = _modelManager.drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
-	
+
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -279,19 +279,14 @@ bool	modeG::Render()
 	{
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
+			if (_valData.isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
 			_modelManager.drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
 		}
-
+		if (_valData.isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }
 		else { atkEfc.erase(atkEfc.begin() + i); }
 	}
 	SetUseLighting(true);
-	//ブラー、いつかやる
-	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
-	//DrawGraph(0, 0, inscg, true);
-	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//inscg = MakeGraph(1280, 720);
-	//GetDrawScreenGraph(0, 0, 1280, 720, inscg);
 
 	if (isLockon)
 	{
@@ -317,7 +312,7 @@ bool	modeG::Render()
 
 	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 	drawUI();
-	
+
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
@@ -351,9 +346,8 @@ bool	modeG::collHitCheck()
 	{
 		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
 		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
-		else 
+		else
 		{
-			mAllColl.at(i).rightingEfc.lifeTime = 10;
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
 			mAllColl.erase(mAllColl.begin() + i);
 		}
