@@ -11,7 +11,7 @@ struct statusInf
 struct collCapsule
 {//Å‘å’l‚ğ‘ã“ü
 	VECTOR underPos, overPos;
-	float r;
+	float r = -1;
 	int parentModelHandle, frameNum;
 };
 
@@ -27,6 +27,7 @@ struct attackColl
 	collCapsule capColl, capCollOld;
 	std::string attackChar;
 	std::vector<collCapsule> capCollTs;
+	MATRIX Mold;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
 	bool isUseMat, isAlive;

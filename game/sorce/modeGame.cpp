@@ -184,8 +184,8 @@ bool	modeG::Process()
 		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
+	//当たり判定計算呼び出し
 	collHitCheck();
-
 
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
@@ -206,6 +206,7 @@ bool	modeG::Process()
 		}
 	}
 
+	//メニュー画面呼び出し
 	if (_imputInf._gTrgb[KEY_INPUT_M])
 	{
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
@@ -219,12 +220,6 @@ bool	modeG::Process()
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
 	return true;
-}
-
-bool insDrawPolygon(int _cg/*float lupX, float lupY, float ldownX, float ldownY, float rupX, float rupY, float rdownX, float rdownY*/)
-{
-	// ２ポリゴンの描画
-	return false;
 }
 
 bool	modeG::Render()

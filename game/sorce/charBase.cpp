@@ -54,7 +54,6 @@ bool	CB::gravity()
 
 bool	CB::hitCheck(const char* name)
 {
-
 	for (int i = 0; i < allColl->size(); i++)
 	{
 		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
@@ -69,28 +68,34 @@ bool	CB::hitCheck(const char* name)
 			, insOverPos
 			, allColl->at(i).capColl.r);
 
-		if (!insCheckHit && allColl->at(i).capCollOld.r != -1)
-		{
-			auto insUnderPosOld = allColl->at(i).capCollOld.underPos;
-			auto insOverPosOld = allColl->at(i).capCollOld.overPos;
-			auto underDis = VAdd(insUnderPos, insUnderPosOld);
-			auto overDis = VAdd(insOverPos, insOverPosOld);
+		int insNum = VSize(VSub(allColl->at(i).capColl.overPos, allColl->at(i).capColl.underPos));
 
-			auto tsUnderPos = VScale(underDis, 0.5f);
-			auto tsOverPos = VScale(overDis, 0.5f);
+		for (int j = 0; j < abs(insNum) / allColl->at(i).capColl.r
+			&& !insCheckHit; j++)
+		{
+			if (allColl->at(i).capCollOld.r == -1) { break; }
+			auto insR = allColl->at(i).capColl.r * j;
+			auto insS = VSize(allColl->at(i).capColl.overPos);
+			auto insN = VNorm(allColl->at(i).capColl.overPos);
+			auto insCapNow = VTransform(VScale(insN, insS - insR), M);
+			auto insCapOld = VTransform(VScale(insN, insS - insR), allColl->at(i).Mold);
+
 			insCheckHit = HitCheck_Capsule_Capsule
 			(collCap.underPos, collCap.overPos, collCap.r
-				, tsUnderPos
-				, tsOverPos
+				, insCapNow
+				, insCapOld
 				, allColl->at(i).capColl.r);
+			//auto a = DrawCapsule3D(insCapOld, insCapNow, allColl->at(i).capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 		}
+
 		allColl->at(i).capCollOld.underPos = insUnderPos;
 		allColl->at(i).capCollOld.overPos = insOverPos;
 		allColl->at(i).capCollOld.r = allColl->at(i).capColl.r;
+		allColl->at(i).Mold = M;
 
-		if (insCheckHit && allColl->at(i).isAlive)
+		if (insCheckHit)
 		{
-			allColl->at(i).isAlive = false;
+			allColl->at(i).activeTimeF = 0.f;
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
 			attackChar = allColl->at(i).attackChar;
 			HPmath(-allColl->at(i).damage);
