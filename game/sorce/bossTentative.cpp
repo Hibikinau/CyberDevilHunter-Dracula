@@ -20,6 +20,11 @@ bool Boss::Initialize()
 	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
 	ChangeVolumeSoundMem(520, swingSE);
+	Awake = false;
+	AwakeDmg = 1;
+	AwakeMove = 1;
+	AwakeSpd = 1;
+	AwakeT = 0;
 	return true;
 }
 
@@ -31,6 +36,13 @@ bool	Boss::Terminate()
 
 bool	Boss::Process()
 {
+	if (_statusInf.hitPoint <= 5000) {
+		AwakeSpd = 1.5f;
+		AwakeMove = 1.5f;
+		AwakeDmg = 1.5f;
+		AwakeT = 25;
+	}
+
 	if (status == STATUS::DEAD) {
 		_modelManager.animChange(BOSS1_dead, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
@@ -94,9 +106,9 @@ bool	Boss::Process()
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
-		animSpd = .8f;
+		animSpd = 0.8f*AwakeSpd;
 		_modelManager.animChange(BOSS1_run, &_modelInf, true, true, false);
-		Move(runSpd, 0);
+		Move(runSpd*AwakeMove, 0);
 		if (PrangeA < 200) { UtilityJudge(); }
 		break;
 	case STATUS::FSTEP:
@@ -104,11 +116,11 @@ bool	Boss::Process()
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::FSTEP) { break; }
 		}
-		animSpd = 1.f;
+		animSpd = 1.f*AwakeSpd;
 		_modelManager.animChange(BOSS1_dodgeF, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Move(40.0, 0.0);
+			Move(40.0*AwakeMove, 0.0);
 		}
 		break;
 	case STATUS::BSTEP:
@@ -116,11 +128,11 @@ bool	Boss::Process()
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::BSTEP) { break; }
 		}
-		animSpd = 1.f;
+		animSpd = 1.f*AwakeSpd;
 		_modelManager.animChange(BOSS1_dodgeB, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Move(40.0, 180.0);
+			Move(40.0*AwakeMove, 180.0);
 		}
 		break;
 	case STATUS::RSTEP:
@@ -128,11 +140,11 @@ bool	Boss::Process()
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::RSTEP) { break; }
 		}
-		animSpd = 1.f;
+		animSpd = 1.f*AwakeSpd;
 		_modelManager.animChange(BOSS1_dodgeR, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Move(40.0, 90.0);
+			Move(40.0*AwakeMove, 90.0);
 		}
 		break;
 	case STATUS::LSTEP:
@@ -140,11 +152,11 @@ bool	Boss::Process()
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::LSTEP) { break; }
 		}
-		animSpd = 1.f;
+		animSpd = 1.f*AwakeSpd;
 		_modelManager.animChange(BOSS1_dodgeL, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
-			Move(40.0, 270.0);
+			Move(40.0*AwakeMove, 270.0);
 		}
 		break;
 	case STATUS::SRASH:
@@ -157,9 +169,9 @@ bool	Boss::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		animSpd = .7f;
+		animSpd = .7f*AwakeSpd;
 		_modelManager.animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 5.f, 100, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 20.f*AwakeDmg, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -185,10 +197,10 @@ bool	Boss::Process()
 		if (ActionFlag == true) { break; }
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 15.f*AwakeDmg, 100, Char_BOSS1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
-		attackStep > 3 ? animSpd = 1.3f : animSpd = .7f;
+		attackStep > 3 ? animSpd = 1.3f*AwakeSpd : animSpd = .7f*AwakeSpd;
 		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
 		_modelManager.animChange(BOSS1_tatakituke_r1 + attackStep + insAddNum, &_modelInf, false, false, true);
 		ActionFlag = true;
@@ -204,15 +216,15 @@ bool	Boss::Process()
 		}
 		if (ActionFlag == true)
 		{
-			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f, .0f); }
+			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f*AwakeMove, .0f); }
 			break;
 		}
 
-		animSpd = 0.7f;
+		animSpd = 0.7f*AwakeSpd;
 		_modelManager.animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 30.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -227,11 +239,11 @@ bool	Boss::Process()
 		}
 		if (ActionFlag == true) { break; }
 
-		animSpd = 0.7f;
+		animSpd = 0.7f*AwakeSpd;
 		_modelManager.animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 20.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -261,11 +273,11 @@ bool	Boss::Process()
 			break;
 		}
 
-		animSpd = 0.7f;
+		animSpd = 0.7f*AwakeSpd;
 		_modelManager.animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -1300.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 5.f, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -1300.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		if (attackStep == 1) { RangeJ(); }
 		ActionFlag = true;
@@ -366,7 +378,7 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::SLAM:
 		status = STATUS::WAIT;
-		time = 50;
+		time = 50-AwakeT;
 		break;
 	case STATUS::STAB:
 		if (Rand < 25) { status = STATUS::FSTEP; break; }
@@ -374,7 +386,7 @@ bool Boss::UtilityJudge() {
 		break;
 	case STATUS::ROBES:
 		status = STATUS::WAIT;
-		time = 50;
+		time = 50-AwakeT;
 		break;
 	case STATUS::JAMPACT:
 		if (Rand < 25) { status = STATUS::FSTEP; break; }
@@ -426,8 +438,8 @@ bool Boss::HPmath(float Num)
 		status = STATUS::DAMEGE;
 		ActionFlag = false;
 	}
-	if (_statusInf.hitPoint <=10000) {
-
+	if (_statusInf.hitPoint <=5000) {
+		Awake = true;
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;

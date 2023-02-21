@@ -64,4 +64,6 @@ protected:
 	bool jumpActFlag;
 	int swingSE;
 	float PrangeA, PrangeB, Pdir, Prange, atkDir;
+	bool Awake;
+	float AwakeSpd, AwakeDmg,AwakeMove,AwakeT;
 };
