@@ -30,7 +30,7 @@ struct attackColl
 	MATRIX Mold;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
-	bool isUseMat, isAlive;
+	bool isUseMat, isAlive = true;
 	weaponEffect rightingEfc;
 }; 
 
