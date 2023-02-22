@@ -64,7 +64,7 @@ bool	modeG::Initialize()
 	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
 	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
-	makeChar(this, std::make_shared<Boss>(), Char_BOSS1);
+	makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1);
 
 	countTime = GetNowCount();
 

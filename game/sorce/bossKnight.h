@@ -4,11 +4,11 @@
 
 
 
-class Boss : public CB
+class BossKnight : public CB
 {
 public:
-	Boss() {};
-	~Boss() {};
+	BossKnight() {};
+	~BossKnight() {};
 	virtual bool Initialize();
 	virtual bool Terminate();
 	virtual bool Input(){ return true; }
@@ -50,10 +50,7 @@ public:
 	RANGE range;
 
 protected:
-	int useAnim;
-	int _x, _y;
-	bool isUseFbx;
-	float animSpd, * _cameraSpd;
+	float animSpd;
 	int time, attackStep;
 	modelManager _modelManager;
 	bool AttackFlag, isAnimEnd;
@@ -62,6 +59,8 @@ protected:
 	bool MotionFlag;
 	bool ActionFlag;
 	bool jumpActFlag;
-	int swingSE;
+	int  swingSE;
 	float PrangeA, PrangeB, Pdir, Prange, atkDir;
+	bool Awake;
+	float AwakeSpd, AwakeDmg,AwakeMove,AwakeT;
 };
