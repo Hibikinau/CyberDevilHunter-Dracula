@@ -516,7 +516,6 @@ bool BossKnight::RangeJ() {
 void BossKnight::Move(float speed, float radian) {
 	float Speed = speed;
 	float Radian = (_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
-
 	_modelInf.pos.x -= sin(Radian) * Speed;
 	_modelInf.pos.z -= cos(Radian) * Speed;
 }
