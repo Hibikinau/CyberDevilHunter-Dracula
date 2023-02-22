@@ -318,7 +318,7 @@ bool	PL::Process()
 	for (auto i = charBox->begin(); i != charBox->end() && !isGhost; ++i)
 	{
 		if (i->second->type == 1) { continue; }
-		auto bossDisV = VSub(i->second->getInf()->pos, _modelInf.pos);
+		auto  bossDisV = VSub(i->second->getInf()->pos, _modelInf.pos);
 		float bossDisF = sqrt(bossDisV.x * bossDisV.x + bossDisV.y * bossDisV.y + bossDisV.z * bossDisV.z);
 		float plzDis = i->second->collCap.r + collCap.r;
 		if (bossDisF < plzDis)

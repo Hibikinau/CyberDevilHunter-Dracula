@@ -45,7 +45,7 @@
     <ClCompile Include="game\sorce\modeGame.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
-    <ClCompile Include="game\sorce\bossTentative.cpp">
+    <ClCompile Include="game\sorce\bossKnight.cpp">
       <Filter>ソース ファイル\char</Filter>
     </ClCompile>
     <ClCompile Include="game\sorce\modeResult.cpp">
@@ -86,7 +86,7 @@
     <ClInclude Include="game\sorce\modeTitle.h">
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
-    <ClInclude Include="game\sorce\bossTentative.h">
+    <ClInclude Include="game\sorce\bossKnight.h">
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\modeResult.h">

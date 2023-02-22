@@ -1,14 +1,12 @@
-#include"bossTentative.h"
+#include"bossKnight.h"
 #include <math.h>
 #define walkSpd 6.f
 #define runSpd 20.f
 
 
-bool Boss::Initialize()
+bool BossKnight::Initialize()
 {
 	_modelManager.modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf);
-	useAnim = 0;
-
 	status = STATUS::WAIT;
 	time = 300;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
@@ -28,13 +26,13 @@ bool Boss::Initialize()
 	return true;
 }
 
-bool	Boss::Terminate()
+bool	BossKnight::Terminate()
 {
 	CB::Terminate();
 	return true;
 }
 
-bool	Boss::Process()
+bool	BossKnight::Process()
 {
 	if (_statusInf.hitPoint <= 5000) {
 		AwakeSpd = 1.5f;
@@ -272,7 +270,6 @@ bool	Boss::Process()
 			else if (attackStep == 1 && _modelInf.playTime <= 5) { _modelInf.dir.y = Pdir; RangeJ(); }
 			break;
 		}
-
 		animSpd = 0.7f*AwakeSpd;
 		_modelManager.animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
@@ -291,7 +288,7 @@ bool	Boss::Process()
 	return true;
 }
 
-bool	Boss::Render(float timeSpeed)
+bool	BossKnight::Render(float timeSpeed)
 {
 
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
@@ -302,106 +299,201 @@ bool	Boss::Render(float timeSpeed)
 }
 
 
-bool Boss::UtilityJudge() {
+bool BossKnight::UtilityJudge() {
 	attackStep = 0, jumpActFlag = false;
 	_modelInf.dir.y = Pdir;
 	int Rand = GetRand(100);
-	switch (status) {
-	case STATUS::NONE:
-	case STATUS::WAIT:
-		RangeJ();
-		if (range == RANGE::CrossRange) {
-			if (Rand < 40) { status = STATUS::SRASH; }
-			if (Rand >= 40) {
-				status = STATUS::SLAM;
+	
+	if (!Awake) {
+		switch (status) {
+		case STATUS::NONE:
+		case STATUS::WAIT:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand < 40) { status = STATUS::SRASH; }
+				if (Rand >= 40) {
+					status = STATUS::SLAM;
+				}
+				break;
+			}
+			if (range == RANGE::MidRange) {
+				if (Rand < 80) { status = STATUS::STAB; }
+				if (Rand >= 80) { status = STATUS::RUN; }
+			}
+			if (range == RANGE::LongRange) {
+				if (Rand < 70) { status = STATUS::JAMPACT; }
+				if (Rand >= 70) { status = STATUS::RUN; }
+				break;
 			}
 			break;
-		}
-		if (range == RANGE::MidRange) {
-			if (Rand < 80) { status = STATUS::STAB; }
-			if (Rand >= 80) { status = STATUS::RUN; }
-		}
-		if (range == RANGE::LongRange) {
-			if (Rand < 70) { status = STATUS::JAMPACT; }
-			if (Rand >= 70) { status = STATUS::RUN; }
+		case STATUS::DAMEGE:
+			status = STATUS::WAIT;
 			break;
-		}
-		break;
-	case STATUS::DAMEGE:
-		status = STATUS::WAIT;
-		break;
-	case STATUS::DEAD:break;
-	case STATUS::RUN:
-		RangeJ();
-		if (range == RANGE::CrossRange) {
-			if (Rand < 65) { status = STATUS::SRASH; }
-			if (Rand >= 65) {
-				status = STATUS::SLAM;
+		case STATUS::DEAD:break;
+		case STATUS::RUN:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand < 65) { status = STATUS::SRASH; }
+				if (Rand >= 65) {
+					status = STATUS::SLAM;
+				}
+				break;
+			}
+			if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
+			if (range == RANGE::LongRange) {
+				status = STATUS::JAMPACT;
+				break;
 			}
 			break;
-		}
-		if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
-		if (range == RANGE::LongRange) {
-			status = STATUS::JAMPACT;
+		case STATUS::FSTEP:
+			if (Rand < 70) { status = STATUS::SRASH; }
+			if (Rand >= 70) { status = STATUS::SLAM; }
 			break;
-		}
-		break;
-	case STATUS::FSTEP:
-		if (Rand < 70) { status = STATUS::SRASH; }
-		if (Rand >= 70) { status = STATUS::SLAM; }
-		break;
-	case STATUS::BSTEP:
-		//status = STATUS::ROBES; break;
-		RangeJ();
-		if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
-		if (range == RANGE::MidRange) { status = STATUS::STAB; break; }
-		if (range == RANGE::LongRange) { status = STATUS::JAMPACT; break; }
-		break;
-	case STATUS::RSTEP:
-		status = STATUS::WAIT;
-		break;
-	case STATUS::LSTEP:
-		status = STATUS::WAIT;
-		break;
-	case STATUS::SRASH:
-		if (Rand > 80) {
+		case STATUS::BSTEP:
+			//status = STATUS::ROBES; break;
+			RangeJ();
+			if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
+			if (range == RANGE::MidRange) { status = STATUS::STAB; break; }
+			if (range == RANGE::LongRange) { status = STATUS::JAMPACT; break; }
 			break;
-		}
-		if (80 >= Rand && Rand > 40) {
-			status = STATUS::BSTEP;
+		case STATUS::RSTEP:
+			status = STATUS::WAIT;
 			break;
-		}
-		if (40 >= Rand) {
-			status = STATUS::ROBES;
+		case STATUS::LSTEP:
+			status = STATUS::WAIT;
 			break;
-		}
-		break;
-	case STATUS::SLAM:
-		status = STATUS::WAIT;
-		time = 50-AwakeT;
-		break;
-	case STATUS::STAB:
-		if (Rand < 25) { status = STATUS::FSTEP; break; }
-		if (25 <= Rand) { status = STATUS::JAMPACT; break; }
-		break;
-	case STATUS::ROBES:
-		status = STATUS::WAIT;
-		time = 50-AwakeT;
-		break;
-	case STATUS::JAMPACT:
-		if (Rand < 25) { status = STATUS::FSTEP; break; }
-		if (25 <= Rand) { status = STATUS::ROBES; break; }
-		break;
-	case STATUS::ONESLASH:
-		status = STATUS::BSTEP; break;
-		break;
-	};
+		case STATUS::SRASH:
+			if (Rand > 80) {
+				break;
+			}
+			if (80 >= Rand && Rand > 40) {
+				status = STATUS::BSTEP;
+				break;
+			}
+			if (40 >= Rand) {
+				status = STATUS::ROBES;
+				break;
+			}
+			break;
+		case STATUS::SLAM:
+			status = STATUS::WAIT;
+			time = 50 - AwakeT;
+			break;
+		case STATUS::STAB:
+			if (Rand < 25) { status = STATUS::FSTEP; break; }
+			if (25 <= Rand) { status = STATUS::JAMPACT; break; }
+			break;
+		case STATUS::ROBES:
+			status = STATUS::WAIT;
+			time = 50 - AwakeT;
+			break;
+		case STATUS::JAMPACT:
+			if (Rand < 25) { status = STATUS::FSTEP; break; }
+			if (25 <= Rand) { status = STATUS::ROBES; break; }
+			break;
+		case STATUS::ONESLASH:
+			status = STATUS::BSTEP; break;
+			break;
+		};
+	}
+	else if (Awake) {
+		switch (status) {
+		case STATUS::NONE:
+		case STATUS::WAIT:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand < 40) { status = STATUS::SRASH; }
+				if (Rand >= 40) {
+					status = STATUS::SLAM;
+				}
+				break;
+			}
+			if (range == RANGE::MidRange) {
+				if (Rand < 80) { status = STATUS::STAB; }
+				if (Rand >= 80) { status = STATUS::RUN; }
+			}
+			if (range == RANGE::LongRange) {
+				if (Rand < 70) { status = STATUS::JAMPACT; }
+				if (Rand >= 70) { status = STATUS::RUN; }
+				break;
+			}
+			break;
+		case STATUS::DAMEGE:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::DEAD:break;
+		case STATUS::RUN:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand < 65) { status = STATUS::SRASH; }
+				if (Rand >= 65) {
+					status = STATUS::SLAM;
+				}
+				break;
+			}
+			if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
+			if (range == RANGE::LongRange) {
+				status = STATUS::JAMPACT;
+				break;
+			}
+			break;
+		case STATUS::FSTEP:
+			if (Rand < 70) { status = STATUS::SRASH; }
+			if (Rand >= 70) { status = STATUS::SLAM; }
+			break;
+		case STATUS::BSTEP:
+			//status = STATUS::ROBES; break;
+			RangeJ();
+			if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
+			if (range == RANGE::MidRange) { status = STATUS::STAB; break; }
+			if (range == RANGE::LongRange) { status = STATUS::JAMPACT; break; }
+			break;
+		case STATUS::RSTEP:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::LSTEP:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::SRASH:
+			if (Rand > 80) {
+				break;
+			}
+			if (80 >= Rand && Rand > 40) {
+				status = STATUS::BSTEP;
+				break;
+			}
+			if (40 >= Rand) {
+				status = STATUS::ROBES;
+				break;
+			}
+			break;
+		case STATUS::SLAM:
+			status = STATUS::WAIT;
+			time = 50 - AwakeT;
+			break;
+		case STATUS::STAB:
+			if (Rand < 25) { status = STATUS::FSTEP; break; }
+			if (25 <= Rand) { status = STATUS::JAMPACT; break; }
+			break;
+		case STATUS::ROBES:
+			status = STATUS::WAIT;
+			time = 50 - AwakeT;
+			break;
+		case STATUS::JAMPACT:
+			if (Rand < 25) { status = STATUS::FSTEP; break; }
+			if (25 <= Rand) { status = STATUS::ROBES; break; }
+			break;
+		case STATUS::ONESLASH:
+			status = STATUS::BSTEP; break;
+			break;
+		};
+	}
 
 
 	return true;
 }
 
-bool Boss::RangeJ() {
+bool BossKnight::RangeJ() {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
@@ -421,7 +513,7 @@ bool Boss::RangeJ() {
 }
 
 
-void Boss::Move(float speed, float radian) {
+void BossKnight::Move(float speed, float radian) {
 	float Speed = speed;
 	float Radian = (_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
 
@@ -430,9 +522,8 @@ void Boss::Move(float speed, float radian) {
 }
 
 
-bool Boss::HPmath(float Num)
+bool BossKnight::HPmath(float Num)
 {
-
 	_statusInf.hitPoint += Num;
 	if (Num <= -200) {
 		status = STATUS::DAMEGE;

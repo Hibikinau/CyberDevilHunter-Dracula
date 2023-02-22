@@ -1,7 +1,7 @@
 #pragma once
 #include"appframe.h"
 #include"player.h"
-#include"bossTentative.h"
+#include"bossKnight.h"
 #include<memory>
 
 class modeG : public ModeBase
