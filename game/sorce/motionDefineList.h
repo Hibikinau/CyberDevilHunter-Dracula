@@ -83,3 +83,9 @@
 #define BOSS1_dodgeF 4
 #define BOSS1_dodgeL 5
 #define BOSS1_dodgeB 6
+
+//ƒ‰ƒCƒIƒ“ƒ}ƒ“
+#define BOSS2_idel 0
+#define BOSS2_run 23
+#define BOSS2_dead 2
+#define BOSS2_hidan 24
