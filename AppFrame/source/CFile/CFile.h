@@ -1,6 +1,12 @@
 #pragma once
 
 #include <string>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <Windows.h>
+#include "../Application/UtilMacro.h"
 
 class CFile
 {
@@ -19,6 +25,9 @@ public:
 	std::string DataStr() { return std::string(_data); }
 	int Size() { return _size; }
 	bool Success() { return _success; }
+	bool loadCSV(std::vector<std::string>* data, const char* name);
+	std::vector<std::string> split(std::string& input, char delimiter);
+	std::string UTF8toSjis(std::string srcUTF8);
 
 private:
 	void Init();
