@@ -21,7 +21,7 @@ public:
 	virtual bool	Imput(imputInf* iInf);
 	virtual bool	Process();
 	virtual bool	Render();
-
+	virtual bool	popBoss(int bossType, const char* _nameA) { return false; }
 
 public:
 	int	GetModeCount() { return _cntMode; }			// このモードが始まってからのカウンタ

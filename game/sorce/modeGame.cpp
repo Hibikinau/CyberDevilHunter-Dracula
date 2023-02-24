@@ -12,24 +12,10 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 	insMG->charBox.emplace(nameA, std::move(charPoint));
 	return true;
 }
-
-bool loadAnimTs(bool* endSignal)
+bool	modeG::popBoss(int bossType, const char* _nameA)
 {
-	int i = 0;
-	while (!*endSignal && ProcessMessage() == 0)
-	{
-		ProcessMessage();
-		ClearDrawScreen();
-		i++;
-		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
+	if (bossType == 1) { makeChar(this, std::shared_ptr<Boss>(), _nameA); }
 
-		ScreenFlip();
-	}
-	*endSignal = true;
-	for (int i = 0; i < 100; i++)
-	{
-		OutputDebugString(std::to_string(i).c_str());
-	}
 	return true;
 }
 
