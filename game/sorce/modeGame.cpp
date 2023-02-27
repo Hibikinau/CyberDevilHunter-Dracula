@@ -14,7 +14,7 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 }
 bool	modeG::popBoss(int bossType, const char* _nameA)
 {
-	if (bossType == 1) { makeChar(this, std::shared_ptr<Boss>(), _nameA); }
+	if (bossType == 1) { makeChar(this, std::shared_ptr<BossKnight>(), _nameA); }
 
 	return true;
 }
@@ -51,7 +51,7 @@ bool	modeG::Initialize()
 	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
 
-	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<Boss>(), Char_BOSS1); }
+	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1); }
 
 	countTime = GetNowCount();
 
@@ -132,7 +132,7 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] || _imputInf._gTrgb[KEY_INPUT_L])
 	{//ロックオン
-		isLockon ^= true;
+		if(charBox.size() >= 2){ isLockon ^= true; }
 	}
 
 	//コマンド呼び出し部分
