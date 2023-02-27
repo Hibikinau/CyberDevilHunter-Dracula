@@ -18,7 +18,7 @@ struct collCapsule
 struct weaponEffect
 {
 	std::vector<VECTOR> upCornerPos, downCornerPos;
-	float lifeTime, overrideTime, nonOverrideTime;
+	float lifeTime = 10, maxLifeTime = 10, overrideTime, nonOverrideTime;
 	int efcPicHandle;
 };
 
@@ -30,9 +30,9 @@ struct attackColl
 	MATRIX Mold;
 	float damage;
 	int nonActiveTimeF, activeTimeF;
-	bool isUseMat, isAlive;
+	bool isUseMat, isAlive = true;
 	weaponEffect rightingEfc;
-}; 
+};
 
 class CB
 {

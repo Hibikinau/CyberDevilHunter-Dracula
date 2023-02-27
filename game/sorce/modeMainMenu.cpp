@@ -13,11 +13,11 @@ bool	modeMM::Initialize()
 
 bool	modeMM::Process()
 {
-	if (_imputInf._gTrgb[KEY_INPUT_DOWN])
+	if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 	{
 		picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
 	}
-	if (_imputInf._gTrgb[KEY_INPUT_UP])
+	if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
 	{
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
 	}

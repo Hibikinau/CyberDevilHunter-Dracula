@@ -28,13 +28,6 @@ struct modelInf
 	std::vector<weponModelInf> wepons;
 };
 
-struct valData
-{
-	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f, counterSpd = 4.f;
-	int _counterTime = 20, plCTimeN = 0, efcHandle = -1;
-	std::vector<int> activateWepon, disableWepon;
-};
-
 class modelManager
 {
 public:

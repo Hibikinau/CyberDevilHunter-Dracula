@@ -20,6 +20,7 @@ public:
 	bool ASyncLoadAnim();
 	bool collHitCheck();
 	bool drawUI();
+	bool	popBoss(int bossType, const char* _nameA)override;
 
 public:
 	ModeServer* _modeServer;
@@ -36,7 +37,7 @@ public:
 	std::string NS;
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;
-	valData _valData;
+	valData *_valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
 	statusInf plStatus, bossStatus;
@@ -49,7 +50,7 @@ public:
 	int ShadowMapHandle;
 	float bright = .6f;
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
-	bool debugMode = false, plDead;
+	bool debugMode = true, plDead;
 	int BGMdelay;
 	int drawAreaSize = 0;
 };

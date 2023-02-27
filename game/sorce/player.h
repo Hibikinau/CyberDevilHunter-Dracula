@@ -20,6 +20,7 @@ enum class ExclusiveState
 	DODGE,
 	GUARD,
 	DAMAGE,
+	finishAttack,
 };
 
 enum class pushButton
@@ -36,6 +37,7 @@ enum class pushButton
 	Irregular,
 	Damage,
 	R1,
+	finishAttack,
 };
 
 class PL : public CB
@@ -69,9 +71,9 @@ protected:
 	int _x, _y, stepChargeSec, isStep = false;
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
 	//int isAttackFinishXorY;//1.弱納刀 2.強納刀
-	int chargeLevel, chargeTime, insEfcHamdle;
+	int chargeLevel, chargeTime, insEfcHamdle, isAwakening = 0;
 	float spd, animSpd, dodgeDir;
-	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isAttackEnd, isCounter = false, isAwakening = false;
+	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isAttackEnd, isCounter = false;
 	float maxHitPoint, maxBloodPoint, maxStamina, atkBuff = 0.f;
 	float nowActionTime;
 	bool bufferedInput, isGhost;

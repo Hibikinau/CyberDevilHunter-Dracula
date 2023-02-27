@@ -6,6 +6,15 @@
 #include <memory>
 #include "ModeBase.h"
 
+struct valData
+{
+	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f, counterSpd = 4.f;
+	int _counterTime = 20, plCTimeN = 0, efcHandle = -1;
+	std::vector<int> activateWepon, disableWepon;
+	bool isAtkEfcArufa = true;
+	int popBossNum = 0;
+};
+
 class	ModeServer
 {
 	typedef	std::map<std::string, std::shared_ptr<ModeBase> >		lstModeBase;
@@ -45,6 +54,7 @@ private:
 
 public:
 	imputInf* _imputInf;
+	valData _valData;
 	lstModeBase		_vMode;			// モードリスト
 
 private:

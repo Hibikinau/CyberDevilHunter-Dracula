@@ -7,29 +7,15 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 	charPoint->setCB(&insMG->charBox);
 	charPoint->setGroundInf(&insMG->stage);
 	charPoint->allColl = &insMG->mAllColl;
-	charPoint->_valData = &insMG->_valData;
+	charPoint->_valData = insMG->_valData;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insMG->charBox.emplace(nameA, std::move(charPoint));
 	return true;
 }
-
-bool loadAnimTs(bool* endSignal)
+bool	modeG::popBoss(int bossType, const char* _nameA)
 {
-	int i = 0;
-	while (!*endSignal && ProcessMessage() == 0)
-	{
-		ProcessMessage();
-		ClearDrawScreen();
-		i++;
-		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
+	if (bossType == 1) { makeChar(this, std::shared_ptr<Boss>(), _nameA); }
 
-		ScreenFlip();
-	}
-	*endSignal = true;
-	for (int i = 0; i < 100; i++)
-	{
-		OutputDebugString(std::to_string(i).c_str());
-	}
 	return true;
 }
 
@@ -60,11 +46,12 @@ bool	modeG::Initialize()
 	SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
-
+	_valData = &_modeServer->_valData;
 	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
 	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
 	makeChar(this, std::make_shared<PL>(), Char_PL);
-	makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1);
+
+	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<Boss>(), Char_BOSS1); }
 
 	countTime = GetNowCount();
 
@@ -76,7 +63,7 @@ bool	modeG::Initialize()
 	HPgaugeHandle = LoadGraph("game/res/GameUI_HP.png");
 	HPgaugeHandle2 = LoadGraph("game/res/GameUI_HPB.png");
 	BPgaugeHandle = LoadGraph("game/res/c.png");
-	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker.png");
+	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker2.png");
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	insEfcHamdle = LoadGraph("game/res/kari2.png");
@@ -93,7 +80,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	_valData.efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f);
+	_valData->efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f);
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 
@@ -173,13 +160,13 @@ bool	modeG::Process()
 	debugWardBox.emplace_back(std::to_string(
 		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
-	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData.plAtkSpd1));
-	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData.plAtkSpd2));
-	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData.plAtkSpd3));
-	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData.plAtkSpd4));
-	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData.counterSpd));
-	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData._counterTime));
-	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData.plCTimeN));
+	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData->plAtkSpd1));
+	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData->plAtkSpd2));
+	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData->plAtkSpd3));
+	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData->plAtkSpd4));
+	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData->counterSpd));
+	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData->_counterTime));
+	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData->plCTimeN));
 	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
 		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
 		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
@@ -214,7 +201,7 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
-		int a = PlayEffekseer3DEffect(_valData.efcHandle);
+		int a = PlayEffekseer3DEffect(_valData->efcHandle);
 		SetPosPlayingEffekseer3DEffect(a, 0, 1300, 0);
 	}
 	// Effekseerにより再生中のエフェクトを更新する。
@@ -257,7 +244,7 @@ bool	modeG::Render()
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
 		auto a = _modelManager.drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
-	
+
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -279,24 +266,19 @@ bool	modeG::Render()
 	{
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
+			if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
 			_modelManager.drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
 		}
-
+		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }
 		else { atkEfc.erase(atkEfc.begin() + i); }
 	}
 	SetUseLighting(true);
-	//ブラー、いつかやる
-	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
-	//DrawGraph(0, 0, inscg, true);
-	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	//inscg = MakeGraph(1280, 720);
-	//GetDrawScreenGraph(0, 0, 1280, 720, inscg);
 
 	if (isLockon)
 	{
 		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 120, 0, lockOnMarkerHandle, true);
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle, true);
 		SetUseZBuffer3D(TRUE);
 	}
 
@@ -317,13 +299,12 @@ bool	modeG::Render()
 
 	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 	drawUI();
-	
+
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
 	if (insDirY > 360) { insDirY -= 360; }
 	else if (insDirY < 0) { insDirY += 360; }
-	debugWardBox.emplace_back(std::to_string(insDirY));
 	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
@@ -351,9 +332,8 @@ bool	modeG::collHitCheck()
 	{
 		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
 		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
-		else 
+		else
 		{
-			mAllColl.at(i).rightingEfc.lifeTime = 10;
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
 			mAllColl.erase(mAllColl.begin() + i);
 		}
@@ -455,22 +435,22 @@ int modeG::useCommand()
 
 			if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
 			if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
-			if (data.find("atkF1") != std::string::npos) { _valData.plAtkSpd1 = getNum(data, 1); }
-			if (data.find("atkF2") != std::string::npos) { _valData.plAtkSpd2 = getNum(data, 1); }
-			if (data.find("atkF3") != std::string::npos) { _valData.plAtkSpd3 = getNum(data, 1); }
-			if (data.find("atkF4") != std::string::npos) { _valData.plAtkSpd4 = getNum(data, 1); }
-			if (data.find("GSpd") != std::string::npos) { _valData.counterSpd = getNum(data, 1); }
-			if (data.find("CTime") != std::string::npos) { _valData._counterTime = getNum(data, 1); }
+			if (data.find("atkF1") != std::string::npos) { _valData->plAtkSpd1 = getNum(data, 1); }
+			if (data.find("atkF2") != std::string::npos) { _valData->plAtkSpd2 = getNum(data, 1); }
+			if (data.find("atkF3") != std::string::npos) { _valData->plAtkSpd3 = getNum(data, 1); }
+			if (data.find("atkF4") != std::string::npos) { _valData->plAtkSpd4 = getNum(data, 1); }
+			if (data.find("GSpd") != std::string::npos) { _valData->counterSpd = getNum(data, 1); }
+			if (data.find("CTime") != std::string::npos) { _valData->_counterTime = getNum(data, 1); }
 			if (data.find("atkFall") != std::string::npos)
 			{
 				auto a = getNum(data, 1);
-				_valData.plAtkSpd1 = a, _valData.plAtkSpd2 = a, _valData.plAtkSpd3 = a, _valData.plAtkSpd4 = a;
+				_valData->plAtkSpd1 = a, _valData->plAtkSpd2 = a, _valData->plAtkSpd3 = a, _valData->plAtkSpd4 = a;
 			}
 			if (data.find("effectChange") != std::string::npos)
 			{
 				auto comEfcDir = "game/res/" + getChar(data, 1) + ".efkefc";
 				auto efcScale = getNum(data, 2);
-				_valData.efcHandle = LoadEffekseerEffect(comEfcDir.c_str(), efcScale);
+				_valData->efcHandle = LoadEffekseerEffect(comEfcDir.c_str(), efcScale);
 			}
 			if (data == "kill")
 			{
