@@ -164,6 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="game\sorce\bossKnight.cpp" />
+    <ClCompile Include="game\sorce\bossLionman.cpp" />
     <ClCompile Include="game\sorce\charBase.cpp" />
     <ClCompile Include="game\sorce\gameMain.cpp" />
     <ClCompile Include="game\sorce\modeBossChoose.cpp" />
@@ -178,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="game\sorce\allMode.h" />
     <ClInclude Include="game\sorce\bossKnight.h" />
+    <ClInclude Include="game\sorce\bossLionman.h" />
     <ClInclude Include="game\sorce\charBase.h" />
     <ClInclude Include="game\sorce\gameMain.h" />
     <ClInclude Include="game\sorce\modeBossChoose.h" />
