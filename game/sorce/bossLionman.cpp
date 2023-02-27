@@ -6,7 +6,7 @@
 
 bool BossLion::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy02_mv1/Enemy02_mv1", 1.0f, &_modelInf);
+	_modelManager.modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 1.0f, &_modelInf);
 	status = STATUS::WAIT;
 	time = 300;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 15000;
