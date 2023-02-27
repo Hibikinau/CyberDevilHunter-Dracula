@@ -37,7 +37,7 @@ public:
 	std::string NS;
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;
-	valData _valData;
+	valData *_valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
 	statusInf plStatus, bossStatus;
