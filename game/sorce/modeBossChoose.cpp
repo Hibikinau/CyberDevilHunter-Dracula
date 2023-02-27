@@ -5,8 +5,7 @@ bool	modeBC::Initialize()
 	_cg = LoadGraph("game/res/chooseBoss.png");
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
-	_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
-	_modeServer->disable(MODE_GAME);
+	//_modeServer->disable(MODE_GAME);
 	menuMessage.emplace_back("ボス１");
 	menuMessage.emplace_back("ボス２");
 	picMenuMaxNum = menuMessage.size() - 1;
@@ -28,13 +27,14 @@ bool	modeBC::Process()
 	{
 		if (picMenuNum == 0)
 		{//ボス1
-			_modeServer->_vMode.find(MODE_GAME)->second->popBoss(1, Char_BOSS1);
+			_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+			//_modeServer->_vMode.find(MODE_GAME)->second->popBoss(1, Char_BOSS1);
 		}
 		else if (picMenuNum == 1)
 		{//ボス2
 
 		}
-		_modeServer->activate(MODE_GAME);
+		//_modeServer->activate(MODE_GAME);
 		return false;
 	}
 }
@@ -62,6 +62,7 @@ bool	modeBC::Render()
 
 bool	modeBC::Terminate()
 {
+	SetFontSize(DeffontSize);
 	DeleteGraph(_cg);
 	return true;
 }

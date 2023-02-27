@@ -32,7 +32,7 @@ struct attackColl
 	int nonActiveTimeF, activeTimeF;
 	bool isUseMat, isAlive = true;
 	weaponEffect rightingEfc;
-}; 
+};
 
 class CB
 {

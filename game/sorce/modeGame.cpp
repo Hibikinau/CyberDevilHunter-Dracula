@@ -304,7 +304,6 @@ bool	modeG::Render()
 	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
 	if (insDirY > 360) { insDirY -= 360; }
 	else if (insDirY < 0) { insDirY += 360; }
-	debugWardBox.emplace_back(std::to_string(insDirY));
 	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");

@@ -9,6 +9,7 @@
 #define charge1ATK 100.f
 #define charge2ATK 160.f
 #define charge3ATK 160.f
+#define finishATK 200.f
 
 #define rWeponParentFrame 192
 #define lWeponParentFrame 167
@@ -94,8 +95,13 @@ bool	PL::Process()
 		_statusInf.bloodPoint = 1500.f;
 	}
 
-	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100) { isAwakening = true, atkBuff = 100.f, _modelInf.animSpdBuff = .5f; }
-	if (isAwakening) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = false, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
+	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 0) { isAwakening = 1, atkBuff = 100.f, _modelInf.animSpdBuff = .5f; }
+	if (_imputInf->lTriggerX < 20 && _imputInf->rTriggerX < 20)
+	{
+		if (isAwakening == 1) { isAwakening = 2; }
+		if (isAwakening == -1) { isAwakening = 0; }
+	}
+	if (isAwakening > 0) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = false, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
 
 	if (CheckHitKey(KEY_INPUT_W)) { spd = runSpd; charMove(spd, *_cameraDir, false); }
 	if (CheckHitKey(KEY_INPUT_A)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f + 90.f, false); }
@@ -247,6 +253,16 @@ bool	PL::Process()
 		lastAttackState = _estate::changeATTACKY;
 		attackNumOld = 0;
 		changeAttackY(this);
+		break;
+	case pushButton::finishAttack://•KŽE‹Z
+		Estate = _estate::finishAttack;
+		lastAttackState = _estate::finishAttack;
+		attackNumOld = 0;
+		_modelManager.animChange(PL_motion_hissatsu, &_modelInf, false, false, true);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), true, finishATK + atkBuff, rWeponParentFrame, Char_PL);
+		isAwakening = -1;
+		immortalTime = _modelInf.totalTime;
+		_statusInf.bloodPoint = 0;
 		break;
 	case pushButton::Lstick://ƒ_ƒbƒVƒ…
 		Estate = _estate::NORMAL;
@@ -405,7 +421,7 @@ bool PL::HPmath(float math)
 		{
 			if (!isGuard || isFastGuard)
 			{
-				if (!isAwakening) { _statusInf.hitPoint += math; BPmath(std::abs(math) * 6); }
+				if (isAwakening == 0) { _statusInf.hitPoint += math; BPmath(std::abs(math) * 6); }
 				PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;
 				auto a = PlayEffekseer3DEffect(_valData->efcHandle);
@@ -427,7 +443,7 @@ bool PL::HPmath(float math)
 }
 bool PL::BPmath(float math)
 {
-	if (isAwakening && math > 0) { return false; }
+	if (isAwakening > 0 && math > 0) { return false; }
 	_statusInf.bloodPoint += math;
 	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
 	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
@@ -491,6 +507,13 @@ pushButton PL::setAction()
 		if (isCharge >= 1) { insEnum = pushButton::LBY; }
 	}
 	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y—£‚µ‚½‚Æ‚«
+
+	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 2)
+	{
+		isNext ? nextKey = pushButton::finishAttack : insEnum = pushButton::finishAttack;
+	}
+
+	if (Estate == _estate::finishAttack) { return pushButton::Irregular; }
 
 	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)
 	{
