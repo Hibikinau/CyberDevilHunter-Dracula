@@ -31,7 +31,7 @@ bool	modeBC::Process()
 		}
 		else if (picMenuNum == 1)
 		{//ƒ{ƒX2
-
+			_modeServer->_valData.popBossNum = 2;
 		}
 		_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
 		return false;
