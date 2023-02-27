@@ -38,7 +38,7 @@ bool	BossKnight::Process()
 		AwakeSpd = 1.5f;
 		AwakeMove = 1.5f;
 		AwakeDmg = 1.5f;
-		AwakeT = 25;
+		AwakeT = 35;
 	}
 
 	if (status == STATUS::DEAD) {
@@ -177,12 +177,20 @@ bool	BossKnight::Process()
 		if (isAnimEnd == true) {
 			ActionFlag = false;
 			if (attackStep < 8)
-			{
+			{    
+				RangeJ();
 				if (attackStep == 1 && (rand() % 100) < 50)
 				{
 					attackStep++;
 					status = STATUS::ONESLASH;
 					UtilityJudge();
+					break;
+				}
+				if (attackStep == 3 && range==RANGE::MidRange)
+				{
+					attackStep=0;
+					status = STATUS::JAMPACT;
+					//UtilityJudge();
 					break;
 				}
 				attackStep++;

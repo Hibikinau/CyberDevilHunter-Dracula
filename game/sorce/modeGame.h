@@ -2,6 +2,7 @@
 #include"appframe.h"
 #include"player.h"
 #include"bossKnight.h"
+#include"bossLionman.h"
 #include<memory>
 
 class modeG : public ModeBase

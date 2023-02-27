@@ -86,6 +86,7 @@
 
 //ƒ‰ƒCƒIƒ“ƒ}ƒ“
 #define BOSS2_idel 0
-#define BOSS2_run 23
-#define BOSS2_dead 2
-#define BOSS2_hidan 24
+#define BOSS2_run 1
+#define BOSS2_dodge 2
+#define BOSS2_dead 3
+#define BOSS2_attack1 4

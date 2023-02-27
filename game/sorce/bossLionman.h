@@ -30,12 +30,7 @@ public:
 		BSTEP,
 		RSTEP,
 		LSTEP,
-		SRASH,
-		SLAM,
-		STAB,
-		ROBES,
-		JAMPACT,
-		ONESLASH,
+		ATTACK,
 	};
 	STATUS status;
 
