@@ -3,6 +3,7 @@
 bool	modeBC::Initialize()
 {
 	//_cg = LoadGraph("game/res/chooseBoss.png");
+	LoadDivGraph("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
 	menuMessage.emplace_back("ボス１");
@@ -37,10 +38,12 @@ bool	modeBC::Process()
 		return false;
 	}
 }
-
+//680, 120
 bool	modeBC::Render()
 {
-	//DrawGraph(0, 0, _cg, false);
+	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
+	DrawGraph(680, 120, mapAnimHandol[mapAnimNum], false);
+
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("討伐ボス選択", strlen("討伐ボス選択"));
 	DrawString(20, 20, "討伐ボス選択", GetColor(255, 255, 255));
@@ -62,6 +65,6 @@ bool	modeBC::Render()
 bool	modeBC::Terminate()
 {
 	SetFontSize(DeffontSize);
-	//DeleteGraph(_cg);
+	InitGraph();
 	return true;
 }

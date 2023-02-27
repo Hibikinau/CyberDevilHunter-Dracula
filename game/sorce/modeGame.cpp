@@ -63,7 +63,7 @@ bool	modeG::Initialize()
 	HPgaugeHandle = LoadGraph("game/res/GameUI_HP.png");
 	HPgaugeHandle2 = LoadGraph("game/res/GameUI_HPB.png");
 	BPgaugeHandle = LoadGraph("game/res/c.png");
-	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker2.png");
+	LoadDivGraph("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	insEfcHamdle = LoadGraph("game/res/kari2.png");
@@ -277,8 +277,9 @@ bool	modeG::Render()
 
 	if (isLockon)
 	{
+		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
 		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle, true);
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle[LOMarkerNum], true);
 		SetUseZBuffer3D(TRUE);
 	}
 
