@@ -25,9 +25,10 @@ public:
 	std::string DataStr() { return std::string(_data); }
 	int Size() { return _size; }
 	bool Success() { return _success; }
-	bool loadCSV(std::vector<std::string>* data, const char* name);
-	std::vector<std::string> split(std::string& input, char delimiter);
-	std::string UTF8toSjis(std::string srcUTF8);
+
+	static bool loadCSV(std::vector<std::string>* data, const char* name, bool isComUtoS);
+	static std::vector<std::string> split(std::string& input, char delimiter);
+	static std::string UTF8toSjis(std::string srcUTF8);
 
 private:
 	void Init();

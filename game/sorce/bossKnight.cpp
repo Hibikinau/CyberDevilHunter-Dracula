@@ -29,6 +29,7 @@ bool BossKnight::Initialize()
 bool	BossKnight::Terminate()
 {
 	CB::Terminate();
+	DeleteSoundMem(swingSE);
 	return true;
 }
 

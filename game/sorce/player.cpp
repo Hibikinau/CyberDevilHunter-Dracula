@@ -38,9 +38,8 @@ bool PL::Initialize()
 	_modelManager.weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya");
 	_modelManager.weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou");
 
-
-	changeAttackY = &CA_kirinuke;
-	changeAttackX = &CA_charge;
+	CA_change(_valData->plChangeAttackX, "X");
+	CA_change(_valData->plChangeAttackY, "Y");
 
 	std::vector<int> insSoundHandle;
 	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
@@ -563,11 +562,13 @@ bool PL::CA_change(std::string name, const char* XorY)
 	{
 		if ("charge" == name) { changeAttackX = &CA_charge; }
 		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
+		if ("debug" == name) { changeAttackX = &CA_debugAttack; }
 	}
 	else if ("Y" == XorY)
 	{
 		if ("charge" == name) { changeAttackY = &CA_charge; }
-		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
+		if ("kirinuke" == name) { changeAttackY = &CA_kirinuke; }
+		if ("debug" == name) { changeAttackY = &CA_debugAttack; }
 	}
 
 	return true;
@@ -577,7 +578,7 @@ bool PL::CA_debugAttack(PL* insPL)
 {
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
-	insPL->_modelManager.animChange(PL_kyou_1, &insPL->_modelInf, false, false, true);
+	insPL->_modelManager.animChange(PL_motion_hissatsu, &insPL->_modelInf, false, false, true);
 	insPL->animSpd = 1.f;
 	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), true, 99999.f, rWeponParentFrame, Char_PL);
 

@@ -62,6 +62,7 @@ int ModeServer::Release(const char* name, bool isDel) {
 	else
 	{
 		_vMode.at(name)->Terminate();
+		_vMode.at(name).reset();
 		_vMode.erase(name);
 		disable(name);
 		return 1;
@@ -75,7 +76,7 @@ void ModeServer::Clear() {
 	try
 	{
 		for (auto itr = _vMode.begin(); itr != _vMode.end(); ++itr) {
-			if (itr->second != NULL) { itr->second->Terminate(); }
+			if (itr->second != NULL) { itr->second->Terminate(); itr->second.reset(); }
 		}
 		for (auto iteAdd = _vModeAdd.begin(); iteAdd != _vModeAdd.end(); ++iteAdd) {
 			if (iteAdd->second != NULL) { iteAdd->second->Terminate(); }

@@ -3,11 +3,11 @@
 
 bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 {
+	charPoint->_valData = insMG->_valData;
 	charPoint->Initialize();
 	charPoint->setCB(&insMG->charBox);
 	charPoint->setGroundInf(&insMG->stage);
 	charPoint->allColl = &insMG->mAllColl;
-	charPoint->_valData = insMG->_valData;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insMG->charBox.emplace(nameA, std::move(charPoint));
 	return true;
@@ -354,7 +354,7 @@ bool	modeG::Terminate()
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
 	int a = InitGraph();
 
-	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }
+	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); i->second.reset(); }
 	mAllColl.clear();
 	charBox.clear();
 	debugWardBox.clear();
