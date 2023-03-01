@@ -53,8 +53,8 @@ int ModeServer::Release(const char* name, bool isDel) {
 		{
 			if (_vModeDel[i] == name)
 			{
-				_vModeDel.erase(_vModeDel.begin() + i); 
-				return 1; 
+				_vModeDel.erase(_vModeDel.begin() + i);
+				return 1;
 			}
 		}
 		return 1;
@@ -79,7 +79,7 @@ void ModeServer::Clear() {
 			if (itr->second != NULL) { itr->second->Terminate(); itr->second.reset(); }
 		}
 		for (auto iteAdd = _vModeAdd.begin(); iteAdd != _vModeAdd.end(); ++iteAdd) {
-			if (iteAdd->second != NULL) { iteAdd->second->Terminate(); }
+			if (iteAdd->second != NULL) { iteAdd->second->Terminate(); iteAdd->second.reset(); }
 		}
 	}
 	catch (std::exception)

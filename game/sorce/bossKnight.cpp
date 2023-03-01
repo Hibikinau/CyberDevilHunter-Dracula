@@ -313,7 +313,7 @@ bool BossKnight::UtilityJudge() {
 	attackStep = 0, jumpActFlag = false;
 	_modelInf.dir.y = Pdir;
 	int Rand = GetRand(100);
-	
+
 	if (!Awake) {
 		switch (status) {
 		case STATUS::NONE:

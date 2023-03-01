@@ -49,7 +49,7 @@ bool	modeG::Initialize()
 	_valData = &_modeServer->_valData;
 	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
 	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
-	makeChar(this, std::make_shared<PL>(), Char_PL);
+	makeChar(this, std::make_unique<PL>(), Char_PL);
 
 	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1); }
 	if (_valData->popBossNum == 2) { makeChar(this, std::make_shared<BossLion>(), Char_BOSS2); }
@@ -64,7 +64,7 @@ bool	modeG::Initialize()
 	HPgaugeHandle = LoadGraph("game/res/GameUI_HP.png");
 	HPgaugeHandle2 = LoadGraph("game/res/GameUI_HPB.png");
 	BPgaugeHandle = LoadGraph("game/res/c.png");
-	lockOnMarkerHandle = LoadGraph("game/res/lockOnMarker2.png");
+	LoadDivGraph("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 
 	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	insEfcHamdle = LoadGraph("game/res/kari2.png");
@@ -278,8 +278,9 @@ bool	modeG::Render()
 
 	if (isLockon)
 	{
+		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
 		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle, true);
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle[LOMarkerNum], true);
 		SetUseZBuffer3D(TRUE);
 	}
 
@@ -352,6 +353,8 @@ bool	modeG::Terminate()
 {
 	StopSoundMem(BGM);
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
+	MV1DeleteModel(stage.modelHandle);
+	MV1DeleteModel(skyDoom.modelHandle);
 	int a = InitGraph();
 
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); i->second.reset(); }
@@ -360,6 +363,7 @@ bool	modeG::Terminate()
 	debugWardBox.clear();
 	InitGraph();
 	InitSoundMem();
+	DeleteLightHandleAll();
 	return true;
 }
 

@@ -26,7 +26,7 @@ public:
 public:
 	ModeServer* _modeServer;
 	int _x, _y;
-	int testAttackF, lockOnMarkerHandle, HPgaugeHandle, HPgaugeHandle2, BPgaugeHandle;
+	int testAttackF, HPgaugeHandle, HPgaugeHandle2, BPgaugeHandle;
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld, insEfcHamdle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
@@ -45,6 +45,7 @@ public:
 	std::vector<weaponEffect> atkEfc;
 	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
 	int keepout[180] = { -1 }, keepoutNum;
+	int lockOnMarkerHandle[30] = { -1 }, LOMarkerNum = 0;
 
 	int StageModelHandle;
 	int CharaModelHandle;
