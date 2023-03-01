@@ -160,6 +160,7 @@ bool	BossKnight::Process()
 		break;
 	case STATUS::SRASH:
 		if (_modelInf.isAnimEnd == true) {
+			ActionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::SRASH) {
 				break;
