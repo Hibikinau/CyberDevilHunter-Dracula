@@ -49,9 +49,9 @@ bool	modeG::Initialize()
 	_valData = &_modeServer->_valData;
 	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
 	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
-	makeChar(this, std::make_shared<PL>(), Char_PL);
+	makeChar(this, std::make_unique<PL>(), Char_PL);
 
-	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1); }
+	if (_valData->popBossNum == 1) { makeChar(this, std::make_unique<BossKnight>(), Char_BOSS1); }
 
 	countTime = GetNowCount();
 
@@ -352,6 +352,8 @@ bool	modeG::Terminate()
 {
 	StopSoundMem(BGM);
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
+	MV1DeleteModel(stage.modelHandle);
+	MV1DeleteModel(skyDoom.modelHandle);
 	int a = InitGraph();
 
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); }
@@ -360,6 +362,7 @@ bool	modeG::Terminate()
 	debugWardBox.clear();
 	InitGraph();
 	InitSoundMem();
+	DeleteLightHandleAll();
 	return true;
 }
 
