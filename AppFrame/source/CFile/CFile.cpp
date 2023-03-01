@@ -40,7 +40,7 @@ string CFile::UTF8toSjis(string srcUTF8) {
 	return strSJis;
 }
 
-bool CFile::loadCSV(vector<string> *data, const char *name)
+bool CFile::loadCSV(vector<string> *data, const char *name, bool isComUtoS)
 {
 	ifstream ifs(name);
 
@@ -49,12 +49,14 @@ bool CFile::loadCSV(vector<string> *data, const char *name)
 		auto insText = split(line, ',');
 
 		for (int i = 0; i < insText.size(); i++) {
-			data->emplace_back(UTF8toSjis(insText.at(i)));
+			if (isComUtoS) { data->emplace_back(UTF8toSjis(insText.at(i))); }
+			else{ data->emplace_back(insText.at(i)); }
 		}
 	}
 
 	return true;
 }
+
 
 // ì«Ç›çûÇ›
 CFile::CFile(const std::string filename) {

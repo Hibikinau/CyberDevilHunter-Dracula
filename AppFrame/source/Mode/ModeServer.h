@@ -13,6 +13,7 @@ struct valData
 	std::vector<int> activateWepon, disableWepon;
 	bool isAtkEfcArufa = true;
 	int popBossNum = 0;
+	std::string plChangeAttackX = "charge", plChangeAttackY = "kirinuke";
 };
 
 class	ModeServer

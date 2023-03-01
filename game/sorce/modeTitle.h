@@ -12,7 +12,7 @@ public:
 	virtual bool	Imput(imputInf* iInf) { _imputInf = *iInf; return true;};
 	virtual bool	Process();
 	virtual bool	Render();
-
+	static bool loadData(const char* dir, valData* _val);
 protected:
 	int _cg;
 	ModeServer* _modeServer;

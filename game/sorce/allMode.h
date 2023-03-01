@@ -1,4 +1,5 @@
 #pragma once
+#include"appframe.h"
 #include"modeGame.h"
 #include"modeTitle.h"
 #include"modeMenu.h"
