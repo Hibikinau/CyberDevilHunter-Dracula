@@ -68,9 +68,6 @@
     <ClInclude Include="game\sorce\gameMain.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="game\sorce\ResourceServerIns.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="game\sorce\player.h">
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>

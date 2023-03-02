@@ -6,7 +6,7 @@ using namespace model;
 
 bool BossKnight::Initialize()
 {
-	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf);
+	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	time = 300;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;

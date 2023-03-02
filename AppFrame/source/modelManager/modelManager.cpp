@@ -1,8 +1,8 @@
 #include"modelManager.h"
 
-bool model::modelImport(const char* dir, const float scale, modelInf* MI)
+bool model::modelImport(const char* dir, const float scale, modelInf* MI, Rserver* _Rserver)
 {
-	MI->modelHandle = MV1LoadModel(dir);
+	MI->modelHandle = _Rserver->modelImportR(dir);
 
 	//if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;
@@ -34,13 +34,13 @@ bool model::changeScale(modelInf* MI)
 	return true;
 }
 
-bool model::weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name)
+bool model::weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name, Rserver* _Rserver)
 {
 	weponModelInf weponMI;
 	weponMI.isActive = activate;
 	weponMI.name = name;
 	weponMI.scale = scale;
-	weponMI.weponHandle = MV1LoadModel(dir);
+	weponMI.weponHandle = _Rserver->modelImportR(dir);
 	//if (weponMI.weponHandle == -1) { return false; }
 	weponMI.weponAttachFrameNum = attachFrameNum;
 

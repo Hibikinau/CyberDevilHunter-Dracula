@@ -55,6 +55,7 @@ private:
 public:
 	imputInf* _imputInf;
 	valData _valData;
+	Rserver RS;
 	lstModeBase		_vMode;			// モードリスト
 
 private:

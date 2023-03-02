@@ -8,6 +8,7 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 	charPoint->_valData = insMG->_valData;
 	charPoint->Initialize();
 	charPoint->setCB(&insMG->charBox);
+	charPoint->setRS(&insMG->_modeServer->RS);
 	charPoint->setGroundInf(&insMG->stage);
 	charPoint->allColl = &insMG->mAllColl;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
@@ -49,8 +50,8 @@ bool	modeG::Initialize()
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 	_valData = &_modeServer->_valData;
-	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
-	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
+	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
+	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
 	makeChar(this, std::make_unique<PL>(), Char_PL);
 
 	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1); }

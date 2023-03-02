@@ -7,7 +7,7 @@ using namespace model;
 
 bool BossLion::Initialize()
 {
-	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf);
+	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	time = 300;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 15000;

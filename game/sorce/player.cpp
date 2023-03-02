@@ -34,10 +34,10 @@ bool PL::Initialize()
 	_modelInf.pos = VGet(210.0f, 1100.0f, 3100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f * DX_PI_F / 180.0f, 0.0f);
 
-	modelImport("game/res/Player01/Player1.mv1", 1.5f, &_modelInf);
-	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana");
-	weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya");
-	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou");
+	modelImport("game/res/Player01/Player1.mv1", 1.5f, &_modelInf, RS);
+	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
+	weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya", RS);
+	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
 
 	CA_change(_valData->plChangeAttackX, "X");
 	CA_change(_valData->plChangeAttackY, "Y");

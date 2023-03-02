@@ -2,7 +2,9 @@
 #include<memory>
 #include<string>
 #include<vector>
+#include<map>
 #include<DxLib.h>
+#include "../AppFrame/source/ResourceServer/ResourceServer.h"
 
 #define Char_PL "Player"
 #define Char_BOSS1 "Boss1"
@@ -30,8 +32,8 @@ struct modelInf
 
 namespace model
 {
-	//3dモデルの読み込み(3dモデルのパス, モデルの拡大率, modelInfのポインタ)
-	bool modelImport(const char* dir, const float scale, modelInf* MI);
+	//3dモデルの読み込み(3dモデルのパス, モデルの拡大率, modelInfのポインタ, Rserverインスタンスのポインタ)
+	bool modelImport(const char* dir, const float scale, modelInf* MI, Rserver *_Rserver);
 	//再生しているアニメーションの変更(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
 	bool animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride);
 	//次に再生するアニメーションの設定(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
@@ -39,8 +41,8 @@ namespace model
 	//3dモデルの描画(modelInfのポインタ, アニメーションのスピード, 再生速度)
 	//アニメーションの再生が終わったらtrueを返す
 	bool modelRender(modelInf* MI, float animSpeed, float timeSpead);
-	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの番号, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前)
-	bool weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name);
+	//3dモデルに武器のアタッチ(武器モデルのパス, 追従させたいmodelInfのポインタ, 追従させたいフレームの番号, 武器モデルの拡大率, 武器モデルの描写を有効にするか, 武器の名前, Rserverインスタンスのポインタ)
+	bool weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name, Rserver* _Rserver);
 	//キャラモデルのメモリ解放
 	bool modelDelete(modelInf* MI);
 	//ロードした3dモデルのサイズ変更

@@ -1,16 +1,21 @@
 #include"ResourceServer.h"
 #include"DxLib.h"
+#include<stdexcept>
 
 int Rserver::modelImportR(const char* dir)
 {
-	auto insIte = modelHandleList.find(dir);
-	if (insIte != modelHandleList.end())
+	return MV1LoadModel(dir);
+	int insHandle = -1;
+	if (modelHandleList.count(dir) > 0)
 	{
-		return MV1DuplicateModel(insIte->second);
+		auto checkHandle = modelHandleList.at(dir);
+		insHandle = MV1DuplicateModel(checkHandle);
 	}
-
-	int insHandle = MV1LoadModel(dir);
-	modelHandleList.emplace(dir, insHandle);
+	else
+	{
+		insHandle = MV1LoadModel(dir);
+		modelHandleList.emplace(dir, insHandle);
+	}
 
 	return MV1DuplicateModel(insHandle);
 }
