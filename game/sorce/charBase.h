@@ -55,7 +55,7 @@ public:
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
 	void setName(const char* _name) { name = _name; }
-	bool hitCheck(const char* name);
+	bool hitCheck(const char* name, VECTOR *hitPos, float *damage);
 	modelInf* getInf() { return &_modelInf; }
 	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }

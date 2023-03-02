@@ -136,7 +136,7 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] || _imputInf._gTrgb[KEY_INPUT_L])
 	{//ロックオン
-		if(charBox.size() >= 2){ isLockon ^= true; }
+		if (charBox.size() >= 2) { isLockon ^= true; }
 	}
 
 	//コマンド呼び出し部分
@@ -350,7 +350,13 @@ bool	modeG::collHitCheck()
 
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
-		i->second->hitCheck(i->first.c_str());
+		VECTOR hitPos = { -1 };
+		float _damage;
+		if (i->second->hitCheck(i->first.c_str(), &hitPos, &_damage))
+		{
+			popDamageInf insDamage = { hitPos, _damage };
+			damageNumPopList.emplace_back(insDamage);
+		}
 	}
 
 	return true;
@@ -485,6 +491,17 @@ int modeG::useCommand()
 
 bool modeG::drawUI()
 {
+	auto DeffontSize = GetFontSize();
+	SetFontSize(30);
+	//ダメージ表示
+	for (int i = 0; i < damageNumPopList.size(); i++)
+	{
+		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
+		DrawString(screenPos.x, screenPos.y - damageNumPopList[i].popTime, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
+		if (damageNumPopList[i].popTime < 100) { damageNumPopList[i].popTime++; }
+		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
+	}
+	SetFontSize(DeffontSize);
 	//HPバー
 	int barPposX = 10, barPosY = 10, barLength = 660;
 	int gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxHitPoint)) * static_cast<float>(plStatus.hitPoint));
