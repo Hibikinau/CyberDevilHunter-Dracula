@@ -231,7 +231,7 @@ bool	BossKnight::Process()
 		_modelManager.animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 30.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime / animSpd + 1, true, 30.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -259,10 +259,11 @@ bool	BossKnight::Process()
 			ActionFlag = false;
 			if (attackStep < 3)
 			{
+				if (isGround && attackStep == 2) { makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f * AwakeDmg, 100, Char_BOSS1); }
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
 				else { attackStep++; }
-
+				
 			}
 			else {
 				UtilityJudge();
@@ -281,10 +282,11 @@ bool	BossKnight::Process()
 		}
 		animSpd = 0.7f*AwakeSpd;
 		_modelManager.animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
-		if (attackStep == 2 || attackStep == 3)
-		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -1300.f, 0.f), 40.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f*AwakeDmg, 100, Char_BOSS1);
-		}
+		//if (attackStep == 2 || attackStep == 3)
+		/*{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f*AwakeDmg, 100, Char_BOSS1);
+
+		}*/
 		if (attackStep == 1) { RangeJ(); }
 		ActionFlag = true;
 		break;
