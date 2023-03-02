@@ -28,7 +28,6 @@ protected:
 	float spd, cameraDir, cameraHigh;
 	VECTOR cameraPos, cameraFor;
 	modelInf plMI, stage;
-	modelManager _modelManager;
 	ModeServer* _modeServer;
 	std::string NS;
 

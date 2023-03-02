@@ -45,7 +45,6 @@ public:
 protected:
 	float animSpd;
 	int time, attackStep;
-	modelManager _modelManager;
 	bool AttackFlag, isAnimEnd;
 	modelInf* plMI, stage;
 	double dir;

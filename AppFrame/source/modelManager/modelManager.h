@@ -2,7 +2,7 @@
 #include<memory>
 #include<string>
 #include<vector>
-#include"../../../DxLib/DxLib.h"
+#include<DxLib.h>
 
 #define Char_PL "Player"
 #define Char_BOSS1 "Boss1"
@@ -28,10 +28,8 @@ struct modelInf
 	std::vector<weponModelInf> wepons;
 };
 
-class modelManager
+namespace model
 {
-public:
-	int a;
 	//3dモデルの読み込み(3dモデルのパス, モデルの拡大率, modelInfのポインタ)
 	bool modelImport(const char* dir, const float scale, modelInf* MI);
 	//再生しているアニメーションの変更(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
@@ -49,8 +47,8 @@ public:
 	bool changeScale(modelInf* MI);
 
 	bool drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle);
-};
 
+};
 
 
 //SetUseASyncLoadFlag(true);

@@ -50,7 +50,7 @@ public:
 	virtual bool Input() { return true; }
 	virtual bool Process();
 	virtual bool Render(float timeSpeed);
-	virtual void charMove(float Speed, float _Dir, bool animChange);
+	virtual void charMove(float Speed, float _Dir, bool isAnimChange);
 	pushButton setAction();
 	bool checkTrgImput(int Key, int Pad) { if (_imputInf->_gTrgb[Key] || _imputInf->_gTrgp[Pad]) { return true; } else { return false; } }
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
@@ -80,7 +80,6 @@ protected:
 	int immortalTime;//, dodgeTime;
 	int playSoundOld[3], walkTime, counterTime, waitCAChargeTime, CAChargeTime, CAChargeSpd;
 	std::vector<std::vector<int> > soundHandle;
-	modelManager _modelManager;
 	ExclusiveState Estate, oldEstate, lastAttackState;
 	pushButton nextKey;
 	modelInf* Einf;

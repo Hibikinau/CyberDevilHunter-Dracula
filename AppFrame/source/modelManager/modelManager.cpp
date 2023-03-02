@@ -1,6 +1,6 @@
 #include"modelManager.h"
 
-bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
+bool model::modelImport(const char* dir, const float scale, modelInf* MI)
 {
 	MI->modelHandle = MV1LoadModel(dir);
 
@@ -11,7 +11,7 @@ bool modelManager::modelImport(const char* dir, const float scale, modelInf* MI)
 	return true;
 }
 
-bool modelManager::changeScale(modelInf* MI)
+bool model::changeScale(modelInf* MI)
 {
 	MV1SetScale(MI->modelHandle, VGet(MI->scale, MI->scale, MI->scale));
 
@@ -30,11 +30,11 @@ bool modelManager::changeScale(modelInf* MI)
 			MV1SetMaterialOutLineDotWidth(MI->wepons[j].weponHandle, k, dotwidthW / MI->wepons[j].scale);
 		}
 	}
-
+	
 	return true;
 }
 
-bool modelManager::weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name)
+bool model::weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name)
 {
 	weponModelInf weponMI;
 	weponMI.isActive = activate;
@@ -48,7 +48,7 @@ bool modelManager::weponAttach(const char* dir, modelInf* MI, int attachFrameNum
 	return true;
 }
 
-bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride)
+bool model::animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride)
 {
 	if (MI->animHandleOld == _animHandle && !isOverride) { return false; }
 	MI->isBrending = isBlend;
@@ -66,7 +66,7 @@ bool modelManager::animChange(int _animHandle, modelInf* MI, bool isLoop, bool i
 	return true;
 }
 
-bool modelManager::setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool isBlend)
+bool model::setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool isBlend)
 {
 	MI->isBrendingNext = isBlend;
 	MI->animHandleNext = _animHandle;
@@ -75,7 +75,7 @@ bool modelManager::setNextAnim(int _animHandle, modelInf* MI, bool isLoop, bool 
 	return true;
 }
 
-bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
+bool model::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 {
 	if (timeSpead != 0) { MI->isAnimEnd = false; }
 	if (MI->isBrending) { MI->rate = 0.f, MI->isBrending = false; }
@@ -126,7 +126,7 @@ bool modelManager::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 	return MI->isAnimEnd;
 }
 
-bool modelManager::modelDelete(modelInf* MI)
+bool model::modelDelete(modelInf* MI)
 {//装備モデルのメモリ解放してからコンテナの消去
 	for (int i = 0; i < MI->wepons.size(); i++)
 	{
@@ -137,7 +137,7 @@ bool modelManager::modelDelete(modelInf* MI)
 	return true;
 }
 
-bool modelManager::drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle)
+bool model::drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle)
 {
 	VERTEX3D Vertex[4];
 	WORD Index[6];

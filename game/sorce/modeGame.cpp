@@ -1,6 +1,8 @@
 #include"allMode.h"
 #include <sstream>
 
+using namespace model;
+
 bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 {
 	charPoint->_valData = insMG->_valData;
@@ -47,8 +49,8 @@ bool	modeG::Initialize()
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 	_valData = &_modeServer->_valData;
-	_modelManager.modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
-	_modelManager.modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
+	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage);
+	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom);
 	makeChar(this, std::make_unique<PL>(), Char_PL);
 
 	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1); }
@@ -88,10 +90,10 @@ bool	modeG::Initialize()
 	//読み込んだ3dモデルのサイズ調整
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
-		_modelManager.changeScale(&i->second->_modelInf);
+		changeScale(&i->second->_modelInf);
 	}
-	_modelManager.changeScale(&stage);
-	_modelManager.changeScale(&skyDoom);
+	changeScale(&stage);
+	changeScale(&skyDoom);
 	MV1SetFrameVisible(stage.modelHandle, 84, false);
 	MV1SetFrameVisible(stage.modelHandle, 85, false);
 
@@ -244,7 +246,7 @@ bool	modeG::Render()
 		auto insUnderPosOld = mAllColl.at(i).capCollOld.underPos;
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
-		auto a = _modelManager.drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+		auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
 
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
@@ -258,7 +260,7 @@ bool	modeG::Render()
 
 			for (int j = 1; j < mAllColl[i].rightingEfc.downCornerPos.size(); ++j)
 			{
-				_modelManager.drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+				drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
 			}
 		}
 	}
@@ -268,7 +270,7 @@ bool	modeG::Render()
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
 			if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
-			_modelManager.drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+			drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
 		}
 		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }
