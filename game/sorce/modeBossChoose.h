@@ -14,10 +14,9 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum;
+	int _cg, DeffontSize, StrWidth, picMenuNum = 0, picMenuMaxNum;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;
-	bool isPic;
-	bool pic;
+	bool isPic = false, pic = false;
 };
