@@ -25,18 +25,7 @@ bool	modeES::Process()
 
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
-			if (pic)
-			{//ボス1
-				_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
-				return false;
-			}
-			else
-			{//ボス2
-				_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
-				return false;
-			}
-
-
+			isPic = false;	
 		}
 	}
 	else {
@@ -61,8 +50,13 @@ bool	modeES::Process()
 				_modeServer->_valData.popSelectNum = 2;
 			}
 
+		}else if(_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_A])
+		{
+			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+			return false;
 		}
 	}
+	return true;
 }
 
 bool	modeES::Render()
