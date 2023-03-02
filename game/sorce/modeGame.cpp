@@ -3,12 +3,12 @@
 
 using namespace model;
 
-bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
+bool makeChar(modeG* insMG, Rserver* _rs, std::shared_ptr<CB> charPoint, const char* nameA)
 {
 	charPoint->_valData = insMG->_valData;
+	charPoint->setRS(&insMG->_modeServer->RS);
 	charPoint->Initialize();
 	charPoint->setCB(&insMG->charBox);
-	charPoint->setRS(&insMG->_modeServer->RS);
 	charPoint->setGroundInf(&insMG->stage);
 	charPoint->allColl = &insMG->mAllColl;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
@@ -17,7 +17,7 @@ bool makeChar(modeG* insMG, std::shared_ptr<CB> charPoint, const char* nameA)
 }
 bool	modeG::popBoss(int bossType, const char* _nameA)
 {
-	if (bossType == 1) { makeChar(this, std::shared_ptr<BossKnight>(), _nameA); }
+	if (bossType == 1) { makeChar(this, &_modeServer->RS, std::shared_ptr<BossKnight>(), _nameA); }
 
 	return true;
 }
@@ -52,10 +52,10 @@ bool	modeG::Initialize()
 	_valData = &_modeServer->_valData;
 	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
 	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
-	makeChar(this, std::make_unique<PL>(), Char_PL);
+	makeChar(this, &_modeServer->RS, std::make_unique<PL>(), Char_PL);
 
-	if (_valData->popBossNum == 1) { makeChar(this, std::make_shared<BossKnight>(), Char_BOSS1); }
-	if (_valData->popBossNum == 2) { makeChar(this, std::make_shared<BossLion>(), Char_BOSS2); }
+	if (_valData->popBossNum == 1) { makeChar(this, &_modeServer->RS, std::make_shared<BossKnight>(), Char_BOSS1); }
+	if (_valData->popBossNum == 2) { makeChar(this, &_modeServer->RS, std::make_shared<BossLion>(), Char_BOSS2); }
 
 	countTime = GetNowCount();
 
@@ -84,7 +84,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	_valData->efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f);
+	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f); }
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 
