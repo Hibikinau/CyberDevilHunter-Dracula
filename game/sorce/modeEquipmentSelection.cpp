@@ -50,7 +50,7 @@ bool	modeES::Process()
 				_modeServer->_valData.popSelectNum = 2;
 			}
 
-		}else if(_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_A])
+		}else if(_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
 			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 			return false;
