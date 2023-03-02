@@ -31,7 +31,8 @@ bool	modeMM::Process()
 		}
 		else if (picMenuNum == 1)
 		{//装備変更
-
+			_modeServer->Add(std::make_unique<modeES>(_modeServer), 1, MODE_ES);
+			return false;
 		}
 		else if (picMenuNum == 2)
 		{//アーツ取得
