@@ -94,6 +94,12 @@ bool	modeBC::Render()
 	else {
 		DrawString(80 - 40, defY + (120 * picMenuNum), "→", GetColor(255, 255, 255));
 	}
+	if (picMenuNum == 0) {
+		DrawString(600, 200, "ドラクエア", GetColor(255, 255, 255));
+	}
+	else {
+		DrawString(600, 200, "サイバー", GetColor(255, 255, 255));
+	}
 	DrawString(400, 580, "この依頼を受注しますか？", GetColor(255, 255, 255));
 	DrawString(1000, 580, "はい", GetColor(255, 255, 255));
 	DrawString(1120, 580, "いいえ", GetColor(255, 255, 255));
