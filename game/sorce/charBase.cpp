@@ -1,5 +1,7 @@
 #include"charBase.h"
 
+using namespace model;
+
 bool CB::Initialize()
 {
 
@@ -8,7 +10,7 @@ bool CB::Initialize()
 
 bool	CB::Terminate()
 {
-	_modelManager->modelDelete(&_modelInf);
+	modelDelete(&_modelInf);
 	return true;
 }
 

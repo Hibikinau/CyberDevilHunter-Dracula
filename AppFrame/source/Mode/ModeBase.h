@@ -1,6 +1,6 @@
 #pragma once
-#include "../ResourceServer/ResourceServer.h"
 #include	<string>
+#include "../AppFrame/source/ResourceServer/ResourceServer.h"
 
 class ModeServer;
 

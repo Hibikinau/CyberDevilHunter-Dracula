@@ -1,6 +1,5 @@
 #pragma once
 #include"appframe.h"
-#include"ResourceServerIns.h"
 #include"motionDefineList.h"
 
 struct statusInf
@@ -47,7 +46,8 @@ public:
 	//virtual bool	atkEfcRender(float timeSpeed);
 	virtual bool gravity();
 	virtual int	getType() { return type; }
-	virtual void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
+	void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
+	void setRS(Rserver *_RS) { RS = _RS; }
 
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	virtual bool CA_change(std::string name, const char* XorY) { return false; };
@@ -68,7 +68,6 @@ public:
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false, dodgeTime;
 	std::string name, attackChar;
-	modelManager* _modelManager;
 	modelInf _modelInf, * _GrounfInf;
 	statusInf _statusInf;
 	std::map<std::string, std::shared_ptr<CB> >* charBox;
@@ -78,4 +77,5 @@ public:
 	collCapsule collCap;
 	std::vector<attackColl>* allColl;
 	imputInf* _imputInf;
+	Rserver *RS;
 };

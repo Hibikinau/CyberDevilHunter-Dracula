@@ -3,10 +3,11 @@
 #define walkSpd 6.f
 #define runSpd 22.f
 
+using namespace model;
 
 bool BossLion::Initialize()
 {
-	_modelManager.modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf);
+	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	time = 300;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 15000;
@@ -43,7 +44,7 @@ bool	BossLion::Process()
 	}
 
 	if (status == STATUS::DEAD) {
-		_modelManager.animChange(BOSS2_dead, &_modelInf, false, true, false);
+		animChange(BOSS2_dead, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -75,7 +76,7 @@ bool	BossLion::Process()
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
 		animSpd = .5f;
-		_modelManager.animChange(BOSS2_idel, &_modelInf, true, true, false);
+		animChange(BOSS2_idel, &_modelInf, true, true, false);
 		if (time == 0) {
 			UtilityJudge();
 		}
@@ -93,7 +94,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.f;
-		_modelManager.animChange(BOSS2_dead, &_modelInf, false, true, false);
+		animChange(BOSS2_dead, &_modelInf, false, true, false);
 		//PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -101,7 +102,7 @@ bool	BossLion::Process()
 	case STATUS::RUN:
 		_modelInf.dir.y = Pdir;
 		animSpd = 1.0f * AwakeSpd;
-		_modelManager.animChange(BOSS2_run, &_modelInf, true, true, false);
+		animChange(BOSS2_run, &_modelInf, true, true, false);
 		Move(runSpd * AwakeMove, 0);
 		if (PrangeA < 300) { UtilityJudge(); }
 		break;
@@ -111,7 +112,7 @@ bool	BossLion::Process()
 			if (status != STATUS::FSTEP) { break; }
 		}
 		animSpd = 1.f * AwakeSpd;
-		_modelManager.animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_dodge, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * AwakeMove, 0.0);
@@ -123,7 +124,7 @@ bool	BossLion::Process()
 			if (status != STATUS::BSTEP) { break; }
 		}
 		animSpd = 1.f * AwakeSpd;
-		_modelManager.animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_dodge, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * AwakeMove, 180.0);
@@ -135,7 +136,7 @@ bool	BossLion::Process()
 			if (status != STATUS::RSTEP) { break; }
 		}
 		animSpd = 1.f * AwakeSpd;
-		_modelManager.animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_dodge, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * AwakeMove, 90.0);
@@ -147,7 +148,7 @@ bool	BossLion::Process()
 			if (status != STATUS::LSTEP) { break; }
 		}
 		animSpd = 1.f * AwakeSpd;
-		_modelManager.animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_dodge, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * AwakeMove, 270.0);
@@ -165,7 +166,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.5f * AwakeSpd;
-		_modelManager.animChange(BOSS2_attack1, &_modelInf, false, true, true);
+		animChange(BOSS2_attack1, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 20.f * AwakeDmg, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
@@ -184,7 +185,7 @@ bool	BossLion::Render(float timeSpeed)
 
 	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
-	isAnimEnd = _modelManager.modelRender(&_modelInf, animSpd, timeSpeed);
+	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 
 	return true;
 }

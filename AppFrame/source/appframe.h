@@ -12,6 +12,5 @@
 
 #include "Application/ApplicationBase.h"
 #include "CFile/CFile.h"
-#include "ResourceServer/ResourceServer.h"
 #include "Mode/ModeServer.h"
 #include "modelManager/modelManager.h"
