@@ -322,6 +322,7 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
 	debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
 	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
+	debugWardBox.emplace_back("/csv(csvファイル更新)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -466,6 +467,10 @@ int modeG::useCommand()
 			if (data == "kill")
 			{
 				charBox[Char_PL]->_statusInf.hitPoint = 0;
+			}
+			if (data == "csv")
+			{
+				modeT::loadData("game/res/save.csv", &_modeServer->_valData);
 			}
 			if (data == "test")
 			{

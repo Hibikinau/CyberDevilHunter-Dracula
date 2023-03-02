@@ -3,7 +3,7 @@
 bool modeT::loadData(const char* dir, valData* _val)
 {
 	std::vector<std::string> _data;
-	CFile::loadCSV(&_data, dir, false);
+	fileIO::loadCSV(&_data, dir, false);
 
 	for (int i = 0; i < _data.size(); i++)
 	{

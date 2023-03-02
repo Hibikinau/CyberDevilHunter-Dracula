@@ -26,9 +26,6 @@ public:
 	int Size() { return _size; }
 	bool Success() { return _success; }
 
-	static bool loadCSV(std::vector<std::string>* data, const char* name, bool isComUtoS);
-	static std::vector<std::string> split(std::string& input, char delimiter);
-	static std::string UTF8toSjis(std::string srcUTF8);
 
 private:
 	void Init();
@@ -39,3 +36,10 @@ private:
 	char* _data;
 	bool	_success;
 };
+
+namespace fileIO
+{
+	bool loadCSV(std::vector<std::string>* data, const char* name, bool isComUtoS);
+	std::vector<std::string> split(std::string& input, char delimiter);
+	std::string UTF8toSjis(std::string srcUTF8);
+}
