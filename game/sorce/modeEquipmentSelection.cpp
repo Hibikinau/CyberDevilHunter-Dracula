@@ -42,15 +42,15 @@ bool	modeES::Process()
 		{
 			isPic = true;
 			if (picMenuNum == 0)
-			{//ボス1
+			{
 				_modeServer->_valData.popSelectNum = 1;
 			}
 			else if (picMenuNum == 1)
-			{//ボス2
+			{
 				_modeServer->_valData.popSelectNum = 2;
 			}
 
-		}else if(_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_A])
+		}else if(_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
 			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 			return false;
@@ -97,9 +97,7 @@ bool	modeES::Render()
 		DrawString(600, 200, "デビル", GetColor(255, 255, 255));
 		DrawString(600, 400, "ハンター", GetColor(255, 255, 255));
 	}
-	//DrawString(400, 580, "○○にしますか？", GetColor(255, 255, 255));
-	//DrawString(1000, 580, "はい", GetColor(255, 255, 255));
-	//DrawString(1120, 580, "いいえ", GetColor(255, 255, 255));
+	
 
 	return true;
 }
@@ -107,6 +105,6 @@ bool	modeES::Render()
 bool	modeES::Terminate()
 {
 	SetFontSize(DeffontSize);
-	//DeleteGraph(_cg);
+	
 	return true;
 }
