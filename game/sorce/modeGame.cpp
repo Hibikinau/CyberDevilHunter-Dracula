@@ -84,7 +84,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f); }
+	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/hit_eff.efkefc", 20.f); }
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 
@@ -286,7 +286,7 @@ bool	modeG::Render()
 	{
 		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
 		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle[LOMarkerNum], true);
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 100, 0, lockOnMarkerHandle[LOMarkerNum], true);
 		SetUseZBuffer3D(TRUE);
 	}
 
@@ -338,9 +338,9 @@ bool	modeG::Render()
 bool	modeG::collHitCheck()
 {
 	for (int i = 0; i < mAllColl.size(); i++)
-	{
-		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
-		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
+	{//
+		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
+		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff;}
 		else
 		{
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
@@ -356,6 +356,8 @@ bool	modeG::collHitCheck()
 		{
 			popDamageInf insDamage = { hitPos, _damage };
 			damageNumPopList.emplace_back(insDamage);
+			auto a = PlayEffekseer3DEffect(_valData->efcHandle);
+			SetPosPlayingEffekseer3DEffect(a, hitPos.x, hitPos.y, hitPos.z);
 		}
 	}
 
@@ -497,7 +499,7 @@ bool modeG::drawUI()
 	for (int i = 0; i < damageNumPopList.size(); i++)
 	{
 		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
-		DrawString(screenPos.x, screenPos.y - damageNumPopList[i].popTime, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
+		DrawString(screenPos.x, screenPos.y, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
 		if (damageNumPopList[i].popTime < 100) { damageNumPopList[i].popTime++; }
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}

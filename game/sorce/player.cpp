@@ -186,7 +186,10 @@ bool	PL::Process()
 			setNextAnim(PL_jaku_4_2, &_modelInf, true, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 4;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, 12.f, true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 17.f, 8.f, true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 32.f, 10.f, true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 47.f, 13.f, true, jakuATK + atkBuff, rWeponParentFrame, Char_PL);
 		}
 		else if (attackNumOld == 4 && !isPushButtonAct)
 		{
@@ -270,10 +273,9 @@ bool	PL::Process()
 		//isDash = true;//------------------------------------------------------------------------------------
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
-		spd = runSpd;
-		if (addDir != 0 && walkTime > 5) { charMove(spd, addDir, true); }
+		spd = runSpd;//walkTime
+		if (addDir != 0) { charMove(spd * (walkTime / 10), addDir, true); }
 		moveCheck = false;
-
 		break;
 	case pushButton::R1://ガード
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
@@ -423,9 +425,9 @@ bool PL::HPmath(float math)
 			{
 				if (isAwakening == 0) { _statusInf.hitPoint += math; BPmath(std::abs(math) * 6); }
 				PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
-				Estate = _estate::DAMAGE;
+				Estate = _estate::DAMAGE;/*
 				auto a = PlayEffekseer3DEffect(_valData->efcHandle);
-				SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
+				SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);*/
 			}
 
 			auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
@@ -475,7 +477,7 @@ pushButton PL::setAction()
 
 	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
-		walkTime++;
+		walkTime < 10 ? walkTime++ : walkTime = 10;
 	}//Lstick
 	else { walkTime = 0; }
 	if (isNext) { insEnum = pushButton::Irregular; }
@@ -636,7 +638,7 @@ bool PL::CA_charge(PL* insPL)
 		insPL->chargeLevel = 0;
 		insPL->isGhost = true;
 	}
-	
+
 	return true;
 }
 

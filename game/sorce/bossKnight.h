@@ -50,7 +50,6 @@ public:
 	RANGE range;
 
 protected:
-	float animSpd;
 	int time, attackStep;
 	bool AttackFlag, isAnimEnd;
 	modelInf* plMI, stage;
