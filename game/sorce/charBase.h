@@ -4,7 +4,7 @@
 
 struct statusInf
 {//最大値を代入
-	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina;
+	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina,stanPoint;
 };
 
 struct collCapsule
@@ -28,6 +28,7 @@ struct attackColl
 	std::vector<collCapsule> capCollTs;
 	MATRIX Mold;
 	float damage;
+	float stan;
 	int nonActiveTimeF, activeTimeF;
 	bool isUseMat, isAlive = true;
 	weaponEffect rightingEfc;
@@ -51,7 +52,7 @@ public:
 
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	virtual bool CA_change(std::string name, const char* XorY) { return false; };
-	virtual bool HPmath(float Num) { return false; };
+	virtual bool HPmath(float Num,float Stan) { return false; };
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
 	void setName(const char* _name) { name = _name; }
@@ -67,6 +68,7 @@ public:
 	float g, camDir, * _cameraDir;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false, dodgeTime;
+	float time,stanTime;
 	std::string name, attackChar;
 	modelInf _modelInf, * _GrounfInf;
 	statusInf _statusInf;

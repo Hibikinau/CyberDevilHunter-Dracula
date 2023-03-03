@@ -10,6 +10,7 @@ bool BossLion::Initialize()
 	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	time = 300;
+	stanTime = 150;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 15000;
 
 	MotionFlag = true;
@@ -41,6 +42,17 @@ bool	BossLion::Process()
 		AwakeMove = 1.5f;
 		AwakeDmg = 1.5f;
 		AwakeT = 25;
+	}
+
+	if (status == STATUS::STAN) {
+		animChange(BOSS2_dead, &_modelInf, true, true, false);
+		if (time == 0) {
+			status = STATUS::WAIT;
+			_statusInf.stanPoint = 200;
+			stanTime = 100;
+		}
+		else { time--; }
+		return true;
 	}
 
 	if (status == STATUS::DEAD) {
@@ -280,9 +292,10 @@ void BossLion::Move(float speed, float radian) {
 }
 
 
-bool BossLion::HPmath(float Num)
+bool BossLion::HPmath(float Num,float Stan)
 {
 	_statusInf.hitPoint += Num;
+	_statusInf.stanPoint += Stan;
 	if (Num <= -200) {
 		status = STATUS::DAMEGE;
 		ActionFlag = false;
@@ -292,6 +305,9 @@ bool BossLion::HPmath(float Num)
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
+	}
+	if (_statusInf.stanPoint >= 100) {
+		status = STATUS::STAN;
 	}
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
 	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);

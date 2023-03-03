@@ -12,7 +12,7 @@ public:
 	virtual bool Input() { return true; }
 	virtual bool Process();
 	virtual bool Render(float timeSpeed);
-	bool HPmath(float Num) override;
+	bool HPmath(float Num, float Stan) override;
 	bool UtilityJudge();
 	bool RangeJ();
 
@@ -24,6 +24,7 @@ public:
 		NONE,
 		WAIT,
 		DAMEGE,
+		STAN,
 		DEAD,
 		RUN,
 		FSTEP,
@@ -44,7 +45,7 @@ public:
 
 protected:
 	float animSpd;
-	int time, attackStep;
+	int  attackStep;
 	bool AttackFlag, isAnimEnd;
 	modelInf* plMI, stage;
 	double dir;
