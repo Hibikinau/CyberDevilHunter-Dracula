@@ -18,5 +18,5 @@ protected:
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;
-	bool isPic = false, pic = false;
+	bool isPic = false, pic = true;
 };

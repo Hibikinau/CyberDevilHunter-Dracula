@@ -14,7 +14,8 @@ struct valData
 	bool isAtkEfcArufa = true;
 	int popBossNum = 0;
 	int popSelectNum = 0;
-	std::string plChangeAttackX = "charge", plChangeAttackY = "kirinuke";
+	std::string plChangeAttackX = "charge", plChangeAttackY = "kirinuke", boss1Inf, boss2Inf;
+
 };
 
 class	ModeServer

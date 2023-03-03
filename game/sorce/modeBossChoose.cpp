@@ -27,13 +27,13 @@ bool	modeBC::Process()
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
 			if (pic)
-			{//ボス1
+			{//ゲームへ移行
 				_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
 				return false;
 			}
 			else
-			{//ボス2
-				isPic = false;
+			{//キャンセル
+				isPic = false; pic = true;
 			}
 
 
@@ -78,11 +78,11 @@ bool	modeBC::Render()
 	int insMenuFontSize = GetDrawStringWidth("討伐ボス選択", strlen("討伐ボス選択"));
 	DrawString(20, 20, "討伐ボス選択", GetColor(255, 255, 255));
 	SetFontSize(40);
-	int defY = 200;
+	int defY = 150;
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
 		StrWidth = GetDrawStringWidth(menuMessage[i].c_str(), strlen(menuMessage[i].c_str()));
-		DrawString(80, defY + (120 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
+		DrawString(80, defY + (90 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
 
 	}
 	if (isPic)
@@ -98,18 +98,19 @@ bool	modeBC::Render()
 
 	}
 	else {
-		DrawString(80 - 40, defY + (120 * picMenuNum), "→", GetColor(255, 255, 255));
-	}
-	if (picMenuNum == 0) {
-		DrawString(600, 200, "ドラクエア", GetColor(255, 255, 255));
-	}
-	else {
-		DrawString(600, 200, "サイバー", GetColor(255, 255, 255));
+		DrawString(80 - 40, defY + (90 * picMenuNum), "→", GetColor(255, 255, 255));
 	}
 	DrawString(400, 580, "この依頼を受注しますか？", GetColor(255, 255, 255));
 	DrawString(1000, 580, "はい", GetColor(255, 255, 255));
 	DrawString(1120, 580, "いいえ", GetColor(255, 255, 255));
 
+	SetFontSize(30);
+	if (picMenuNum == 0) {
+		DrawString(300, 150, _modeServer->_valData.boss1Inf.c_str(), GetColor(255, 255, 255));
+	}
+	else {
+		DrawString(300, 150, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
+	}
 	return true;
 }
 
