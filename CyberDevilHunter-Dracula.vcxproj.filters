@@ -117,4 +117,9 @@
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="game\res\save.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+  </ItemGroup>
 </Project>

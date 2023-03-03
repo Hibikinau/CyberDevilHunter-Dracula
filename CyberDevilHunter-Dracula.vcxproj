@@ -195,6 +195,9 @@
     <ClInclude Include="game\sorce\player.h" />
     <ClInclude Include="game\sorce\ResourceServerIns.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="game\res\save.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
