@@ -3,13 +3,15 @@
 bool	modeBC::Initialize()
 {
 	//_cg = LoadGraph("game/res/chooseBoss.png");
-	LoadDivGraph("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
+	_modeServer->RS.loadDivGraphR("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
 	menuMessage.emplace_back("ƒ{ƒX‚P");
 	menuMessage.emplace_back("ƒ{ƒX‚Q");
 	picMenuMaxNum = menuMessage.size() - 1;
 	_modeServer->_valData.popBossNum = 0;
+	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
+	mapAnimNum = 0, backAnimNum = 0;
 	return true;
 }
 
@@ -42,6 +44,8 @@ bool	modeBC::Process()
 bool	modeBC::Render()
 {
 	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
+	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
+	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	DrawGraph(680, 120, mapAnimHandol[mapAnimNum], false);
 
 	SetFontSize(80);

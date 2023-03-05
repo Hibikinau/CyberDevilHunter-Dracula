@@ -8,6 +8,7 @@ bool	modeMM::Initialize()
 	menuMessage.emplace_back("ƒA[ƒcŽæ“¾");
 	menuMessage.emplace_back("Ý’è");
 	picMenuMaxNum = menuMessage.size() - 1;
+	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	return true;
 }
 
@@ -45,6 +46,8 @@ bool	modeMM::Process()
 
 bool	modeMM::Render()
 {
+	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
+	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("BRIEFING", strlen("BRIEFING"));
 	DrawString(20, 20, "BRIEFING", GetColor(255, 255, 255));
