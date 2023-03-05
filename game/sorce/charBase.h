@@ -55,7 +55,7 @@ public:
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
 	void setName(const char* _name) { name = _name; }
-	bool hitCheck(const char* name);
+	bool hitCheck(const char* name, VECTOR *hitPos, float *damage);
 	modelInf* getInf() { return &_modelInf; }
 	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
@@ -64,7 +64,7 @@ public:
 
 	int type = 0;//pl=1, oEnemy=2
 	bool isGround, isHit;
-	float g, camDir, * _cameraDir;
+	float g, camDir, * _cameraDir, animSpd;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false, dodgeTime;
 	std::string name, attackChar;

@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<string> CFile::split(string& input, char delimiter)
+vector<string> fileIO::split(string& input, char delimiter)
 {
 	istringstream stream(input);
 	string field;
@@ -13,7 +13,7 @@ vector<string> CFile::split(string& input, char delimiter)
 	return result;
 }
 
-string CFile::UTF8toSjis(string srcUTF8) {
+string fileIO::UTF8toSjis(string srcUTF8) {
 	//Unicode‚Ö•ÏŠ·Œã‚Ì•¶Žš—ñ’·‚ð“¾‚é
 	int lenghtUnicode = MultiByteToWideChar(CP_UTF8, 0, srcUTF8.c_str(), srcUTF8.size() + 1, NULL, 0);
 
@@ -40,7 +40,7 @@ string CFile::UTF8toSjis(string srcUTF8) {
 	return strSJis;
 }
 
-bool CFile::loadCSV(vector<string> *data, const char *name, bool isComUtoS)
+bool fileIO::loadCSV(vector<string> *data, const char *name, bool isComUtoS)
 {
 	ifstream ifs(name);
 

@@ -5,11 +5,18 @@
 #include"bossLionman.h"
 #include<memory>
 
+struct popDamageInf
+{
+	VECTOR pos;
+	float damage;
+	int popTime = 0;
+};
+
 class modeG : public ModeBase
 {
 public:
 	modeG(ModeServer* MS) { _modeServer = MS; }
-	~modeG(){};
+	~modeG() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();
@@ -33,15 +40,16 @@ public:
 	bool isLockon;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
-	modelInf *plMI, stage, *bossMI, skyDoom;
+	modelInf* plMI, stage, * bossMI, skyDoom;
 	std::string NS;
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;
-	valData *_valData;
+	valData* _valData;
 	std::vector<attackColl> mAllColl;
 	collCapsule testAttackCap;
 	statusInf plStatus, bossStatus;
 	std::vector<weaponEffect> atkEfc;
+	std::vector<popDamageInf> damageNumPopList;
 	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
 	int keepout[180] = { -1 }, keepoutNum;
 	int lockOnMarkerHandle[30] = { -1 }, LOMarkerNum = 0;

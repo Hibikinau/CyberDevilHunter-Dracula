@@ -229,23 +229,23 @@ bool BossLion::UtilityJudge() {
 			time = 100;
 			break;
 		case STATUS::ATTACK:
-			if (Rand >= 0 || Rand < 25) { 
-				status = STATUS::FSTEP; 
+			if (Rand >= 0 || Rand < 25) {
+				status = STATUS::FSTEP;
 			}
 			if (Rand >= 25 || Rand < 50) {
-				status = STATUS::BSTEP; 
+				status = STATUS::BSTEP;
 			}
 			if (Rand >= 50 || Rand < 75) {
 				status = STATUS::RSTEP;
 			}
 			if (Rand >= 75 || Rand <= 100) {
-				status = STATUS::LSTEP; 
+				status = STATUS::LSTEP;
 			}
 			break;
 		};
 	}
 
-	
+
 
 
 	return true;
@@ -292,9 +292,9 @@ bool BossLion::HPmath(float Num)
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
-	}
+	}/*
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
-	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
+	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);*/
 
 	return true;
 }

@@ -172,7 +172,7 @@ bool	BossKnight::Process()
 		}
 		animSpd = .7f*AwakeSpd;
 		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 20.f*AwakeDmg, 100, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 20.f*AwakeDmg, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -180,7 +180,7 @@ bool	BossKnight::Process()
 		if (isAnimEnd == true) {
 			ActionFlag = false;
 			if (attackStep < 8)
-			{    
+			{
 				RangeJ();
 				if (attackStep == 1 && (rand() % 100) < 50)
 				{
@@ -206,7 +206,7 @@ bool	BossKnight::Process()
 		if (ActionFlag == true) { break; }
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 15.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 15.f*AwakeDmg, 100, Char_BOSS1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
 		attackStep > 3 ? animSpd = 1.3f*AwakeSpd : animSpd = .7f*AwakeSpd;
@@ -233,7 +233,7 @@ bool	BossKnight::Process()
 		animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime / animSpd + 1, true, 30.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime / animSpd + 1, true, 30.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -252,7 +252,7 @@ bool	BossKnight::Process()
 		animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime / animSpd + 1, true, 20.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime / animSpd + 1, true, 20.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -265,7 +265,7 @@ bool	BossKnight::Process()
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
 				else { attackStep++; }
-				
+
 			}
 			else {
 				UtilityJudge();
@@ -546,9 +546,9 @@ bool BossKnight::HPmath(float Num)
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
-	}
+	}/*
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
-	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
+	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);*/
 
 	return true;
 }

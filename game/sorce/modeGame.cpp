@@ -84,7 +84,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/test.efkefc", 20.f); }
+	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/hit_eff.efkefc", 20.f); }
 	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
 	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
 
@@ -136,7 +136,7 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] || _imputInf._gTrgb[KEY_INPUT_L])
 	{//ロックオン
-		if(charBox.size() >= 2){ isLockon ^= true; }
+		if (charBox.size() >= 2) { isLockon ^= true; }
 	}
 
 	//コマンド呼び出し部分
@@ -286,7 +286,7 @@ bool	modeG::Render()
 	{
 		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
 		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 300, 0, lockOnMarkerHandle[LOMarkerNum], true);
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 100, 0, lockOnMarkerHandle[LOMarkerNum], true);
 		SetUseZBuffer3D(TRUE);
 	}
 
@@ -322,6 +322,7 @@ bool	modeG::Render()
 	debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
 	debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
 	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
+	debugWardBox.emplace_back("/csv(csvファイル更新)");
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -337,9 +338,9 @@ bool	modeG::Render()
 bool	modeG::collHitCheck()
 {
 	for (int i = 0; i < mAllColl.size(); i++)
-	{
-		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
-		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
+	{//
+		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
+		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff;}
 		else
 		{
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
@@ -349,7 +350,15 @@ bool	modeG::collHitCheck()
 
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
-		i->second->hitCheck(i->first.c_str());
+		VECTOR hitPos = { -1 };
+		float _damage;
+		if (i->second->hitCheck(i->first.c_str(), &hitPos, &_damage))
+		{
+			popDamageInf insDamage = { hitPos, _damage };
+			damageNumPopList.emplace_back(insDamage);
+			auto a = PlayEffekseer3DEffect(_valData->efcHandle);
+			SetPosPlayingEffekseer3DEffect(a, hitPos.x, hitPos.y, hitPos.z);
+		}
 	}
 
 	return true;
@@ -467,6 +476,10 @@ int modeG::useCommand()
 			{
 				charBox[Char_PL]->_statusInf.hitPoint = 0;
 			}
+			if (data == "csv")
+			{
+				modeT::loadData("game/res/save.csv", &_modeServer->_valData);
+			}
 			if (data == "test")
 			{
 				OutputDebugString("succes");
@@ -480,6 +493,17 @@ int modeG::useCommand()
 
 bool modeG::drawUI()
 {
+	auto DeffontSize = GetFontSize();
+	SetFontSize(30);
+	//ダメージ表示
+	for (int i = 0; i < damageNumPopList.size(); i++)
+	{
+		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
+		DrawString(screenPos.x, screenPos.y, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
+		if (damageNumPopList[i].popTime < 100) { damageNumPopList[i].popTime++; }
+		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
+	}
+	SetFontSize(DeffontSize);
 	//HPバー
 	int barPposX = 10, barPosY = 10, barLength = 660;
 	int gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxHitPoint)) * static_cast<float>(plStatus.hitPoint));
