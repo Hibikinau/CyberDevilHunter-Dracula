@@ -24,7 +24,7 @@ bool modeT::loadData(const char* dir, valData* _val)
 bool	modeT::Initialize()
 {
 	//"game/res/ZENRYOKUstage/tsStage.mv1"
-	_cg = LoadGraph("game/res/タイトル.png");
+	_cg = _modeServer->RS.loadGraphR("game/res/タイトル.png");
 	loadData("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }
@@ -49,6 +49,5 @@ bool	modeT::Render()
 
 bool	modeT::Terminate()
 {
-	InitGraph();
 	return true;
 }

@@ -63,14 +63,14 @@ bool	modeG::Initialize()
 	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
 	testAttackCap.r = 30.f;
 
-	UIkari = LoadGraph("game/res/A.png");
-	HPgaugeHandle = LoadGraph("game/res/GameUI_HP.png");
-	HPgaugeHandle2 = LoadGraph("game/res/GameUI_HPB.png");
-	BPgaugeHandle = LoadGraph("game/res/c.png");
-	LoadDivGraph("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
+	UIkari = _modeServer->RS.loadGraphR("game/res/A.png");
+	HPgaugeHandle = _modeServer->RS.loadGraphR("game/res/GameUI_HP.png");
+	HPgaugeHandle2 = _modeServer->RS.loadGraphR("game/res/GameUI_HPB.png");
+	BPgaugeHandle = _modeServer->RS.loadGraphR("game/res/c.png");
+	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 
-	LoadDivGraph("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
-	insEfcHamdle = LoadGraph("game/res/kari2.png");
+	_modeServer->RS.loadDivGraphR("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
+	insEfcHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
 
 	//‚±‚±‚Ü‚Å”ñ“¯Šúƒ[ƒh-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -370,13 +370,11 @@ bool	modeG::Terminate()
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
 	MV1DeleteModel(stage.modelHandle);
 	MV1DeleteModel(skyDoom.modelHandle);
-	int a = InitGraph();
 
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); i->second.reset(); }
 	mAllColl.clear();
 	charBox.clear();
 	debugWardBox.clear();
-	InitGraph();
 	InitSoundMem();
 	DeleteLightHandleAll();
 	return true;

@@ -3,7 +3,7 @@
 bool	modeR::Initialize()
 {
 	//"game/res/ZENRYOKUstage/tsStage.mv1"
-	_cg = LoadGraph("game/res/result.png");
+	_cg = _modeServer->RS.loadGraphR("game/res/result.png");
 	return true;
 }
 
@@ -28,6 +28,5 @@ bool	modeR::Render()
 
 bool	modeR::Terminate()
 {
-	InitGraph();
 	return true;
 }

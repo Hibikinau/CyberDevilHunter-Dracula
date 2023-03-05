@@ -30,7 +30,7 @@ bool model::changeScale(modelInf* MI)
 			MV1SetMaterialOutLineDotWidth(MI->wepons[j].weponHandle, k, dotwidthW / MI->wepons[j].scale);
 		}
 	}
-	
+
 	return true;
 }
 
@@ -128,12 +128,13 @@ bool model::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 
 bool model::modelDelete(modelInf* MI)
 {//装備モデルのメモリ解放してからコンテナの消去
+	OutputDebugString("a");
 	for (int i = 0; i < MI->wepons.size(); i++)
 	{
-		 MV1DeleteModel(MI->wepons[i].weponHandle);
+		auto a = MV1DeleteModel(MI->wepons[i].weponHandle);
 	}
 	MI->wepons.clear();
-	MV1DeleteModel(MI->modelHandle);//キャラモデルのメモリ解放
+	auto b = MV1DeleteModel(MI->modelHandle);//キャラモデルのメモリ解放
 	return true;
 }
 

@@ -69,6 +69,5 @@ bool	modeBC::Render()
 bool	modeBC::Terminate()
 {
 	SetFontSize(DeffontSize);
-	InitGraph();
 	return true;
 }
