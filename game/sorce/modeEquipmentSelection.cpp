@@ -97,6 +97,6 @@ bool	modeES::Render()
 bool	modeES::Terminate()
 {
 	SetFontSize(DeffontSize);
-
+	modeT::save("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }

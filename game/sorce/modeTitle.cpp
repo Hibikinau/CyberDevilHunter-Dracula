@@ -1,4 +1,30 @@
 #include"allMode.h"
+#include <fstream>
+#include <sstream>
+
+bool modeT::save(const char* dir, valData* _val)
+{
+	std::vector<std::string> _data;
+	fileIO::loadCSV(&_data, dir, false);
+
+	for (int i = 0; i < _data.size(); i++)
+	{
+		if (_data[i].find("//") != std::string::npos)
+		{
+			continue;
+		}
+
+		if (_data[i] == "“ü‚ê‘Ö‚¦‹ZX") { i++; _data[i] = _val->plChangeAttackX; }
+		if (_data[i] == "“ü‚ê‘Ö‚¦‹ZY") { i++; _data[i] = _val->plChangeAttackY; }
+	}
+	std::string insStr = "";
+	for (auto insData : _data) { insStr += insData + "\n"; }
+	std::ofstream ofs(dir);
+	ofs << insStr;
+	ofs.close();
+
+	return true;
+}
 
 bool modeT::loadData(const char* dir, valData* _val)
 {
