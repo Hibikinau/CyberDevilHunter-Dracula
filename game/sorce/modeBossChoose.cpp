@@ -6,8 +6,8 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
-	menuMessage.emplace_back("　　　ボス１\n「クエスト名」");
-	menuMessage.emplace_back("　　　ボス２\n「クエスト名」");
+	menuMessage.emplace_back("　　　　ボス１\n「クエスト名」");
+	menuMessage.emplace_back("　　　　ボス２\n「クエスト名」");
 	picMenuMaxNum = menuMessage.size() - 1;
 	picMenuNum = 0;
 	_modeServer->_valData.popBossNum = 0;
@@ -16,6 +16,7 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	newsWindow = _modeServer->RS.loadGraphR("game/res/UI_obi.png");
 	newsWindowStr = _modeServer->RS.loadGraphR("game/res/UI_news.png");
+	wakuHandle = _modeServer->RS.loadGraphR("game/res/wakuUI2.png");
 	mapAnimNum = 0, backAnimNum = 0;
 	randomNum = (rand() % 8) + 10;
 	randomNewsNum = rand() % _modeServer->_valData.news.size();
@@ -90,7 +91,9 @@ bool	modeBC::Render()
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], true);
-	DrawExtendGraph(800, 20, 1260, 320, mapAnimHandol[mapAnimNum], true);
+	DrawBox(300, 110, 1260, 560, GetColor(255, 0, 255), true);
+	DrawExtendGraph(800, 20, 1270, 320, mapAnimHandol[mapAnimNum], true);
+	DrawGraph(15, 110, wakuHandle, true);
 
 	//neonAnimNum < 61 ? neonAnimNum++ : neonAnimNum = 0;
 	//DrawExtendGraph(-110, -10, 410, 770, neonAnimHandle[neonAnimNum], true);
@@ -117,11 +120,10 @@ bool	modeBC::Render()
 		randomNewsNum = rand() % _modeServer->_valData.news.size();
 		newsPosX = 1280;
 	}
-	else { newsPosX -= 5; }
+	else { newsPosX -= 2; }
 	DrawExtendGraph(0, 660, 1280, 700, newsWindowStr, true);
 
-	SetFontSize(40);
-	int defY = 150;
+	int defY = 120;
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
 		StrWidth = GetDrawStringWidth(menuMessage[i].c_str(), strlen(menuMessage[i].c_str()));
@@ -143,17 +145,20 @@ bool	modeBC::Render()
 	else {
 		DrawGraph(70, defY + (110 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
 	}
+
+	SetFontSize(30);
+	if (picMenuNum == 0) {
+		DrawString(300, 120, _modeServer->_valData.boss1Inf.c_str(), GetColor(255, 255, 255));
+	}
+	else {
+		DrawString(300, 120, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
+	}
+
+	SetFontSize(40);
 	DrawString(300, 580, "この依頼を受注しますか？", GetColor(255, 255, 255));
 	DrawString(900, 580, "はい", GetColor(255, 255, 255));
 	DrawString(1090, 580, "いいえ", GetColor(255, 255, 255));
 
-	SetFontSize(30);
-	if (picMenuNum == 0) {
-		DrawString(300, 150, _modeServer->_valData.boss1Inf.c_str(), GetColor(255, 255, 255));
-	}
-	else {
-		DrawString(300, 150, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
-	}
 
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("討伐ボス選択", strlen("討伐ボス選択"));

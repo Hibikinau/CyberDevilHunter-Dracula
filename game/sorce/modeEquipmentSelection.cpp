@@ -4,6 +4,7 @@ bool	modeES::Initialize()
 {
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
+	wakuHandle = _modeServer->RS.loadGraphR("game/res/wakuUI2.png");
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
 	menuMessage.emplace_back("アーツ１(X)");
@@ -25,6 +26,7 @@ bool	modeES::Process()
 			pic == 0 ? pic = 2 : pic--;
 		}
 
+		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B]) { isPic = false; }
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
 			isPic = false;
@@ -62,10 +64,13 @@ bool	modeES::Render()
 	arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
+	//DrawGraph(15, 110, wakuHandle, true);
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("装備選択", strlen("装備選択"));
 	DrawString(20, 20, "装備選択", GetColor(255, 255, 255));
+
 	SetFontSize(40);
+	DrawString(20, 150, "攻撃技選択", GetColor(255, 255, 255));
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
 	{

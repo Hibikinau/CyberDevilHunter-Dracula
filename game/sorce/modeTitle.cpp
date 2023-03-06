@@ -44,12 +44,26 @@ bool modeT::loadData(const char* dir, valData* _val)
 		if (_data[i] == "ボス1依頼情報")
 		{
 			_val->boss1Inf = ""; i++;
-			while (_data[i] != "ここまで") {  _val->boss1Inf += _data[i] + "\n"; i++;}
+			while (_data[i] != "ここまで")
+			{
+				if (_data[i] == "内容") { _val->boss1Inf += "\n"; }
+				if (_data[i] == "概要") { _val->boss1Inf += "\n"; }
+				if (_data[i] == "報酬") { _val->boss1Inf += "\n"; }
+				_val->boss1Inf += _data[i] + "\n";
+				i++;
+			}
 		}
 		if (_data[i] == "ボス2依頼情報")
 		{
 			_val->boss2Inf = ""; i++;
-			while (_data[i] != "ここまで") { _val->boss2Inf += _data[i] + "\n"; i++; }
+			while (_data[i] != "ここまで")
+			{
+				if (_data[i] == "内容") { _val->boss2Inf += "\n"; }
+				if (_data[i] == "概要") { _val->boss2Inf += "\n"; }
+				if (_data[i] == "報酬") { _val->boss2Inf += "\n"; }
+				_val->boss2Inf += _data[i] + "\n";
+				i++;
+			}
 		}
 		if (_data[i] == "ニュース")
 		{
