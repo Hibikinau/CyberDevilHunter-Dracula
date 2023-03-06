@@ -25,6 +25,11 @@ bool modeT::loadData(const char* dir, valData* _val)
 			_val->boss2Inf = ""; i++;
 			while (_data[i] != "‚±‚±‚Ü‚Å") { _val->boss2Inf += _data[i] + "\n"; i++; }
 		}
+		if (_data[i] == "ƒjƒ…[ƒX")
+		{
+			i++;
+			while (_data[i] != "‚±‚±‚Ü‚Å") { _val->news.emplace_back(_data[i]); i++; }
+		}
 
 	}
 

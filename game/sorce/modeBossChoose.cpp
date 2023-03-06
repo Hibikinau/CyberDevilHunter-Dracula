@@ -11,7 +11,13 @@ bool	modeBC::Initialize()
 	picMenuMaxNum = menuMessage.size() - 1;
 	_modeServer->_valData.popBossNum = 0;
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/glitch/apngframe01_sheet.png", 18, 2, 9, 800, 450, glitchAnimHandle);
+	newsWindow = _modeServer->RS.loadGraphR("game/res/UI_obi.png");
+	newsWindowStr = _modeServer->RS.loadGraphR("game/res/UI_news.png");
 	mapAnimNum = 0, backAnimNum = 0;
+	randomNum = (rand() % 8) + 10;
+	randomNewsNum = rand() % _modeServer->_valData.news.size();
+	newsPosX = 1280;
 	return true;
 }
 
@@ -76,14 +82,36 @@ bool	modeBC::Process()
 //680, 120
 bool	modeBC::Render()
 {
-	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
+	SetFontSize(36);
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
-	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
-	DrawGraph(680, 120, mapAnimHandol[mapAnimNum], false);
+	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
+	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], true);
+	DrawExtendGraph(800, 20, 1260, 320, mapAnimHandol[mapAnimNum], true);
+	if (randomFrameNum <= 0)
+	{
+		if (glitchAnimNum < randomNum) { glitchAnimNum++; }
+		else
+		{
+			glitchAnimNum = 0;
+			randomFrameNum = (rand() % 120) + 20;
+			randomNum = (rand() % 14) + 5;
+		}
+		DrawExtendGraph(800, 20, 1260, 320, glitchAnimHandle[glitchAnimNum], true);
+	}
+	else { randomFrameNum--; }
 
-	SetFontSize(80);
-	int insMenuFontSize = GetDrawStringWidth("討伐ボス選択", strlen("討伐ボス選択"));
-	DrawString(20, 20, "討伐ボス選択", GetColor(255, 255, 255));
+	DrawExtendGraph(0, 660, 1280, 700, newsWindow, true);
+	const char* insStr = _modeServer->_valData.news[randomNewsNum].c_str();
+	DrawString(newsPosX, 662, insStr, GetColor(255, 255, 255));
+	int insStrWidth = GetDrawStringWidth(insStr, strlen(insStr));
+	if (newsPosX + insStrWidth < 0)
+	{
+		randomNewsNum = rand() % _modeServer->_valData.news.size();
+		newsPosX = 1280;
+	}
+	else { newsPosX-=5; }
+	DrawExtendGraph(0, 660, 1280, 700, newsWindowStr, true);
+
 	SetFontSize(40);
 	int defY = 150;
 	for (int i = 0; i < menuMessage.size(); i++)
@@ -101,8 +129,6 @@ bool	modeBC::Render()
 		{
 			DrawString(1120 - 40, 580, "→", GetColor(255, 255, 255));
 		}
-
-
 	}
 	else {
 		DrawString(80 - 40, defY + (90 * picMenuNum), "→", GetColor(255, 255, 255));
@@ -118,6 +144,10 @@ bool	modeBC::Render()
 	else {
 		DrawString(300, 150, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
 	}
+
+	SetFontSize(80);
+	int insMenuFontSize = GetDrawStringWidth("討伐ボス選択", strlen("討伐ボス選択"));
+	DrawString(20, 20, "討伐ボス選択", GetColor(255, 255, 255));
 	return true;
 }
 

@@ -2,6 +2,7 @@
 
 bool	modeES::Initialize()
 {
+	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
 	menuMessage.emplace_back("アーツ１");
@@ -25,7 +26,7 @@ bool	modeES::Process()
 
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
-			isPic = false;	
+			isPic = false;
 		}
 	}
 	else {
@@ -50,7 +51,8 @@ bool	modeES::Process()
 				_modeServer->_valData.popSelectNum = 2;
 			}
 
-		}else if(_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
+		}
+		else if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
 			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 			return false;
@@ -62,6 +64,8 @@ bool	modeES::Process()
 bool	modeES::Render()
 {
 	//DrawGraph(0, 0, _cg, false);
+	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
+	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("装備選択", strlen("装備選択"));
 	DrawString(20, 20, "装備選択", GetColor(255, 255, 255));
@@ -76,7 +80,7 @@ bool	modeES::Render()
 	if (isPic)
 	{
 		if (pic) {
-			DrawString(600 - 40, 200 , "→", GetColor(255, 255, 255));
+			DrawString(600 - 40, 200, "→", GetColor(255, 255, 255));
 		}
 		else
 		{
@@ -97,7 +101,7 @@ bool	modeES::Render()
 		DrawString(600, 200, "デビル", GetColor(255, 255, 255));
 		DrawString(600, 400, "ハンター", GetColor(255, 255, 255));
 	}
-	
+
 
 	return true;
 }
@@ -105,6 +109,6 @@ bool	modeES::Render()
 bool	modeES::Terminate()
 {
 	SetFontSize(DeffontSize);
-	
+
 	return true;
 }
