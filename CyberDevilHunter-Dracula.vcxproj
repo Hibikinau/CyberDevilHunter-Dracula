@@ -170,6 +170,7 @@
     <ClCompile Include="game\sorce\bossKnight.cpp" />
     <ClCompile Include="game\sorce\bossLionman.cpp" />
     <ClCompile Include="game\sorce\charBase.cpp" />
+    <ClCompile Include="game\sorce\modeEquipmentSelection.cpp" />
     <ClCompile Include="game\sorce\gameMain.cpp" />
     <ClCompile Include="game\sorce\modeBossChoose.cpp" />
     <ClCompile Include="game\sorce\modeGame.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="game\sorce\bossKnight.h" />
     <ClInclude Include="game\sorce\bossLionman.h" />
     <ClInclude Include="game\sorce\charBase.h" />
+    <ClInclude Include="game\sorce\modeEquipmentSelection.h" />
     <ClInclude Include="game\sorce\gameMain.h" />
     <ClInclude Include="game\sorce\modeBossChoose.h" />
     <ClInclude Include="game\sorce\modeGame.h" />
@@ -195,6 +197,9 @@
     <ClInclude Include="game\sorce\modeTitle.h" />
     <ClInclude Include="game\sorce\motionDefineList.h" />
     <ClInclude Include="game\sorce\player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="game\res\save.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

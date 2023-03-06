@@ -15,6 +15,16 @@ bool modeT::loadData(const char* dir, valData* _val)
 		if (_data[i] == "入れ替え技X") { i++; _val->plChangeAttackX = _data[i]; }
 		if (_data[i] == "入れ替え技Y") { i++; _val->plChangeAttackY = _data[i]; }
 		if (_data[i] == "エフェクトフェード") { i++; _data[i] == "1" ? _val->isAtkEfcArufa = true : _val->isAtkEfcArufa = false; }
+		if (_data[i] == "ボス1依頼情報")
+		{
+			_val->boss1Inf = ""; i++;
+			while (_data[i] != "ここまで") {  _val->boss1Inf += _data[i] + "\n"; i++;}
+		}
+		if (_data[i] == "ボス2依頼情報")
+		{
+			_val->boss2Inf = ""; i++;
+			while (_data[i] != "ここまで") { _val->boss2Inf += _data[i] + "\n"; i++; }
+		}
 
 	}
 

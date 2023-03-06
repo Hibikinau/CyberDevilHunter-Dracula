@@ -1,11 +1,11 @@
 #pragma once
 #include"appframe.h"
 
-class modeBC : public ModeBase
+class modeES : public ModeBase
 {
 public:
-	modeBC(ModeServer* MS) { _modeServer = MS; };
-	~modeBC() {};
+	 modeES(ModeServer* MS) { _modeServer = MS; };
+	~modeES() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();
@@ -14,9 +14,9 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, mapAnimNum = 0, mapAnimHandol[62] = { -1 }, backAnimNum = 0, backAnimHandle[90] = { -1 };
+	int _cg, DeffontSize, StrWidth, picMenuNum = 0, picMenuMaxNum;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;
-	bool isPic = false, pic = true;
+	bool isPic = false, pic = false;
 };

@@ -7,14 +7,14 @@ int Rserver::modelImportR(const char* dir)
 {
 	for (int i = 0; i < modelHandleList.size(); i++)
 	{
-		if (modelHandleList[i].dir == dir) { return modelHandleList[i].handle; }
+		if (modelHandleList[i].dir == dir) { return MV1DuplicateModel(modelHandleList[i].handle); }
 	}
 
 	int insHandle = -1;
 	insHandle = MV1LoadModel(dir);
 	modelHandleInf insInf = { dir, insHandle };
 	modelHandleList.emplace_back(insInf);
-	return insHandle;
+	return MV1DuplicateModel(insHandle);
 }
 
 int Rserver::loadGraphR(const char* dir)
