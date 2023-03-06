@@ -30,6 +30,11 @@ bool modeT::loadData(const char* dir, valData* _val)
 			i++;
 			while (_data[i] != "‚±‚±‚Ü‚Å") { _val->news.emplace_back(_data[i]); i++; }
 		}
+		if (_data[i] == "“ü‚ê‘Ö‚¦‹Zˆê——")
+		{
+			i++;
+			while (_data[i] != "‚±‚±‚Ü‚Å") { _val->changeAttackList.emplace_back(_data[i]); i++; }
+		}
 
 	}
 

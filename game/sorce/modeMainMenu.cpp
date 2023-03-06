@@ -9,6 +9,7 @@ bool	modeMM::Initialize()
 	menuMessage.emplace_back("ê›íË");
 	picMenuMaxNum = menuMessage.size() - 1;
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	return true;
 }
 
@@ -60,7 +61,9 @@ bool	modeMM::Render()
 		DrawString(80, defY + (120 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
 		if (picMenuNum == i)
 		{
-			DrawString(80 - 40, defY + (120 * i), "Å®", GetColor(255, 255, 255));
+			arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
+			DrawGraph(80 - 65, defY + (120 * i) + 7, arrowAnimHandle[arrowAnimNum], true);
+			//DrawString(80 - 40, defY + (120 * i), "Å®", GetColor(255, 255, 255));
 		}
 	}
 

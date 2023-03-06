@@ -3,30 +3,33 @@
 bool	modeES::Initialize()
 {
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
-	menuMessage.emplace_back("アーツ１");
-	menuMessage.emplace_back("アーツ２");
+	menuMessage.emplace_back("アーツ１(X)");
+	menuMessage.emplace_back("アーツ２(Y)");
 	picMenuMaxNum = menuMessage.size() - 1;
-	_modeServer->_valData.popSelectNum = 0;
+	popSelectNum = 0;
 	return true;
 }
 
 bool	modeES::Process()
 {
 	if (isPic) {
-		if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
-		{
-			pic ^= true;
-		}
 		if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 		{
-			pic ^= true;
+			pic == 2 ? pic = 0 : pic++;
+		}
+		if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
+		{
+			pic == 0 ? pic = 2 : pic--;
 		}
 
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
 			isPic = false;
+			if (picMenuNum == 0) { _modeServer->_valData.plChangeAttackX = _modeServer->_valData.changeAttackList[pic]; }
+			if (picMenuNum == 1) { _modeServer->_valData.plChangeAttackY = _modeServer->_valData.changeAttackList[pic]; }
 		}
 	}
 	else {
@@ -42,15 +45,6 @@ bool	modeES::Process()
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
 			isPic = true;
-			if (picMenuNum == 0)
-			{
-				_modeServer->_valData.popSelectNum = 1;
-			}
-			else if (picMenuNum == 1)
-			{
-				_modeServer->_valData.popSelectNum = 2;
-			}
-
 		}
 		else if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
@@ -58,12 +52,14 @@ bool	modeES::Process()
 			return false;
 		}
 	}
+
 	return true;
 }
 
 bool	modeES::Render()
 {
 	//DrawGraph(0, 0, _cg, false);
+	arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
@@ -73,34 +69,26 @@ bool	modeES::Render()
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
-		StrWidth = GetDrawStringWidth(menuMessage[i].c_str(), strlen(menuMessage[i].c_str()));
-		DrawString(80, defY + (120 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
+		std::string insStr = menuMessage[i] + "\n";
+		if (i == 0) { insStr += _modeServer->_valData.plChangeAttackX; }
+		if (i == 1) { insStr += _modeServer->_valData.plChangeAttackY; }
+		DrawString(80, defY + (120 * i), insStr.c_str(), GetColor(255, 255, 255));
 
 	}
 	if (isPic)
 	{
-		if (pic) {
-			DrawString(600 - 40, 200, "→", GetColor(255, 255, 255));
-		}
-		else
+		DrawGraph(450 - 65, 200 + (pic * 100) + 7, arrowAnimHandle[arrowAnimNum], true);
+	}
+	else {
+		DrawGraph(80 - 65, defY + (120 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
+	}
+	if (picMenuNum == 0 || picMenuNum == 1) {
+		for (int i = 0; i < _modeServer->_valData.changeAttackList.size(); i++)
 		{
-			DrawString(600 - 40, 400, "→", GetColor(255, 255, 255));
+			DrawString(450, 200 + (100 * i), _modeServer->_valData.changeAttackList[i].c_str(), GetColor(255, 255, 255));
 		}
-
-
 	}
-	else {
-		DrawString(80 - 40, defY + (120 * picMenuNum), "→", GetColor(255, 255, 255));
-	}
-	if (picMenuNum == 0) {
-		DrawString(600, 200, "ドラクエア", GetColor(255, 255, 255));
-		DrawString(600, 400, "サイバー", GetColor(255, 255, 255));
-
-	}
-	else {
-		DrawString(600, 200, "デビル", GetColor(255, 255, 255));
-		DrawString(600, 400, "ハンター", GetColor(255, 255, 255));
-	}
+	//else {	}
 
 
 	return true;

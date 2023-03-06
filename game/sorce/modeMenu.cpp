@@ -2,6 +2,7 @@
 
 bool	modeM::Initialize()
 {
+	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
 	_cg = MakeGraph(1280, 720);
@@ -31,6 +32,7 @@ bool	modeM::Process()
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
 	}
 
+	if (_imputInf._gTrgb[KEY_INPUT_M] || _imputInf._gTrgp[XINPUT_BUTTON_B]) { _modeServer->activate(MODE_GAME); return false; }
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
 		if (picMenuNum == 0)
@@ -74,7 +76,9 @@ bool	modeM::Render()
 		DrawString(1280 - StrWidth, defY + (90 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
 		if (picMenuNum == i)
 		{
-			DrawString(1280 - StrWidth - 40, defY + (90 * i), "Å®", GetColor(255, 255, 255));
+			arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
+			DrawGraph(1280 - StrWidth - 65, defY + (90 * i) + 7, arrowAnimHandle[arrowAnimNum], true);
+			//DrawString(1280 - StrWidth - 40, defY + (90 * i), "Å®", GetColor(255, 255, 255));
 		}
 	}
 

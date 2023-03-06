@@ -6,6 +6,7 @@
 #include <sstream>
 #include <vector>
 #include <Windows.h>
+#include "../AppFrame/source/ResourceServer/ResourceServer.h"
 #include "../Application/UtilMacro.h"
 
 class CFile
@@ -39,7 +40,8 @@ private:
 
 namespace fileIO
 {
-	bool loadCSV(std::vector<std::string>* data, const char* name, bool isComUtoS);
+	bool loadCSV(std::vector<std::string>* data, const char* dir, bool isComUtoS);
+	bool writeCSV(valData* data, const char* dir, bool isComUtoS);
 	std::vector<std::string> split(std::string& input, char delimiter);
 	std::string UTF8toSjis(std::string srcUTF8);
 }

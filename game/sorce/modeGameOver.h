@@ -18,4 +18,6 @@ protected:
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;
+	int gameOverAnimHandle[89] = { -1 };
+	float GOAnimNum = 0;
 };

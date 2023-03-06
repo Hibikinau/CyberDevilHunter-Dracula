@@ -68,6 +68,8 @@ bool	modeG::Initialize()
 	HPgaugeHandle2 = _modeServer->RS.loadGraphR("game/res/GameUI_HPB.png");
 	BPgaugeHandle = _modeServer->RS.loadGraphR("game/res/c.png");
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
+	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
+	GSAnimNum = 0;
 
 	_modeServer->RS.loadDivGraphR("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	insEfcHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
@@ -182,16 +184,14 @@ bool	modeG::Process()
 	{
 		if (i->second->isDead == 2 || i->second->_modelInf.pos.y < -500)
 		{
-			if (i->second->type == 1)
+			if (i->second->type == 1 && !isGameOver)
 			{//自機の死
 				_modeServer->Add(std::make_unique<modeGO>(_modeServer), 1, MODE_GO);
-				Terminate();
-				return false;
+				isGameOver = true;
 			}
 			else
 			{//それ以外の死
 				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
-				Terminate();
 				return false;
 			}
 		}
@@ -215,6 +215,11 @@ bool	modeG::Process()
 
 bool	modeG::Render()
 {
+	if (GSAnimNum < 40) {
+		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
+		GSAnimNum++;
+		return true;
+	}
 	MV1DrawModel(skyDoom.modelHandle);
 	//シャドウマップココカラ-----------------------------------------
 	ShadowMap_DrawSetup(ShadowMapHandle);
@@ -310,9 +315,6 @@ bool	modeG::Render()
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
-	float insDirY = charBox[Char_PL]->_modelInf.dir.y;
-	if (insDirY > 360) { insDirY -= 360; }
-	else if (insDirY < 0) { insDirY += 360; }
 	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
@@ -332,6 +334,12 @@ bool	modeG::Render()
 	}
 	debugWardBox.clear();
 
+	if (GSAnimNum < 89)
+	{
+		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
+		GSAnimNum++;
+	}
+
 	return true;
 }
 
@@ -340,7 +348,7 @@ bool	modeG::collHitCheck()
 	for (int i = 0; i < mAllColl.size(); i++)
 	{//
 		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
-		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff;}
+		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
 		else
 		{
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);

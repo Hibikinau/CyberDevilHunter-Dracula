@@ -37,7 +37,7 @@ public:
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld, insEfcHamdle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
-	bool isLockon;
+	bool isLockon, isGameOver = false;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
 	modelInf* plMI, stage, * bossMI, skyDoom;
@@ -53,6 +53,7 @@ public:
 	int UIkari, BGM, insEfcHandle, efcHandle, efcTime;
 	int keepout[180] = { -1 }, keepoutNum;
 	int lockOnMarkerHandle[30] = { -1 }, LOMarkerNum = 0;
+	int gameStartAnimHandle[89] = { -1 }, GSAnimNum;
 
 	int StageModelHandle;
 	int CharaModelHandle;

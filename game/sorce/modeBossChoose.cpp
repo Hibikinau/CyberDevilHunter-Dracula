@@ -6,12 +6,14 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
-	menuMessage.emplace_back("ボス１");
-	menuMessage.emplace_back("ボス２");
+	menuMessage.emplace_back("　　　ボス１\n「クエスト名」");
+	menuMessage.emplace_back("　　　ボス２\n「クエスト名」");
 	picMenuMaxNum = menuMessage.size() - 1;
+	picMenuNum = 0;
 	_modeServer->_valData.popBossNum = 0;
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/glitch/apngframe01_sheet.png", 18, 2, 9, 800, 450, glitchAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	newsWindow = _modeServer->RS.loadGraphR("game/res/UI_obi.png");
 	newsWindowStr = _modeServer->RS.loadGraphR("game/res/UI_news.png");
 	mapAnimNum = 0, backAnimNum = 0;
@@ -44,9 +46,8 @@ bool	modeBC::Process()
 			{//キャンセル
 				isPic = false; pic = true;
 			}
-
-
 		}
+		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B]) { isPic = false; pic = true; }
 	}
 	else {
 		if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
@@ -78,15 +79,22 @@ bool	modeBC::Process()
 			return false;
 		}
 	}
+
+	return true;
 }
 //680, 120
 bool	modeBC::Render()
 {
 	SetFontSize(36);
+	arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], true);
 	DrawExtendGraph(800, 20, 1260, 320, mapAnimHandol[mapAnimNum], true);
+
+	//neonAnimNum < 61 ? neonAnimNum++ : neonAnimNum = 0;
+	//DrawExtendGraph(-110, -10, 410, 770, neonAnimHandle[neonAnimNum], true);
+
 	if (randomFrameNum <= 0)
 	{
 		if (glitchAnimNum < randomNum) { glitchAnimNum++; }
@@ -109,7 +117,7 @@ bool	modeBC::Render()
 		randomNewsNum = rand() % _modeServer->_valData.news.size();
 		newsPosX = 1280;
 	}
-	else { newsPosX-=5; }
+	else { newsPosX -= 5; }
 	DrawExtendGraph(0, 660, 1280, 700, newsWindowStr, true);
 
 	SetFontSize(40);
@@ -117,25 +125,27 @@ bool	modeBC::Render()
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
 		StrWidth = GetDrawStringWidth(menuMessage[i].c_str(), strlen(menuMessage[i].c_str()));
-		DrawString(80, defY + (90 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
+		DrawString(10, defY + (110 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
 
 	}
 	if (isPic)
 	{
 		if (pic) {
-			DrawString(1000 - 40, 580, "→", GetColor(255, 255, 255));
+			DrawGraph(900 - 65, 580 + 7, arrowAnimHandle[arrowAnimNum], true);
+			//DrawString(1000 - 40, 580, "→", GetColor(255, 255, 255));
 		}
 		else
 		{
-			DrawString(1120 - 40, 580, "→", GetColor(255, 255, 255));
+			DrawGraph(1090 - 65, 580 + 7, arrowAnimHandle[arrowAnimNum], true);
+			//DrawString(1120 - 40, 580, "→", GetColor(255, 255, 255));
 		}
 	}
 	else {
-		DrawString(80 - 40, defY + (90 * picMenuNum), "→", GetColor(255, 255, 255));
+		DrawGraph(70, defY + (110 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
 	}
-	DrawString(400, 580, "この依頼を受注しますか？", GetColor(255, 255, 255));
-	DrawString(1000, 580, "はい", GetColor(255, 255, 255));
-	DrawString(1120, 580, "いいえ", GetColor(255, 255, 255));
+	DrawString(300, 580, "この依頼を受注しますか？", GetColor(255, 255, 255));
+	DrawString(900, 580, "はい", GetColor(255, 255, 255));
+	DrawString(1090, 580, "いいえ", GetColor(255, 255, 255));
 
 	SetFontSize(30);
 	if (picMenuNum == 0) {

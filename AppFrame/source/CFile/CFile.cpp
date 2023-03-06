@@ -57,6 +57,11 @@ bool fileIO::loadCSV(vector<string> *data, const char *name, bool isComUtoS)
 	return true;
 }
 
+bool fileIO::writeCSV(valData* data, const char* dir, bool isComUtoS)
+{
+
+
+}
 
 // ì«Ç›çûÇ›
 CFile::CFile(const std::string filename) {
