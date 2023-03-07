@@ -16,7 +16,8 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	newsWindow = _modeServer->RS.loadGraphR("game/res/UI_obi.png");
 	newsWindowStr = _modeServer->RS.loadGraphR("game/res/UI_news.png");
-	wakuHandle = _modeServer->RS.loadGraphR("game/res/wakuUI2.png");
+	wakuHandle = _modeServer->RS.loadGraphR("game/res/wakuUI.png");
+	wakuHandle2 = _modeServer->RS.loadGraphR("game/res/wakuUI3.png");
 	mapAnimNum = 0, backAnimNum = 0;
 	randomNum = (rand() % 8) + 10;
 	randomNewsNum = rand() % _modeServer->_valData.news.size();
@@ -91,7 +92,8 @@ bool	modeBC::Render()
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	mapAnimNum < 61 ? mapAnimNum++ : mapAnimNum = 61;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], true);
-	DrawBox(300, 110, 1260, 560, GetColor(255, 0, 255), true);
+	//DrawBox(300, 110, 1260, 560, GetColor(255, 0, 255), true);
+	DrawExtendGraph(300, 110, 1260, 560, wakuHandle2, true);
 	DrawExtendGraph(800, 20, 1270, 320, mapAnimHandol[mapAnimNum], true);
 	DrawGraph(15, 110, wakuHandle, true);
 
@@ -148,10 +150,10 @@ bool	modeBC::Render()
 
 	SetFontSize(30);
 	if (picMenuNum == 0) {
-		DrawString(300, 120, _modeServer->_valData.boss1Inf.c_str(), GetColor(255, 255, 255));
+		DrawString(320, 120, _modeServer->_valData.boss1Inf.c_str(), GetColor(255, 255, 255));
 	}
 	else {
-		DrawString(300, 120, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
+		DrawString(320, 120, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
 	}
 
 	SetFontSize(40);

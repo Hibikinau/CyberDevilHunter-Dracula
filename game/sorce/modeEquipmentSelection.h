@@ -14,7 +14,7 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg, DeffontSize, StrWidth, picMenuNum = 0, picMenuMaxNum, backAnimNum = 0, backAnimHandle[90] = { -1 }, pic = 0, popSelectNum = 0, wakuHandle;
+	int _cg, DeffontSize, StrWidth, picMenuNum = 0, picMenuMaxNum, backAnimNum = 0, backAnimHandle[90] = { -1 }, pic = 0, popSelectNum = 0, wakuHandle, wakuHandle2;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;

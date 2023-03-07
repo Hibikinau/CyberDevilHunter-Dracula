@@ -64,21 +64,22 @@ public:
 	static bool CA_debugAttack(PL* insPL);
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
-	float getAnimPlayTotalTime() { return _modelInf.totalTime ; };
+	float getAnimPlayTotalTime() { return _modelInf.totalTime; };
+	void battleEndVoice() override { PlaySoundMem(soundHandle[voiceStartNum + 41 + rand() % 2], DX_PLAYTYPE_BACK); }
+	void battleStartVoice() override { PlaySoundMem(soundHandle[voiceStartNum + 35 + rand() % 2], DX_PLAYTYPE_BACK); }
 
 protected:
 	int _cg, useAnim, attackNumOld, waitNextAttack;
 	int _x, _y, stepChargeSec, isStep = false;
 	int isCharge;//0.チャージしてない 1.チャージ中 2.解放
-	int chargeLevel, chargeTime, insEfcHamdle, isAwakening = 0;
+	int chargeLevel, chargeTime, insEfcHamdle, isAwakening = 0, voiceStartNum;
 	float spd, dodgeDir;
-	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isAttackEnd, isCounter = false;
+	bool attackFlag, isAnimEnd, isPushButtonAct, isGuard, isFastGuard, isAttackEnd;
 	float maxHitPoint, maxBloodPoint, maxStamina, atkBuff = 0.f;
 	float nowActionTime;
-	bool bufferedInput, isGhost;
-	int immortalTime;//, dodgeTime;
+	bool bufferedInput, isGhost, deadVoice = false;
+	int immortalTime, isCounter = 0;
 	int playSoundOld[3], walkTime, counterTime, waitCAChargeTime, CAChargeTime, CAChargeSpd;
-	std::vector<std::vector<int> > soundHandle;
 	ExclusiveState Estate, oldEstate, lastAttackState;
 	pushButton nextKey;
 	modelInf* Einf;

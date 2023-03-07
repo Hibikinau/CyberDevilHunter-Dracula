@@ -42,31 +42,25 @@ bool PL::Initialize()
 	CA_change(_valData->plChangeAttackX, "X");
 	CA_change(_valData->plChangeAttackY, "Y");
 
-	std::vector<int> insSoundHandle;
-	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
-	soundHandle.emplace_back(insSoundHandle);
-	insSoundHandle.clear();
-	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_Finish.mp3"));
-	//insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_loop.mp3"));
-	soundHandle.emplace_back(insSoundHandle);
-	insSoundHandle.clear();
-	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_01.mp3"));
-	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_02.mp3"));
-	insSoundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_03.mp3"));
-	soundHandle.emplace_back(insSoundHandle);
+	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
+	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_Finish.mp3"));
+	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_01.mp3"));
+	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_02.mp3"));
+	voiceStartNum = soundHandle.size();
+	for (std::string voiceNameList : _valData->playerVoiceList)
+	{
+		std::string insName = "game/res/Player01/voice/" + voiceNameList;
+		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
+	}
+
 	return true;
 }
+
 
 bool	PL::Terminate()
 {
 	CB::Terminate();
-	for (int i = 0; i < soundHandle.size(); i++)
-	{
-		for (int j = 0; j < soundHandle[i].size(); j++)
-		{
-			DeleteSoundMem(soundHandle[i][j]);
-		}
-	}
+	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
 	return true;
 }
 
@@ -82,11 +76,13 @@ bool KATANAIO(modelInf* MI, bool isIO)
 
 bool	PL::Process()
 {
+	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	if (_statusInf.hitPoint <= 0)
 	{
 		isDead = 1;
 		animSpd = 1.f;
 		animChange(PL_death, &_modelInf, false, true, false);
+		if (!deadVoice) { deadVoice = true; PlaySoundMem(soundHandle[voiceStartNum + 31 + rand() % 4], DX_PLAYTYPE_BACK); }
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -95,7 +91,11 @@ bool	PL::Process()
 		_statusInf.bloodPoint = 1500.f;
 	}
 
-	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 0) { isAwakening = 1, atkBuff = 100.f, _modelInf.animSpdBuff = .5f; }
+	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 0)
+	{
+		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
+		isAwakening = 1, atkBuff = 100.f, _modelInf.animSpdBuff = .5f;
+	}
 	if (_imputInf->lTriggerX < 20 && _imputInf->rTriggerX < 20)
 	{
 		if (isAwakening == 1) { isAwakening = 2; }
@@ -113,8 +113,9 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::Damage://被弾
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0;;
-		isCharge = 0;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0;
+		isCharge = 0, isFastGuard = true, isGuard = true;;
+		nextKey = pushButton::Neutral;
 		animChange(PL_damage, &_modelInf, false, false, false);
 
 		if (_modelInf.playTime > 25.f)
@@ -123,7 +124,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::B://回避
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0;
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0;
 		animSpd = 2.f;
 		spd = 50.f;
 		isCharge = 0;
@@ -151,6 +152,8 @@ bool	PL::Process()
 		lastAttackState = _estate::quickATTACK;
 		waitNextAttack = 40;
 		animSpd = 2.f;
+		if (attackNumOld < 3) { PlaySoundMem(soundHandle[voiceStartNum + 0 + rand() % 4], DX_PLAYTYPE_BACK); }
+		else { PlaySoundMem(soundHandle[voiceStartNum + 4 + rand() % 2], DX_PLAYTYPE_BACK); }
 		if (attackNumOld == 0)
 		{
 			animChange(PL_jaku_1, &_modelInf, false, false, true);
@@ -207,6 +210,8 @@ bool	PL::Process()
 		lastAttackState = _estate::slowATTACK;
 		waitNextAttack = 40;
 		animSpd = 2.f;
+		if (attackNumOld < 3) { PlaySoundMem(soundHandle[voiceStartNum + 6 + rand() % 5], DX_PLAYTYPE_BACK); }
+		else { PlaySoundMem(soundHandle[voiceStartNum + 11 + rand() % 3], DX_PLAYTYPE_BACK); }
 		if (attackNumOld == 0)
 		{
 			animChange(PL_kyou_1, &_modelInf, false, false, true);
@@ -261,6 +266,7 @@ bool	PL::Process()
 		Estate = _estate::finishAttack;
 		lastAttackState = _estate::finishAttack;
 		attackNumOld = 0;
+		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), true, finishATK + atkBuff, rWeponParentFrame, Char_PL);
 		isAwakening = -1;
@@ -278,24 +284,27 @@ bool	PL::Process()
 		moveCheck = false;
 		break;
 	case pushButton::R1://ガード
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1;
-		Estate = _estate::GUARD;
-		animSpd = 1.f;
-		if (isCounter)
+		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0;
+		if (Estate != _estate::GUARD && isFastGuard) { Estate = _estate::GUARD; }
+		nextKey = pushButton::Neutral;
+		if (isCounter == 1)
 		{
 			animSpd = 3.f;
 			KATANAIO(&_modelInf, true);
+			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
 			animChange(PL_counter, &_modelInf, false, false, true);
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), true, counterATK + atkBuff, rWeponParentFrame, Char_PL);
-			isFastGuard = false, isGuard = false, isCounter = false, counterTime = 0;
+			isFastGuard = true, isCounter = 2, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
 		}
-		else if (isFastGuard)
+		else if (isFastGuard && isCounter == 0)
 		{
+			animSpd = 1.f;
 			animSpd = _valData->counterSpd;
 			animChange(PL_guard_1, &_modelInf, false, false, false);
 		}
-		else {
+		else if (isCounter != 2) {
+			animSpd = 1.f;
 			animChange(PL_guard_2, &_modelInf, true, false, false);
 			Estate = _estate::NORMAL;
 			BPmath(-1);
@@ -329,7 +338,7 @@ bool	PL::Process()
 			charMove(spd, dodgeDir, false);
 		}
 		else { animSpd = 3.f; }
-		dodgeTime--;
+		dodgeTime -= animSpd;
 	}
 
 	//ボスと重ならないように
@@ -372,14 +381,9 @@ bool	PL::Process()
 		BPmath(100);
 		if (lastAttackState == _estate::quickATTACK)
 		{
-			int soundNum = 0, attackType;
-			attackNumOld >= 5 ? attackType = 1 : attackType = 2;
-			do
-			{
-				soundNum = rand() % soundHandle[attackType].size();
-			} while (playSoundOld[0] == soundNum && soundHandle[attackType].size() > 1);
-			playSoundOld[0] = soundNum;
-			PlaySoundMem(soundHandle[attackType][soundNum], DX_PLAYTYPE_BACK);
+			int soundNum = 0;
+			attackNumOld >= 5 ? soundNum = 1 : soundNum = 2 + rand() % 3;
+			PlaySoundMem(soundHandle[soundNum], DX_PLAYTYPE_BACK);
 		}
 		isHit = false;
 	}
@@ -415,16 +419,17 @@ bool PL::HPmath(float math)
 {
 	if (math < 0)
 	{
-		if (counterTime > 0)
-		{
-			isCounter = true;
-		}
+		if (counterTime > 0) { isCounter = 1; }
 		else if (immortalTime <= 0)
 		{
 			if (!isGuard || isFastGuard)
 			{
-				if (isAwakening == 0) { _statusInf.hitPoint += math; BPmath(std::abs(math) * 6); }
-				PlaySoundMem(soundHandle[0][0], DX_PLAYTYPE_BACK);
+				if (isAwakening == 0)
+				{
+					if (!deadVoice) { PlaySoundMem(soundHandle[voiceStartNum + 27 + rand() % 4], DX_PLAYTYPE_BACK); }
+					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6);
+				}
+				PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;/*
 				auto a = PlayEffekseer3DEffect(_valData->efcHandle);
 				SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);*/
@@ -440,6 +445,7 @@ bool PL::HPmath(float math)
 		_statusInf.hitPoint += math;
 		if (_statusInf.hitPoint > _statusInf.maxHitPoint) { _statusInf.hitPoint = _statusInf.maxHitPoint; }
 	}
+	if (dodgeTime > 0) { PlaySoundMem(soundHandle[voiceStartNum + 24 + rand() % 3], DX_PLAYTYPE_BACK); }
 
 	return true;
 }
@@ -459,21 +465,39 @@ pushButton PL::setAction()
 	bufferedInput = false;
 	isPushButtonAct = false;
 	pushButton insEnum = pushButton::Neutral;
+
 	if (Estate == _estate::DAMAGE) { return pushButton::Damage; }
-	if (isCounter) { return pushButton::R1; }
+	if (isCounter == 1) { return pushButton::R1; }
 	if (isAnimEnd)
 	{
 		isAnimEnd = false, isGhost = false;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
-		if (isFastGuard)
-		{
-			isFastGuard = false, counterTime = _valData->_counterTime;
-		}
+		if (isFastGuard) { isFastGuard = false, counterTime = _valData->_counterTime; }
+		if (isCounter == 2) { isCounter = 0; }
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { bufferedInput = true, insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
+
+	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//B
+	{
+		attackNumOld = 0;
+		Estate = _estate::DODGE;
+		return insEnum = pushButton::B;
+	}
+	else if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)
+	{
+		if (isFastGuard && _modelInf.playTime > 17.5f) { KATANAIO(&_modelInf, false); }
+		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER)) { isFastGuard = true, isGuard = true; }
+		counterTime > 0 ? counterTime-- : counterTime = 0;
+		return insEnum = pushButton::R1;
+	}
+	else
+	{
+		KATANAIO(&_modelInf, true);
+		isGuard = false, counterTime = 0;
+	}
 
 	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
@@ -517,30 +541,11 @@ pushButton PL::setAction()
 
 	if (Estate == _estate::finishAttack) { return pushButton::Irregular; }
 
-	if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)
-	{
-		if (isFastGuard && _modelInf.playTime > 17.5f) { KATANAIO(&_modelInf, false); }
-		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER)) { isFastGuard = true, isGuard = true; }
-		if (isGuard) { insEnum = pushButton::R1; }
-		counterTime > 0 ? counterTime-- : counterTime = 0;
-	}
-	else
-	{
-		KATANAIO(&_modelInf, true);
-		isGuard = false, counterTime = 0;
-	}
-
 	if (waitNextAttack <= 0 && lastAttackState == _estate::quickATTACK && attackNumOld == 4)
 	{
 		insEnum = pushButton::X;
 	}
 
-	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//B
-	{
-		attackNumOld = 0;
-		Estate = _estate::DODGE;
-		insEnum = pushButton::B;
-	}
 
 	return insEnum;
 }
@@ -620,6 +625,7 @@ bool PL::CA_charge(PL* insPL)
 		insPL->isCharge = 0;
 		if (insPL->chargeLevel == 2)
 		{
+			PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
 			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, true, charge3ATK + insPL->atkBuff, rWeponParentFrame, Char_PL);
 			insPL->waitCAChargeTime = 16.f;
@@ -628,6 +634,7 @@ bool PL::CA_charge(PL* insPL)
 		}
 		else
 		{
+			PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
 			float insDamage = insPL->atkBuff;
 			insPL->chargeLevel == 1 ? insDamage += charge2ATK : insDamage += charge1ATK;
@@ -647,6 +654,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	insPL->animSpd = 1.f;
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
+	PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 22 + rand() % 2], DX_PLAYTYPE_BACK);
 	animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);
 	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), true, kirinukeATK + insPL->atkBuff, rWeponParentFrame, Char_PL);
 	insPL->waitCAChargeTime = 12.f;

@@ -87,8 +87,10 @@ bool	modeG::Initialize()
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
 	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/hit_eff.efkefc", 20.f); }
-	BGM = LoadSoundMem("game/res/BGM/DEATH TRIGGER.mp3");
-	ChangeVolumeSoundMem(255 * (0.01 * 50), BGM);
+	if (_valData->popBossNum == 1) { BGM = LoadSoundMem("game/res/BGM/boss01_BGM_Lemon Fight - Stronger (feat. Jessica Reynoso)-GameEdit [NCS Release].mp3"); }
+	else { BGM = LoadSoundMem("game/res/BGM/boss02_BGM_ReauBeau - Make Waves (feat. Brynja Mary)-GameEdit [NCS Release].mp3"); }
+
+	ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), BGM);
 
 	//読み込んだ3dモデルのサイズ調整
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
@@ -133,6 +135,7 @@ bool	modeG::Process()
 			bossMI = i->second->getInf();
 			i->second->gravity();
 			bossStatus = i->second->getStatus();
+			if (bossStatus.hitPoint <= 0 && !endVoice) { endVoice = true; charBox[Char_PL]->battleEndVoice(); }
 		}
 	}
 
@@ -336,6 +339,7 @@ bool	modeG::Render()
 
 	if (GSAnimNum < 89)
 	{
+		if (GSAnimNum == 42) { charBox[Char_PL]->battleStartVoice(); }
 		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
 		GSAnimNum++;
 	}
@@ -362,8 +366,11 @@ bool	modeG::collHitCheck()
 		float _damage;
 		if (i->second->hitCheck(i->first.c_str(), &hitPos, &_damage))
 		{
-			popDamageInf insDamage = { hitPos, _damage };
-			damageNumPopList.emplace_back(insDamage);
+			if (i->first != Char_PL)
+			{
+				popDamageInf insDamage = { hitPos, _damage };
+				damageNumPopList.emplace_back(insDamage);
+			}
 			auto a = PlayEffekseer3DEffect(_valData->efcHandle);
 			SetPosPlayingEffekseer3DEffect(a, hitPos.x, hitPos.y, hitPos.z);
 		}

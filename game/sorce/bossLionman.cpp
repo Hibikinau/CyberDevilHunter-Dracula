@@ -17,8 +17,6 @@ bool BossLion::Initialize()
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
 	g = 3.f;
-	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
-	ChangeVolumeSoundMem(520, swingSE);
 	Awake = false;
 	AwakeDmg = 1;
 	AwakeMove = 1;
@@ -30,7 +28,6 @@ bool BossLion::Initialize()
 bool	BossLion::Terminate()
 {
 	CB::Terminate();
-	DeleteSoundMem(swingSE);
 	return true;
 }
 

@@ -2,7 +2,6 @@
 
 bool	modeR::Initialize()
 {
-	//"game/res/ZENRYOKUstage/tsStage.mv1"
 	_cg = _modeServer->RS.loadGraphR("game/res/result.png");
 	return true;
 }

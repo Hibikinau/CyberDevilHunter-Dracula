@@ -41,6 +41,11 @@ bool modeT::loadData(const char* dir, valData* _val)
 		if (_data[i] == "入れ替え技X") { i++; _val->plChangeAttackX = _data[i]; }
 		if (_data[i] == "入れ替え技Y") { i++; _val->plChangeAttackY = _data[i]; }
 		if (_data[i] == "エフェクトフェード") { i++; _data[i] == "1" ? _val->isAtkEfcArufa = true : _val->isAtkEfcArufa = false; }
+		if (_data[i] == "マスター音量") { i++; _val->soundMasterValume = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "ニュース") { i++; while (_data[i] != "ここまで") { _val->news.emplace_back(_data[i]); i++; } }
+		if (_data[i] == "入れ替え技一覧") { i++; while (_data[i] != "ここまで") { _val->changeAttackList.emplace_back(_data[i]); i++; } }
+		if (_data[i] == "プレイヤーボイスリスト") { i++; while (_data[i] != "ここまで") { _val->playerVoiceList.emplace_back(_data[i]); i++; } }
+
 		if (_data[i] == "ボス1依頼情報")
 		{
 			_val->boss1Inf = ""; i++;
@@ -53,6 +58,7 @@ bool modeT::loadData(const char* dir, valData* _val)
 				i++;
 			}
 		}
+
 		if (_data[i] == "ボス2依頼情報")
 		{
 			_val->boss2Inf = ""; i++;
@@ -65,17 +71,6 @@ bool modeT::loadData(const char* dir, valData* _val)
 				i++;
 			}
 		}
-		if (_data[i] == "ニュース")
-		{
-			i++;
-			while (_data[i] != "ここまで") { _val->news.emplace_back(_data[i]); i++; }
-		}
-		if (_data[i] == "入れ替え技一覧")
-		{
-			i++;
-			while (_data[i] != "ここまで") { _val->changeAttackList.emplace_back(_data[i]); i++; }
-		}
-
 	}
 
 	return true;

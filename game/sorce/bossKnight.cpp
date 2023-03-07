@@ -17,25 +17,26 @@ bool BossKnight::Initialize()
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	AttackFlag = false;
 	g = 3.f;
-	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
-	ChangeVolumeSoundMem(520, swingSE);
+	soundHandle.emplace_back(LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3"));
 	Awake = false;
 	AwakeDmg = 1;
 	AwakeMove = 1;
 	AwakeSpd = 1;
 	AwakeT = 0;
+	setMasterVolume(420 * ( 0.01 * _valData->soundMasterValume));
 	return true;
 }
 
 bool	BossKnight::Terminate()
 {
 	CB::Terminate();
-	DeleteSoundMem(swingSE);
+	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
 	return true;
 }
 
 bool	BossKnight::Process()
 {
+	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	if (_statusInf.hitPoint <= 5000) {
 		AwakeSpd = 1.5f;
 		AwakeMove = 1.5f;
@@ -100,7 +101,6 @@ bool	BossKnight::Process()
 		}
 		animSpd = 1.f;
 		animChange(BOSS1_hidan, &_modelInf, false, true, false);
-		//PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
 	case STATUS::DEAD:break;
@@ -172,8 +172,8 @@ bool	BossKnight::Process()
 		}
 		animSpd = .7f*AwakeSpd;
 		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 20.f*AwakeDmg, 100, Char_BOSS1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 18.f, _modelInf.totalTime, true, 20.f * AwakeDmg, 100, Char_BOSS1);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
 	case STATUS::SLAM:
@@ -206,8 +206,8 @@ bool	BossKnight::Process()
 		if (ActionFlag == true) { break; }
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime / animSpd + 1, true, 15.f*AwakeDmg, 100, Char_BOSS1);
-			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime, true, 15.f*AwakeDmg, 100, Char_BOSS1);
+			PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		attackStep > 3 ? animSpd = 1.3f*AwakeSpd : animSpd = .7f*AwakeSpd;
 		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
@@ -233,7 +233,7 @@ bool	BossKnight::Process()
 		animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime / animSpd + 1, true, 30.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime , true, 30.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -252,7 +252,7 @@ bool	BossKnight::Process()
 		animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime / animSpd + 1, true, 20.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime , true, 20.f*AwakeDmg, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -261,7 +261,7 @@ bool	BossKnight::Process()
 			ActionFlag = false;
 			if (attackStep < 3)
 			{
-				if (isGround && attackStep == 2) { makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f * AwakeDmg, 100, Char_BOSS1); }
+				if (isGround && attackStep == 2) { makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime , true, 50.f * AwakeDmg, 100, Char_BOSS1); }
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
 				else { attackStep++; }

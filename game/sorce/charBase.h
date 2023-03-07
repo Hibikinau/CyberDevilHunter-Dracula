@@ -47,35 +47,39 @@ public:
 	virtual bool gravity();
 	virtual int	getType() { return type; }
 	void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
-	void setRS(Rserver *_RS) { RS = _RS; }
+	void setRS(Rserver* _RS) { RS = _RS; }
 
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	virtual bool CA_change(std::string name, const char* XorY) { return false; };
 	virtual bool HPmath(float Num) { return false; };
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
+	virtual void battleEndVoice() { return; }
+	virtual void battleStartVoice() { return; }
 	void setName(const char* _name) { name = _name; }
-	bool hitCheck(const char* name, VECTOR *hitPos, float *damage);
+	bool hitCheck(const char* name, VECTOR* hitPos, float* damage);
 	modelInf* getInf() { return &_modelInf; }
 	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
 	void getInputKey(imputInf* iInf, float* cameraDir) { _imputInf = iInf, _cameraDir = cameraDir; };
 	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName);
+	void setMasterVolume(int masterValume) { for (int handle : soundHandle) { ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), handle); } }
 
 	int type = 0;//pl=1, oEnemy=2
-	bool isGround, isHit;
+	bool isGround, isHit, isSetSoundValume = false;
 	float g, camDir, * _cameraDir, animSpd;
 	int isDead;//0.生きてる 1.死亡モーション中 2.インスタンス解放
 	int isImmortal = false, dodgeTime;
+	std::map<std::string, std::shared_ptr<CB> >* charBox;
+	std::vector<attackColl>* allColl;
+	std::vector<int> soundHandle;
 	std::string name, attackChar;
 	modelInf _modelInf, * _GrounfInf;
 	statusInf _statusInf;
-	std::map<std::string, std::shared_ptr<CB> >* charBox;
 	valData* _valData;
 	MV1_COLL_RESULT_POLY hitCheckGround;
 	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
 	collCapsule collCap;
-	std::vector<attackColl>* allColl;
 	imputInf* _imputInf;
-	Rserver *RS;
+	Rserver* RS;
 };

@@ -65,7 +65,7 @@ bool	modeGO::Render()
 	//DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	GOAnimNum < 79 ? GOAnimNum += 0.5f : GOAnimNum = 79;
+	GOAnimNum < 79 ? GOAnimNum += 0.5f : GOAnimNum = 79 - rand() % 10;
 	DrawExtendGraph(280, 60, 1000, 260, gameOverAnimHandle[static_cast<int>(GOAnimNum / 1)], true);
 
 	int defY = 300;

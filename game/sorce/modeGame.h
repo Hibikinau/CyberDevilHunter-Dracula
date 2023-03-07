@@ -37,7 +37,7 @@ public:
 	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld, insEfcHamdle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
-	bool isLockon, isGameOver = false;
+	bool isLockon, isGameOver = false, endVoice = false;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
 	modelInf* plMI, stage, * bossMI, skyDoom;
