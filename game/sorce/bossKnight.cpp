@@ -172,7 +172,7 @@ bool	BossKnight::Process()
 		}
 		animSpd = .7f*AwakeSpd;
 		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 18.f, _modelInf.totalTime, true, 20.f * AwakeDmg, 100, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime * AwakeSpd, true, 20.f * AwakeDmg, 100, Char_BOSS1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;

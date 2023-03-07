@@ -401,7 +401,7 @@ void modeG::cameraMove()
 	{
 		auto EtoPdir = VSub(bossMI->pos, plMI->pos);
 		cameraFor = VAdd(bossMI->pos, VGet(0.f, 100.f, 0.f));
-		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -350.f)), VGet(0.f, 250.f, 0.f));
+		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -400.f)), VGet(0.f, 250.f, 0.f));
 		if (cameraPos.y < 0) { cameraPos.y = 0; }
 		cameraLockDir = (std::atan2(-EtoPdir.x, -EtoPdir.z) * 180.f) / DX_PI_F;
 		cameraDir = cameraLockDir;
