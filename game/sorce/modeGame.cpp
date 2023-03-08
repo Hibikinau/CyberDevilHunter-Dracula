@@ -71,6 +71,7 @@ bool	modeG::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
 	GSAnimNum = 0;
 
+	_modeServer->RS.loadDivGraphR("game/res/slashEfc/nc142771Efc.png", 39, 3, 13, 1080, 1080, slashLineAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	insEfcHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
 
@@ -290,13 +291,6 @@ bool	modeG::Render()
 	}
 	SetUseLighting(true);
 
-	if (isLockon)
-	{
-		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
-		SetUseZBuffer3D(FALSE);
-		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 100, 0, lockOnMarkerHandle[LOMarkerNum], true);
-		SetUseZBuffer3D(TRUE);
-	}
 
 	int nowTime = GetNowCount();
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
@@ -314,7 +308,16 @@ bool	modeG::Render()
 	//}
 
 	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
+
+	SetUseZBuffer3D(FALSE);
+	if (isLockon)
+	{
+		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
+		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 100, 0, lockOnMarkerHandle[LOMarkerNum], true);
+	}
+
 	drawUI();
+	SetUseZBuffer3D(TRUE);
 
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
@@ -351,8 +354,8 @@ bool	modeG::collHitCheck()
 {
 	for (int i = 0; i < mAllColl.size(); i++)
 	{//
-		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
-		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
+		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
+		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
 		else
 		{
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
@@ -513,7 +516,8 @@ bool modeG::drawUI()
 	{
 		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
 		DrawString(screenPos.x, screenPos.y, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
-		if (damageNumPopList[i].popTime < 100) { damageNumPopList[i].popTime++; }
+		DrawBillboard3D(damageNumPopList[i].pos, .5f, .5f, 500, 0.f, slashLineAnimHandle[damageNumPopList[i].popTime], true);
+		if (damageNumPopList[i].popTime < 39) { damageNumPopList[i].popTime++; }
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}
 	SetFontSize(DeffontSize);

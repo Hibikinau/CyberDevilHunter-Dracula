@@ -54,7 +54,7 @@ bool	CB::gravity()
 	return true;
 }
 
-bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
+bool	CB::hitCheck(const char* name, VECTOR* hitPos, float* damage)
 {
 	bool _isHit = false;
 	for (int i = 0; i < allColl->size(); i++)
@@ -88,7 +88,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 				, insCapOld
 				, allColl->at(i).capColl.r);
 			//auto a = DrawCapsule3D(insCapOld, insCapNow, allColl->at(i).capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
-			if(insCheckHit)
+			if (insCheckHit)
 			{
 				*hitPos = VScale(VAdd(insCapNow, insCapOld), 0.5f);
 				break;
@@ -105,7 +105,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 			allColl->at(i).isAlive = false;
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
 			attackChar = allColl->at(i).attackChar;
-			HPmath(-allColl->at(i).damage, allColl->at(i).damage);
+			HPmath(-allColl->at(i).damage, allColl->at(i).stan);
 			*damage = allColl->at(i).damage;
 			_isHit = true;
 		}
@@ -115,7 +115,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 }
 
 bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
-	, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName)
+	, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, const char* charName)
 {
 	attackColl acoll;
 	acoll.isUseMat = isUseMat;
@@ -125,9 +125,10 @@ bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
 	acoll.capColl.overPos = _overPos;
 	acoll.capColl.r = r;
 	acoll.attackChar = charName;
-	acoll.activeTimeF = activeTimeF;
-	acoll.nonActiveTimeF = nonActiveTimeF;
+	activeTimeF == 0 || timeSpeed == 0 ? acoll.activeTimeF = activeTimeF : acoll.activeTimeF = activeTimeF / timeSpeed;
+	nonActiveTimeF == 0 || timeSpeed == 0 ? acoll.nonActiveTimeF = nonActiveTimeF : acoll.nonActiveTimeF = nonActiveTimeF / timeSpeed;
 	acoll.damage = damage;
+	acoll.stan = stan;
 	acoll.capCollOld.r = -1;
 	allColl->emplace_back(acoll);
 

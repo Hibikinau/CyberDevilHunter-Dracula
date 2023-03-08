@@ -4,7 +4,7 @@
 
 struct statusInf
 {//Å‘å’l‚ð‘ã“ü
-	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina,stanPoint;
+	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina, stanPoint;
 };
 
 struct collCapsule
@@ -52,7 +52,7 @@ public:
 
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	virtual bool CA_change(std::string name, const char* XorY) { return false; };
-	virtual bool HPmath(float Num,float Stan) { return false; };
+	virtual bool HPmath(float Num, float Stan) { return false; };
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
 	virtual void battleEndVoice() { return; }
@@ -63,7 +63,7 @@ public:
 	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
 	void getInputKey(imputInf* iInf, float* cameraDir) { _imputInf = iInf, _cameraDir = cameraDir; };
-	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, bool isUseMat, float damage, int frameNum, const char* charName);
+	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, const char* charName);
 	void setMasterVolume(int masterValume) { for (int handle : soundHandle) { ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), handle); } }
 
 	int type = 0;//pl=1, oEnemy=2
@@ -82,5 +82,5 @@ public:
 	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
 	collCapsule collCap;
 	imputInf* _imputInf;
-	Rserver *RS;
+	Rserver* RS;
 };

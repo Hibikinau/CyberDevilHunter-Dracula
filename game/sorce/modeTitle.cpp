@@ -80,13 +80,14 @@ bool	modeT::Initialize()
 {
 	//"game/res/ZENRYOKUstage/tsStage.mv1"
 	_cg = _modeServer->RS.loadGraphR("game/res/ƒ^ƒCƒgƒ‹.png");
+	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
 	loadData("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }
 
 bool	modeT::Process()
 {
-	if (CheckHitKeyAll())
+	if (CheckHitKeyAll() && !_modeServer->_valData.isLogoRender)
 	{
 		//_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
 		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
@@ -97,8 +98,20 @@ bool	modeT::Process()
 
 bool	modeT::Render()
 {
-	DrawGraph(0, 0, _cg, true);
-	DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
+	if (_modeServer->_valData.isLogoRender)
+	{//logoAlphaNum
+		
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - std::abs(255 - logoAlphaNum));
+		auto i= DrawRotaGraph(640, 360, 1, 0, logoHandle, true, false);
+		if (logoAlphaNum < 510) { logoAlphaNum++; }
+		else { _modeServer->_valData.isLogoRender = false; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
+		if (CheckHitKeyAll()) { _modeServer->_valData.isLogoRender = false; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
+	}
+	else
+	{
+		DrawGraph(0, 0, _cg, true);
+		DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
+	}
 	return true;
 }
 

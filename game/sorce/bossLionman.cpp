@@ -46,12 +46,12 @@ bool	BossLion::Process()
 
 	if (status == STATUS::STAN) {
 		animChange(BOSS2_dead, &_modelInf, true, true, false);
-		if (time == 0) {
+		if (stanTime == 0) {
 			status = STATUS::WAIT;
 			_statusInf.stanPoint = 200;
 			stanTime = 100;
 		}
-		else { time--; }
+		else { stanTime--; }
 		return true;
 	}
 
@@ -179,7 +179,7 @@ bool	BossLion::Process()
 		}
 		animSpd = 1.5f * AwakeSpd;
 		animChange(BOSS2_attack1, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, true, 20.f * AwakeDmg, 100, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, (_modelInf.totalTime / animSpd + 1) - 10.f, animSpd, true, 20.f * AwakeDmg,0, 100, Char_BOSS1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;

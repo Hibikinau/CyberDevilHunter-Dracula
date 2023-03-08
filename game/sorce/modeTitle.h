@@ -15,7 +15,7 @@ public:
 	static bool loadData(const char* dir, valData* _val);
 	static bool save(const char* dir, valData* _val);
 protected:
-	int _cg;
+	int _cg, logoHandle, logoAlphaNum = 0;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 };
