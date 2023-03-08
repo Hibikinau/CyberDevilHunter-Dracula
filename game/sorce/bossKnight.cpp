@@ -193,7 +193,7 @@ bool	BossKnight::Process()
 		if (isAnimEnd == true) {
 			ActionFlag = false;
 			if (attackStep < 8)
-			{
+			{    
 				RangeJ();
 				if (attackStep == 1 && (rand() % 100) < 50)
 				{
@@ -278,7 +278,7 @@ bool	BossKnight::Process()
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
 				else { attackStep++; }
-
+				
 			}
 			else {
 				UtilityJudge();
@@ -550,7 +550,7 @@ void BossKnight::Move(float speed, float radian) {
 bool BossKnight::HPmath(float Num,float Stan)
 {
 	_statusInf.hitPoint += Num;
-	_statusInf.stanPoint -= Num;
+	_statusInf.stanPoint += Stan;
 	if (Num <= -200) {
 		status = STATUS::DAMEGE;
 		ActionFlag = false;
