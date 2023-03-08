@@ -420,7 +420,7 @@ void PL::charMove(float Speed, float _Dir, bool isAnimChange)
 	}
 }
 
-bool PL::HPmath(float math)
+bool PL::HPmath(float math,float Stan)
 {
 	if (math < 0)
 	{
@@ -515,7 +515,7 @@ pushButton PL::setAction()
 	{//ì¸ÇÍë÷Ç¶ãZ
 		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
 		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
-		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f) { HPmath(100); BPmath(-500); }//LBA
+		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f) { HPmath(100,10); BPmath(-500); }//LBA
 	}
 	else
 	{//í èÌãZ

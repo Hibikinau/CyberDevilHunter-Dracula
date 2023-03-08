@@ -54,9 +54,8 @@ bool	CB::gravity()
 	return true;
 }
 
-bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
+bool	CB::hitCheck(const char* name)
 {
-	bool _isHit = false;
 	for (int i = 0; i < allColl->size(); i++)
 	{
 		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
@@ -73,7 +72,8 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 
 		int insNum = VSize(VSub(allColl->at(i).capColl.overPos, allColl->at(i).capColl.underPos));
 
-		for (int j = 0; j < abs(insNum) / allColl->at(i).capColl.r; j++)
+		for (int j = 0; j < abs(insNum) / allColl->at(i).capColl.r
+			&& !insCheckHit; j++)
 		{
 			if (allColl->at(i).capCollOld.r == -1) { break; }
 			auto insR = allColl->at(i).capColl.r * j;
@@ -88,11 +88,6 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 				, insCapOld
 				, allColl->at(i).capColl.r);
 			//auto a = DrawCapsule3D(insCapOld, insCapNow, allColl->at(i).capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
-			if(insCheckHit)
-			{
-				*hitPos = VScale(VAdd(insCapNow, insCapOld), 0.5f);
-				break;
-			}
 		}
 
 		allColl->at(i).capCollOld.underPos = insUnderPos;
@@ -105,13 +100,11 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 			allColl->at(i).isAlive = false;
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
 			attackChar = allColl->at(i).attackChar;
-			HPmath(-allColl->at(i).damage);
-			*damage = allColl->at(i).damage;
-			_isHit = true;
+			HPmath(-allColl->at(i).damage,allColl->at(i).stan);
 		}
 	}
 
-	return _isHit;
+	return true;
 }
 
 bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
