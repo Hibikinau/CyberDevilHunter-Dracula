@@ -87,6 +87,15 @@
 //ƒ‰ƒCƒIƒ“ƒ}ƒ“
 #define BOSS2_idel 0
 #define BOSS2_run 1
-#define BOSS2_dodge 2
-#define BOSS2_dead 3
-#define BOSS2_attack1 4
+#define BOSS2_damege 2
+#define BOSS2_down 3
+#define BOSS2_dead 4
+#define BOSS2_dodge 5
+//UŒ‚
+#define BOSS2_attack1 6
+#define BOSS2_attack2 7
+#define BOSS2_attack3 8
+#define BOSS2_haniattack 9
+#define BOSS2_tackle 10
+#define BOSS2_tatakituke 11
+#define BOSS2_divetackle 12

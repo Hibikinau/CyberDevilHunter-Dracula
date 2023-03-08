@@ -274,7 +274,9 @@ bool	BossKnight::Process()
 			ActionFlag = false;
 			if (attackStep < 3)
 			{
-				if (isGround && attackStep == 2) { makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime , true, 50.f * AwakeDmg, 100, Char_BOSS1); }
+				if (isGround && attackStep == 2) {
+					makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime , true, 50.f * AwakeDmg, 100, Char_BOSS1);
+				}
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
 				else { attackStep++; }
