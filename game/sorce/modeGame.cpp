@@ -203,7 +203,7 @@ bool	modeG::Process()
 	}
 
 	//ƒƒjƒ…[‰æ–ÊŒÄ‚Ño‚µ
-	if (_imputInf._gTrgb[KEY_INPUT_M])
+	if (_imputInf._gTrgb[KEY_INPUT_M] || _imputInf._gTrgp[XINPUT_BUTTON_START])
 	{
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
 	}

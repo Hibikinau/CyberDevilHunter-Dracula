@@ -18,7 +18,7 @@ bool	modeM::Initialize()
 
 bool	modeM::Process()
 {
-	if (CheckHitKey(KEY_INPUT_Q))
+	if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 	{
 		_modeServer->activate(MODE_GAME);
 		return false;
