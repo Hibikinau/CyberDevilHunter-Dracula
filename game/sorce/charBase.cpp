@@ -105,7 +105,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float *damage)
 			allColl->at(i).isAlive = false;
 			charBox->at(allColl->at(i).attackChar)->isHit = true;
 			attackChar = allColl->at(i).attackChar;
-			HPmath(-allColl->at(i).damage);
+			HPmath(-allColl->at(i).damage, allColl->at(i).damage);
 			*damage = allColl->at(i).damage;
 			_isHit = true;
 		}

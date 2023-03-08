@@ -4,7 +4,7 @@
 
 struct statusInf
 {//ç≈ëÂílÇë„ì¸
-	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina;
+	float hitPoint, maxHitPoint, bloodPoint, maxBloodPoint, stamina, maxStamina,stanPoint;
 };
 
 struct collCapsule
@@ -28,6 +28,7 @@ struct attackColl
 	std::vector<collCapsule> capCollTs;
 	MATRIX Mold;
 	float damage;
+	float stan;
 	int nonActiveTimeF, activeTimeF;
 	bool isUseMat, isAlive = true;
 	weaponEffect rightingEfc;
@@ -51,7 +52,7 @@ public:
 
 	virtual int deadCheck(VECTOR PLpos) { return 0; }
 	virtual bool CA_change(std::string name, const char* XorY) { return false; };
-	virtual bool HPmath(float Num) { return false; };
+	virtual bool HPmath(float Num,float Stan) { return false; };
 	virtual bool BPmath(float Num) { return false; };
 	virtual void setCamDir(float Num) { camDir = Num; };
 	virtual void battleEndVoice() { return; }
@@ -81,5 +82,5 @@ public:
 	MV1_COLL_RESULT_POLY_DIM hitCheckWall;
 	collCapsule collCap;
 	imputInf* _imputInf;
-	Rserver* RS;
+	Rserver *RS;
 };

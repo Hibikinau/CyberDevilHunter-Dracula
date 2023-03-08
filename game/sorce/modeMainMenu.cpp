@@ -80,7 +80,6 @@ bool	modeMM::Render()
 bool	modeMM::Terminate()
 {
 	SetFontSize(DeffontSize);
-	StopMusic();
 	if (_modeServer->_valData.bgmSwitchNum > 1) { _modeServer->_valData.bgmSwitchNum--; }
 	return true;
 }
