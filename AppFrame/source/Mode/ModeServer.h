@@ -10,7 +10,7 @@ struct valData
 	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f, counterSpd = 4.f;
 	int _counterTime = 20, plCTimeN = 0, efcHandle = -1, bgmSwitchNum = 1;
 	std::vector<int> activateWepon, disableWepon;
-	bool isAtkEfcArufa = true;
+	bool isAtkEfcArufa = true, isLogoRender = true;
 	int popBossNum = 0;
 	std::string plChangeAttackX = "charge", plChangeAttackY = "kirinuke", boss1Inf, boss2Inf;
 	std::vector<std::string> news, changeAttackList, playerVoiceList;
