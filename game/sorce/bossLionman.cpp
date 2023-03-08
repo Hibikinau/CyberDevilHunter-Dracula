@@ -19,7 +19,7 @@ bool BossLion::Initialize()
 	AttackFlag = false;
 	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
-	ChangeVolumeSoundMem(520, swingSE);
+	ChangeVolumeSoundMem(120, swingSE);
 	Awake = false;
 	AwakeDmg = 1;
 	AwakeMove = 1;

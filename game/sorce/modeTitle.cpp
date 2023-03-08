@@ -81,13 +81,15 @@ bool	modeT::Initialize()
 	//"game/res/ZENRYOKUstage/tsStage.mv1"
 	_cg = _modeServer->RS.loadGraphR("game/res/ƒ^ƒCƒgƒ‹.png");
 	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
+	titleAnimHandle = _modeServer->RS.loadGraphR("game/res/titleMovie.mp4");
 	loadData("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }
 
 bool	modeT::Process()
 {
-	if (CheckHitKeyAll() && !_modeServer->_valData.isLogoRender)
+	if (isPut == 1 && !CheckHitKeyAll() || isPut == 0 && !_modeServer->_valData.isLogoRender) { isPut = 2; }
+	if (CheckHitKeyAll() && !_modeServer->_valData.isLogoRender && isPut == 2)
 	{
 		//_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
 		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
@@ -98,18 +100,21 @@ bool	modeT::Process()
 
 bool	modeT::Render()
 {
+
 	if (_modeServer->_valData.isLogoRender)
 	{//logoAlphaNum
-		
+
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - std::abs(255 - logoAlphaNum));
-		auto i= DrawRotaGraph(640, 360, 1, 0, logoHandle, true, false);
+		auto i = DrawRotaGraph(640, 360, 1, 0, logoHandle, true, false);
 		if (logoAlphaNum < 510) { logoAlphaNum++; }
 		else { _modeServer->_valData.isLogoRender = false; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
-		if (CheckHitKeyAll()) { _modeServer->_valData.isLogoRender = false; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
+		if (CheckHitKeyAll()) { _modeServer->_valData.isLogoRender = false, isPut++; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 	}
 	else
 	{
-		DrawGraph(0, 0, _cg, true);
+		if (isFirstMovie) { PlayMovieToGraph(titleAnimHandle);		isFirstMovie = false; }
+		if (GetMovieStateToGraph(titleAnimHandle) == 0) { SeekMovieToGraph(titleAnimHandle, 2870); PlayMovieToGraph(titleAnimHandle); }
+		DrawExtendGraph(0, 0, 1280, 720, titleAnimHandle, FALSE);
 		DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
 	}
 	return true;

@@ -20,4 +20,5 @@ protected:
 	std::vector<std::string> menuMessage;
 	int gameOverAnimHandle[89] = { -1 };
 	float GOAnimNum = 0;
+	bool isGameEnd = false;
 };

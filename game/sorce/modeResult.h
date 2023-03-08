@@ -14,7 +14,7 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg;
+	int _cg, DeffontSize;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 };

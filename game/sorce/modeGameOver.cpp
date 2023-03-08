@@ -14,26 +14,24 @@ bool	modeGO::Initialize()
 	menuMessage.emplace_back("ブリーフィングに戻る");
 	menuMessage.emplace_back("タイトルに戻る");
 	picMenuMaxNum = menuMessage.size() - 1;
+	PlaySoundMem(_modeServer->_valData.menuSoundHandle[5], DX_PLAYTYPE_BACK);
 	return true;
 }
 
 bool	modeGO::Process()
 {
-	if (CheckHitKey(KEY_INPUT_Q))
-	{
-		_modeServer->activate(MODE_GAME);
-		return false;
-	}
 	if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 	{
 		picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 	}
 	if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
 	{
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 	}
 
-	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
+	if (_imputInf._gRelb[KEY_INPUT_RETURN] || _imputInf._gRelp[XINPUT_BUTTON_A])
 	{
 		if (picMenuNum == 0)
 		{//戦闘のやり直し
@@ -48,6 +46,7 @@ bool	modeGO::Process()
 			_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
 		}
 		_modeServer->Del(MODE_GAME);
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 		return false;
 	}
 	return true;

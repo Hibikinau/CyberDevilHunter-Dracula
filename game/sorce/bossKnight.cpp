@@ -25,7 +25,7 @@ bool BossKnight::Initialize()
 	AwakeMove = 1;
 	AwakeSpd = 1;
 	AwakeT = 0;
-	setMasterVolume(420 * ( 0.01 * _valData->soundMasterValume));
+	setMasterVolume(120 * ( 0.01 * _valData->soundMasterValume));
 	return true;
 }
 
@@ -44,7 +44,7 @@ bool	BossKnight::Process()
 		return true;
 	}
 
-	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+	//if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	if (_statusInf.hitPoint <= 5000) {
 		AwakeSpd = 1.5f;
 		AwakeMove = 1.5f;

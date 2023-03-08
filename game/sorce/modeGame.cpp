@@ -192,6 +192,7 @@ bool	modeG::Process()
 			if (i->second->type == 1 && !isGameOver)
 			{//Ž©‹@‚ÌŽ€
 				_modeServer->Add(std::make_unique<modeGO>(_modeServer), 1, MODE_GO);
+				//StopSoundMem(BGM);
 				isGameOver = true;
 			}
 			else
@@ -394,7 +395,6 @@ bool	modeG::Terminate()
 	mAllColl.clear();
 	charBox.clear();
 	debugWardBox.clear();
-	InitSoundMem();
 	DeleteLightHandleAll();
 	return true;
 }
