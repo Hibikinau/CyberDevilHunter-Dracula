@@ -32,6 +32,12 @@ public:
 		RSTEP,
 		LSTEP,
 		ATTACK,
+		ATTACK2,
+		ATTACK3,
+		HANIATTACK,
+		TACKLE,
+		SLAM,
+		DIVE,
 	};
 	STATUS status;
 
