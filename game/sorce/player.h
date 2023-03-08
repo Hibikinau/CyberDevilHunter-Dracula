@@ -56,7 +56,7 @@ public:
 	bool checkKeyImput(int Key, int Pad) { if (_imputInf->_gKeyb[Key] || _imputInf->_gKeyp[Pad]) { return true; } else { return false; } }
 	bool checkRelImput(int Key, int Pad) { if (_imputInf->_gRelb[Key] || _imputInf->_gRelp[Pad]) { return true; } else { return false; } }
 	float getMoveDir(bool checkUseCamDir);
-	bool HPmath(float math,float Stan) override;
+	bool HPmath(float math, float Stan) override;
 	bool BPmath(float math) override;
 	bool CA_change(std::string name, const char* XorY) override;
 	static bool CA_charge(PL* insPL);
@@ -80,7 +80,7 @@ protected:
 	bool bufferedInput, isGhost, deadVoice = false;
 	int immortalTime, isCounter = 0;
 	int playSoundOld[3], walkTime, counterTime, waitCAChargeTime, CAChargeTime, CAChargeSpd;
-	ExclusiveState Estate, oldEstate, lastAttackState;
+	ExclusiveState Estate = ExclusiveState::NORMAL, oldEstate = ExclusiveState::NORMAL, lastAttackState;
 	pushButton nextKey;
 	modelInf* Einf;
 

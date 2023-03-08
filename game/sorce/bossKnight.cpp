@@ -9,7 +9,7 @@ bool BossKnight::Initialize()
 {
 	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
-	time = 300;
+	time = 150;
 	stanTime = 150;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	_statusInf.stanPoint = 0;
@@ -38,6 +38,12 @@ bool	BossKnight::Terminate()
 
 bool	BossKnight::Process()
 {
+	if (status == STATUS::DEAD) {
+		animChange(BOSS1_dead, &_modelInf, false, true, false);
+		if (isAnimEnd) { isDead = 2; }
+		return true;
+	}
+
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	if (_statusInf.hitPoint <= 5000) {
 		AwakeSpd = 1.5f;
@@ -57,12 +63,6 @@ bool	BossKnight::Process()
 		return true;
 	}
 
-	if (status == STATUS::DEAD) {
-		animChange(BOSS1_dead, &_modelInf, false, true, false);
-		if (isAnimEnd) { isDead = 2; }
-		return true;
-	}
-
 	for (auto i = charBox->begin(); i != charBox->end(); i++) {
 		if (i->second->getType() == 1)
 		{
@@ -74,7 +74,7 @@ bool	BossKnight::Process()
 		_statusInf.hitPoint = 1;
 	}
 
-	collCap.r = 90.f;
+	collCap.r = 120.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
@@ -185,7 +185,7 @@ bool	BossKnight::Process()
 		}
 		animSpd = .7f*AwakeSpd;
 		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime * AwakeSpd, true, 20.f * AwakeDmg, 100, Char_BOSS1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime -10.f, animSpd, true, 20.f * AwakeDmg,0, 100, Char_BOSS1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -219,7 +219,7 @@ bool	BossKnight::Process()
 		if (ActionFlag == true) { break; }
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
-			makeAttackCap(VGet(0.f, 80.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime, true, 15.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 60.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime, animSpd, true, 15.f*AwakeDmg,0, 100, Char_BOSS1);
 			PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		attackStep > 3 ? animSpd = 1.3f*AwakeSpd : animSpd = .7f*AwakeSpd;
@@ -244,9 +244,9 @@ bool	BossKnight::Process()
 
 		animSpd = 0.7f*AwakeSpd;
 		animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
-		if (attackStep == 2 || attackStep == 3)
+		if (attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime , true, 30.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(-20.f, 80.f, 0.f), VGet(-20.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime, animSpd, true, 30.f*AwakeDmg, 0,100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -265,7 +265,7 @@ bool	BossKnight::Process()
 		animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime , true, 20.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime, animSpd, true, 20.f*AwakeDmg,0, 100, Char_BOSS1);
 		}
 		ActionFlag = true;
 		break;
@@ -274,7 +274,7 @@ bool	BossKnight::Process()
 			ActionFlag = false;
 			if (attackStep < 3)
 			{
-				if (isGround && attackStep == 2) { makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime , true, 50.f * AwakeDmg, 100, Char_BOSS1); }
+				if (isGround && attackStep == 2) { makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime, 1, true, 50.f * AwakeDmg,0, 100, Char_BOSS1); }
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
 				else { attackStep++; }
@@ -558,14 +558,14 @@ bool BossKnight::HPmath(float Num,float Stan)
 	if (_statusInf.hitPoint <=5000) {
 		Awake = true;
 	}
-	if (_statusInf.hitPoint <= 0) {
-		status = STATUS::DEAD;
-	}
 	if (_statusInf.stanPoint >= 100) {
 		status = STATUS::STAN;
 	}
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
 	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
 
+	if (_statusInf.hitPoint <= 0) {
+		status = STATUS::DEAD;
+	}
 	return true;
 }

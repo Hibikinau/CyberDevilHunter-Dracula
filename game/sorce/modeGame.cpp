@@ -351,8 +351,8 @@ bool	modeG::collHitCheck()
 {
 	for (int i = 0; i < mAllColl.size(); i++)
 	{//
-		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
-		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF -= charBox[mAllColl.at(i).attackChar]->animSpd + charBox[mAllColl.at(i).attackChar]->_modelInf.animSpdBuff; }
+		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
+		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
 		else
 		{
 			atkEfc.emplace_back(mAllColl.at(i).rightingEfc);
