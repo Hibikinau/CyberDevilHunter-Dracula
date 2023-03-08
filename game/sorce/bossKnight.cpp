@@ -10,7 +10,9 @@ bool BossKnight::Initialize()
 	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	time = 300;
+	stanTime = 150;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
+	_statusInf.stanPoint = 0;
 
 	MotionFlag = true;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
@@ -42,6 +44,17 @@ bool	BossKnight::Process()
 		AwakeMove = 1.5f;
 		AwakeDmg = 1.5f;
 		AwakeT = 35;
+	}
+
+	if (status == STATUS::STAN) {
+		animChange(BOSS1_hidan, &_modelInf, true, true, false);
+		if (stanTime == 0) {
+			status = STATUS::WAIT;
+			stanTime = 100;
+			_statusInf.stanPoint = 0;
+		}
+		else { stanTime--; }
+		return true;
 	}
 
 	if (status == STATUS::DEAD) {
@@ -534,9 +547,10 @@ void BossKnight::Move(float speed, float radian) {
 }
 
 
-bool BossKnight::HPmath(float Num)
+bool BossKnight::HPmath(float Num,float Stan)
 {
 	_statusInf.hitPoint += Num;
+	_statusInf.stanPoint -= Num;
 	if (Num <= -200) {
 		status = STATUS::DAMEGE;
 		ActionFlag = false;
@@ -546,7 +560,10 @@ bool BossKnight::HPmath(float Num)
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
-	}/*
+	}
+	if (_statusInf.stanPoint >= 100) {
+		status = STATUS::STAN;
+	}
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
 	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);*/
 
