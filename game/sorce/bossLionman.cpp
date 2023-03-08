@@ -253,7 +253,7 @@ bool	BossLion::Process()
 		animChange(BOSS2_tackle + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime, true, 30.f * AwakeDmg, 100, Char_BOSS2);
+			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime,animSpd, true, 30.f * AwakeDmg,0, 100, Char_BOSS2);
 		}
 		ActionFlag = true;
 		break;
@@ -263,7 +263,7 @@ bool	BossLion::Process()
 			if (attackStep < 3)
 			{
 				if (isGround && attackStep == 2) {
-					makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime, true, 50.f * AwakeDmg, 100, Char_BOSS1);
+					makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime,animSpd, true, 50.f * AwakeDmg,0, 100, Char_BOSS1);
 				}
 				if (_modelInf.vec.y > 0 && attackStep == 1) { ActionFlag = true; }
 				else if (!isGround && attackStep == 2) { ActionFlag = true; }
