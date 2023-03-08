@@ -266,6 +266,8 @@ bool	PL::Process()
 		Estate = _estate::finishAttack;
 		lastAttackState = _estate::finishAttack;
 		attackNumOld = 0;
+		insDir = getMoveDir(true);
+		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), true, finishATK + atkBuff, rWeponParentFrame, Char_PL);
@@ -289,6 +291,8 @@ bool	PL::Process()
 		nextKey = pushButton::Neutral;
 		if (isCounter == 1)
 		{
+			insDir = getMoveDir(true);
+			if (insDir != 0) { _modelInf.dir.y = insDir; }
 			animSpd = 3.f;
 			KATANAIO(&_modelInf, true);
 			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
@@ -397,6 +401,7 @@ bool	PL::Process()
 bool	PL::Render(float timeSpeed)
 {
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 	return true;
 }
 

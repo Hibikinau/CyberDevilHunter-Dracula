@@ -61,7 +61,7 @@ bool	BossKnight::Process()
 		_statusInf.hitPoint = 1;
 	}
 
-	collCap.r = 80.f;
+	collCap.r = 90.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
@@ -206,7 +206,7 @@ bool	BossKnight::Process()
 		if (ActionFlag == true) { break; }
 		if (attackStep == 1 || attackStep == 4 || attackStep == 7)
 		{
-			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime, true, 15.f*AwakeDmg, 100, Char_BOSS1);
+			makeAttackCap(VGet(0.f, 80.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 0.f, _modelInf.totalTime, true, 15.f*AwakeDmg, 100, Char_BOSS1);
 			PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		attackStep > 3 ? animSpd = 1.3f*AwakeSpd : animSpd = .7f*AwakeSpd;
@@ -304,7 +304,7 @@ bool	BossKnight::Process()
 bool	BossKnight::Render(float timeSpeed)
 {
 
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 

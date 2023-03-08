@@ -27,6 +27,13 @@ bool	modeBC::Initialize()
 
 bool	modeBC::Process()
 {
+	if (!CheckMusic())
+	{
+		if (_modeServer->_valData.bgmSwitchNum % 2) { { PlayMusic("game/res/BGM/menuBGM_01_Rob Gasser - Ricochet [NCS Release].mp3", DX_PLAYTYPE_BACK); _modeServer->_valData.bgmSwitchNum++; } }
+		else { if (!CheckMusic()) { PlayMusic("game/res/BGM/menuBGM_02_ANGELPLAYA - LET THEM HAVE IT [NCS Release].mp3", DX_PLAYTYPE_BACK); _modeServer->_valData.bgmSwitchNum++; } }
+		SetVolumeMusic(255 * (0.01 * _modeServer->_valData.soundMasterValume));
+	}
+
 	if (isPic) {
 		if (_imputInf._gTrgb[KEY_INPUT_LEFT] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_LEFT])
 		{
@@ -42,6 +49,7 @@ bool	modeBC::Process()
 			if (pic)
 			{//ƒQ[ƒ€‚ÖˆÚs
 				_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+				StopMusic();
 				return false;
 			}
 			else
