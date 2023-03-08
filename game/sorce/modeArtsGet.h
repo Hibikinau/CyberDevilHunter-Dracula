@@ -1,11 +1,11 @@
 #pragma once
 #include"appframe.h"
 
-class modeMM : public ModeBase
+class modeAG : public ModeBase
 {
 public:
-	modeMM(ModeServer* MS) { _modeServer = MS; };
-	~modeMM() {};
+	modeAG(ModeServer* MS) { _modeServer = MS; };
+	~modeAG() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();

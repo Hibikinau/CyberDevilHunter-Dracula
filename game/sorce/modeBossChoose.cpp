@@ -38,10 +38,12 @@ bool	modeBC::Process()
 		if (_imputInf._gTrgb[KEY_INPUT_LEFT] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_LEFT])
 		{
 			pic ^= true;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		if (_imputInf._gTrgb[KEY_INPUT_RIGHT] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_RIGHT])
 		{
 			pic ^= true;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
@@ -49,24 +51,32 @@ bool	modeBC::Process()
 			if (pic)
 			{//ゲームへ移行
 				_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+				PlaySoundMem(_modeServer->_valData.menuSoundHandle[2], DX_PLAYTYPE_BACK);
 				StopMusic();
 				return false;
 			}
 			else
 			{//キャンセル
 				isPic = false; pic = true;
+				PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
 			}
 		}
-		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B]) { isPic = false; pic = true; }
+		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
+		{
+			isPic = false; pic = true;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
+		}
 	}
 	else {
 		if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 		{
 			picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
 		{
 			picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
@@ -75,16 +85,18 @@ bool	modeBC::Process()
 			if (picMenuNum == 0)
 			{//ボス1
 				_modeServer->_valData.popBossNum = 1;
+				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 			}
 			else if (picMenuNum == 1)
 			{//ボス2
 				_modeServer->_valData.popBossNum = 2;
+				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 			}
-
 		}
 
 		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
 			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 			return false;
 		}

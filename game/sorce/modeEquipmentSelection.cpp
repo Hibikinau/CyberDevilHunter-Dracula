@@ -28,37 +28,46 @@ bool	modeES::Process()
 		if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 		{
 			pic == 2 ? pic = 0 : pic++;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
 		{
 			pic == 0 ? pic = 2 : pic--;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 
-		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B]) { isPic = false; }
+		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B]) { isPic = false;
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
+		}
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
 			isPic = false;
 			if (picMenuNum == 0) { _modeServer->_valData.plChangeAttackX = _modeServer->_valData.changeAttackList[pic]; }
 			if (picMenuNum == 1) { _modeServer->_valData.plChangeAttackY = _modeServer->_valData.changeAttackList[pic]; }
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 		}
 	}
 	else {
 		if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 		{
 			picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
 		{
 			picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 		}
 
 		if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 		{
 			isPic = true;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 		}
 		else if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
 			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
 			return false;
 		}
 	}

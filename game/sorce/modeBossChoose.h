@@ -14,7 +14,7 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, mapAnimNum = 0, mapAnimHandol[62] = { -1 }, backAnimNum = 0, backAnimHandle[90] = { -1 }
+	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, mapAnimNum = 0, mapAnimHandol[62] = { -1 }
 	, glitchAnimNum, glitchAnimHandle[19] = { -1 }, randomNum = 0, randomFrameNum = 0, newsWindow = -1, newsWindowStr = -1, randomNewsNum, newsPosX, wakuHandle, wakuHandle2;
 	ModeServer* _modeServer;
 	imputInf _imputInf;

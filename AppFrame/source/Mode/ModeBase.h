@@ -57,7 +57,8 @@ public:
 	// CallPerFrame / CallOfCount—p
 	int		_callPerFrame, _callPerFrame_cnt;
 	int		_callOfCount;
-	int arrowAnimHandle[16] = { -1 }, arrowAnimNum = -1;
+	int arrowAnimHandle[16] = { -1 }, arrowAnimNum = 0;
+	int backAnimHandle[90] = { -1 }, backAnimNum = 0;
 };
 
 

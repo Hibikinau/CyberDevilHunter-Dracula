@@ -10,6 +10,14 @@ bool	modeMM::Initialize()
 	picMenuMaxNum = menuMessage.size() - 1;
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
+	if (_modeServer->_valData.menuSoundHandle.size() == 0)
+	{
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_select_01.mp3"));
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_decide_01.mp3"));
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_decide_02.mp3"));
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_cancel.mp3"));
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_ng_01.mp3"));
+	}
 	return true;
 }
 
@@ -25,14 +33,17 @@ bool	modeMM::Process()
 	if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 	{
 		picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 	}
 	if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
 	{
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
 	}
 
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 		if (picMenuNum == 0)
 		{//討伐ボス選択
 			_modeServer->Add(std::make_unique<modeBC>(_modeServer), 1, MODE_BC);
@@ -45,9 +56,13 @@ bool	modeMM::Process()
 		}
 		else if (picMenuNum == 2)
 		{//アーツ取得
+			_modeServer->Add(std::make_unique<modeAG>(_modeServer), 1, MODE_AG);
+			return false;
 		}
 		else if (picMenuNum == 3)
 		{//設定
+			_modeServer->Add(std::make_unique<modeS>(_modeServer), 1, MODE_S);
+			return false;
 		}
 	}
 	return true;

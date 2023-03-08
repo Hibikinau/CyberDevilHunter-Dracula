@@ -66,6 +66,12 @@
     <ClCompile Include="game\sorce\modeEquipmentSelection.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
+    <ClCompile Include="game\sorce\modeSetting.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
+    <ClCompile Include="game\sorce\modeArtsGet.cpp">
+      <Filter>ソース ファイル\mode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\gameMain.h">
@@ -111,6 +117,12 @@
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\modeEquipmentSelection.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\modeSetting.h">
+      <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\modeArtsGet.h">
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
   </ItemGroup>
