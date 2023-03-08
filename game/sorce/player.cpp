@@ -159,21 +159,21 @@ bool	PL::Process()
 			animChange(PL_jaku_1, &_modelInf, false, false, true);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
 		}
 		else if (attackNumOld == 1)
 		{
 			animChange(PL_jaku_2, &_modelInf, false, false, true);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
 		}
 		else if (attackNumOld == 2)
 		{
 			animChange(PL_jaku_3, &_modelInf, false, false, true);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5,rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5,rWeponParentFrame);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -189,17 +189,17 @@ bool	PL::Process()
 			setNextAnim(PL_jaku_4_2, &_modelInf, true, false);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 4;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, 12.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 17.f, 8.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 32.f, 10.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 47.f, 13.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, 12.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 17.f, 8.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 32.f, 10.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 47.f, 13.f, animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
 		}
 		else if (attackNumOld == 4 && !isPushButtonAct)
 		{
 			_modelInf.animHandleNext = -1;
 			animChange(PL_jaku_4_4, &_modelInf, false, false, true);
 			waitNextAttack = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff,5, rWeponParentFrame);
 		}
 
 		break;
@@ -217,21 +217,21 @@ bool	PL::Process()
 			animChange(PL_kyou_1, &_modelInf, false, false, true);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame);
 		}
 		else if (attackNumOld == 1)
 		{
 			animChange(PL_kyou_2, &_modelInf, false, false, true);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame);
 		}
 		else if (attackNumOld == 2)
 		{
 			animChange(PL_kyou_3, &_modelInf, false, false, true);
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -246,7 +246,7 @@ bool	PL::Process()
 			_modelInf.animHandleNext = -1;
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff,5, rWeponParentFrame);
 		}
 
 		break;
@@ -270,7 +270,7 @@ bool	PL::Process()
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, finishATK + atkBuff,5, rWeponParentFrame, Char_PL);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, finishATK + atkBuff,5, rWeponParentFrame);
 		isAwakening = -1;
 		immortalTime = _modelInf.totalTime;
 		_statusInf.bloodPoint = 0;
@@ -297,7 +297,7 @@ bool	PL::Process()
 			KATANAIO(&_modelInf, true);
 			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
 			animChange(PL_counter, &_modelInf, false, false, true);
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, counterATK + atkBuff,5, rWeponParentFrame, Char_PL);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, counterATK + atkBuff,5, rWeponParentFrame);
 			isFastGuard = true, isCounter = 2, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
 		}
@@ -593,7 +593,7 @@ bool PL::CA_debugAttack(PL* insPL)
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	animChange(PL_motion_hissatsu, &insPL->_modelInf, false, false, true);
 	insPL->animSpd = 1.f;
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 99999.f,100000, rWeponParentFrame, Char_PL);
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 99999.f,100000, rWeponParentFrame);
 
 	return true;
 }
@@ -632,7 +632,7 @@ bool PL::CA_charge(PL* insPL)
 		{
 			PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, charge3ATK + insPL->atkBuff,5, rWeponParentFrame, Char_PL);
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, charge3ATK + insPL->atkBuff,5, rWeponParentFrame);
 			insPL->waitCAChargeTime = 16.f;
 			insPL->CAChargeTime = 41.f;
 			insPL->CAChargeSpd = 40.f;
@@ -643,7 +643,7 @@ bool PL::CA_charge(PL* insPL)
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);
 			float insDamage = insPL->atkBuff;
 			insPL->chargeLevel == 1 ? insDamage += charge2ATK : insDamage += charge1ATK;
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, insDamage,5, rWeponParentFrame, Char_PL);
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, insDamage,5, rWeponParentFrame);
 
 		}
 		insPL->isCharge = 0;
@@ -661,7 +661,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 22 + rand() % 2], DX_PLAYTYPE_BACK);
 	animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, kirinukeATK + insPL->atkBuff,5, rWeponParentFrame, Char_PL);
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, kirinukeATK + insPL->atkBuff,5, rWeponParentFrame);
 	insPL->waitCAChargeTime = 12.f;
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
 	insPL->CAChargeSpd = 40.f;

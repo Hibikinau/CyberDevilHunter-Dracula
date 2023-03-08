@@ -9,6 +9,7 @@ bool makeChar(modeG* insMG, Rserver* _rs, std::shared_ptr<CB> charPoint, const c
 	charPoint->setRS(&insMG->_modeServer->RS);
 	charPoint->Initialize();
 	charPoint->setCB(&insMG->charBox);
+	charPoint->setName(nameA);
 	charPoint->setGroundInf(&insMG->stage);
 	charPoint->allColl = &insMG->mAllColl;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);

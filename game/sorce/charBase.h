@@ -63,7 +63,7 @@ public:
 	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }
 	void getInputKey(imputInf* iInf, float* cameraDir) { _imputInf = iInf, _cameraDir = cameraDir; };
-	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, const char* charName);
+	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum);
 	void setMasterVolume(int masterValume) { for (int handle : soundHandle) { ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), handle); } }
 
 	int type = 0;//pl=1, oEnemy=2
