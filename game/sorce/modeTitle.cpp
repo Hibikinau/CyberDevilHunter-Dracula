@@ -106,7 +106,7 @@ bool	modeT::Render()
 
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - std::abs(255 - logoAlphaNum));
 		auto i = DrawRotaGraph(640, 360, 1, 0, logoHandle, true, false);
-		if (logoAlphaNum < 510) { logoAlphaNum++; }
+		if (logoAlphaNum < 510) { logoAlphaNum+=2; }
 		else { _modeServer->_valData.isLogoRender = false; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (CheckHitKeyAll()) { _modeServer->_valData.isLogoRender = false, isPut++; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 	}
@@ -115,7 +115,7 @@ bool	modeT::Render()
 		if (isFirstMovie) { PlayMovieToGraph(titleAnimHandle);		isFirstMovie = false; }
 		if (GetMovieStateToGraph(titleAnimHandle) == 0) { SeekMovieToGraph(titleAnimHandle, 2870); PlayMovieToGraph(titleAnimHandle); }
 		DrawExtendGraph(0, 0, 1280, 720, titleAnimHandle, FALSE);
-		DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
+		//DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
 	}
 	return true;
 }

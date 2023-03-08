@@ -61,7 +61,7 @@ public:
 	int ShadowMapHandle;
 	float bright = .6f;
 	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
-	bool debugMode = true, plDead;
+	bool debugMode = false, plDead;
 	int BGMdelay;
 	int drawAreaSize = 0;
 };
