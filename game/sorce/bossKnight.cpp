@@ -10,7 +10,7 @@ bool BossKnight::Initialize()
 	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	time = 150;
-	stanTime = 150;
+	stanTime = 200;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	_statusInf.stanPoint = 0;
 
@@ -319,7 +319,7 @@ bool	BossKnight::Process()
 bool	BossKnight::Render(float timeSpeed)
 {
 
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 
@@ -560,7 +560,7 @@ bool BossKnight::HPmath(float Num,float Stan)
 	if (_statusInf.hitPoint <=5000) {
 		Awake = true;
 	}
-	if (_statusInf.stanPoint >= 100) {
+	if (_statusInf.stanPoint >= 150) {
 		status = STATUS::STAN;
 	}
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
