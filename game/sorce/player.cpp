@@ -80,7 +80,9 @@ bool	PL::Process()
 	if (_statusInf.hitPoint <= 0)
 	{
 		isDead = 1;
-		animSpd = 1.f;
+		animSpd = .7f;
+		_modelInf.animSpdBuff = .0f;
+
 		animChange(PL_death, &_modelInf, false, true, false);
 		if (!deadVoice) { deadVoice = true; PlaySoundMem(soundHandle[voiceStartNum + 31 + rand() % 4], DX_PLAYTYPE_BACK); }
 		if (_modelInf.isAnimEnd) { isDead = 2; }

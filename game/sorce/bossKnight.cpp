@@ -39,6 +39,7 @@ bool	BossKnight::Terminate()
 bool	BossKnight::Process()
 {
 	if (status == STATUS::DEAD) {
+		animSpd = 0.7f;
 		animChange(BOSS1_dead, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
 		return true;

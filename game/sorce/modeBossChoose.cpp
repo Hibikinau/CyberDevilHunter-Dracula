@@ -22,6 +22,7 @@ bool	modeBC::Initialize()
 	randomNum = (rand() % 8) + 10;
 	randomNewsNum = rand() % _modeServer->_valData.news.size();
 	newsPosX = 1280;
+	PlaySoundMem(_modeServer->_valData.menuSoundHandle[6], DX_PLAYTYPE_BACK);
 	return true;
 }
 
