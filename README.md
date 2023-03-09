@@ -1,10 +1,10 @@
 ## _CyberDevilHunter-Dracula_
 
 # 開発環境
-visualStudio 2022
-DxLib
-C++
-GitHub(https://github.com/Hibikinau/CyberDevilHunter-Dracula.git)
+visualStudio 2022<br>
+DxLib<br>
+C++<br>
+GitHub(https://github.com/Hibikinau/CyberDevilHunter-Dracula.git)<br>
 
 # 操作方法
 コントローラー(Xinput)対応<br>
@@ -21,3 +21,8 @@ L１＋R１　	     : 覚醒<br>
 
 # 実行方法
 exeファイルを実行してください
+
+# ソースコードについて
+AppFrameフォルダ内
+
+gameフォルダ内
