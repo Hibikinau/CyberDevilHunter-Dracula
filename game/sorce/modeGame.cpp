@@ -229,6 +229,7 @@ bool	modeG::Render()
 {
 	if (GSAnimNum < 40) {
 		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
+		if (GSAnimNum == 15) { PlaySoundMem(_modeServer->_valData.menuSoundHandle[7], DX_PLAYTYPE_BACK); }
 		GSAnimNum++;
 		return true;
 	}

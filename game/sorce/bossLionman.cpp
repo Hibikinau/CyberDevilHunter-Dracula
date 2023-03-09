@@ -467,12 +467,13 @@ bool BossLion::HPmath(float Num, float Stan)
 	if (_statusInf.hitPoint <= 5000) {
 		Awake = true;
 	}
-	if (_statusInf.hitPoint <= 0) {
-		status = STATUS::DEAD;
-	}
 	if (_statusInf.stanPoint >= 100) {
 		status = STATUS::STAN;
 	}
+	if (_statusInf.hitPoint <= 0) {
+		status = STATUS::DEAD;
+	}
+
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
 	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
 

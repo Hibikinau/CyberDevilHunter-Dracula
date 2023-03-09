@@ -4,6 +4,7 @@ bool	modeR::Initialize()
 {
 	_cg = _modeServer->RS.loadGraphR("game/res/result.png");
 	DeffontSize = GetFontSize();
+	PlaySoundMem(_modeServer->_valData.menuSoundHandle[7], DX_PLAYTYPE_BACK);
 	return true;
 }
 
