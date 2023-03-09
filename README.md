@@ -7,11 +7,9 @@ C++
 GitHub(https://github.com/Hibikinau/CyberDevilHunter-Dracula.git)
 
 # 操作方法
-コントローラー(Xinput)対応
-
-Lスティック　　　　　: 移動
-
-Rスティック　　　　　: カメラ操作
+コントローラー(Xinput)対応\n
+Lスティック　　　　　: 移動 
+Rスティック　　　　　: カメラ操作\r\n
 
 Rスティック押し込み　: ロックオン切り替え
 
