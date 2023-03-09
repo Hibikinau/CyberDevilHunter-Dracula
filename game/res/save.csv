@@ -6,11 +6,11 @@ debug
 NODATA
 ここまで
 入れ替え技X
-debug
-入れ替え技Y
 kirinuke
+入れ替え技Y
+debug
 エフェクトフェード
-0
+1
 ボス1依頼情報
 エリアA　「クエスト名」
 内容
@@ -40,9 +40,6 @@ kirinuke
 撃破済みBoss
 Boss1
 ここまで
-ﾐ
-プレイヤーボイスリスト
-player_voice_01_A.mp3
 player_voice_01_B.mp3
 player_voice_01_C.mp3
 player_voice_01_D.mp3
