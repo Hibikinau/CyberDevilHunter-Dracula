@@ -7,6 +7,7 @@ bool	modeMM::Initialize()
 	menuMessage.emplace_back("装備変更");
 	menuMessage.emplace_back("アーツ取得");
 	menuMessage.emplace_back("設定");
+	picMenuNum = _modeServer->_valData.mainMenuPicNum;
 	picMenuMaxNum = menuMessage.size() - 1;
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
@@ -97,5 +98,6 @@ bool	modeMM::Terminate()
 {
 	SetFontSize(DeffontSize);
 	if (_modeServer->_valData.bgmSwitchNum > 1) { _modeServer->_valData.bgmSwitchNum--; }
+	_modeServer->_valData.mainMenuPicNum = picMenuNum;
 	return true;
 }

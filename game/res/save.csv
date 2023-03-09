@@ -3,11 +3,12 @@
 charge
 kirinuke
 debug
+NODATA
 ここまで
 入れ替え技X
-kirinuke
-入れ替え技Y
 debug
+入れ替え技Y
+kirinuke
 エフェクトフェード
 0
 ボス1依頼情報
@@ -36,6 +37,10 @@ debug
 ここまで
 マスター音量
 50
+撃破済みBoss
+Boss1
+ここまで
+ﾐ
 プレイヤーボイスリスト
 player_voice_01_A.mp3
 player_voice_01_B.mp3
@@ -84,3 +89,4 @@ player_voice_15_A.mp3
 player_voice_15_B.mp3
 player_voice_15_C.mp3
 ここまで
+開発者モード

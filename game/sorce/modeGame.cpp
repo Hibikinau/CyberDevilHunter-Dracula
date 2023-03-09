@@ -64,10 +64,12 @@ bool	modeG::Initialize()
 	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
 	testAttackCap.r = 30.f;
 
-	UIkari = _modeServer->RS.loadGraphR("game/res/A.png");
-	HPgaugeHandle = _modeServer->RS.loadGraphR("game/res/GameUI_HP.png");
-	HPgaugeHandle2 = _modeServer->RS.loadGraphR("game/res/GameUI_HPB.png");
-	BPgaugeHandle = _modeServer->RS.loadGraphR("game/res/c.png");
+	HPgaugeHandle = _modeServer->RS.loadGraphR("game/res/UI/bar1.png");
+	HPgaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/kara1.png");
+	BPgaugeHandle = _modeServer->RS.loadGraphR("game/res/UI/BP.png");
+	BPgaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/BP_waku.png");
+	HPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_HP.png");
+	BPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_BP.png");
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
 	GSAnimNum = 0;
@@ -138,6 +140,7 @@ bool	modeG::Process()
 			i->second->gravity();
 			bossStatus = i->second->getStatus();
 			if (bossStatus.hitPoint <= 0 && !endVoice) { endVoice = true; charBox[Char_PL]->battleEndVoice(); }
+			debugWardBox.emplace_back("敵のスタン値 = " + std::to_string(bossStatus.stanPoint));
 		}
 	}
 
@@ -198,6 +201,9 @@ bool	modeG::Process()
 			else
 			{//それ以外の死
 				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+				_valData->points += 20000;
+				for (auto name : _valData->deadBoss) { if (name == i->first) { return false; } }
+				_valData->deadBoss.emplace_back(i->first);
 				return false;
 			}
 		}
@@ -396,6 +402,7 @@ bool	modeG::Terminate()
 	charBox.clear();
 	debugWardBox.clear();
 	DeleteLightHandleAll();
+	modeT::save("game/res/save.csv", _valData);
 	return true;
 }
 
@@ -521,20 +528,28 @@ bool modeG::drawUI()
 		if (damageNumPopList[i].popTime < 39) { damageNumPopList[i].popTime++; }
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}
-	SetFontSize(DeffontSize);
+
 	//HPバー
-	int barPposX = 10, barPosY = 10, barLength = 660;
+	int barPposX = 10, barPosY = 10, barLength = 462;
 	int gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxHitPoint)) * static_cast<float>(plStatus.hitPoint));
-	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 30, HPgaugeHandle, true, false);
+	DrawRectGraph(98, 23, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false);
+	DrawGraph(90, 15, HPgaugeHandleWaku, true);
+	DrawGraph(30, 23, HPstrHandle, true);
 
 	//BPバー
-	barLength = 600, barPposX = 640 - barLength / 2, barPosY = 600;
+	//500 x 3本
+	barLength = 603, barPposX = 640 - barLength / 2, barPosY = 600;
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxBloodPoint)) * static_cast<float>(plStatus.bloodPoint));
-	DrawRectGraph(barPposX, barPosY, 0, 0, barLength - gauge, 23, BPgaugeHandle, true, false);
+	DrawRectGraph(344, 606, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
+	DrawGraph(354, 620, BPgaugeHandleWaku, true);
+	DrawGraph(299, 620, BPstrHandle, true);
 
 	//bossHPバー
-	barPposX = 600, barPosY = 10, barLength = 660;
+	barPposX = 782, barPosY = 10, barLength = 462;
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
-	auto J = DrawRectGraph(barPposX + gauge, barPosY, gauge, 0, barLength, 30, HPgaugeHandle2, true, false);
+	DrawRectGraph(782 + gauge, 23, gauge, 0, barLength, 29, HPgaugeHandle, true, false);
+	DrawGraph(776, 15, HPgaugeHandleWaku, true);
+	
+	SetFontSize(DeffontSize);
 	return true;
 }

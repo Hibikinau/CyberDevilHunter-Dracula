@@ -16,6 +16,8 @@ bool modeT::save(const char* dir, valData* _val)
 
 		if (_data[i] == "入れ替え技X") { i++; _data[i] = _val->plChangeAttackX; }
 		if (_data[i] == "入れ替え技Y") { i++; _data[i] = _val->plChangeAttackY; }
+		if (_data[i] == "所持ポイント") { i++; _data[i] = _val->points; }
+		if (_data[i] == "撃破済みBoss") { i++; for (auto boss : _val->deadBoss) { _data[i] = boss, i++; } _data[i] = "ここまで"; }
 	}
 	std::string insStr = "";
 	for (auto insData : _data) { insStr += insData + "\n"; }
@@ -45,6 +47,9 @@ bool modeT::loadData(const char* dir, valData* _val)
 		if (_data[i] == "ニュース") { i++; while (_data[i] != "ここまで") { _val->news.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "入れ替え技一覧") { i++; while (_data[i] != "ここまで") { _val->changeAttackList.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "プレイヤーボイスリスト") { i++; while (_data[i] != "ここまで") { _val->playerVoiceList.emplace_back(_data[i]); i++; } }
+		if (_data[i] == "撃破済みBoss") { i++; while (_data[i] != "ここまで") { _val->deadBoss.emplace_back(_data[i]); i++; } }
+		if (_data[i] == "所持ポイント") { i++; _val->points = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "開発者モード") { _val->isDebug = true; }
 
 		if (_data[i] == "ボス1依頼情報")
 		{
@@ -82,12 +87,15 @@ bool	modeT::Initialize()
 	_cg = _modeServer->RS.loadGraphR("game/res/タイトル.png");
 	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
 	titleAnimHandle = _modeServer->RS.loadGraphR("game/res/titleMovie.mp4");
+	titleLogoHandle = _modeServer->RS.loadGraphR("game/res/Titlelogo1.png");
 	loadData("game/res/save.csv", &_modeServer->_valData);
 	return true;
-}
+}//JNATHYN_-_Dioma_Demo_NCS_Release
 
 bool	modeT::Process()
 {
+	if (!CheckMusic()) { PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK); }
+
 	if (isPut == 1 && !CheckHitKeyAll() || isPut == 0 && !_modeServer->_valData.isLogoRender) { isPut = 2; }
 	if (CheckHitKeyAll() && !_modeServer->_valData.isLogoRender && isPut == 2)
 	{
@@ -106,7 +114,7 @@ bool	modeT::Render()
 
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - std::abs(255 - logoAlphaNum));
 		auto i = DrawRotaGraph(640, 360, 1, 0, logoHandle, true, false);
-		if (logoAlphaNum < 510) { logoAlphaNum+=2; }
+		if (logoAlphaNum < 510) { logoAlphaNum += 2; }
 		else { _modeServer->_valData.isLogoRender = false; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (CheckHitKeyAll()) { _modeServer->_valData.isLogoRender = false, isPut++; SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 	}
@@ -115,6 +123,7 @@ bool	modeT::Render()
 		if (isFirstMovie) { PlayMovieToGraph(titleAnimHandle);		isFirstMovie = false; }
 		if (GetMovieStateToGraph(titleAnimHandle) == 0) { SeekMovieToGraph(titleAnimHandle, 2870); PlayMovieToGraph(titleAnimHandle); }
 		DrawExtendGraph(0, 0, 1280, 720, titleAnimHandle, FALSE);
+		DrawGraph(280, 400, titleLogoHandle, true);
 		//DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
 	}
 	return true;

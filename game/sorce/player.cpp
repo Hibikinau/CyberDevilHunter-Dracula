@@ -576,12 +576,14 @@ bool PL::CA_change(std::string name, const char* XorY)
 		if ("charge" == name) { changeAttackX = &CA_charge; }
 		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
 		if ("debug" == name) { changeAttackX = &CA_debugAttack; }
+		if ("NODATA" == name) { changeAttackX = &CA_noData; }
 	}
 	else if ("Y" == XorY)
 	{
 		if ("charge" == name) { changeAttackY = &CA_charge; }
 		if ("kirinuke" == name) { changeAttackY = &CA_kirinuke; }
 		if ("debug" == name) { changeAttackY = &CA_debugAttack; }
+		if ("NODATA" == name) { changeAttackY = &CA_noData; }
 	}
 
 	return true;
@@ -669,3 +671,6 @@ bool PL::CA_kirinuke(PL* insPL)
 
 	return true;
 }
+
+
+bool PL::CA_noData(PL* insPL) { return false; }

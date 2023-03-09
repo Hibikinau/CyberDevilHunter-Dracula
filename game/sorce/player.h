@@ -62,6 +62,7 @@ public:
 	static bool CA_charge(PL* insPL);
 	static bool CA_kirinuke(PL* insPL);
 	static bool CA_debugAttack(PL* insPL);
+	static bool CA_noData(PL* insPL);
 	bool (*changeAttackX)(PL* insPL);
 	bool (*changeAttackY)(PL* insPL);
 	float getAnimPlayTotalTime() { return _modelInf.totalTime; };
