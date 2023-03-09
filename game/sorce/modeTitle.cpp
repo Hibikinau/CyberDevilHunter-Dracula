@@ -94,7 +94,8 @@ bool	modeT::Initialize()
 
 bool	modeT::Process()
 {
-	if (!CheckMusic()) { PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK); }
+	if (!CheckMusic()) { PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK);		SetVolumeMusic(255 * (0.01 * 70));
+	}
 
 	if (isPut == 1 && !CheckHitKeyAll() || isPut == 0 && !_modeServer->_valData.isLogoRender) { isPut = 2; }
 	if (CheckHitKeyAll() && !_modeServer->_valData.isLogoRender && isPut == 2)
@@ -131,5 +132,6 @@ bool	modeT::Render()
 
 bool	modeT::Terminate()
 {
+	StopMusic();
 	return true;
 }

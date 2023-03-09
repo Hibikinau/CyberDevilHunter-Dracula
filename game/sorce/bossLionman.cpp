@@ -37,6 +37,12 @@ bool	BossLion::Terminate()
 
 bool	BossLion::Process()
 {
+	if (status == STATUS::DEAD) {
+		animChange(BOSS2_dead, &_modelInf, false, true, false);
+		if (isAnimEnd) { isDead = 2; }
+		return true;
+	}
+
 	if (_statusInf.hitPoint <= 5000) {
 		AwakeSpd = 1.5f;
 		AwakeMove = 1.5f;
@@ -52,12 +58,6 @@ bool	BossLion::Process()
 			stanTime = 100;
 		}
 		else { time--; }
-		return true;
-	}
-
-	if (status == STATUS::DEAD) {
-		animChange(BOSS2_dead, &_modelInf, false, true, false);
-		if (isAnimEnd) { isDead = 2; }
 		return true;
 	}
 
