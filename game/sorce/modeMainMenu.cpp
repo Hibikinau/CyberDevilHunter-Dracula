@@ -19,6 +19,8 @@ bool	modeMM::Initialize()
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_cancel.mp3"));
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_ng_01.mp3"));
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_gameover.mp3"));
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_boss_select.mp3"));
+		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_result.mp3"));
 	}
 	return true;
 }
@@ -75,8 +77,9 @@ bool	modeMM::Render()
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
-	int insMenuFontSize = GetDrawStringWidth("BRIEFING", strlen("BRIEFING"));
-	DrawString(20, 20, "BRIEFING", GetColor(255, 255, 255));
+	ChangeFontType(DX_FONTTYPE_EDGE);
+	DrawString(0, 0, "BRIEFING", GetColor(255, 255, 255), GetColor(0, 0, 0));
+	ChangeFontType(DX_FONTTYPE_NORMAL);
 	SetFontSize(40);
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
@@ -90,7 +93,7 @@ bool	modeMM::Render()
 			//DrawString(80 - 40, defY + (120 * i), "¨", GetColor(255, 255, 255));
 		}
 	}
-
+	
 	return true;
 }
 
