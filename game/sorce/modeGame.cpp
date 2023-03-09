@@ -132,6 +132,7 @@ bool	modeG::Process()
 			i->second->gravity();
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
+			if (plStatus.hitPoint <= 0) { isLockon = false; }
 		}
 		else
 		{
@@ -139,7 +140,7 @@ bool	modeG::Process()
 			bossMI = i->second->getInf();
 			i->second->gravity();
 			bossStatus = i->second->getStatus();
-			if (bossStatus.hitPoint <= 0 && !endVoice) { endVoice = true; charBox[Char_PL]->battleEndVoice(); }
+			if (bossStatus.hitPoint <= 0 && !endVoice) { endVoice = true; charBox[Char_PL]->battleEndVoice(), isLockon = false; }
 			debugWardBox.emplace_back("“G‚ÌƒXƒ^ƒ“’l = " + std::to_string(bossStatus.stanPoint));
 		}
 	}
