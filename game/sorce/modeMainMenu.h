@@ -15,6 +15,7 @@ public:
 
 protected:
 	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum;
+	bool isBackTitle = false ;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;

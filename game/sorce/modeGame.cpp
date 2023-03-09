@@ -46,7 +46,7 @@ bool	modeG::Initialize()
 	SetUseLighting(true);
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
-	//SetUseBackCulling(false);
+	SetUseBackCulling(true);
 	SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
@@ -90,7 +90,7 @@ bool	modeG::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/hit_eff.efkefc", 20.f); }
+	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/slash_effect.efkefc", 20.f); }
 	if (_valData->popBossNum == 1) { BGM = LoadSoundMem("game/res/BGM/boss01_BGM_Lemon Fight - Stronger (feat. Jessica Reynoso)-GameEdit [NCS Release].mp3"); }
 	else { BGM = LoadSoundMem("game/res/BGM/boss02_BGM_ReauBeau - Make Waves (feat. Brynja Mary)-GameEdit [NCS Release].mp3"); }
 
@@ -235,23 +235,24 @@ bool	modeG::Render()
 		return true;
 	}
 	MV1DrawModel(skyDoom.modelHandle);
+
 	//シャドウマップココカラ-----------------------------------------
 	ShadowMap_DrawSetup(ShadowMapHandle);
 	//3dモデルの描画
+	MV1DrawModel(stage.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(1);
 	}
-	MV1DrawModel(stage.modelHandle);
 
 	ShadowMap_DrawEnd();
 	SetUseShadowMap(0, ShadowMapHandle);
 	//影用の3dモデルの描画
+	MV1DrawModel(stage.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(0);
 	}
-	MV1DrawModel(stage.modelHandle);
 
 	SetUseShadowMap(0, -1);
 	//シャドウマップここまで-----------------------------------------
@@ -266,7 +267,7 @@ bool	modeG::Render()
 		auto insUnderPosOld = mAllColl.at(i).capCollOld.underPos;
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
-		auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+		//auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
 
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
@@ -283,7 +284,7 @@ bool	modeG::Render()
 
 			for (int j = 1; j < mAllColl[i].rightingEfc.downCornerPos.size(); ++j)
 			{
-				drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+				//drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
 			}
 		}
 	}
@@ -293,7 +294,7 @@ bool	modeG::Render()
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
 			if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
-			drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+			//drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
 		}
 		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }
@@ -375,9 +376,9 @@ bool	modeG::collHitCheck()
 
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
-		VECTOR hitPos = { -1 };
+		VECTOR hitPos = { -1 }, hitDir = { -1 };
 		float _damage;
-		if (i->second->hitCheck(i->first.c_str(), &hitPos, &_damage))
+		if (i->second->hitCheck(i->first.c_str(), &hitPos, &hitDir, &_damage))
 		{
 			if (i->first != Char_PL)
 			{
@@ -386,6 +387,9 @@ bool	modeG::collHitCheck()
 			}
 			auto a = PlayEffekseer3DEffect(_valData->efcHandle);
 			SetPosPlayingEffekseer3DEffect(a, hitPos.x, hitPos.y, hitPos.z);
+			auto D = 45;
+			SetRotationPlayingEffekseer3DEffect(a, hitDir.x - D, hitDir.y - D, hitDir.z - D);
+			SetScalePlayingEffekseer3DEffect(a, 2, 2, 2);
 		}
 	}
 
@@ -526,7 +530,7 @@ bool modeG::drawUI()
 	{
 		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
 		DrawString(screenPos.x, screenPos.y, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
-		DrawBillboard3D(damageNumPopList[i].pos, .5f, .5f, 500, 0.f, slashLineAnimHandle[damageNumPopList[i].popTime], true);
+		//DrawBillboard3D(damageNumPopList[i].pos, .5f, .5f, 500, 0.f, slashLineAnimHandle[damageNumPopList[i].popTime], true);
 		if (damageNumPopList[i].popTime < 39) { damageNumPopList[i].popTime++; }
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}

@@ -54,7 +54,7 @@ bool	CB::gravity()
 	return true;
 }
 
-bool	CB::hitCheck(const char* name, VECTOR* hitPos, float* damage)
+bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damage)
 {
 	bool _isHit = false;
 	for (int i = 0; i < allColl->size(); i++)
@@ -91,6 +91,12 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, float* damage)
 			if (insCheckHit)
 			{
 				*hitPos = VScale(VAdd(insCapNow, insCapOld), 0.5f);
+				auto nDir = (VSub(insCapOld, insCapNow));
+				VECTOR dir = VGet(std::atan2(nDir.y, nDir.z) 
+				, std::atan2(nDir.x, nDir.z) 
+				, std::atan2(nDir.x, nDir.y) );
+
+				*hitDir = dir;
 				break;
 			}
 		}

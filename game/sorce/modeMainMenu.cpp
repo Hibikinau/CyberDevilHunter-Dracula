@@ -27,6 +27,12 @@ bool	modeMM::Initialize()
 
 bool	modeMM::Process()
 {
+	if (isBackTitle && _imputInf._gRelb[KEY_INPUT_Z] || _imputInf._gRelp[XINPUT_BUTTON_A])
+	{
+		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
+		return false;
+	}
 	if (!CheckMusic())
 	{
 		if (_modeServer->_valData.bgmSwitchNum % 2) { { PlayMusic("game/res/BGM/menuBGM_01_Rob Gasser - Ricochet [NCS Release].mp3", DX_PLAYTYPE_BACK); _modeServer->_valData.bgmSwitchNum++; } }
@@ -43,6 +49,11 @@ bool	modeMM::Process()
 	{
 		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
 		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
+	}
+
+	 if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
+	{
+		isBackTitle = true;
 	}
 
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
@@ -92,6 +103,12 @@ bool	modeMM::Render()
 			DrawGraph(80 - 65, defY + (120 * i) + 7, arrowAnimHandle[arrowAnimNum], true);
 			//DrawString(80 - 40, defY + (120 * i), "→", GetColor(255, 255, 255));
 		}
+	}
+	if (isBackTitle)
+	{
+		DrawBox(340, 300, 900, 420, GetColor(255, 255, 255), true);
+		DrawString(360, 310, "タイトルに戻りますか？", GetColor(0, 0, 0));
+		DrawString(420, 370, "はい　　いいえ", GetColor(0, 0, 0));
 	}
 	
 	return true;

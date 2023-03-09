@@ -59,7 +59,7 @@ protected:
 	bool MotionFlag;
 	bool ActionFlag;
 	bool jumpActFlag;
-	int  swingSE;
+	int  swingSE, newSomenHandle;
 	float PrangeA, PrangeB, Pdir, Prange, atkDir;
 	bool Awake;
 	float AwakeSpd, AwakeDmg,AwakeMove,AwakeT;

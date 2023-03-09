@@ -17,8 +17,10 @@ bool modeT::save(const char* dir, valData* _val)
 		if (_data[i] == "“ü‚ê‘Ö‚¦‹ZX") { i++; _data[i] = _val->plChangeAttackX; }
 		if (_data[i] == "“ü‚ê‘Ö‚¦‹ZY") { i++; _data[i] = _val->plChangeAttackY; }
 		if (_data[i] == "ŠŽƒ|ƒCƒ“ƒg") { i++; _data[i] = _val->points; }
-		if (_data[i] == "Œ‚”jÏ‚ÝBoss") {	i++;  while (_data[i] != "‚±‚±‚Ü‚Å") { _data.erase(_data.begin() + i); }
-		for (auto boss : _val->deadBoss) { _data.emplace(_data.begin() + i, boss), i++; }; }
+		if (_data[i] == "Œ‚”jÏ‚ÝBoss") {
+			i++;  while (_data[i] != "‚±‚±‚Ü‚Å") { _data.erase(_data.begin() + i); }
+			for (auto boss : _val->deadBoss) { _data.emplace(_data.begin() + i, boss), i++; };
+		}
 	}
 	std::string insStr = "";
 	for (auto insData : _data) { insStr += insData + "\n"; }
@@ -89,13 +91,15 @@ bool	modeT::Initialize()
 	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
 	titleAnimHandle = _modeServer->RS.loadGraphR("game/res/titleMovie.mp4");
 	titleLogoHandle = _modeServer->RS.loadGraphR("game/res/Titlelogo1.png");
+	pressAtoStart = _modeServer->RS.loadGraphR("game/res/4.png");
 	loadData("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }//JNATHYN_-_Dioma_Demo_NCS_Release
 
 bool	modeT::Process()
 {
-	if (!CheckMusic()) { PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK);		SetVolumeMusic(255 * (0.01 * 70));
+	if (!CheckMusic()) {
+		PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK);		SetVolumeMusic(255 * (0.01 * 70));
 	}
 
 	if (isPut == 1 && !CheckHitKeyAll() || isPut == 0 && !_modeServer->_valData.isLogoRender) { isPut = 2; }
@@ -125,7 +129,13 @@ bool	modeT::Render()
 		if (isFirstMovie) { PlayMovieToGraph(titleAnimHandle);		isFirstMovie = false; }
 		if (GetMovieStateToGraph(titleAnimHandle) == 0) { SeekMovieToGraph(titleAnimHandle, 2870); PlayMovieToGraph(titleAnimHandle); }
 		DrawExtendGraph(0, 0, 1280, 720, titleAnimHandle, FALSE);
-		DrawGraph(280, 400, titleLogoHandle, true);
+		DrawGraph(260, 370, titleLogoHandle, true);
+
+		waveAlphaNum < 200 ? waveAlphaNum+=2 : waveAlphaNum = -200;
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - std::abs(waveAlphaNum));
+		DrawGraph(20, 20, pressAtoStart, true);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 		//DrawString(1200, 20, "TITLEmode", GetColor(255, 255, 255));
 	}
 	return true;

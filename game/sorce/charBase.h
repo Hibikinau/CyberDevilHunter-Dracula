@@ -58,7 +58,7 @@ public:
 	virtual void battleEndVoice() { return; }
 	virtual void battleStartVoice() { return; }
 	void setName(const char* _name) { name = _name; }
-	bool hitCheck(const char* name, VECTOR* hitPos, float* damage);
+	bool hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damage);
 	modelInf* getInf() { return &_modelInf; }
 	void setGroundInf(modelInf* GE) { _GrounfInf = GE; }
 	statusInf	getStatus() { return _statusInf; }

@@ -128,7 +128,6 @@ bool model::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 
 bool model::modelDelete(modelInf* MI)
 {//装備モデルのメモリ解放してからコンテナの消去
-	OutputDebugString("a");
 	for (int i = 0; i < MI->wepons.size(); i++)
 	{
 		auto a = MV1DeleteModel(MI->wepons[i].weponHandle);
