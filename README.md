@@ -7,25 +7,17 @@ C++
 GitHub(https://github.com/Hibikinau/CyberDevilHunter-Dracula.git)
 
 # 操作方法
-コントローラー(Xinput)対応\n
-Lスティック　　　　　: 移動 
-Rスティック　　　　　: カメラ操作\r\n
-
-Rスティック押し込み　: ロックオン切り替え
-
-X　		　　 : 弱攻撃
-
-Y　		     : 強攻撃
-
-B　		     : 回避
-
-A　		     : 決定
-
-L１＋（A.X.Y.B）     : スキル3種
-
-R１　		     : ガード
-
-L１＋R１　	     : 覚醒
+コントローラー(Xinput)対応<br>
+Lスティック　　　　　: 移動<br>
+Rスティック　　　　　: カメラ操作<br>
+Rスティック押し込み　: ロックオン切り替え<br>
+X　		　　 : 弱攻撃<br>
+Y　		     : 強攻撃<br>
+B　		     : 回避<br>
+A　		     : 決定<br>
+L１＋（A.X.Y.B）     : スキル3種<br>
+R１　		     : ガード<br>
+L１＋R１　	     : 覚醒<br>
 
 # 実行方法
 exeファイルを実行してください
