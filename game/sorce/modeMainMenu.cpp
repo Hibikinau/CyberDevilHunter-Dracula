@@ -22,13 +22,15 @@ bool	modeMM::Initialize()
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_boss_select.mp3"));
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_result.mp3"));
 	}
+	isBackTitle = false;
 	return true;
 }
 
 bool	modeMM::Process()
 {
-	if (isBackTitle && _imputInf._gRelb[KEY_INPUT_Z] || _imputInf._gRelp[XINPUT_BUTTON_A])
+	if (isBackTitle && (_imputInf._gTrgb[KEY_INPUT_Z] || _imputInf._gTrgp[XINPUT_BUTTON_A]))
 	{
+		StopMusic();
 		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
 		PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
 		return false;
@@ -53,7 +55,7 @@ bool	modeMM::Process()
 
 	 if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 	{
-		isBackTitle = true;
+		isBackTitle ^= true;
 	}
 
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
@@ -110,7 +112,7 @@ bool	modeMM::Render()
 		DrawString(360, 310, "タイトルに戻りますか？", GetColor(0, 0, 0));
 		DrawString(420, 370, "はい　　いいえ", GetColor(0, 0, 0));
 	}
-	
+
 	return true;
 }
 

@@ -91,21 +91,21 @@ bool	modeT::Initialize()
 	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
 	titleAnimHandle = _modeServer->RS.loadGraphR("game/res/titleMovie.mp4");
 	titleLogoHandle = _modeServer->RS.loadGraphR("game/res/Titlelogo1.png");
-	pressAtoStart = _modeServer->RS.loadGraphR("game/res/4.png");
+	pressAtoStart = _modeServer->RS.loadGraphR("game/res/start.png");
 	loadData("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }//JNATHYN_-_Dioma_Demo_NCS_Release
 
 bool	modeT::Process()
 {
-	if (!CheckMusic()) {
+	if (!CheckMusic() && !_modeServer->_valData.isLogoRender) {
 		PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK);		SetVolumeMusic(255 * (0.01 * 70));
 	}
 
 	if (isPut == 1 && !CheckHitKeyAll() || isPut == 0 && !_modeServer->_valData.isLogoRender) { isPut = 2; }
-	if (CheckHitKeyAll() && !_modeServer->_valData.isLogoRender && isPut == 2)
+	if ((_imputInf._gTrgb[KEY_INPUT_Z] || _imputInf._gTrgp[XINPUT_BUTTON_A]) && !_modeServer->_valData.isLogoRender && isPut == 2)
 	{
-		//_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+		StopMusic();
 		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 		return false;
 	}
