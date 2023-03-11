@@ -1,13 +1,12 @@
+/*****************************************************************//**
+ * \file   player.h
+ * \brief  プレイヤークラス
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #pragma once
 #include"charBase.h"
-
-////3dモデル用
-//struct modelInf
-//{
-//	int modelHandle, importCnt, attachIndex;
-//	float playTime, totalTime;
-//	VECTOR pos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
-//};
 
 enum class ExclusiveState
 {

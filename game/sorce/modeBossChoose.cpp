@@ -1,5 +1,11 @@
 #include"allMode.h"
-
+/*****************************************************************//**
+ * \file   modeBossChoose.cpp
+ * \brief  ボス選択クラス
+ *
+ * \author 脇添敏暉
+ * \date   March 2023
+ *********************************************************************/
 bool	modeBC::Initialize()
 {
 	//_cg = LoadGraph("game/res/chooseBoss.png");

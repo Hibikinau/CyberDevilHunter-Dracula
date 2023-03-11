@@ -1,5 +1,11 @@
 #include"allMode.h"
-
+/*****************************************************************//**
+ * \file   modeEquipmentSelection.cpp
+ * \brief  ‘•”õ‘I‘ðƒNƒ‰ƒX
+ *
+ * \author ˜e“Y•qô
+ * \date   March 2023
+ *********************************************************************/
 bool	modeES::Initialize()
 {
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
@@ -14,6 +20,8 @@ bool	modeES::Initialize()
 	popSelectNum = 0;
 	return true;
 }
+
+
 
 bool	modeES::Process()
 {
