@@ -11,6 +11,7 @@ bool	modeMM::Initialize()
 	picMenuMaxNum = menuMessage.size() - 1;
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_Window_open/apngframe01_sheet.png", 29, 2, 15, 800, 600, windowAnimHandle);
 	if (_modeServer->_valData.menuSoundHandle.size() == 0)
 	{
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_select_01.mp3"));
@@ -28,13 +29,6 @@ bool	modeMM::Initialize()
 
 bool	modeMM::Process()
 {
-	if (isBackTitle && (_imputInf._gTrgb[KEY_INPUT_Z] || _imputInf._gTrgp[XINPUT_BUTTON_A]))
-	{
-		StopMusic();
-		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
-		PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
-		return false;
-	}
 	if (!CheckMusic())
 	{
 		if (_modeServer->_valData.bgmSwitchNum % 2) { { PlayMusic("game/res/BGM/menuBGM_01_Rob Gasser - Ricochet [NCS Release].mp3", DX_PLAYTYPE_BACK); _modeServer->_valData.bgmSwitchNum++; } }
@@ -42,44 +36,73 @@ bool	modeMM::Process()
 		SetVolumeMusic(255 * (0.01 * _modeServer->_valData.soundMasterValume));
 	}
 
-	if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
+	if (isBackTitle)
 	{
-		picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
-		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
+		if (_imputInf._gTrgb[KEY_INPUT_LEFT] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_LEFT]
+			|| _imputInf._gTrgb[KEY_INPUT_RIGHT] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_RIGHT])
+		{
+			isBackTitlePic ^= true;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
+		}
 	}
-	if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
+	else
 	{
-		picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
-		PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
+		if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
+		{
+			picMenuNum == picMenuMaxNum ? picMenuNum = 0 : picMenuNum++;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
+		}
+		if (_imputInf._gTrgb[KEY_INPUT_UP] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_UP])
+		{
+			picMenuNum == 0 ? picMenuNum = picMenuMaxNum : picMenuNum--;
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[0], DX_PLAYTYPE_BACK);
+		}
 	}
 
-	 if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
+	if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 	{
+		PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
 		isBackTitle ^= true;
+		windowAnimNum = 0;
 	}
 
-	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
+	if (_imputInf._gTrgb[KEY_INPUT_Z] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
-		PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
-		if (picMenuNum == 0)
-		{//討伐ボス選択
-			_modeServer->Add(std::make_unique<modeBC>(_modeServer), 1, MODE_BC);
-			return false;
+		if (isBackTitle)
+		{
+			if (isBackTitlePic)
+			{
+				StopMusic();
+				_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
+				return false;
+			}
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
+			isBackTitle ^= true;
 		}
-		else if (picMenuNum == 1)
-		{//装備変更
-			_modeServer->Add(std::make_unique<modeES>(_modeServer), 1, MODE_ES);
-			return false;
-		}
-		else if (picMenuNum == 2)
-		{//アーツ取得
-			_modeServer->Add(std::make_unique<modeAG>(_modeServer), 1, MODE_AG);
-			return false;
-		}
-		else if (picMenuNum == 3)
-		{//設定
-			_modeServer->Add(std::make_unique<modeS>(_modeServer), 1, MODE_S);
-			return false;
+		else
+		{
+			PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
+			if (picMenuNum == 0)
+			{//討伐ボス選択
+				_modeServer->Add(std::make_unique<modeBC>(_modeServer), 1, MODE_BC);
+				return false;
+			}
+			else if (picMenuNum == 1)
+			{//装備変更
+				_modeServer->Add(std::make_unique<modeES>(_modeServer), 1, MODE_ES);
+				return false;
+			}
+			else if (picMenuNum == 2)
+			{//アーツ取得
+				_modeServer->Add(std::make_unique<modeAG>(_modeServer), 1, MODE_AG);
+				return false;
+			}
+			else if (picMenuNum == 3)
+			{//設定
+				_modeServer->Add(std::make_unique<modeS>(_modeServer), 1, MODE_S);
+				return false;
+			}
 		}
 	}
 	return true;
@@ -107,10 +130,15 @@ bool	modeMM::Render()
 		}
 	}
 	if (isBackTitle)
-	{
-		DrawBox(340, 300, 900, 420, GetColor(255, 255, 255), true);
-		DrawString(360, 310, "タイトルに戻りますか？", GetColor(0, 0, 0));
-		DrawString(420, 370, "はい　　いいえ", GetColor(0, 0, 0));
+	{//240
+		DrawBox(350, 235, 930, 485, GetColor(1, 1, 1), true);
+		windowAnimNum < 28 ? windowAnimNum++ : windowAnimNum = 28;
+		DrawExtendGraph(330, 215, 950, 505, windowAnimHandle[windowAnimNum], true);
+		DrawString(420, 280, "タイトルに戻りますか？", GetColor(255, 255, 255));
+		DrawString(500, 370, "はい　　いいえ", GetColor(255, 255, 255));
+		arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
+		if (isBackTitlePic) { DrawGraph(500 - 65, 370 + 7, arrowAnimHandle[arrowAnimNum], true); }
+		else { DrawGraph(660 - 65, 370 + 7, arrowAnimHandle[arrowAnimNum], true); }
 	}
 
 	return true;
