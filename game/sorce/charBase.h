@@ -15,6 +15,7 @@
 struct statusInf
 {
 	float hitPoint//!体力値
+		, stanPoint//!スタン値
 		, maxHitPoint//!最大体力値
 		, bloodPoint//!ブラッドポイント値
 		, maxBloodPoint;//!最大ブラッドポイント値

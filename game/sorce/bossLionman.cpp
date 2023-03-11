@@ -12,10 +12,9 @@ bool BossLion::Initialize()
 	stanTime = 200;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
 
-	MotionFlag = true;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	AttackFlag = false;
+	ActionFlag = false;
 	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
 	ChangeVolumeSoundMem(120, swingSE);
@@ -307,7 +306,7 @@ bool	BossLion::Render(float timeSpeed)
 
 
 bool BossLion::UtilityJudge() {
-	attackStep = 0, jumpActFlag = false;
+	attackStep = 0;
 	_modelInf.dir.y = Pdir;
 	int Rand = GetRand(100);
 	if (!Awake) {

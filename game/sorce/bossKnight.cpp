@@ -25,11 +25,9 @@ bool BossKnight::Initialize()
 	stanTime = 200;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	_statusInf.stanPoint = 0;
-
-	MotionFlag = true;
+	ActionFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	AttackFlag = false;
 	g = 3.f;
 	soundHandle.emplace_back(LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3"));
 	Awake = false;
@@ -92,14 +90,11 @@ bool	BossKnight::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
-	return true;
-	//auto xz = plMI->pos;
 
 	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
 
 
@@ -314,11 +309,6 @@ bool	BossKnight::Process()
 		}
 		animSpd = 0.7f * AwakeSpd;
 		animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
-		//if (attackStep == 2 || attackStep == 3)
-		/*{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f*AwakeDmg, 100);
-
-		}*/
 		if (attackStep == 1) { RangeJ(); }
 		ActionFlag = true;
 		break;
