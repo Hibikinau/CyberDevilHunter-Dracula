@@ -90,8 +90,6 @@ bool	BossKnight::Process()
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
-	return true;
-	//auto xz = plMI->pos;
 
 	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
@@ -311,11 +309,6 @@ bool	BossKnight::Process()
 		}
 		animSpd = 0.7f * AwakeSpd;
 		animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
-		//if (attackStep == 2 || attackStep == 3)
-		/*{
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, .0f, _modelInf.totalTime / animSpd + 1, true, 50.f*AwakeDmg, 100);
-
-		}*/
 		if (attackStep == 1) { RangeJ(); }
 		ActionFlag = true;
 		break;
