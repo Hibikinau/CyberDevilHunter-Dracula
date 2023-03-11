@@ -25,11 +25,9 @@ bool BossKnight::Initialize()
 	stanTime = 200;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	_statusInf.stanPoint = 0;
-
-	MotionFlag = true;
+	ActionFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	AttackFlag = false;
 	g = 3.f;
 	soundHandle.emplace_back(LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3"));
 	Awake = false;
@@ -99,7 +97,6 @@ bool	BossKnight::Process()
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	Pdir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	PrangeA = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	//float Prange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
 
 
