@@ -1,6 +1,5 @@
 #include"bossLionman.h"
 #include <math.h>
-#define walkSpd 6.f
 #define runSpd 25.f
 
 using namespace model;

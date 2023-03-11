@@ -1,9 +1,21 @@
+/*****************************************************************//**
+ * @file   bossKnight.cpp
+ * @brief  ボス「騎士」クラス
+ *
+ * @author 松田　裕
+ * @date  March  2023
+ *********************************************************************/
 #include"bossKnight.h"
 #include <math.h>
-#define walkSpd 6.f
 #define runSpd 20.f
 
 using namespace model;
+
+/**
+ * @
+ * 
+ *  
+ */
 
 bool BossKnight::Initialize()
 {

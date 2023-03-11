@@ -1,18 +1,49 @@
+/*****************************************************************//**
+ * @file    bossKnight.h
+ * @brief   ボス「騎士」のクラス
+ *
+ * @author  松田　裕
+ * @date    March 2023
+ *********************************************************************/
 #pragma once
 #include"charBase.h"
 #include"player.h"
 
-
-
+/**
+ * @class BossKnight
+ * @brief ボス「騎士」クラス
+ */
 class BossKnight : public CB
 {
 public:
+	/**
+	 * @brief コンストラクタ
+	 */
 	BossKnight() {};
+	/**
+	 * @brief デストラクタ
+	 */
 	~BossKnight() {};
+	/**
+	 * @brief 初期化
+	 * @return true 
+	 */
 	virtual bool Initialize();
+	/**
+	 * @brief 
+	 * @return true 
+	 */
 	virtual bool Terminate();
-	virtual bool Input(){ return true; }
+	/**
+	 * @brief 更新
+	 * @return true
+	 */
 	virtual bool Process();
+	/**
+	 * @brief 描画
+	 * @param timeSpeed アニメーションの再生速度
+	 * @return true
+	 */
 	virtual bool Render(float timeSpeed);
 	bool HPmath(float Num,float Stan) override;
 	bool UtilityJudge();
