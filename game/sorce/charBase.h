@@ -77,9 +77,9 @@ public:
 
 	/**
 	 * @brief 削除処理
-	 * @return true
+	 * @return modelDeleteが成功したか
 	 */
-	virtual bool	Terminate();
+	virtual bool	Terminate() { return modelDelete(&_modelInf); };
 
 	/**
 	 * @brief 更新処理
@@ -218,7 +218,8 @@ public:
 
 	int type = 0;//!キャラクタタイプ(player = 1, boss = 2)
 	bool isGround//!設置しているか
-		, isHit;//!攻撃がヒットしたか
+		, isHit//!攻撃がヒットしたか
+		, isSetSoundValume;//!マスター音量適用をするか
 	float g//!重力値
 		, camDir//!ロックオンカメラ位置情報
 		, * _cameraDir//!カメラ位置情報

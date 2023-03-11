@@ -1,40 +1,19 @@
+/*****************************************************************//**
+ * \file   charBase.cpp
+ * \brief  キャラベースクラスの定義
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #include"charBase.h"
 
 using namespace model;
 
-bool CB::Initialize()
-{
-
-	return true;
-}
-
-bool	CB::Terminate()
-{
-	modelDelete(&_modelInf);
-	return true;
-}
-
-bool	CB::Process()
-{
-
-	return true;
-}
-
-bool	CB::Render(float timeSpeed)
-{
-
-	return true;
-}
-
 bool	CB::gravity()
 {
-	/*if (_modelInf.pos.y > 0.f) { _modelInf.vec.y -= g, isGround = false; }
-	else { _modelInf.pos.y = 0.f, isGround = true;}*/
-
-	//hitCheckGround = MV1CollCheck_Line(_GrounfInf->modelHandle, -1, VAdd(_modelInf.pos, VGet(0.f, 140.f, 0.f)), _modelInf.pos);
 	if (_modelInf.pos.y < 1100)
 	{
-		_modelInf.pos.y = 1090;// = VSub(hitCheckGround.HitPosition, VGet(0.f, .1f, 0.f));
+		_modelInf.pos.y = 1090;
 		isGround = true;
 		if (_modelInf.vec.y < 0) { _modelInf.vec.y = 0; }
 	}
@@ -92,8 +71,8 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 			{
 				*hitPos = VScale(VAdd(insCapNow, insCapOld), 0.5f);
 				auto nDir = (VSub(insCapOld, insCapNow));
-				VECTOR dir = VGet(std::atan2(nDir.y, nDir.z) 
-				, std::atan2(nDir.x, nDir.z) 
+				VECTOR dir = VGet(std::atan2(nDir.y, nDir.z)
+				, std::atan2(nDir.x, nDir.z)
 				, std::atan2(nDir.x, nDir.y) );
 
 				*hitDir = dir;
