@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   modelManager.cpp
+ * \brief  モデル制御クラスの定義
+ *
+ * \author raide
+ * \date   March 2023
+ *********************************************************************/
 #include"modelManager.h"
 
 bool model::modelImport(const char* dir, const float scale, modelInf* MI, Rserver* _Rserver)

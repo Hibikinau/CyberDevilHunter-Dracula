@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   CFile.cpp
+ * \brief  ファイル読み書き用関数まとめ
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #include "CFile.h"
 
 using namespace std;
@@ -40,7 +47,7 @@ string fileIO::UTF8toSjis(string srcUTF8) {
 	return strSJis;
 }
 
-bool fileIO::loadCSV(vector<string> *data, const char *dir, bool isComUtoS)
+bool fileIO::loadCSV(vector<string>* data, const char* dir, bool isComUtoS)
 {
 	ifstream ifs(dir);
 
@@ -50,7 +57,7 @@ bool fileIO::loadCSV(vector<string> *data, const char *dir, bool isComUtoS)
 
 		for (int i = 0; i < insText.size(); i++) {
 			if (isComUtoS) { data->emplace_back(UTF8toSjis(insText.at(i))); }
-			else{ data->emplace_back(insText.at(i)); }
+			else { data->emplace_back(insText.at(i)); }
 		}
 	}
 

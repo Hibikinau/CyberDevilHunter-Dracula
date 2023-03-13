@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   ModeBase.h
+ * \brief  モードの基底クラス
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #pragma once
 #include	<string>
 #include "../AppFrame/source/ResourceServer/ResourceServer.h"

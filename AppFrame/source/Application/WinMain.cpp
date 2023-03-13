@@ -1,18 +1,22 @@
-//
-// include 部
-//
+/*****************************************************************//**
+ * \file   WinMain.cpp
+ * \brief  プログラムのエントリーポイント
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #include "../appframe.h"
 
-//
-// WinMain(). プログラム起動関数
-//
+ //
+ // WinMain(). プログラム起動関数
+ //
 int WINAPI WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine,
 	int nCmdShow
 ) {
-	ApplicationBase *appBase = ApplicationBase::GetInstance();
+	ApplicationBase* appBase = ApplicationBase::GetInstance();
 	ModeServer _modeServer;
 	SetOutApplicationLogValidFlag(false);
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -26,7 +30,7 @@ int WINAPI WinMain(
 	int setTime = GetNowCount();//1000=1秒
 	bool two = false;
 	// 1フレームループを組む ----------------------------------------------------------
-	while ( true)		// プログラムが終了するまでループ
+	while (true)		// プログラムが終了するまでループ
 	{
 		if (two) { if (ProcessMessage() != 0) { break; } }
 		two = !two;

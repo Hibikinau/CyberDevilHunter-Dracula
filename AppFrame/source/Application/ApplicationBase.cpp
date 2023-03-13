@@ -1,4 +1,10 @@
-
+/*****************************************************************//**
+ * \file   ApplicationBase.cpp
+ * \brief  アプリケーションのスーパークラスの定義
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #include "ApplicationBase.h"
 
 ApplicationBase* ApplicationBase::_lpInstance = NULL;
@@ -11,7 +17,7 @@ ApplicationBase::ApplicationBase() {
 ApplicationBase::~ApplicationBase() {
 }
 
-bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer *ms) {
+bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 
 	// DXライブラリの初期化
 	if (AppWindowed()) {

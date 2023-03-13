@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file   modelManager.h
+ * \brief  モデル制御クラス
+ *
+ * \author raide
+ * \date   March 2023
+ *********************************************************************/
+
 #pragma once
 #include<memory>
 #include<string>
@@ -10,7 +18,7 @@
 #define Char_BOSS1 "Boss1"
 #define Char_BOSS2 "Boss2"
 
-//武器モデル用
+ //武器モデル用
 struct weponModelInf
 {
 	int weponHandle, weponAttachFrameNum;
@@ -33,7 +41,7 @@ struct modelInf
 namespace model
 {
 	//3dモデルの読み込み(3dモデルのパス, モデルの拡大率, modelInfのポインタ, Rserverインスタンスのポインタ)
-	bool modelImport(const char* dir, const float scale, modelInf* MI, Rserver *_Rserver);
+	bool modelImport(const char* dir, const float scale, modelInf* MI, Rserver* _Rserver);
 	//再生しているアニメーションの変更(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
 	bool animChange(int _animHandle, modelInf* MI, bool isLoop, bool isBlend, bool isOverride);
 	//次に再生するアニメーションの設定(アニメーション番号, modelInfのポインタ, ループするアニメーションなのか, アニメーションブレンドを使うか)
