@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   modeTitle.cpp
+ * \brief  タイトル画面のクラスの定義
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #include"allMode.h"
 #include <fstream>
 #include <sstream>
@@ -131,7 +138,7 @@ bool	modeT::Render()
 		DrawExtendGraph(0, 0, 1280, 720, titleAnimHandle, FALSE);
 		DrawGraph(260, 370, titleLogoHandle, true);
 
-		waveAlphaNum < 200 ? waveAlphaNum+=2 : waveAlphaNum = -200;
+		waveAlphaNum < 200 ? waveAlphaNum += 2 : waveAlphaNum = -200;
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 255 - std::abs(waveAlphaNum));
 		DrawGraph(20, 20, pressAtoStart, true);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);

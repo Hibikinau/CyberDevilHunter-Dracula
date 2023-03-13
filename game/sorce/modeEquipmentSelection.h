@@ -1,10 +1,17 @@
+/*****************************************************************//**
+ * \file   modeEquipmentSelection.h
+ * \brief  ‘•”õ‘I‘ğ‰æ–Ê‚ÌƒNƒ‰ƒX
+ *
+ * \author ˜e“Y•qô
+ * \date   March 2023
+ *********************************************************************/
 #pragma once
 #include"appframe.h"
 
 class modeES : public ModeBase
 {
 public:
-	 modeES(ModeServer* MS) { _modeServer = MS; };
+	modeES(ModeServer* MS) { _modeServer = MS; };
 	~modeES() {};
 
 	virtual bool	Initialize();

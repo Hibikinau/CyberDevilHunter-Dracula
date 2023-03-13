@@ -1,3 +1,10 @@
+/*****************************************************************//**
+ * \file   modeGame.h
+ * \brief  ゲーム画面のクラス
+ *
+ * \author 山本莉久
+ * \date   March 2023
+ *********************************************************************/
 #include"allMode.h"
 #include <sstream>
 
@@ -555,7 +562,7 @@ bool modeG::drawUI()
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
 	DrawRectGraph(782 + gauge, 23, gauge, 0, barLength, 29, HPgaugeHandle, true, false);
 	DrawGraph(776, 15, HPgaugeHandleWaku, true);
-	
+
 	SetFontSize(DeffontSize);
 	return true;
 }
