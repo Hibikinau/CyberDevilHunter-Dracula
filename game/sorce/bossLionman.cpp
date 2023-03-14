@@ -269,11 +269,11 @@ bool	BossLion::Process()
 			{
 				Move(15, .0f);
 			}
-			if (_modelInf.playTime > 29 && _modelInf.playTime < 80) 
+			if (_modelInf.playTime > 29 && _modelInf.playTime < 80)
 			{
 				Move(Prange / 40, .0f);
 			}
-			if (_modelInf.playTime > 79 && _modelInf.playTime < 135) 
+			if (_modelInf.playTime > 79 && _modelInf.playTime < 135)
 			{
 				Move(15, .0f);
 			}
@@ -297,7 +297,7 @@ bool	BossLion::Process()
 bool	BossLion::Render(float timeSpeed)
 {
 
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS2_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 
@@ -434,7 +434,7 @@ bool BossLion::HPmath(float Num, float Stan)
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
 	}
-	
+
 	int a = PlayEffekseer3DEffect(_valData->efcHandle);
 	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
 

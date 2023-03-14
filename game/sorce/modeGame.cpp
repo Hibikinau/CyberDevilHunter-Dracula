@@ -274,7 +274,7 @@ bool	modeG::Render()
 		auto insUnderPosOld = mAllColl.at(i).capCollOld.underPos;
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
-		//auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+		auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
 
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
@@ -283,7 +283,7 @@ bool	modeG::Render()
 		{
 			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 
-			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			//DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 
 
 			mAllColl[i].rightingEfc.downCornerPos.push_back(VTransform(mAllColl.at(i).capColl.underPos, M));
@@ -291,7 +291,7 @@ bool	modeG::Render()
 
 			for (int j = 1; j < mAllColl[i].rightingEfc.downCornerPos.size(); ++j)
 			{
-				//drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+				drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
 			}
 		}
 	}
@@ -301,7 +301,7 @@ bool	modeG::Render()
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
 			if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
-			//drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+			drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
 		}
 		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }

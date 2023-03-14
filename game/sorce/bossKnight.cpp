@@ -13,8 +13,8 @@ using namespace model;
 
 /**
  * @
- * 
- *  
+ *
+ *
  */
 
 bool BossKnight::Initialize()
@@ -335,10 +335,10 @@ VECTOR getDirVec(float dir, int powar)
 bool	BossKnight::Render(float timeSpeed)
 {
 
-	DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
+	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
-	if (!timeSpeed)
+	/*if (!timeSpeed)
 	{
 		SetUseLighting(false);
 		auto a = VAdd(_modelInf.pos, getDirVec(_modelInf.dir.y - 90, 1000));
@@ -348,7 +348,7 @@ bool	BossKnight::Render(float timeSpeed)
 		a.y = b.y = az.y = bz.y = 1101;
 		int g = drawBPolygon(a, az, b, bz, newSomenHandle);
 		SetUseLighting(true);
-	}
+	}*/
 	return true;
 }
 
