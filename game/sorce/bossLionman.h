@@ -1,9 +1,9 @@
 /*****************************************************************//**
- * @file    bossLionman.h
- * @brief   ボス「ライオンマン」のクラス
+ * \file    bossLionman.h
+ * \brief   ボス「ライオンマン」のクラス
  *
- * @author  松田　裕
- * @date    March 2023
+ * \author  松田　裕
+ * \date    March 2023
  *********************************************************************/
 #pragma once
 #include"charBase.h"

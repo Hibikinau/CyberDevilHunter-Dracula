@@ -1,9 +1,9 @@
 /*****************************************************************//**
- * @file    bossKnight.h
- * @brief   ボス「騎士」のクラス
+ * \file    bossKnight.h
+ * \brief   ボス「騎士」のクラス
  *
- * @author  松田　裕
- * @date    March 2023
+ * \author  松田　裕
+ * \date    March 2023
  *********************************************************************/
 #pragma once
 #include"charBase.h"

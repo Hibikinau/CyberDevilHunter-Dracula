@@ -1,9 +1,9 @@
 /*****************************************************************//**
- * @file   bossKnight.cpp
- * @brief  ボス「騎士」クラス
+ * \file   bossKnight.cpp
+ * \brief  ボス「騎士」クラスの定義
  *
- * @author 松田　裕
- * @date  March  2023
+ * \author 松田　裕
+ * \date  March  2023
  *********************************************************************/
 #include"bossKnight.h"
 #include <math.h>

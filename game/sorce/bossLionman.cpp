@@ -1,3 +1,11 @@
+/*****************************************************************//**
+ * \file    bossLionman.h
+ * \brief   ボス「ライオンマン」クラスの定義
+ *
+ * \author  松田　裕
+ * \date    March 2023
+ *********************************************************************/
+
 #include"bossLionman.h"
 #include <math.h>
 #define runSpd 25.f
@@ -267,11 +275,13 @@ bool	BossLion::Process()
 		if (ActionFlag == true) {
 			if (_modelInf.playTime > 0 && _modelInf.playTime < 30)
 			{
+				RangeJ();
+				_modelInf.dir.y = Pdir;
 				Move(15, .0f);
 			}
 			if (_modelInf.playTime > 29 && _modelInf.playTime < 80) 
 			{
-				Move(Prange / 40, .0f);
+				Move(Prange / 25, .0f);
 			}
 			if (_modelInf.playTime > 79 && _modelInf.playTime < 135) 
 			{
