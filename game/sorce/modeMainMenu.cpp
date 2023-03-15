@@ -10,12 +10,13 @@
 bool	modeMM::Initialize()
 {
 	DeffontSize = GetFontSize();
-	menuMessage.emplace_back("討伐ボス選択");
+	menuMessage.emplace_back("ミッション選択");
 	menuMessage.emplace_back("装備変更");
 	menuMessage.emplace_back("アーツ取得");
 	menuMessage.emplace_back("設定");
 	picMenuNum = _modeServer->_valData.mainMenuPicNum;
 	picMenuMaxNum = menuMessage.size() - 1;
+	menuBarHandle = _modeServer->RS.loadGraphR("game/res/menu_bar.png");
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_Window_open/apngframe01_sheet.png", 29, 2, 15, 800, 600, windowAnimHandle);
@@ -121,7 +122,7 @@ bool	modeMM::Render()
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
 	ChangeFontType(DX_FONTTYPE_EDGE);
-	DrawString(0, 0, "BRIEFING", GetColor(255, 255, 255), GetColor(0, 0, 0));
+	DrawString(0, 20, "BRIEFING", GetColor(255, 255, 255), GetColor(0, 0, 0));
 	ChangeFontType(DX_FONTTYPE_NORMAL);
 	SetFontSize(40);
 	int defY = 200;
@@ -139,15 +140,15 @@ bool	modeMM::Render()
 	if (isBackTitle)
 	{//240
 		DrawBox(350, 235, 930, 485, GetColor(1, 1, 1), true);
-		windowAnimNum < 28 ? windowAnimNum++ : windowAnimNum = 28;
-		DrawExtendGraph(330, 215, 950, 505, windowAnimHandle[windowAnimNum], true);
 		DrawString(420, 280, "タイトルに戻りますか？", GetColor(255, 255, 255));
 		DrawString(500, 370, "はい　　いいえ", GetColor(255, 255, 255));
+		windowAnimNum < 28 ? windowAnimNum++ : windowAnimNum = 28;
+		DrawExtendGraph(330, 215, 950, 505, windowAnimHandle[windowAnimNum], true);
 		arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
 		if (isBackTitlePic) { DrawGraph(500 - 65, 370 + 7, arrowAnimHandle[arrowAnimNum], true); }
 		else { DrawGraph(660 - 65, 370 + 7, arrowAnimHandle[arrowAnimNum], true); }
 	}
-
+	DrawGraph(0, 0, menuBarHandle, true);
 	return true;
 }
 

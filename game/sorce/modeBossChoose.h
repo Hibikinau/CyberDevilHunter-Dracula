@@ -22,7 +22,8 @@ public:
 
 protected:
 	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, mapAnimNum = 0, mapAnimHandol[62] = { -1 }
-	, glitchAnimNum, glitchAnimHandle[19] = { -1 }, randomNum = 0, randomFrameNum = 0, newsWindow = -1, newsWindowStr = -1, randomNewsNum, newsPosX, wakuHandle, wakuHandle2;
+	, glitchAnimNum, glitchAnimHandle[19] = { -1 }, randomNum = 0, randomFrameNum = 0, newsWindow = -1, newsWindowStr = -1
+		, randomNewsNum, newsPosX, wakuHandle, wakuHandle2, titleHandle, maskData, checkUiHandle, bossUiHandle;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
 	std::vector<std::string> menuMessage;

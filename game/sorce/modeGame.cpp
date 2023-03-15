@@ -60,6 +60,7 @@ bool	modeG::Initialize()
 	_valData = &_modeServer->_valData;
 	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
 	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
+	modelImport("game/res/saku/saku.mv1", 380.f, &sakuHandle, &_modeServer->RS);
 	makeChar(this, &_modeServer->RS, std::make_unique<PL>(), Char_PL);
 
 	if (_valData->popBossNum == 1) { makeChar(this, &_modeServer->RS, std::make_shared<BossKnight>(), Char_BOSS1); }
@@ -110,6 +111,8 @@ bool	modeG::Initialize()
 	}
 	changeScale(&stage);
 	changeScale(&skyDoom);
+	changeScale(&sakuHandle);
+	MV1SetPosition(sakuHandle.modelHandle, VGet(0, 1400, 0));
 	MV1SetFrameVisible(stage.modelHandle, 84, false);
 	MV1SetFrameVisible(stage.modelHandle, 85, false);
 
@@ -154,7 +157,11 @@ bool	modeG::Process()
 
 	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] || _imputInf._gTrgb[KEY_INPUT_L])
 	{//ロックオン
-		if (charBox.size() >= 2) { isLockon ^= true; }
+		if (charBox.size() >= 2)
+		{
+			isLockon ^= true;
+			cameraNtDir = cameraLockDir;
+		}
 	}
 
 	//コマンド呼び出し部分
@@ -247,6 +254,7 @@ bool	modeG::Render()
 	ShadowMap_DrawSetup(ShadowMapHandle);
 	//3dモデルの描画
 	MV1DrawModel(stage.modelHandle);
+	MV1DrawModel(sakuHandle.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(1);
@@ -256,6 +264,7 @@ bool	modeG::Render()
 	SetUseShadowMap(0, ShadowMapHandle);
 	//影用の3dモデルの描画
 	MV1DrawModel(stage.modelHandle);
+	auto a = MV1DrawModel(sakuHandle.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(0);
@@ -409,6 +418,7 @@ bool	modeG::Terminate()
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
 	MV1DeleteModel(stage.modelHandle);
 	MV1DeleteModel(skyDoom.modelHandle);
+	MV1DeleteModel(sakuHandle.modelHandle);
 
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); i->second.reset(); }
 	mAllColl.clear();

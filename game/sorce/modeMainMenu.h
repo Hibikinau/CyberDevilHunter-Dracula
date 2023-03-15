@@ -21,7 +21,8 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, windowAnimHandle[29] = { -1 }, windowAnimNum = 0;
+	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, windowAnimHandle[29] = { -1 }, windowAnimNum = 0
+		, menuBarHandle = -1;
 	bool isBackTitle = false, isBackTitlePic = true;
 	ModeServer* _modeServer;
 	imputInf _imputInf;

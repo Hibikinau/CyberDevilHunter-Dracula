@@ -47,7 +47,7 @@ public:
 	bool isLockon, isGameOver = false, endVoice = false;
 	std::map<std::string, std::shared_ptr<CB> > charBox;
 	VECTOR cameraPos, cameraFor;
-	modelInf* plMI, stage, * bossMI, skyDoom;
+	modelInf* plMI, stage, * bossMI, skyDoom, sakuHandle;
 	std::string NS;
 	std::vector<std::string> debugWardBox;
 	imputInf _imputInf;

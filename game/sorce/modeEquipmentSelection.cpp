@@ -96,14 +96,14 @@ bool	modeES::Render()
 	DrawString(20, 20, "‘•”õ‘I‘ğ", GetColor(255, 255, 255));
 
 	SetFontSize(30);
-	DrawString(20, 150, "UŒ‚‹Z‘I‘ğ", GetColor(255, 255, 255));
+	DrawString(40, 150, "UŒ‚‹Z‘I‘ğ", GetColor(255, 255, 255));
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
 		std::string insStr = menuMessage[i] + "\n";
 		if (i == 0) { insStr += _modeServer->_valData.plChangeAttackX; }
 		if (i == 1) { insStr += _modeServer->_valData.plChangeAttackY; }
-		DrawString(90, defY + (100 * i), insStr.c_str(), GetColor(255, 255, 255));
+		DrawString(110, defY + (100 * i), insStr.c_str(), GetColor(255, 255, 255));
 
 	}
 	if (isPic)
@@ -111,7 +111,7 @@ bool	modeES::Render()
 		DrawGraph(400 - 65, 200 + (pic * 50) + 7, arrowAnimHandle[arrowAnimNum], true);
 	}
 	else {
-		DrawGraph(80 - 65, defY + (100 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
+		DrawGraph(110 - 65, defY + (100 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
 	}
 	if (picMenuNum == 0 || picMenuNum == 1) {
 		for (int i = 0; i < _modeServer->_valData.changeAttackList.size(); i++)
