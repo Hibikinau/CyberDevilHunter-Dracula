@@ -143,7 +143,8 @@ bool	modeG::Process()
 			i->second->gravity();
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
-			if (plStatus.hitPoint <= 0) { isLockon = false; }
+			if (plStatus.hitPoint <= 0) { 
+				isLockon = false; }
 		}
 		else
 		{
@@ -151,15 +152,17 @@ bool	modeG::Process()
 			bossMI = i->second->getInf();
 			i->second->gravity();
 			bossStatus = i->second->getStatus();
-			if (bossStatus.hitPoint <= 0 && !endVoice) { endVoice = true; charBox[Char_PL]->battleEndVoice(), isLockon = false; }
+			if (bossStatus.hitPoint <= 0 && !endVoice) {
+				endVoice = true; charBox[Char_PL]->battleEndVoice();
+				isLockon = false; }
 			debugWardBox.emplace_back("敵のスタン値 = " + std::to_string(bossStatus.stanPoint));
 		}
 	}
 
-	if (charBox.size() >= 2)
-	{
-		cameraNtDir = cameraLockDir;
-	}
+		/*if (charBox.size() >= 2)
+		{
+			cameraNtDir = cameraLockDir;
+		}*/
 
 	//コマンド呼び出し部分
 	useCommand();
