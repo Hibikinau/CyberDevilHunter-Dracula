@@ -19,6 +19,8 @@ bool	modeES::Initialize()
 	menuMessage.emplace_back("アーツ２(Y)");
 	picMenuMaxNum = menuMessage.size() - 1;
 	popSelectNum = 0;
+	_cg = _modeServer->RS.loadGraphR("game/res/AB.png");
+	_ui = _modeServer->RS.loadGraphR("game/res/soubihenkou_ui.png");
 	return true;
 }
 
@@ -92,9 +94,10 @@ bool	modeES::Render()
 	DrawGraph(15, 110, wakuHandle, true);
 	DrawExtendGraph(300, 110, 1260, 560, wakuHandle2, true);
 	SetFontSize(80);
-	int insMenuFontSize = GetDrawStringWidth("装備選択", strlen("装備選択"));
-	DrawString(20, 20, "装備選択", GetColor(255, 255, 255));
-
+	//int insMenuFontSize = GetDrawStringWidth("装備選択", strlen("装備選択"));
+	//DrawString(20, 20, "装備選択", GetColor(255, 255, 255));
+	DrawGraph(30, 670, _cg, true);
+	DrawGraph(0, 40, _ui, true);
 	SetFontSize(30);
 	DrawString(40, 150, "攻撃技選択", GetColor(255, 255, 255));
 	int defY = 200;

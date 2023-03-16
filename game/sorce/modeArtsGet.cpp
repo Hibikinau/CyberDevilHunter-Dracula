@@ -18,6 +18,8 @@ bool	modeAG::Initialize()
 	menuMessage.emplace_back("・入れ替え3");
 	menuMessage.emplace_back("・入れ替え4");
 	picMenuMaxNum = menuMessage.size() - 1;
+	_cg = _modeServer->RS.loadGraphR("game/res/AB.png");
+	_ui = _modeServer->RS.loadGraphR("game/res/arts_ui.png");
 	return true;
 }
 
@@ -62,9 +64,8 @@ bool	modeAG::Render()
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
-	int insMenuFontSize = GetDrawStringWidth("アーツ取得", strlen("アーツ取得"));
-	DrawString(20, 20, "アーツ取得", GetColor(255, 255, 255));
-
+	DrawGraph(30, 670, _cg, true);
+	DrawGraph(0, 40, _ui, true);
 	SetFontSize(30);
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
@@ -79,7 +80,6 @@ bool	modeAG::Render()
 
 bool	modeAG::Terminate()
 {
-	DeleteGraph(_cg);
 	SetFontSize(DeffontSize);
 	return true;
 }

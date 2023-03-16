@@ -18,6 +18,8 @@ bool	modeS::Initialize()
 	menuMessage.emplace_back("データ初期化");
 	menuMessage.emplace_back("パスワード");
 	picMenuMaxNum = menuMessage.size() - 1;
+	_cg = _modeServer->RS.loadGraphR("game/res/AB.png");
+	_ui = _modeServer->RS.loadGraphR("game/res/config_ui.png");
 	return true;
 }
 
@@ -65,7 +67,8 @@ bool	modeS::Render()
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("設定", strlen("設定"));
 	DrawString(20, 20, "設定", GetColor(255, 255, 255));
-
+	DrawGraph(30, 670, _cg, true);
+	DrawGraph(0, 40, _ui, true);
 	SetFontSize(30);
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
