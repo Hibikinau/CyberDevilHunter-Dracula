@@ -51,6 +51,7 @@ struct attackColl
 	collCapsule capColl, capCollOld;//!現在と1F前の当たり判定情報
 	std::string attackChar;//!攻撃したキャラクタの名前
 	MATRIX Mold;//!1F前の追従させるモデルのフレームの変換行列
+	VECTOR Vec;
 	float damage;//!ダメージ
 	int nonActiveTimeF//!描画待機時間
 		, activeTimeF;//!描画時間
@@ -209,7 +210,7 @@ public:
 	 * @param charName キャラクタ名
 	 * @param cameraDir カメラ位置情報セット用ポインタ
 	 */
-	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum);
+	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir);
 
 	/**
 	 * @brief マスター音量セット処理

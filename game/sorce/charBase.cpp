@@ -40,10 +40,14 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 	{
 		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
 
-		MATRIX M = MV1GetFrameLocalWorldMatrix(allColl->at(i).capColl.parentModelHandle, allColl->at(i).capColl.frameNum);
+		allColl->at(i).capColl.overPos = VAdd(allColl->at(i).capColl.overPos, allColl->at(i).Vec);
+		allColl->at(i).capColl.underPos = VAdd(allColl->at(i).capColl.underPos, allColl->at(i).Vec);
+
+		MATRIX M = MGetIdent();
+		if (allColl->at(i).isUseMat) { M = MV1GetFrameLocalWorldMatrix(allColl->at(i).capColl.parentModelHandle, allColl->at(i).capColl.frameNum); }
+
 		auto insUnderPos = VTransform(allColl->at(i).capColl.underPos, M);
 		auto insOverPos = VTransform(allColl->at(i).capColl.overPos, M);
-
 		bool insCheckHit = HitCheck_Capsule_Capsule
 		(collCap.underPos, collCap.overPos, collCap.r
 			, insUnderPos
@@ -72,8 +76,8 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 				*hitPos = VScale(VAdd(insCapNow, insCapOld), 0.5f);
 				auto nDir = (VSub(insCapOld, insCapNow));
 				VECTOR dir = VGet(std::atan2(nDir.y, nDir.z)
-				, std::atan2(nDir.x, nDir.z)
-				, std::atan2(nDir.x, nDir.y) );
+					, std::atan2(nDir.x, nDir.z)
+					, std::atan2(nDir.x, nDir.y));
 
 				*hitDir = dir;
 				break;
@@ -100,7 +104,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 }
 
 bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
-	, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum)
+	, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir)
 {
 	attackColl acoll;
 	acoll.isUseMat = isUseMat;
@@ -115,6 +119,7 @@ bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
 	acoll.damage = damage;
 	acoll.stan = stan;
 	acoll.capCollOld.r = -1;
+	acoll.Vec = _dir;
 	allColl->emplace_back(acoll);
 
 	return true;

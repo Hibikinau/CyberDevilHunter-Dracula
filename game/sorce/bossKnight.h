@@ -107,7 +107,8 @@ protected:
 	float animSpd//!アニメーションのスピード
 		 ,stanTime;//!スタン時間
 	int  time,//!待機時間
-		attackStep;//!行動番号
+		attackStep//!行動番号
+		, slamEfcHandle;
 	bool isAnimEnd;//アニメーション終わったかどうか
 	modelInf* plMI;//!プレイヤー情報のインスタンス
 	bool ActionFlag;//!行動してるかどうか
