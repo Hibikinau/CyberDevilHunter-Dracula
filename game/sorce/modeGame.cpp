@@ -118,6 +118,7 @@ bool	modeG::Initialize()
 
 	//ステージの当たり判定作成
 	//MV1SetupCollInfo(stage.modelHandle, -1, 32, 6, 32);
+	isLockon = true;
 
 	return true;
 }
@@ -155,14 +156,10 @@ bool	modeG::Process()
 		}
 	}
 
-	if (_imputInf._gTrgp[XINPUT_BUTTON_RIGHT_THUMB] || _imputInf._gTrgb[KEY_INPUT_L])
-	{//ロックオン
 		if (charBox.size() >= 2)
 		{
-			isLockon ^= true;
 			cameraNtDir = cameraLockDir;
 		}
-	}
 
 	//コマンド呼び出し部分
 	useCommand();
