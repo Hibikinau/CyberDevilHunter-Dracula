@@ -94,8 +94,6 @@ bool	modeES::Render()
 	DrawGraph(15, 110, wakuHandle, true);
 	DrawExtendGraph(300, 110, 1260, 560, wakuHandle2, true);
 	SetFontSize(80);
-	//int insMenuFontSize = GetDrawStringWidth("‘•”õ‘I‘ð", strlen("‘•”õ‘I‘ð"));
-	//DrawString(20, 20, "‘•”õ‘I‘ð", GetColor(255, 255, 255));
 	DrawGraph(30, 670, _cg, true);
 	DrawGraph(0, 40, _ui, true);
 	SetFontSize(30);

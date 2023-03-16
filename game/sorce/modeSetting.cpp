@@ -65,8 +65,6 @@ bool	modeS::Render()
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
-	int insMenuFontSize = GetDrawStringWidth("Ý’è", strlen("Ý’è"));
-	DrawString(20, 20, "Ý’è", GetColor(255, 255, 255));
 	DrawGraph(30, 670, _cg, true);
 	DrawGraph(0, 40, _ui, true);
 	SetFontSize(30);
