@@ -74,7 +74,7 @@ bool	modeMM::Process()
 		windowAnimNum = 0;
 	}
 
-	if (_imputInf._gTrgb[KEY_INPUT_Z] || _imputInf._gTrgp[XINPUT_BUTTON_A])
+	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
 		if (isBackTitle)
 		{
