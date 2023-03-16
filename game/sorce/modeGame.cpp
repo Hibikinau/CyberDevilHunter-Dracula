@@ -156,10 +156,10 @@ bool	modeG::Process()
 		}
 	}
 
-		if (charBox.size() >= 2)
-		{
-			cameraNtDir = cameraLockDir;
-		}
+	if (charBox.size() >= 2)
+	{
+		cameraNtDir = cameraLockDir;
+	}
 
 	//コマンド呼び出し部分
 	useCommand();
@@ -558,17 +558,17 @@ bool modeG::drawUI()
 
 	//BPバー
 	//500 x 3本
-	barLength = 603, barPposX = 640 - barLength / 2, barPosY = 600;
+	barLength = 603, barPposX = 70, barPosY = 70;
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxBloodPoint)) * static_cast<float>(plStatus.bloodPoint));
-	DrawRectGraph(344, 606, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
-	DrawGraph(354, 620, BPgaugeHandleWaku, true);
-	DrawGraph(299, 620, BPstrHandle, true);
+	DrawRectGraph(barPposX - 10, barPosY - 14, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
+	DrawGraph(barPposX, barPosY, BPgaugeHandleWaku, true);
+	DrawGraph(30, 70, BPstrHandle, true);
 
 	//bossHPバー
-	barPposX = 782, barPosY = 10, barLength = 462;
+	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
-	DrawRectGraph(782 + gauge, 23, gauge, 0, barLength, 29, HPgaugeHandle, true, false);
-	DrawGraph(776, 15, HPgaugeHandleWaku, true);
+	DrawRectGraph(barPposX + gauge + 6, barPosY + 8, gauge, 0, barLength, 29, HPgaugeHandle, true, false);
+	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
 
 	SetFontSize(DeffontSize);
 	return true;
