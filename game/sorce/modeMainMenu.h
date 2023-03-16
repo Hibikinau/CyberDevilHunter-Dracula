@@ -22,7 +22,7 @@ public:
 
 protected:
 	int _cg, DeffontSize, StrWidth, picMenuNum, picMenuMaxNum, windowAnimHandle[29] = { -1 }, windowAnimNum = 0
-		, menuBarHandle = -1;
+		, menuBarHandle = -1, obiHandle;
 	bool isBackTitle = false, isBackTitlePic = true;
 	ModeServer* _modeServer;
 	imputInf _imputInf;

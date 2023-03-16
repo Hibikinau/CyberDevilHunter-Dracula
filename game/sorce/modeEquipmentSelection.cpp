@@ -21,6 +21,7 @@ bool	modeES::Initialize()
 	popSelectNum = 0;
 	_cg = _modeServer->RS.loadGraphR("game/res/AB.png");
 	_ui = _modeServer->RS.loadGraphR("game/res/soubihenkou_ui.png");
+	menuBarHandle = _modeServer->RS.loadGraphR("game/res/menu_bar.png");
 	return true;
 }
 
@@ -95,7 +96,7 @@ bool	modeES::Render()
 	DrawExtendGraph(300, 110, 1260, 560, wakuHandle2, true);
 	SetFontSize(80);
 	DrawGraph(30, 670, _cg, true);
-	DrawGraph(0, 40, _ui, true);
+	DrawGraph(0, 20, _ui, true);
 	SetFontSize(30);
 	DrawString(40, 150, "UŒ‚‹Z‘I‘ğ", GetColor(255, 255, 255));
 	int defY = 200;
@@ -122,6 +123,7 @@ bool	modeES::Render()
 	}
 	//else {	}
 
+	DrawGraph(0, 0, menuBarHandle, true);
 
 	return true;
 }

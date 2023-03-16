@@ -17,6 +17,7 @@ bool	modeMM::Initialize()
 	picMenuNum = _modeServer->_valData.mainMenuPicNum;
 	picMenuMaxNum = menuMessage.size() - 1;
 	menuBarHandle = _modeServer->RS.loadGraphR("game/res/menu_bar.png");
+	obiHandle = _modeServer->RS.loadGraphR("game/res/mainmenu_ui.png");
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_Window_open/apngframe01_sheet.png", 29, 2, 15, 800, 600, windowAnimHandle);
@@ -120,10 +121,7 @@ bool	modeMM::Render()
 {
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
-	SetFontSize(80);
-	ChangeFontType(DX_FONTTYPE_EDGE);
-	DrawString(0, 20, "BRIEFING", GetColor(255, 255, 255), GetColor(0, 0, 0));
-	ChangeFontType(DX_FONTTYPE_NORMAL);
+	DrawGraph(0, 20, obiHandle, true);
 	SetFontSize(40);
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)

@@ -208,7 +208,8 @@ protected:
 	int chargeLevel//!攻撃のチャージ段階
 		, chargeTime//!チャージ時間
 		, isAwakening = 0//覚醒中か
-		, voiceStartNum;//!音声データコンテナ内の声データの初期値
+		, voiceStartNum//!音声データコンテナ内の声データの初期値
+		, guardEfcHandle, chargeEfcHandle, healEfcHandle, impactEfcHandle;
 	float spd//!キャラの移動速度
 		, dodgeDir;//!キャラの回避方向
 	bool isAnimEnd//!アニメーション再生が終わっているか
@@ -224,7 +225,8 @@ protected:
 		, counterTime//!カウンター再生時間
 		, waitCAChargeTime//!入れ替え技での移動までの待機時間
 		, CAChargeTime//!入れ替え技での移動時間
-		, CAChargeSpd;//!入れ替え技での移動スピード
+		, CAChargeSpd//!入れ替え技での移動スピード
+		, CAChargeAttackNum = 0;
 	ExclusiveState Estate = ExclusiveState::NORMAL//!キャラの行動状態インスタンス
 		, oldEstate = ExclusiveState::NORMAL//!1つ前のキャラの行動状態インスタンス
 		, lastAttackState;//!キャラの最終攻撃インスタンス

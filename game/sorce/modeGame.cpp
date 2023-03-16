@@ -54,7 +54,7 @@ bool	modeG::Initialize()
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(true);
-	SetUseASyncLoadFlag(true);
+	//SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 	_valData = &_modeServer->_valData;
@@ -78,6 +78,8 @@ bool	modeG::Initialize()
 	BPgaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/BP_waku.png");
 	HPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_HP.png");
 	BPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_BP.png");
+	stunGaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/stun_bar_01.png");
+	stunGaugeHandle = _modeServer->RS.loadGraphR("game/res/stun_bar_02.png");
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
 	GSAnimNum = 0;
@@ -143,8 +145,9 @@ bool	modeG::Process()
 			i->second->gravity();
 			plMI = i->second->getInf();
 			plStatus = i->second->getStatus();
-			if (plStatus.hitPoint <= 0) { 
-				isLockon = false; }
+			if (plStatus.hitPoint <= 0) {
+				isLockon = false;
+			}
 		}
 		else
 		{
@@ -154,15 +157,16 @@ bool	modeG::Process()
 			bossStatus = i->second->getStatus();
 			if (bossStatus.hitPoint <= 0 && !endVoice) {
 				endVoice = true; charBox[Char_PL]->battleEndVoice();
-				isLockon = false; }
+				isLockon = false;
+			}
 			debugWardBox.emplace_back("敵のスタン値 = " + std::to_string(bossStatus.stanPoint));
 		}
 	}
 
-		/*if (charBox.size() >= 2)
-		{
-			cameraNtDir = cameraLockDir;
-		}*/
+	/*if (charBox.size() >= 2)
+	{
+		cameraNtDir = cameraLockDir;
+	}*/
 
 	//コマンド呼び出し部分
 	useCommand();
@@ -292,8 +296,7 @@ bool	modeG::Render()
 		{
 			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 
-			//DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
-
+			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 
 			mAllColl[i].rightingEfc.downCornerPos.push_back(VTransform(mAllColl.at(i).capColl.underPos, M));
 			mAllColl[i].rightingEfc.upCornerPos.push_back(VTransform(mAllColl.at(i).capColl.overPos, M));
@@ -561,17 +564,22 @@ bool modeG::drawUI()
 
 	//BPバー
 	//500 x 3本
-	barLength = 603, barPposX = 70, barPosY = 70;
+	barLength = 303, barPposX = 90, barPosY = 70;
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxBloodPoint)) * static_cast<float>(plStatus.bloodPoint));
-	DrawRectGraph(barPposX - 10, barPosY - 14, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
-	DrawGraph(barPposX, barPosY, BPgaugeHandleWaku, true);
+	DrawRectGraph(barPposX - 5, barPosY - 7, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
+	DrawExtendGraph(barPposX, barPosY, barPposX + barLength-10, barPosY + 20, BPgaugeHandleWaku, true);
 	DrawGraph(30, 70, BPstrHandle, true);
 
 	//bossHPバー
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
-	gauge = barLength - static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
-	DrawRectGraph(barPposX + gauge + 6, barPosY + 8, gauge, 0, barLength, 29, HPgaugeHandle, true, false);
+	gauge = static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
+	DrawRectGraph(barPposX + 6, barPosY + 8, barLength - gauge, 0, gauge, 29, HPgaugeHandle, true, false);
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
+
+	barLength = 551, barPposX = 640 - barLength / 2, barPosY = 650;
+	gauge = barLength - static_cast<int>((barLength / static_cast<float>(150)) * static_cast<float>(bossStatus.stanPoint));
+	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
+	DrawRectGraph(barPposX, barPosY + 8, gauge, 0, barLength, 53, stunGaugeHandle, true, false);
 
 	SetFontSize(DeffontSize);
 	return true;

@@ -40,8 +40,8 @@ public:
 public:
 	ModeServer* _modeServer;
 	int _x, _y;
-	int testAttackF, HPgaugeHandle, HPgaugeHandleWaku, BPgaugeHandle, BPgaugeHandleWaku, HPstrHandle, BPstrHandle;
-	int LightHandle01, LightHandle02, shadowMapHandle, animIndexOld, insEfcHamdle;
+	int testAttackF, HPgaugeHandle, HPgaugeHandleWaku, BPgaugeHandle, BPgaugeHandleWaku, HPstrHandle, BPstrHandle, stunGaugeHandleWaku, stunGaugeHandle;
+	int shadowMapHandle, animIndexOld, insEfcHamdle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
 	bool isLockon, isGameOver = false, endVoice = false;

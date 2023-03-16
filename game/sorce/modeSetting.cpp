@@ -20,6 +20,7 @@ bool	modeS::Initialize()
 	picMenuMaxNum = menuMessage.size() - 1;
 	_cg = _modeServer->RS.loadGraphR("game/res/AB.png");
 	_ui = _modeServer->RS.loadGraphR("game/res/config_ui.png");
+	menuBarHandle = _modeServer->RS.loadGraphR("game/res/menu_bar.png");
 	return true;
 }
 
@@ -66,7 +67,7 @@ bool	modeS::Render()
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	SetFontSize(80);
 	DrawGraph(30, 670, _cg, true);
-	DrawGraph(0, 40, _ui, true);
+	DrawGraph(0, 20, _ui, true);
 	SetFontSize(30);
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
@@ -76,6 +77,7 @@ bool	modeS::Render()
 	}
 	DrawGraph(80 - 65, defY + (100 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
 
+	DrawGraph(0, 0, menuBarHandle, true);
 	return true;
 }
 

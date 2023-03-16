@@ -13,8 +13,8 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
-	menuMessage.emplace_back("　　　　ボス１\n「クエスト名」");
-	menuMessage.emplace_back("　　　　ボス２\n「クエスト名」");
+	menuMessage.emplace_back("　　　　ボス１\n「騎士」");
+	menuMessage.emplace_back("　　　　ボス２\n「ライオンマン」");
 	picMenuMaxNum = menuMessage.size() - 1;
 	picMenuNum = 0;
 	_modeServer->_valData.popBossNum = 0;
@@ -28,6 +28,7 @@ bool	modeBC::Initialize()
 	titleHandle = _modeServer->RS.loadGraphR("game/res/mission_ui.png");
 	checkUiHandle = _modeServer->RS.loadGraphR("game/res/kakunin_ui.png");
 	bossUiHandle = _modeServer->RS.loadGraphR("game/res/boss_ui.png");
+	menuBarHandle = _modeServer->RS.loadGraphR("game/res/menu_bar.png");
 	mapAnimNum = 0, backAnimNum = 0;
 	randomNum = (rand() % 8) + 10;
 	randomNewsNum = rand() % _modeServer->_valData.news.size();
@@ -150,7 +151,7 @@ bool	modeBC::Render()
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
 		StrWidth = GetDrawStringWidth(menuMessage[i].c_str(), strlen(menuMessage[i].c_str()));
-		DrawString(20, defY + (110 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
+		DrawString(15, defY + (110 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
 
 	}
 
@@ -193,6 +194,7 @@ bool	modeBC::Render()
 	}
 
 	DrawGraph(0, 20, titleHandle, true);
+	DrawGraph(0, 0, menuBarHandle, true);
 	//SetFontSize(80);maskData131, 53
 	//int insMenuFontSize = GetDrawStringWidth("ミッション選択", strlen("ミッション選択"));
 	//DrawString(20, 20, "ミッション選択", GetColor(255, 255, 255));
