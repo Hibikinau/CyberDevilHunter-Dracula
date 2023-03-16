@@ -18,8 +18,9 @@ bool BossLion::Initialize()
 	status = STATUS::WAIT;
 	time = 200;
 	stanTime = 200;
+	hittime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
-
+	hitFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	ActionFlag = false;
@@ -31,6 +32,7 @@ bool BossLion::Initialize()
 	AwakeMove = 1;
 	AwakeSpd = 1;
 	AwakeT = 0;
+	AwakeTK = 0;
 	return true;
 }
 
@@ -51,10 +53,12 @@ bool	BossLion::Process()
 	}
 
 	if (_statusInf.hitPoint <= 5000) {
+		Awake = true;
 		AwakeSpd = 1.5f;
 		AwakeMove = 1.5f;
 		AwakeDmg = 1.5f;
-		AwakeT = 25;
+		AwakeT = 30;
+		AwakeTK = 30;
 	}
 
 	if (status == STATUS::STAN) {
@@ -72,6 +76,7 @@ bool	BossLion::Process()
 		if (i->second->getType() == 1)
 		{
 			plMI = i->second->getInf();
+			DT = i->second->dodgeTime;
 		}
 	}
 	if (CheckHitKey(KEY_INPUT_K))
@@ -124,6 +129,8 @@ bool	BossLion::Process()
 		animChange(BOSS2_run, &_modelInf, true, true, false);
 		Move(runSpd * AwakeMove, 0);
 		if (PrangeA < 300) { UtilityJudge(); }
+		if (time == 0) { UtilityJudge(); }
+		else { time--; }
 		break;
 	case STATUS::FSTEP:
 		if (_modelInf.isAnimEnd == true) {
@@ -132,9 +139,9 @@ bool	BossLion::Process()
 		}
 		animSpd = 1.f * AwakeSpd;
 		animChange(BOSS2_dodge, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
-			Move(40.0 * AwakeMove, 0.0);
+			Move(60.0 * AwakeMove, 0.0);
 		}
 		break;
 	case STATUS::BSTEP:
@@ -144,9 +151,9 @@ bool	BossLion::Process()
 		}
 		animSpd = 1.f * AwakeSpd;
 		animChange(BOSS2_dodge, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
-			Move(40.0 * AwakeMove, 180.0);
+			Move(60.0 * AwakeMove, 180.0);
 		}
 		break;
 	case STATUS::RSTEP:
@@ -156,7 +163,7 @@ bool	BossLion::Process()
 		}
 		animSpd = 1.f * AwakeSpd;
 		animChange(BOSS2_dodge, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
 			Move(40.0 * AwakeMove, 90.0);
 		}
@@ -168,7 +175,7 @@ bool	BossLion::Process()
 		}
 		animSpd = 1.f * AwakeSpd;
 		animChange(BOSS2_dodge, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
+		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
 			Move(40.0 * AwakeMove, 270.0);
 		}
@@ -201,7 +208,7 @@ bool	BossLion::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		animSpd = 1.5f * AwakeSpd;
+		animSpd = 2.0f * AwakeSpd;
 		animChange(BOSS2_attack2, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 18);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
@@ -218,7 +225,7 @@ bool	BossLion::Process()
 		if (ActionFlag == true) {
 			break;
 		}
-		animSpd = 1.5f * AwakeSpd;
+		animSpd = 2.0f * AwakeSpd;
 		animChange(BOSS2_attack3, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 41);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
@@ -242,6 +249,33 @@ bool	BossLion::Process()
 		ActionFlag = true;
 		break;
 	case STATUS::TACKLE:
+		if (_modelInf.isAnimEnd == true) {
+			attackStep == 0 ? attackStep++ : UtilityJudge();
+			//if (status != STATUS::TACKLE) {
+				ActionFlag = false;
+				//break;
+			//}
+		}
+		if (ActionFlag == true) {
+			if (_modelInf.playTime > 5 && _modelInf.playTime < 8)
+			{
+				Move(200+AwakeTK, .0f);
+			}
+			if (_modelInf.playTime > 8 && _modelInf.playTime < 15)
+			{
+				Move(80 + AwakeTK, .0f);
+			}
+			if (_modelInf.playTime > 15 && _modelInf.playTime < 25)
+			{
+				Move(30 + AwakeTK, .0f);
+			}
+			break;
+		}
+		animSpd = 1.0f * AwakeSpd;
+		animChange(BOSS2_tackle, &_modelInf, false, false, true);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3);
+		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		ActionFlag = true;
 		break;
 	case STATUS::SLAM:
 		if (_modelInf.isAnimEnd == true) {
@@ -259,7 +293,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.0f * AwakeSpd;
-		animChange(BOSS2_tatakituke + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS2_tatakituke , &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
@@ -281,6 +315,9 @@ bool	BossLion::Process()
 			}
 			if (_modelInf.playTime > 29 && _modelInf.playTime < 80)
 			{
+				if (DT==0&&!hitFlag) { 
+					_modelInf.dir.y = Pdir; 
+				}
 				Move(Prange / 25, .0f);
 			}
 			if (_modelInf.playTime > 79 && _modelInf.playTime < 135)
@@ -290,13 +327,21 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.0f * AwakeSpd;
-		animChange(BOSS2_divetackle + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS2_divetackle, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime*AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
 	};
 
+	if (isHit&&hittime==0) {
+		hitFlag = true;
+		hittime = 50;
+	}
+	else if (hitFlag) { 
+		hittime--;
+	if (hittime == 0) { hitFlag = false; }
+	}
 
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
@@ -324,7 +369,13 @@ bool BossLion::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::RUN;
+			if (range == RANGE::CrossRange) {
+				status = STATUS::ATTACK2;
+			}
+			else{
+				if (Rand > 50) { status = STATUS::DIVE; }
+				if (Rand <= 50) { status = STATUS::RUN; }
+			}
 			break;
 		case STATUS::DAMEGE:
 			status = STATUS::WAIT;
@@ -333,37 +384,53 @@ bool BossLion::UtilityJudge() {
 		case STATUS::RUN:
 			RangeJ();
 			if (range == RANGE::CrossRange) {
-				status = STATUS::ATTACK;
+				if (Rand > 70) { status = STATUS::ATTACK; }
+				if (Rand <= 70 || Rand > 40) { status = STATUS::ATTACK2; }
+				if (Rand <= 40 || Rand > 10) { status = STATUS::HANIATTACK; }
+				if (Rand <= 10) { status = STATUS::WAIT; }
 			}
+			if (range == RANGE::MidRange) {
+				if (Rand < 50) { status = STATUS::SLAM; }
+				if (Rand >= 50) {
+					status = STATUS::RUN;
+				}
+			}
+			if (range == RANGE::LongRange) {
+				if (Rand < 50) { status = STATUS::DIVE; }
+				if (Rand >= 50) {
+					status = STATUS::RUN;
+				}
+				break;
+			}
+			time = 60;
 			break;
 		case STATUS::FSTEP:
-			status = STATUS::ATTACK2;
-			time = 100;
+			status = STATUS::TACKLE;
 			break;
 		case STATUS::BSTEP:
-			status = STATUS::ATTACK2;
-			time = 100;
+			if (Rand>50) { status = STATUS::TACKLE; }
+			if(Rand<=50){status = STATUS::HANIATTACK;}
 			break;
 		case STATUS::RSTEP:
-			status = STATUS::ATTACK2;
+			status = STATUS::RUN;
 			time = 100;
 			break;
 		case STATUS::LSTEP:
-			status = STATUS::ATTACK2;
+			status = STATUS::RUN;
 			time = 100;
 			break;
 		case STATUS::ATTACK:
-			if (Rand >= 0 || Rand < 25) {
-				status = STATUS::FSTEP;
+			if (Rand >= 0 && Rand < 30) {
+				status = STATUS::HANIATTACK;
 			}
-			if (Rand >= 25 || Rand < 50) {
+			if (Rand >= 30 && Rand < 50) {
 				status = STATUS::BSTEP;
 			}
-			if (Rand >= 50 || Rand < 75) {
-				status = STATUS::RSTEP;
+			if (Rand >= 50 && Rand < 80) {
+				status = STATUS::TACKLE;
 			}
-			if (Rand >= 75 || Rand <= 100) {
-				status = STATUS::LSTEP;
+			if (Rand >= 80 && Rand <= 100) {
+				status = STATUS::FSTEP;
 			}
 			break;
 		case STATUS::ATTACK2:
@@ -372,17 +439,35 @@ bool BossLion::UtilityJudge() {
 			break;
 		case STATUS::ATTACK3:
 			RangeJ();
-			status = STATUS::HANIATTACK;
-			break;
+			if (range == RANGE::LongRange&&range==RANGE::MidRange) {
+				status = STATUS::DIVE;
+			}
+			if(range==RANGE::CrossRange) {
+				if (Rand > 50) {
+					status = STATUS::WAIT;
+					time = 80;
+				}
+				if (Rand <= 50) { status = STATUS::TACKLE; }
+				break;
+			}
 		case STATUS::HANIATTACK:
-			RangeJ();
-			status = STATUS::SLAM;
+			if (Rand > 50) { status = STATUS::SLAM; }
+			if (Rand <= 50) { status = STATUS::TACKLE; }
 			break;
 		case STATUS::TACKLE:
+			if (Rand>50) {
+				status = STATUS::WAIT;
+				time = 80;
+			}
+			if (Rand <= 50) { status = STATUS::ATTACK2; }
 			break;
 		case STATUS::SLAM:
 			RangeJ();
-			status = STATUS::DIVE;
+			if (Rand > 50) {
+				status = STATUS::WAIT;
+				time = 80;
+			}
+			if (Rand <= 50) { status = STATUS::TACKLE; }
 			break;
 		case STATUS::DIVE:
 			RangeJ();
@@ -391,8 +476,118 @@ bool BossLion::UtilityJudge() {
 			break;
 		};
 	}
-
-
+	if (Awake) {
+		switch (status) {
+		case STATUS::NONE:
+		case STATUS::WAIT:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				status = STATUS::ATTACK2;
+			}
+			else {
+				if (Rand > 50) { status = STATUS::DIVE; }
+				if (Rand <= 50) { status = STATUS::RUN; }
+			}
+			break;
+		case STATUS::DAMEGE:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::DEAD:break;
+		case STATUS::RUN:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand > 70) { status = STATUS::ATTACK; }
+				if (Rand <= 70 || Rand > 40) { status = STATUS::ATTACK2; }
+				if (Rand <= 40 || Rand > 10) { status = STATUS::HANIATTACK; }
+				if (Rand <= 10) { status = STATUS::WAIT; }
+			}
+			if (range == RANGE::MidRange) {
+				if (Rand < 50) { status = STATUS::SLAM; }
+				if (Rand >= 50) {
+					status = STATUS::RUN;
+				}
+			}
+			if (range == RANGE::LongRange) {
+				if (Rand < 50) { status = STATUS::DIVE; }
+				if (Rand >= 50) {
+					status = STATUS::RUN;
+				}
+				break;
+			}
+			time = 60;
+			break;
+		case STATUS::FSTEP:
+			status = STATUS::TACKLE;
+			break;
+		case STATUS::BSTEP:
+			if (Rand > 50) { status = STATUS::TACKLE; }
+			if (Rand <= 50) { status = STATUS::HANIATTACK; }
+			break;
+		case STATUS::RSTEP:
+			status = STATUS::RUN;
+			time = 100;
+			break;
+		case STATUS::LSTEP:
+			status = STATUS::RUN;
+			time = 100;
+			break;
+		case STATUS::ATTACK:
+			if (Rand >= 0 && Rand < 30) {
+				status = STATUS::HANIATTACK;
+			}
+			if (Rand >= 30 && Rand < 50) {
+				status = STATUS::BSTEP;
+			}
+			if (Rand >= 50 && Rand < 80) {
+				status = STATUS::TACKLE;
+			}
+			if (Rand >= 80 && Rand <= 100) {
+				status = STATUS::FSTEP;
+			}
+			break;
+		case STATUS::ATTACK2:
+			RangeJ();
+			status = STATUS::ATTACK3;
+			break;
+		case STATUS::ATTACK3:
+			RangeJ();
+			if (range == RANGE::LongRange && range == RANGE::MidRange) {
+				status = STATUS::DIVE;
+			}
+			if (range == RANGE::CrossRange) {
+				if (Rand > 50) {
+					status = STATUS::WAIT;
+					time = 80 - AwakeT;
+				}
+				if (Rand <= 50) { status = STATUS::TACKLE; }
+				break;
+			}
+		case STATUS::HANIATTACK:
+			if (Rand > 50) { status = STATUS::SLAM; }
+			if (Rand <= 50) { status = STATUS::TACKLE; }
+			break;
+		case STATUS::TACKLE:
+			if (Rand > 19) {
+				status = STATUS::TACKLE;
+			}
+			if (Rand <= 19) { 
+				status = STATUS::ATTACK2; }
+			break;
+		case STATUS::SLAM:
+			RangeJ();
+			if (Rand > 50) {
+				status = STATUS::WAIT;
+				time = 80 - AwakeT;
+			}
+			if (Rand <= 50) { status = STATUS::TACKLE; }
+			break;
+		case STATUS::DIVE:
+			RangeJ();
+			status = STATUS::WAIT;
+			time = 80-AwakeT;
+			break;
+		};
+	}
 
 
 	return true;

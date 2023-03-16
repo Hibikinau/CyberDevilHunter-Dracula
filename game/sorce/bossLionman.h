@@ -112,6 +112,7 @@ protected:
 	bool isAnimEnd;//アニメーション終わったかどうか
 	modelInf* plMI;//!プレイヤー情報のインスタンス
 	bool ActionFlag;//!行動してるかどうか
+	bool hitFlag;
 	int  swingSE, //!斬撃SEハンドル
 		newSomenHandle;//エフェクトハンドル
 	float Pdir,//!プレイヤーの方向 
@@ -121,5 +122,7 @@ protected:
 	float AwakeSpd,//!覚醒時スピード
 		AwakeDmg,//!覚醒時追加ダメージ
 		AwakeMove,//!覚醒時移動量
-		AwakeT;//!覚醒時待機時間
+		AwakeT,//!覚醒時待機時間
+	    AwakeTK;
+	int DT,hittime;
 };

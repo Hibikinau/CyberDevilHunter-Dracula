@@ -26,6 +26,8 @@ bool BossKnight::Initialize()
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	_statusInf.stanPoint = 0;
 	ActionFlag = false;
+	PosFlag=false;
+	STABFlag;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	g = 3.f;
@@ -58,6 +60,7 @@ bool	BossKnight::Process()
 
 	//if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	if (_statusInf.hitPoint <= 5000) {
+		Awake = true;
 		AwakeSpd = 1.5f;
 		AwakeMove = 1.5f;
 		AwakeDmg = 1.5f;
@@ -248,6 +251,8 @@ bool	BossKnight::Process()
 		}
 		if (ActionFlag == true)
 		{
+			STABFlag = true;
+			if (attackStep == 0) { PosFlag = true; }
 			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f * AwakeMove, .0f); }
 			break;
 		}
@@ -299,6 +304,8 @@ bool	BossKnight::Process()
 		}
 		if (ActionFlag == true)
 		{
+			STABFlag = true;
+			if (attackStep == 0) { PosFlag = true; }
 			if ((attackStep == 1 && _modelInf.playTime > 5) || attackStep == 2)
 			{
 				if (!jumpActFlag) { _modelInf.vec.y = 45, jumpActFlag = true; }
@@ -338,23 +345,27 @@ bool	BossKnight::Render(float timeSpeed)
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
-	/*if (!timeSpeed)
+	if (STABFlag)
 	{
 		SetUseLighting(false);
-		auto a = VAdd(_modelInf.pos, getDirVec(_modelInf.dir.y - 90, 1000));
-		auto b = VAdd(_modelInf.pos, getDirVec(_modelInf.dir.y + 90, 1000));
-		auto az = VAdd(a, getDirVec(_modelInf.dir.y, 7000));
-		auto bz = VAdd(b, getDirVec(_modelInf.dir.y, 7000));
-		a.y = b.y = az.y = bz.y = 1101;
-		int g = drawBPolygon(a, az, b, bz, newSomenHandle);
+		if (PosFlag) {
+			 Efa = VAdd(_modelInf.pos, getDirVec(_modelInf.dir.y - 90, 1000));
+			 Efb = VAdd(_modelInf.pos, getDirVec(_modelInf.dir.y + 90, 1000));
+			 Efaz = VAdd(Efa, getDirVec(_modelInf.dir.y, 7000));
+			 Efbz = VAdd(Efb, getDirVec(_modelInf.dir.y, 7000));
+			Efa.y = Efb.y = Efaz.y = Efbz.y = 1101;
+			PosFlag = false;
+		}
+		int g = drawBPolygon(Efa, Efaz, Efb, Efbz, newSomenHandle);
 		SetUseLighting(true);
-	}*/
+	}
 	return true;
 }
 
 
 bool BossKnight::UtilityJudge() {
 	attackStep = 0, jumpActFlag = false;
+	STABFlag = false;
 	_modelInf.dir.y = Pdir;
 	int Rand = GetRand(100);
 
