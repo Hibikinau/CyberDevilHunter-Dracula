@@ -21,6 +21,13 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/glitch/apngframe01_sheet.png", 18, 2, 9, 800, 450, glitchAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/enemy01_holo/Enemy01_wire0_sheet.png", 7, 3, 3, 600, 450, Boss1HoloAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/enemy02_holo/Enemy01_wire0_sheet.png", 7, 3, 3, 600, 450, Boss2HoloAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/.memo/apngframe01_sheet.png", 29, 4, 8, 250, 50, memoAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/arrow/apngframe01_sheet.png", 18, 6, 3, 150, 50, bArrowAnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/bar/apngframe01_sheet.png", 22, 5, 5, 200, 50, barANimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/Icon2/apngframe01_sheet.png", 30, 20, 2, 50, 50, Icon2AnimHandle);
+	_modeServer->RS.loadDivGraphR("game/res/bossHoloInfRes/others/apngframe01_sheet.png", 30, 4, 8, 250, 50, othersAnimHandle);
 	newsWindow = _modeServer->RS.loadGraphR("game/res/UI_obi.png");
 	newsWindowStr = _modeServer->RS.loadGraphR("game/res/UI_news.png");
 	wakuHandle = _modeServer->RS.loadGraphR("game/res/wakuUI.png");
@@ -133,6 +140,20 @@ bool	modeBC::Render()
 	//DrawExtendGraph(-110, -10, 410, 770, neonAnimHandle[neonAnimNum], true);
 
 	DrawGraph(915, 380, bossUiHandle, true);
+	//Boss1HoloAnimHandle
+	if (picMenuNum == 0) { Boss1HoloAnimNum < 6.9 ? Boss1HoloAnimNum += 0.1 : Boss1HoloAnimNum = 0; DrawExtendGraph(915, 380, 1256, 624, Boss1HoloAnimHandle[static_cast<int>(Boss1HoloAnimNum)], true); }
+	if (picMenuNum == 1) { Boss2HoloAnimNum < 6.9 ? Boss2HoloAnimNum += 0.1 : Boss2HoloAnimNum = 0; DrawExtendGraph(915, 380, 1256, 624, Boss2HoloAnimHandle[static_cast<int>(Boss2HoloAnimNum)], true); }
+
+	memoAnimNum < 29 ? memoAnimNum++ : memoAnimNum = 0;	bArrowAnimNum < 18 ? bArrowAnimNum++ : bArrowAnimNum = 0;
+	barAimNum < 22 ? barAimNum++ : barAimNum = 0;	Icon2AnimNum < 30 ? Icon2AnimNum++ : Icon2AnimNum = 0;
+	othersAnimNum < 30 ? othersAnimNum++ : othersAnimNum = 0;
+
+	DrawExtendGraph(921, 400, 995, 415, memoAnimHandle[memoAnimNum], true);
+	DrawExtendGraph(923, 410, 1045, 440, othersAnimHandle[othersAnimNum], true);
+	DrawExtendGraph(1086,574, 1266, 615, barANimHandle[barAimNum], true);
+	DrawExtendGraph(910, 574, 1000, 605, bArrowAnimHandle[bArrowAnimNum], true);
+	DrawExtendGraph(990,574, 1020, 604, Icon2AnimHandle[Icon2AnimNum], true);
+
 	DrawExtendGraph(910, 100, 1270, 360, mapAnimHandol[mapAnimNum], true);
 	if (randomFrameNum <= 0)
 	{
@@ -180,12 +201,12 @@ bool	modeBC::Render()
 		DrawGraph(468, 238, checkUiHandle, true);
 
 		if (pic) {
-			DrawGraph(540 , 430 , arrowAnimHandle[arrowAnimNum], true);
+			DrawGraph(540, 430, arrowAnimHandle[arrowAnimNum], true);
 			//DrawString(1000 - 40, 580, "¨", GetColor(255, 255, 255));
 		}
 		else
 		{
-			DrawGraph(690 , 430, arrowAnimHandle[arrowAnimNum], true);
+			DrawGraph(690, 430, arrowAnimHandle[arrowAnimNum], true);
 			//DrawString(1120 - 40, 580, "¨", GetColor(255, 255, 255));
 		}
 	}
