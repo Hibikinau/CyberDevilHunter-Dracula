@@ -12,7 +12,7 @@
 
 //各攻撃のダメージ設定
 #define jakuATK 50.f
-#define kyouATK 70.f
+#define kyouATK 120.f
 #define counterATK 200.f
 #define debugATK 99999.f
 #define kirinukeATK 80.f

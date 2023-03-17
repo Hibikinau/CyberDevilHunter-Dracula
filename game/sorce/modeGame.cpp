@@ -258,7 +258,6 @@ bool	modeG::Render()
 	ShadowMap_DrawSetup(ShadowMapHandle);
 	//3dモデルの描画
 	MV1DrawModel(stage.modelHandle);
-	MV1DrawModel(sakuHandle.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(1);
@@ -268,7 +267,6 @@ bool	modeG::Render()
 	SetUseShadowMap(0, ShadowMapHandle);
 	//影用の3dモデルの描画
 	MV1DrawModel(stage.modelHandle);
-	auto a = MV1DrawModel(sakuHandle.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(0);
@@ -278,6 +276,8 @@ bool	modeG::Render()
 	//シャドウマップここまで-----------------------------------------
 
 	SetUseLighting(false);
+
+	MV1DrawModel(sakuHandle.modelHandle);
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
 
@@ -296,7 +296,7 @@ bool	modeG::Render()
 		{
 			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 
-			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			//DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 
 			mAllColl[i].rightingEfc.downCornerPos.push_back(VTransform(mAllColl.at(i).capColl.underPos, M));
 			mAllColl[i].rightingEfc.upCornerPos.push_back(VTransform(mAllColl.at(i).capColl.overPos, M));

@@ -83,7 +83,6 @@ bool	modeS::Render()
 
 bool	modeS::Terminate()
 {
-	DeleteGraph(_cg);
 	SetFontSize(DeffontSize);
 	return true;
 }
