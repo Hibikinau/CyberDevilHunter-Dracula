@@ -80,12 +80,15 @@ bool	modeG::Initialize()
 	BPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_BP.png");
 	stunGaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/stun_bar_01.png");
 	stunGaugeHandle = _modeServer->RS.loadGraphR("game/res/stun_bar_02.png");
+	swordIcon = _modeServer->RS.loadGraphR("game/res/UI/ken.png");
+	heatIcon = _modeServer->RS.loadGraphR("game/res/UI/heat.png");
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
 	GSAnimNum = 0;
 
 	_modeServer->RS.loadDivGraphR("game/res/slashEfc/nc142771Efc.png", 39, 3, 13, 1080, 1080, slashLineAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
+	_modeServer->RS.loadDivGraphR("game/res/UI/GlitchUI/kenGlitch_0000_sheet.png", 29, 2, 15, 770, 770, swordGlitchAnimHandle);
 	insEfcHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
 
 	//ここまで非同期ロード-------------------------------------------------------------------
@@ -148,6 +151,8 @@ bool	modeG::Process()
 			if (plStatus.hitPoint <= 0) {
 				isLockon = false;
 			}
+			plRecastTimeX = i->second->caRecastX;
+			plRecastTimeY = i->second->caRecastY;
 		}
 		else
 		{
@@ -160,6 +165,24 @@ bool	modeG::Process()
 				isLockon = false;
 			}
 			debugWardBox.emplace_back("敵のスタン値 = " + std::to_string(bossStatus.stanPoint));
+		}
+
+		if (i->second->isDead == 2 || i->second->_modelInf.pos.y < -500)
+		{
+			if (i->second->type == 1 && !isGameOver)
+			{//自機の死
+				_modeServer->Add(std::make_unique<modeGO>(_modeServer), 1, MODE_GO);
+				//StopSoundMem(BGM);
+				isGameOver = true;
+			}
+			else
+			{//それ以外の死
+				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+				_valData->points += 20000;
+				for (auto name : _valData->deadBoss) { if (name == i->first) { return false; } }
+				_valData->deadBoss.emplace_back(i->first);
+				return false;
+			}
 		}
 	}
 
@@ -187,11 +210,12 @@ bool	modeG::Process()
 	if (bright > 1) { bright = 1; }
 	SetGlobalAmbientLight(GetColorF(bright, bright, bright, 0.0f));
 	debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
-
 	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
 	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
 	debugWardBox.emplace_back(std::to_string(
 		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
+	debugWardBox.emplace_back("入れ替え技Xのリキャスト = " + std::to_string(plRecastTimeX));
+	debugWardBox.emplace_back("入れ替え技Yのリキャスト = " + std::to_string(plRecastTimeY));
 	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
 	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData->plAtkSpd1));
 	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData->plAtkSpd2));
@@ -207,27 +231,6 @@ bool	modeG::Process()
 	//当たり判定計算呼び出し
 	collHitCheck();
 
-	for (auto i = charBox.begin(); i != charBox.end(); ++i)
-	{
-		if (i->second->isDead == 2 || i->second->_modelInf.pos.y < -500)
-		{
-			if (i->second->type == 1 && !isGameOver)
-			{//自機の死
-				_modeServer->Add(std::make_unique<modeGO>(_modeServer), 1, MODE_GO);
-				//StopSoundMem(BGM);
-				isGameOver = true;
-			}
-			else
-			{//それ以外の死
-				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
-				_valData->points += 20000;
-				for (auto name : _valData->deadBoss) { if (name == i->first) { return false; } }
-				_valData->deadBoss.emplace_back(i->first);
-				return false;
-			}
-		}
-	}
-
 	//メニュー画面呼び出し
 	if (_imputInf._gTrgb[KEY_INPUT_M] || _imputInf._gTrgp[XINPUT_BUTTON_START])
 	{
@@ -239,6 +242,8 @@ bool	modeG::Process()
 		int a = PlayEffekseer3DEffect(_valData->efcHandle);
 		SetPosPlayingEffekseer3DEffect(a, 0, 1300, 0);
 	}
+
+	if (_imputInf._gTrgb[KEY_INPUT_A]) { swordGlitchAnimNum = 0; }
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
 	return true;
@@ -576,10 +581,28 @@ bool modeG::drawUI()
 	DrawRectGraph(barPposX + 6, barPosY + 8, barLength - gauge, 0, gauge, 29, HPgaugeHandle, true, false);
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
 
+	//bossスタンバー
 	barLength = 551, barPposX = 640 - barLength / 2, barPosY = 650;
 	gauge = barLength - static_cast<int>((barLength / static_cast<float>(150)) * static_cast<float>(bossStatus.stanPoint));
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
 	DrawRectGraph(barPposX, barPosY + 8, gauge, 0, barLength, 53, stunGaugeHandle, true, false);
+
+	//スキルアイコン
+	swordGlitchAnimNum < 13 ? swordGlitchAnimNum++ : swordGlitchAnimNum = 28;
+	DrawExtendGraph(1070, 450, 1190, 570, swordGlitchAnimHandle[swordGlitchAnimNum], true);//上
+	DrawString(1070 + 80, 450 + 70, "Y", GetColor(255, 255, 255));
+
+	DrawExtendGraph(995, 520, 1115, 640, swordIcon, true);//左
+	DrawString(995 + 80, 520 + 70, "X", GetColor(255, 255, 255));
+
+	DrawExtendGraph(1145, 520, 1265, 640, swordIcon, true);//右
+	DrawString(1145 + 80, 520 + 70, "B", GetColor(255, 255, 255));
+
+	DrawExtendGraph(1070, 590, 1190, 710, heatIcon, true);//下
+	DrawString(1070 + 80, 590 + 70, "A", GetColor(255, 255, 255));
+
+	DrawString(995, 660, "L+", GetColor(255, 255, 255));
+	//1070, 450, 1190, 570	//swordIcon, heatIcon
 
 	SetFontSize(DeffontSize);
 	return true;

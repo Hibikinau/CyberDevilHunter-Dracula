@@ -165,6 +165,7 @@ bool	PL::Process()
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
 		isCharge = 0, isFastGuard = true, isGuard = true;;
 		nextKey = pushButton::Neutral;
+		recastSet();
 		animChange(PL_damage, &_modelInf, false, false, false);//アニメーションを被弾モーションに変更
 
 		if (_modelInf.playTime > 25.f)
@@ -177,6 +178,7 @@ bool	PL::Process()
 		animSpd = 2.f;
 		spd = 50.f;
 		isCharge = 0;
+		recastSet();
 
 		insDir = getMoveDir(false);
 		if (insDir == 0) { insDir = _modelInf.dir.y; }
@@ -336,6 +338,7 @@ bool	PL::Process()
 		break;
 	case pushButton::R1://ガード
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
+		recastSet();
 		if (Estate != _estate::GUARD && isFastGuard)
 		{
 			Estate = _estate::GUARD;
@@ -433,6 +436,8 @@ bool	PL::Process()
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 190, 0));
+	caRecastX > 0 ? caRecastX-- : caRecastX = 0;
+	caRecastY > 0 ? caRecastY-- : caRecastY = 0;
 
 	//首振り-------------
 	//if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
@@ -545,13 +550,9 @@ pushButton PL::setAction()
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
 		if (isFastGuard) { isFastGuard = false; }
 		if (isCounter == 2) { isCounter = 0; }
-		if (CAChargeAttackNum > 0)
-		{
-			if (lastAttackState == _estate::changeATTACKX) { return pushButton::LBX; }
-			else { return pushButton::LBY; }
-
-		}
+		if (CAChargeAttackNum > 0) { if (lastAttackState == _estate::changeATTACKX) { return pushButton::LBX; } else { return pushButton::LBY; } }
 		else { CAChargeAttackNum = 0; }
+		recastSet();
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
@@ -585,8 +586,14 @@ pushButton PL::setAction()
 
 	if (checkKeyImput(KEY_INPUT_C, XINPUT_BUTTON_LEFT_SHOULDER))
 	{//入れ替え技
-		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X)) { isNext ? nextKey = pushButton::LBX : insEnum = pushButton::LBX; }//LBX
-		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::LBY : insEnum = pushButton::LBY; }//LBY
+		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X) && caRecastX <= 0) {
+			if (isNext) { if (Estate != _estate::changeATTACKX) { nextKey = pushButton::LBX; } }
+			else { insEnum = pushButton::LBX; }
+		}//LBX
+		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y) && caRecastY <= 0) {
+			if (isNext) { if (Estate != _estate::changeATTACKY) { nextKey = pushButton::LBY; } }
+			else { insEnum = pushButton::LBY; }
+		}//LBY
 		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f)
 		{
 			HPmath(100, 10); BPmath(-500);
@@ -669,6 +676,7 @@ bool PL::CA_change(std::string name, const char* XorY)
 
 bool PL::CA_debugAttack(PL* insPL)
 {
+	insPL->setRecastTime = 60;
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	animChange(PL_motion_hissatsu, &insPL->_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
@@ -690,6 +698,7 @@ bool PL::CA_debugAttack(PL* insPL)
 
 bool PL::CA_charge(PL* insPL)
 {
+	insPL->setRecastTime = 60;
 	if (insPL->CAChargeAttackNum > 0)
 	{
 		auto insDir = insPL->getMoveDir(true);
@@ -790,6 +799,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
 	insPL->CAChargeSpd = 40.f;
 	insPL->isGhost = true;
+	insPL->setRecastTime = 60;
 
 	return true;
 }

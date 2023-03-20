@@ -200,12 +200,20 @@ public:
 	 * @brief メインゲーム開始時ボイス処理
 	 */
 	void battleStartVoice() override { PlaySoundMem(soundHandle[voiceStartNum + 35 + rand() % 2], DX_PLAYTYPE_BACK); }
+	bool recastSet()
+	{
+		if (lastAttackState == ExclusiveState::changeATTACKX) { caRecastX = setRecastTime; }
+		else if (lastAttackState == ExclusiveState::changeATTACKY) { caRecastY = setRecastTime; }
+		else { return false; }
+		setRecastTime = 0;
+		return true;
+	};
 
 protected:
 	int attackNumOld//!弱/強攻撃が何段目か
-		, waitNextAttack;//!弱/強攻撃受付時間
-	int isCharge;//!攻撃のチャージ中か(0.チャージしてない 1.チャージ中 2.解放)
-	int chargeLevel//!攻撃のチャージ段階
+		, waitNextAttack//!弱/強攻撃受付時間
+		, isCharge//!攻撃のチャージ中か(0.チャージしてない 1.チャージ中 2.解放)
+		, chargeLevel//!攻撃のチャージ段階
 		, chargeTime//!チャージ時間
 		, isAwakening = 0//覚醒中か
 		, voiceStartNum//!音声データコンテナ内の声データの初期値
