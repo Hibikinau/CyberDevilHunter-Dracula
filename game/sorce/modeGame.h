@@ -40,8 +40,9 @@ public:
 public:
 	ModeServer* _modeServer;
 	int _x, _y;
-	int testAttackF, HPgaugeHandle, HPgaugeHandleWaku, BPgaugeHandle, BPgaugeHandleWaku, HPstrHandle, BPstrHandle, stunGaugeHandleWaku, stunGaugeHandle;
-	int shadowMapHandle, animIndexOld, insEfcHamdle, plRecastTimeX, plRecastTimeY, swordIcon, heatIcon, swordGlitchAnimHandle[29], swordGlitchAnimNum;
+	int testAttackF, HPgaugeHandle, HPgaugeHandleWaku, BPgaugeHandle, BPgaugeHandleWaku, HPstrHandle, BPstrHandle, stunGaugeHandleWaku, stunGaugeHandle
+		, shadowMapHandle, animIndexOld, insEfcHamdle, plRecastTimeX, plRecastTimeY, swordIcon, heatIcon, swordGlitchAnimHandle[29], swordGlitchAnimNum
+		, recastMaxNumX, recastMaxNumY, plSetRecastTime, swordRecastIconHandle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
 	bool isLockon, isGameOver = false, endVoice = false;

@@ -698,7 +698,6 @@ bool PL::CA_debugAttack(PL* insPL)
 
 bool PL::CA_charge(PL* insPL)
 {
-	insPL->setRecastTime = 60;
 	if (insPL->CAChargeAttackNum > 0)
 	{
 		auto insDir = insPL->getMoveDir(true);
@@ -781,6 +780,7 @@ bool PL::CA_charge(PL* insPL)
 		}
 		insPL->isCharge = 0;
 		insPL->chargeLevel = 0;
+		insPL->setRecastTime = 60;
 		//insPL->isGhost = true;
 	}
 

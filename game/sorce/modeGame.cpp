@@ -82,6 +82,7 @@ bool	modeG::Initialize()
 	stunGaugeHandle = _modeServer->RS.loadGraphR("game/res/stun_bar_02.png");
 	swordIcon = _modeServer->RS.loadGraphR("game/res/UI/ken.png");
 	heatIcon = _modeServer->RS.loadGraphR("game/res/UI/heat.png");
+	swordRecastIconHandle = _modeServer->RS.loadGraphR("game/res/UI/ken2.png");
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
 	GSAnimNum = 0;
@@ -153,6 +154,7 @@ bool	modeG::Process()
 			}
 			plRecastTimeX = i->second->caRecastX;
 			plRecastTimeY = i->second->caRecastY;
+			plSetRecastTime = i->second->setRecastTime;
 		}
 		else
 		{
@@ -561,8 +563,9 @@ bool modeG::drawUI()
 	}
 
 	//HPバー
-	int barPposX = 10, barPosY = 10, barLength = 462;
-	int gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxHitPoint)) * static_cast<float>(plStatus.hitPoint));
+	int barPposX = 10, barPosY = 10;
+	float barLength = 462;
+	float gauge = barLength - ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint);
 	DrawRectGraph(98, 23, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false);
 	DrawGraph(90, 15, HPgaugeHandleWaku, true);
 	DrawGraph(30, 23, HPstrHandle, true);
@@ -570,29 +573,52 @@ bool modeG::drawUI()
 	//BPバー
 	//500 x 3本
 	barLength = 303, barPposX = 90, barPosY = 70;
-	gauge = barLength - static_cast<int>((barLength / static_cast<float>(plStatus.maxBloodPoint)) * static_cast<float>(plStatus.bloodPoint));
+	gauge = barLength - ((barLength / plStatus.maxBloodPoint) * plStatus.bloodPoint);
 	DrawRectGraph(barPposX - 5, barPosY - 7, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
-	DrawExtendGraph(barPposX, barPosY, barPposX + barLength-10, barPosY + 20, BPgaugeHandleWaku, true);
+	DrawExtendGraph(barPposX, barPosY, barPposX + barLength - 10, barPosY + 20, BPgaugeHandleWaku, true);
 	DrawGraph(30, 70, BPstrHandle, true);
 
 	//bossHPバー
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
-	gauge = static_cast<int>((barLength / static_cast<float>(bossStatus.maxHitPoint)) * static_cast<float>(bossStatus.hitPoint));
+	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
 	DrawRectGraph(barPposX + 6, barPosY + 8, barLength - gauge, 0, gauge, 29, HPgaugeHandle, true, false);
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
 
 	//bossスタンバー
 	barLength = 551, barPposX = 640 - barLength / 2, barPosY = 650;
-	gauge = barLength - static_cast<int>((barLength / static_cast<float>(150)) * static_cast<float>(bossStatus.stanPoint));
+	gauge = barLength - barLength - ((barLength / 150) * bossStatus.stanPoint);
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
 	DrawRectGraph(barPposX, barPosY + 8, gauge, 0, barLength, 53, stunGaugeHandle, true, false);
 
 	//スキルアイコン
-	swordGlitchAnimNum < 13 ? swordGlitchAnimNum++ : swordGlitchAnimNum = 28;
-	DrawExtendGraph(1070, 450, 1190, 570, swordGlitchAnimHandle[swordGlitchAnimNum], true);//上
+
+	//swordRecastIconHandle
+	//swordGlitchAnimNum < 13 ? swordGlitchAnimNum++ : swordGlitchAnimNum = 28;
+	//DrawExtendGraph(1070, 450, 1190, 570, swordGlitchAnimHandle[28], true);//上
+	if (plRecastTimeY <= 0)
+	{
+		recastMaxNumY = plSetRecastTime;
+		DrawExtendGraph(1070, 450, 1190, 570, swordIcon, true);//上
+	}
+	else
+	{
+		barLength = 120, barPposX = 1070, barPosY = 450;
+		gauge = barLength - ((barLength / recastMaxNumY) * plRecastTimeY);
+		DrawRectGraph(barPposX, barPosY, 0, 0, barLength, barLength - gauge, swordRecastIconHandle, true);
+	}
 	DrawString(1070 + 80, 450 + 70, "Y", GetColor(255, 255, 255));
 
-	DrawExtendGraph(995, 520, 1115, 640, swordIcon, true);//左
+	if (plRecastTimeX <= 0)
+	{
+		recastMaxNumX = plSetRecastTime;
+		DrawExtendGraph(995, 520, 1115, 640, swordIcon, true);//左
+	}
+	else
+	{
+		barLength = 120, barPposX = 995, barPosY = 520;
+		gauge = barLength - ((barLength / recastMaxNumX) * plRecastTimeX);
+		DrawRectGraph(barPposX, barPosY, 0, 0, barLength, barLength - gauge, swordRecastIconHandle, true);
+	}
 	DrawString(995 + 80, 520 + 70, "X", GetColor(255, 255, 255));
 
 	DrawExtendGraph(1145, 520, 1265, 640, swordIcon, true);//右

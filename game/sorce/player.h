@@ -202,8 +202,8 @@ public:
 	void battleStartVoice() override { PlaySoundMem(soundHandle[voiceStartNum + 35 + rand() % 2], DX_PLAYTYPE_BACK); }
 	bool recastSet()
 	{
-		if (lastAttackState == ExclusiveState::changeATTACKX) { caRecastX = setRecastTime; }
-		else if (lastAttackState == ExclusiveState::changeATTACKY) { caRecastY = setRecastTime; }
+		if (lastAttackState == ExclusiveState::changeATTACKX && caRecastX <= 0) { caRecastX = setRecastTime; }
+		else if (lastAttackState == ExclusiveState::changeATTACKY && caRecastY <= 0) { caRecastY = setRecastTime; }
 		else { return false; }
 		setRecastTime = 0;
 		return true;
