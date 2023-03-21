@@ -5,6 +5,9 @@
 #define PL_run 1
 #define PL_damage 2
 #define PL_death 3
+#define PL_huttobi1 40
+#define PL_huttobi2 41
+#define PL_hirumi 42
 //‰ñ”ð
 #define PL_dodge_F 4
 #define PL_dodge_R 5

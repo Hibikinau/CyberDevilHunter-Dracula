@@ -149,7 +149,7 @@ bool	PL::Process()
 	}
 
 	//覚醒中にブラッドポイントの減少、尽きた際の覚醒解除処理
-	if (isAwakening > 0) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = false, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
+	if (isAwakening > 0) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
 
 	//キーボードでの自機移動処理(デバッグ用)
 	if (CheckHitKey(KEY_INPUT_W)) { spd = runSpd; charMove(spd, *_cameraDir, false); }
@@ -166,17 +166,28 @@ bool	PL::Process()
 		isCharge = 0, isFastGuard = true, isGuard = true;;
 		nextKey = pushButton::Neutral;
 		recastSet();
-		animChange(PL_damage, &_modelInf, false, false, false);//アニメーションを被弾モーションに変更
-
-		if (_modelInf.playTime > 25.f)
+		if (isBlow)
 		{
-			Estate = _estate::NORMAL;
-		}
+			animChange(PL_huttobi1, &_modelInf, false, false, false);
+			if (_modelInf.playTime > 180.f) { Estate = _estate::NORMAL; }
+			if (_modelInf.attachIndex == PL_huttobi1)
+			{
+				immortalTime = getAnimPlayTotalTime() - _modelInf.playTime;
+				if (_modelInf.playTime > 140.f) { Estate = _estate::NORMAL; }
+				setNextAnim(PL_huttobi2, &_modelInf, false, false);
+			}
+		}//アニメーションを被弾モーションに変更}
+		else
+		{
+			animChange(PL_hirumi, &_modelInf, false, false, false);
+			if (_modelInf.playTime > 25.f) { Estate = _estate::NORMAL; }
+		}//アニメーションを被弾モーションに変更}
+
 		break;
 	case pushButton::B://回避
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
-		animSpd = 2.f;
-		spd = 50.f;
+		animSpd = 4.f;
+		spd = 70.f;
 		isCharge = 0;
 		recastSet();
 
@@ -406,7 +417,7 @@ bool	PL::Process()
 	{
 		if (_modelInf.playTime < _modelInf.totalTime - (_modelInf.totalTime / 6.f) && _modelInf.playTime > _modelInf.totalTime / 6.f)
 		{
-			animSpd = 1.5f;
+			animSpd = 2.f;
 			charMove(spd, dodgeDir, false);
 		}
 		else { animSpd = 3.f; }
@@ -436,8 +447,11 @@ bool	PL::Process()
 	collCap.r = 30.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 30, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 190, 0));
-	caRecastX > 0 ? caRecastX-- : caRecastX = 0;
-	caRecastY > 0 ? caRecastY-- : caRecastY = 0;
+	int insNum;
+	isAwakening > 0 ? insNum = 10 : insNum = 1;
+	caRecastX > 0 ? caRecastX -= insNum : caRecastX = 0;
+	caRecastY > 0 ? caRecastY -= insNum : caRecastY = 0;
+	waitBlowTime > 0 ? waitBlowTime-- : waitBlowTime = 0;
 
 	//首振り-------------
 	//if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
@@ -506,9 +520,9 @@ bool PL::HPmath(float math, float Stan)
 					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6);
 				}
 				PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
-				Estate = _estate::DAMAGE;/*
-				auto a = PlayEffekseer3DEffect(_valData->efcHandle);
-				SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);*/
+				Estate = _estate::DAMAGE;
+				if (math < -30 || waitBlowTime > 0) { isBlow = true; }
+				else { waitBlowTime = 100; }
 			}
 
 			auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
@@ -527,7 +541,10 @@ bool PL::HPmath(float math, float Stan)
 }
 bool PL::BPmath(float math)
 {
-	if (isAwakening > 0 && math > 0) { return false; }
+	if (isAwakening > 0 && math > 0)
+	{
+		return false;
+	}
 	_statusInf.bloodPoint += math;
 	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
 	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
@@ -545,7 +562,7 @@ pushButton PL::setAction()
 	if (isCounter == 1) { return pushButton::R1; }
 	if (isAnimEnd)
 	{
-		isAnimEnd = false, isGhost = false;
+		isAnimEnd = false, isGhost = false, isBlow = false;
 		StopJoypadVibration(DX_INPUT_PAD1);
 		if (Estate != _estate::NORMAL && isCharge == 0 && !isGuard) { Estate = _estate::NORMAL; }
 		if (isFastGuard) { isFastGuard = false; }

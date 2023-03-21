@@ -581,14 +581,14 @@ bool modeG::drawUI()
 	//bossHPバー
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
 	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
-	DrawRectGraph(barPposX + 6, barPosY + 8, barLength - gauge, 0, gauge, 29, HPgaugeHandle, true, false);
+	DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false);
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
 
 	//bossスタンバー
 	barLength = 551, barPposX = 640 - barLength / 2, barPosY = 650;
-	gauge = barLength - barLength - ((barLength / 150) * bossStatus.stanPoint);
+	gauge = ((barLength / 150) * bossStatus.stanPoint);
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
-	DrawRectGraph(barPposX, barPosY + 8, gauge, 0, barLength, 53, stunGaugeHandle, true, false);
+	DrawRectGraph(barPposX, barPosY + 8, 0, 0, gauge, 53, stunGaugeHandle, true, false);
 
 	//スキルアイコン
 
@@ -603,8 +603,8 @@ bool modeG::drawUI()
 	else
 	{
 		barLength = 120, barPposX = 1070, barPosY = 450;
-		gauge = barLength - ((barLength / recastMaxNumY) * plRecastTimeY);
-		DrawRectGraph(barPposX, barPosY, 0, 0, barLength, barLength - gauge, swordRecastIconHandle, true);
+		gauge = (barLength / recastMaxNumY) * plRecastTimeY;
+		DrawRectGraph(barPposX, barPosY + gauge, 0, gauge, barLength, barLength - gauge, swordRecastIconHandle, true);
 	}
 	DrawString(1070 + 80, 450 + 70, "Y", GetColor(255, 255, 255));
 
@@ -616,8 +616,8 @@ bool modeG::drawUI()
 	else
 	{
 		barLength = 120, barPposX = 995, barPosY = 520;
-		gauge = barLength - ((barLength / recastMaxNumX) * plRecastTimeX);
-		DrawRectGraph(barPposX, barPosY, 0, 0, barLength, barLength - gauge, swordRecastIconHandle, true);
+		gauge = (barLength / recastMaxNumX) * plRecastTimeX;
+		DrawRectGraph(barPposX, barPosY + gauge, 0, gauge, barLength, barLength - gauge, swordRecastIconHandle, true);
 	}
 	DrawString(995 + 80, 520 + 70, "X", GetColor(255, 255, 255));
 

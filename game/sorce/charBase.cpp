@@ -35,7 +35,7 @@ bool	CB::gravity()
 
 bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damage)
 {
-	isHit = false;
+	bool _isHit = false;
 	for (int i = 0; i < allColl->size(); i++)
 	{
 		if (allColl->at(i).attackChar == name || allColl->at(i).nonActiveTimeF > 0) { continue; }
@@ -92,15 +92,15 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 		if (insCheckHit && allColl->at(i).isAlive)
 		{
 			allColl->at(i).isAlive = false;
-			charBox->at(allColl->at(i).attackChar)->isHit = true;
 			attackChar = allColl->at(i).attackChar;
+			charBox->at(attackChar)->isHit = true;
 			HPmath(-allColl->at(i).damage, allColl->at(i).stan);
 			*damage = allColl->at(i).damage;
-			isHit = true;
+			_isHit = true;
 		}
 	}
 
-	return isHit;
+	return _isHit;
 }
 
 bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r

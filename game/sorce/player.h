@@ -217,13 +217,14 @@ protected:
 		, chargeTime//!チャージ時間
 		, isAwakening = 0//覚醒中か
 		, voiceStartNum//!音声データコンテナ内の声データの初期値
-		, guardEfcHandle, chargeEfcHandle, healEfcHandle, impactEfcHandle;
+		, guardEfcHandle, chargeEfcHandle, healEfcHandle, impactEfcHandle, waitBlowTime;
 	float spd//!キャラの移動速度
 		, dodgeDir;//!キャラの回避方向
 	bool isAnimEnd//!アニメーション再生が終わっているか
 		, isPushButtonAct//!弱攻撃連打から攻撃受付時間終わりまでに別アクションに切り替えたか
 		, isGuard//!ガード中か
-		, isFastGuard;//!ガード準備中か
+		, isFastGuard//!ガード準備中か
+		, isBlow;
 	float atkBuff = 0.f;//!加算攻撃バフ値
 	bool isGhost//!別キャラとのすり抜けを許可するか
 		, deadVoice = false;//!死亡音声の再生はしたか
