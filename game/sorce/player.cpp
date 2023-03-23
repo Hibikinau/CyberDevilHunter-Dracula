@@ -162,19 +162,31 @@ bool	PL::Process()
 	switch (setAction())
 	{
 	case pushButton::Damage://被弾
-		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
-		isCharge = 0, isFastGuard = true, isGuard = true;;
-		nextKey = pushButton::Neutral;
-		recastSet();
+		if (_modelInf.playTime <= animSpd)
+		{
+			dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
+			isCharge = 0, isFastGuard = true, isGuard = true;
+			nextKey = pushButton::Neutral;
+			recastSet();
+		}
 		if (isBlow)
 		{
+			animSpd = 2.f;
 			animChange(PL_huttobi1, &_modelInf, false, false, false);
+			setNextAnim(PL_huttobi2, &_modelInf, false, false);
 			if (_modelInf.playTime > 180.f) { Estate = _estate::NORMAL; }
-			if (_modelInf.attachIndex == PL_huttobi1)
+			auto animName = _modelInf.animHandleOld;
+			if (animName == PL_huttobi1)
 			{
+				if (_modelInf.playTime <= animSpd)
+				{
+					_modelInf.dir.y = getMoveDir(true);
+					waitCAChargeTime = 20.f;
+					CAChargeTime = 100.f;
+					CAChargeSpd = -30.f;
+				}
 				immortalTime = getAnimPlayTotalTime() - _modelInf.playTime;
 				if (_modelInf.playTime > 140.f) { Estate = _estate::NORMAL; }
-				setNextAnim(PL_huttobi2, &_modelInf, false, false);
 			}
 		}//アニメーションを被弾モーションに変更}
 		else
@@ -394,6 +406,7 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::Neutral://入力なし
+		if (_modelInf.animHandleOld == PL_huttobi1 || _modelInf.animHandleOld == PL_huttobi2) { break; }
 		if (attackNumOld > 0) { break; }
 		Estate = _estate::NORMAL;
 		animChange(PL_idel, &_modelInf, true, true, false);//アニメーションを待機モーションに変更
@@ -485,6 +498,7 @@ bool	PL::Process()
 
 bool	PL::Render(float timeSpeed)
 {
+	int i = 0;
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 	return true;
@@ -560,7 +574,7 @@ pushButton PL::setAction()
 
 	if (Estate == _estate::DAMAGE) { return pushButton::Damage; }
 	if (isCounter == 1) { return pushButton::R1; }
-	if (isAnimEnd)
+	if (_modelInf.isAnimEnd)
 	{
 		isAnimEnd = false, isGhost = false, isBlow = false;
 		StopJoypadVibration(DX_INPUT_PAD1);
