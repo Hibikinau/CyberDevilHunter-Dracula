@@ -294,7 +294,10 @@ bool	modeG::Render()
 		auto insUnderPosOld = mAllColl.at(i).capCollOld.underPos;
 		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
 
-		auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+		if (mAllColl.at(i).efcNum == 1)
+		{
+			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+		}
 
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
@@ -307,10 +310,14 @@ bool	modeG::Render()
 
 			mAllColl[i].rightingEfc.downCornerPos.push_back(VTransform(mAllColl.at(i).capColl.underPos, M));
 			mAllColl[i].rightingEfc.upCornerPos.push_back(VTransform(mAllColl.at(i).capColl.overPos, M));
+			mAllColl[i].rightingEfc.efcNum = mAllColl[i].efcNum;
 
 			for (int j = 1; j < mAllColl[i].rightingEfc.downCornerPos.size(); ++j)
 			{
-				drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+				if (mAllColl[i].efcNum == 1)
+				{
+					drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+				}
 			}
 		}
 	}
@@ -320,7 +327,10 @@ bool	modeG::Render()
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
 		{
 			if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
-			drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+			if (atkEfc[i].efcNum == 1)
+			{
+				drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+			}
 		}
 		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
 		if (atkEfc[i].lifeTime > 0) { atkEfc[i].lifeTime--; }

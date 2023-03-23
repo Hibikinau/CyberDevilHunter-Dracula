@@ -40,7 +40,8 @@ struct weaponEffect
 	std::vector<VECTOR> upCornerPos, downCornerPos;//!剣の根元部分、剣先部分の座標情報
 	float lifeTime = 10//!描画時間
 		, maxLifeTime = 10;//!最大描画時間
-	int efcPicHandle;//画像ハンドル
+	int efcPicHandle//画像ハンドル
+		,efcNum;
 };
 
 /**
@@ -54,7 +55,8 @@ struct attackColl
 	VECTOR Vec;
 	float damage;//!ダメージ
 	int nonActiveTimeF//!描画待機時間
-		, activeTimeF;//!描画時間
+		, activeTimeF//!描画時間
+		, efcNum;
 	bool isUseMat//!モデルのフレームに追従させるか
 		, isAlive = true;//!当たり判定が有効か
 	weaponEffect rightingEfc;//!剣の軌跡情報
@@ -210,7 +212,7 @@ public:
 	 * @param charName キャラクタ名
 	 * @param cameraDir カメラ位置情報セット用ポインタ
 	 */
-	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir);
+	bool makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir, int _efcNum);
 
 	/**
 	 * @brief マスター音量セット処理

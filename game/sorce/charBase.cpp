@@ -104,7 +104,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 }
 
 bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
-	, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir)
+	, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir, int _efcNum)
 {
 	attackColl acoll;
 	acoll.isUseMat = isUseMat;
@@ -120,6 +120,7 @@ bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
 	acoll.stan = stan;
 	acoll.capCollOld.r = -1;
 	acoll.Vec = _dir;
+	acoll.efcNum = _efcNum;
 	allColl->emplace_back(acoll);
 
 	return true;

@@ -134,7 +134,7 @@ bool	PL::Process()
 	}
 
 	//非覚醒時にL2/R2ボタンを押すと覚醒状態に移行
-	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 0)
+	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 0 && _statusInf.bloodPoint >= _statusInf.maxBloodPoint)
 	{
 		//覚醒用音声データの再生
 		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
@@ -233,21 +233,21 @@ bool	PL::Process()
 			animChange(PL_jaku_1, &_modelInf, false, false, true);//アニメーションを弱攻撃１段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0),1);
 		}
 		else if (attackNumOld == 1)
 		{
 			animChange(PL_jaku_2, &_modelInf, false, false, true);//アニメーションを弱攻撃２段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 2)
 		{
 			animChange(PL_jaku_3, &_modelInf, false, false, true);//アニメーションを弱攻撃３段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -263,17 +263,17 @@ bool	PL::Process()
 			setNextAnim(PL_jaku_4_2, &_modelInf, true, false);//次アニメーションに納刀をセット
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 4;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, 12.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 17.f, 8.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 32.f, 10.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 47.f, 13.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, 12.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 17.f, 8.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 32.f, 10.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 47.f, 13.f, animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 4 && !isPushButtonAct)
 		{
 			_modelInf.animHandleNext = -1;
 			animChange(PL_jaku_4_4, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション３に変更
 			waitNextAttack = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 
 		break;
@@ -291,21 +291,21 @@ bool	PL::Process()
 			animChange(PL_kyou_1, &_modelInf, false, false, true);//アニメーションを強攻撃１段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 1)
 		{
 			animChange(PL_kyou_2, &_modelInf, false, false, true);//アニメーションを強攻撃２段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 2)
 		{
 			animChange(PL_kyou_3, &_modelInf, false, false, true);//アニメーションを強攻撃3段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 3)
 		{
@@ -320,7 +320,7 @@ bool	PL::Process()
 			_modelInf.animHandleNext = -1;
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 0;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, kyouATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 
 		break;
@@ -344,7 +344,7 @@ bool	PL::Process()
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, finishATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, finishATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		isAwakening = -1;
 		immortalTime = _modelInf.totalTime;
 		_statusInf.bloodPoint = 0;
@@ -378,7 +378,7 @@ bool	PL::Process()
 			KATANAIO(&_modelInf, true);
 			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
 			animChange(PL_counter, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, counterATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 150.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, counterATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 			isFastGuard = true, isCounter = 2, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
 			auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
@@ -386,7 +386,7 @@ bool	PL::Process()
 			auto bz = getDirVecP(_modelInf.dir.y, 30);
 			a.y = b.y = _modelInf.pos.y + 200;
 
-			makeAttackCap(a, b, 40.f, 10.f, getAnimPlayTotalTime() - 10.f, animSpd, false, 75.f, 20, -1, bz);
+			makeAttackCap(a, b, 40.f, 10.f, getAnimPlayTotalTime() - 10.f, animSpd, false, 75.f, 20, -1, bz, 0);
 
 			int a2 = PlayEffekseer3DEffect(impactEfcHandle);
 			SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
@@ -712,14 +712,14 @@ bool PL::CA_debugAttack(PL* insPL)
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	animChange(PL_motion_hissatsu, &insPL->_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
 	insPL->animSpd = 1.f;
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 1.f, 100000, rWeponParentFrame, VGet(0, 0, 0));
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 1.f, 100000, rWeponParentFrame, VGet(0, 0, 0), 1);
 
 	auto a = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y - 90, 300));
 	auto b = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y + 90, 300));
 	auto bz = getDirVecP(insPL->_modelInf.dir.y, 30);
 	a.y = b.y = insPL->_modelInf.pos.y + 200;
 
-	insPL->makeAttackCap(a, b, 40.f, 10.f, insPL->getAnimPlayTotalTime() - 10.f, insPL->animSpd, false, 300.f, 100000, -1, bz);
+	insPL->makeAttackCap(a, b, 40.f, 10.f, insPL->getAnimPlayTotalTime() - 10.f, insPL->animSpd, false, 300.f, 100000, -1, bz, 1);
 
 	int a2 = PlayEffekseer3DEffect(insPL->impactEfcHandle);
 	SetPosPlayingEffekseer3DEffect(a2, insPL->_modelInf.pos.x, insPL->_modelInf.pos.y + 120.f, insPL->_modelInf.pos.z);
@@ -736,8 +736,8 @@ bool PL::CA_charge(PL* insPL)
 
 		insPL->animSpd = 3.f;
 		PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
-		animChange(PL_counter, &insPL->_modelInf, false, false, true);//アニメーションを突きモーション３に変更
-		insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, charge3ATK + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+		animChange(PL_counter, &insPL->_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
+		insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, charge3ATK + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 0);
 		insPL->waitCAChargeTime = 16.f;
 		insPL->CAChargeTime = 41.f;
 		insPL->CAChargeSpd = 0.f;
@@ -749,7 +749,7 @@ bool PL::CA_charge(PL* insPL)
 		auto bz = getDirVecP(insPL->_modelInf.dir.y, 30);
 		a.y = b.y = insPL->_modelInf.pos.y + 200;
 
-		insPL->makeAttackCap(a, b, 40.f, 10.f, insPL->getAnimPlayTotalTime() - 10.f, insPL->animSpd, false, 1.f, 100000, -1, bz);
+		insPL->makeAttackCap(a, b, 40.f, 10.f, insPL->getAnimPlayTotalTime() - 10.f, insPL->animSpd, false, 1.f, 100000, -1, bz, 1);
 
 		int a2 = PlayEffekseer3DEffect(insPL->impactEfcHandle);
 		SetPosPlayingEffekseer3DEffect(a2, insPL->_modelInf.pos.x, insPL->_modelInf.pos.y + 120.f, insPL->_modelInf.pos.z);
@@ -790,7 +790,7 @@ bool PL::CA_charge(PL* insPL)
 			insPL->animSpd = 3.f;
 			PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);//アニメーションを突きモーション３に変更
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, charge3ATK + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, charge3ATK + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 			insPL->waitCAChargeTime = 16.f;
 			insPL->CAChargeTime = 41.f;
 			insPL->CAChargeSpd = 200.f;
@@ -804,7 +804,7 @@ bool PL::CA_charge(PL* insPL)
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);//アニメーションを突きモーション３に変更
 			float insDamage = insPL->atkBuff;
 			insPL->chargeLevel == 1 ? insDamage += charge2ATK : insDamage += charge1ATK;
-			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, insDamage, 5, rWeponParentFrame, VGet(0, 0, 0));
+			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 16.f, 41.f, insPL->animSpd, true, insDamage, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 			insPL->waitCAChargeTime = 16.f;
 			insPL->CAChargeTime = 41.f;
 			insPL->CAChargeSpd = 120.f;
@@ -825,7 +825,7 @@ bool PL::CA_kirinuke(PL* insPL)
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 22 + rand() % 2], DX_PLAYTYPE_BACK);
 	animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);//アニメーションを切り抜けモーションに変更
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, kirinukeATK + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0));
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, kirinukeATK + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 	insPL->waitCAChargeTime = 12.f;
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
 	insPL->CAChargeSpd = 40.f;
