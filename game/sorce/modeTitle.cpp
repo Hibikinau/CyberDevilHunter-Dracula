@@ -12,6 +12,7 @@
 bool modeT::save(const char* dir, valData* _val)
 {
 	std::vector<std::string> _data;
+	int points = _val->points;
 	fileIO::loadCSV(&_data, dir, false);
 
 	for (int i = 0; i < _data.size(); i++)
@@ -23,7 +24,7 @@ bool modeT::save(const char* dir, valData* _val)
 
 		if (_data[i] == "“ü‚ê‘Ö‚¦‹ZX") { i++; _data[i] = _val->plChangeAttackX; }
 		if (_data[i] == "“ü‚ê‘Ö‚¦‹ZY") { i++; _data[i] = _val->plChangeAttackY; }
-		if (_data[i] == "ŠŽƒ|ƒCƒ“ƒg") { i++; _data[i] = _val->points; }
+		if (_data[i] == "ŠŽƒ|ƒCƒ“ƒg") { i++; _data[i] = std::to_string(points); }
 		if (_data[i] == "Œ‚”jÏ‚ÝBoss") {
 			i++;  while (_data[i] != "‚±‚±‚Ü‚Å") { _data.erase(_data.begin() + i); }
 			for (auto boss : _val->deadBoss) { _data.emplace(_data.begin() + i, boss), i++; };

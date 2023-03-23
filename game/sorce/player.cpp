@@ -712,7 +712,7 @@ bool PL::CA_debugAttack(PL* insPL)
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	animChange(PL_motion_hissatsu, &insPL->_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
 	insPL->animSpd = 1.f;
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 1.f, 100000, rWeponParentFrame, VGet(0, 0, 0), 1);
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 99999.f, 100000, rWeponParentFrame, VGet(0, 0, 0), 1);
 
 	auto a = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y - 90, 300));
 	auto b = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y + 90, 300));
