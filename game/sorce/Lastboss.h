@@ -73,6 +73,17 @@ public:
 	 * @brief キャラクターの現在の状態
 	 */
 	enum class STATUS {
+		NORMAL,//!初期状態
+		JUMP,//!ジャンプ
+		quickATTACK,//!弱攻撃
+		slowATTACK,//!強攻撃
+		changeATTACKX,//Xボタン側入れ替え技
+		changeATTACKY,//Yボタン側入れ替え技
+		DODGE,//!回避
+		GUARD,//!ガード
+		DAMAGE,//!被弾時やられ
+		finishAttack,//!覚醒時フィニッシュ技
+
 		NONE,
 		WAIT,
 		DAMEGE,
@@ -91,7 +102,9 @@ public:
 		SLAM,
 		DIVE,
 	};
-	STATUS status;
+	STATUS status //!キャラの行動状態インスタンス
+		, oldEstate = STATUS::NORMAL//!1つ前のキャラの行動状態インスタンス
+		, lastAttackState;//!キャラの最終攻撃インスタンス
 
 	/**
 	 * @brief プレイヤーとの距離状態
