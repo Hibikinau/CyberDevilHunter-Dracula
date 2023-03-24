@@ -51,6 +51,8 @@
 //•KŽE
 #define PL_motion_hissatsu 31
 
+
+
 //‹RŽm
 #define BOSS1_idel 0
 #define BOSS1_run 23
