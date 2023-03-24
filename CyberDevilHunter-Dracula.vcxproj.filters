@@ -72,6 +72,9 @@
     <ClCompile Include="game\sorce\modeArtsGet.cpp">
       <Filter>ソース ファイル\mode</Filter>
     </ClCompile>
+    <ClCompile Include="game\sorce\Lastboss.cpp">
+      <Filter>ソース ファイル\char</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\gameMain.h">
@@ -124,6 +127,9 @@
     </ClInclude>
     <ClInclude Include="game\sorce\modeArtsGet.h">
       <Filter>ヘッダー ファイル\mode</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\Lastboss.h">
+      <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
