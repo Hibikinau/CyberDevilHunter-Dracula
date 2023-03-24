@@ -89,18 +89,7 @@ public:
 		DAMEGE,
 		STAN,
 		DEAD,
-		RUN,
-		FSTEP,
-		BSTEP,
-		RSTEP,
-		LSTEP,
-		ATTACK,
-		ATTACK2,
-		ATTACK3,
-		HANIATTACK,
-		TACKLE,
-		SLAM,
-		DIVE,
+
 	};
 	STATUS status //!キャラの行動状態インスタンス
 		, oldEstate = STATUS::NORMAL//!1つ前のキャラの行動状態インスタンス
