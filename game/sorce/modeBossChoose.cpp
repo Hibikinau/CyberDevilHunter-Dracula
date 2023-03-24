@@ -118,7 +118,7 @@ bool	modeBC::Process()
 			}
 			else if (picMenuNum == 2)
 			{//ƒ‰ƒXƒ{ƒX
-				_modeServer->_valData.popBossNum = 2;
+				_modeServer->_valData.popBossNum = 3;
 				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 			}
 		}

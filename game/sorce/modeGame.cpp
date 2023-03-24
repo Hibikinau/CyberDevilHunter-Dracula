@@ -65,6 +65,7 @@ bool	modeG::Initialize()
 
 	if (_valData->popBossNum == 1) { makeChar(this, &_modeServer->RS, std::make_shared<BossKnight>(), Char_BOSS1); }
 	if (_valData->popBossNum == 2) { makeChar(this, &_modeServer->RS, std::make_shared<BossLion>(), Char_BOSS2); }
+	if (_valData->popBossNum == 3) { makeChar(this, &_modeServer->RS, std::make_shared<LastBoss>(), Char_LBOSS); }
 
 	countTime = GetNowCount();
 

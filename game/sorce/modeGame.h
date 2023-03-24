@@ -10,6 +10,7 @@
 #include"player.h"
 #include"bossKnight.h"
 #include"bossLionman.h"
+#include"Lastboss.h"
 #include<memory>
 
 struct popDamageInf
