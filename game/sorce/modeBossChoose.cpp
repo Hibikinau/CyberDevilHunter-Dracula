@@ -15,6 +15,10 @@ bool	modeBC::Initialize()
 	SetFontSize(40);
 	menuMessage.emplace_back("　　　　ボス１\n「騎士」");
 	menuMessage.emplace_back("　　　　ボス２\n「ライオンマン」");
+	if (_modeServer->_valData.deadBoss.size() >= 2)
+	{
+		menuMessage.emplace_back("　　　　ボス２\n「ラスボス」");
+	}
 	picMenuMaxNum = menuMessage.size() - 1;
 	picMenuNum = 0;
 	_modeServer->_valData.popBossNum = 0;
@@ -112,6 +116,11 @@ bool	modeBC::Process()
 				_modeServer->_valData.popBossNum = 2;
 				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 			}
+			else if (picMenuNum == 2)
+			{//ラスボス
+				_modeServer->_valData.popBossNum = 2;
+				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
+			}
 		}
 
 		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
@@ -180,8 +189,12 @@ bool	modeBC::Render()
 	if (picMenuNum == 0) {
 		DrawString(320, 140, _modeServer->_valData.boss1Inf.c_str(), GetColor(255, 255, 255));
 	}
-	else {
+	else if(picMenuNum == 1){
 		DrawString(320, 140, _modeServer->_valData.boss2Inf.c_str(), GetColor(255, 255, 255));
+	}
+	else
+	{
+		DrawString(320, 140, _modeServer->_valData.lastBossInf.c_str(), GetColor(255, 255, 255));
 	}
 
 	DrawGraph(0, 660, newsWindow, true);

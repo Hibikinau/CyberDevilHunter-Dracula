@@ -87,6 +87,19 @@ bool modeT::loadData(const char* dir, valData* _val)
 				i++;
 			}
 		}
+
+		if (_data[i] == "ラスボス依頼情報")
+		{
+			_val->lastBossInf = ""; i++;
+			while (_data[i] != "ここまで")
+			{
+				if (_data[i] == "内容") { _val->lastBossInf += "\n"; }
+				if (_data[i] == "概要") { _val->lastBossInf += "\n"; }
+				if (_data[i] == "報酬") { _val->lastBossInf += "\n"; }
+				_val->lastBossInf += _data[i] + "\n";
+				i++;
+			}
+		}
 	}
 
 	return true;
