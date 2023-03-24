@@ -4,18 +4,24 @@
 *
 * \author  松田　裕
 * \date    March 2023
-* ********************************************************************/
+********************************************************************/
 
 #include"Lastboss.h"
 #include <math.h>
-#define runSpd 25.f
-
+#define runSpd 40.f
+//武器追従フレーム番号設定
+#define rWeponParentFrame 192
+#define lWeponParentFrame 167
 using namespace model;
 
 bool LastBoss::Initialize()
 {
-	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf, RS);
-	status = STATUS::WAIT;
+	//モデルの読み込み
+	modelImport("game/res/Enemy03/Enemy03.mv1", 1.5f, &_modelInf, RS);
+	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
+	weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya", RS);
+	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
+	status = STATUS::NORMAL;
 	time = 200;
 	stanTime = 200;
 	hittime = 0;
