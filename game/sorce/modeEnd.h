@@ -14,7 +14,7 @@ public:
 	virtual bool	Render();
 
 protected:
-	int _cg, logoHandle, logoAlphaNum = 0, titleAnimHandle = -1, titleLogoHandle = -1, isPut = 0, pressAtoStart, waveAlphaNum;
+	int _cg, creditsY, DeffontSize;
 	bool isFirstMovie = true;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
