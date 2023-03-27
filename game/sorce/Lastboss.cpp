@@ -10,16 +10,16 @@
 #include <math.h>
 #define runSpd 40.f
 //•Ší’Ç]ƒtƒŒ[ƒ€”Ô†Ý’è
-#define rWeponParentFrame 192
-#define lWeponParentFrame 167
+#define rWeponParentFrame 190
+#define lWeponParentFrame 165
 using namespace model;
 
 bool LastBoss::Initialize()
 {
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	modelImport("game/res/Enemy03/Enemy03.mv1", 1.5f, &_modelInf, RS);
+	modelImport("game/res/Enemy03/Enemy03.mv1", 1.8f, &_modelInf, RS);
 	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
-	weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya", RS);
+	//weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya", RS);
 	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
 	status = STATUS::WAIT;
 	time = 200;
@@ -145,9 +145,9 @@ bool	LastBoss::Process()
 		}
 		animSpd = 4.f * AwakeSpd;
 		animChange(PL_dodge_F, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
+		if (_modelInf.playTime > 15 && _modelInf.playTime < 48)
 		{
-			Move(60.0 * AwakeMove, 0.0);
+			Move(80.0 * AwakeMove, 0.0);
 		}
 		break;
 	case STATUS::BSTEP:
@@ -157,9 +157,9 @@ bool	LastBoss::Process()
 		}
 		animSpd = 4.f * AwakeSpd;
 		animChange(PL_dodge_B, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
+		if (_modelInf.playTime > 15 && _modelInf.playTime < 48)
 		{
-			Move(60.0 * AwakeMove, 180.0);
+			Move(80.0 * AwakeMove, 180.0);
 		}
 		break;
 	case STATUS::RSTEP:
@@ -169,9 +169,9 @@ bool	LastBoss::Process()
 		}
 		animSpd = 4.f * AwakeSpd;
 		animChange(PL_dodge_R, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
+		if (_modelInf.playTime > 15 && _modelInf.playTime < 48)
 		{
-			Move(40.0 * AwakeMove, 90.0);
+			Move(80.0 * AwakeMove, 90.0);
 		}
 		break;
 	case STATUS::LSTEP:
@@ -181,9 +181,9 @@ bool	LastBoss::Process()
 		}
 		animSpd = 4.f * AwakeSpd;
 		animChange(PL_dodge_L, &_modelInf, false, true, false);
-		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
+		if (_modelInf.playTime > 15 && _modelInf.playTime < 48)
 		{
-			Move(40.0 * AwakeMove, 270.0);
+			Move(80.0 * AwakeMove, 270.0);
 		}
 		break;
 	case STATUS::kick:
@@ -199,7 +199,7 @@ bool	LastBoss::Process()
 		}
 		animSpd = 1.5f * AwakeSpd;
 		animChange(Boss_kick, &_modelInf, false, true, true);
-		makeAttackCap(VGet(-20.f, 0.f, -0.f), VGet(50.f, 0.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 41, VGet(0, 0, 0),1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 131, VGet(0, 0, 0),1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -216,7 +216,7 @@ bool	LastBoss::Process()
 		}
 		animSpd = 2.0f * AwakeSpd;
 		animChange(Boss_kaiten, &_modelInf, false, true, true);
-		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 18, VGet(0, 0, 0), 1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -233,7 +233,7 @@ bool	LastBoss::Process()
 		}
 		animSpd = 2.0f * AwakeSpd;
 		animChange(Boss_jumpattack, &_modelInf, false, true, true);
-		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 41, VGet(0, 0, 0), 1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -250,7 +250,13 @@ bool	LastBoss::Process()
 		}
 		animSpd = 1.5f * AwakeSpd;
 		animChange(Boss_magic1, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 8, VGet(0, 0, 0), 1);
+		auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
+		auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
+		auto bz = getDirVecP(_modelInf.dir.y, 30);
+		a.y = b.y = _modelInf.pos.y + 200;
+
+		makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
+		//makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 8, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -263,6 +269,23 @@ bool	LastBoss::Process()
 		}
 		}
 		if (ActionFlag == true) {
+			//_modelInf.dir.y = Pdir;
+			auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
+			auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
+			auto bz = getDirVecP(_modelInf.dir.y, 30);
+			a.y = b.y = _modelInf.pos.y + 200;
+			if (_modelInf.playTime == 60 ) {
+				_modelInf.dir.y = Pdir;
+				makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
+			}
+			if (_modelInf.playTime == 100 ) {
+				_modelInf.dir.y = Pdir;
+				makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
+			}
+			if (_modelInf.playTime ==140 ) {
+				_modelInf.dir.y = Pdir;
+				makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
+			}
 			break;
 		}
 		animSpd = 1.0f * AwakeSpd;

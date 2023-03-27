@@ -200,6 +200,12 @@ bool	BossKnight::Process()
 		}
 		animSpd = .7f * AwakeSpd;
 		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
+		auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
+		auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
+		auto bz = getDirVecP(_modelInf.dir.y, 30);
+		a.y = b.y = _modelInf.pos.y + 200;
+
+		makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 100, VGet(0, 0, 0), 1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		ActionFlag = true;
@@ -347,7 +353,7 @@ bool	BossKnight::Render(float timeSpeed)
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
-	if (STABFlag)
+	/*if (STABFlag)
 	{
 		SetUseLighting(false);
 		if (PosFlag) {
@@ -360,7 +366,7 @@ bool	BossKnight::Render(float timeSpeed)
 		}
 		int g = drawBPolygon(Efa, Efaz, Efb, Efbz, newSomenHandle);
 		SetUseLighting(true);
-	}
+	}*/
 	return true;
 }
 

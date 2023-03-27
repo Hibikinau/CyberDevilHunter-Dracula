@@ -9,6 +9,17 @@
 
 using namespace model;
 
+VECTOR CB::getDirVecP(float dir, int powar)
+{
+	float _Dir = dir - 180.f;
+	float radian = _Dir * DX_PI_F / 180.0f;
+	VECTOR dirZ = VGet(0, 0, 0);
+	dirZ.x = sin(radian) * powar;
+	dirZ.z = cos(radian) * powar;
+	dirZ.y = 0;
+	return dirZ;
+}
+
 bool	CB::gravity()
 {
 	if (_modelInf.pos.y < 1100)
