@@ -79,21 +79,28 @@ public:
 		slowATTACK,//!強攻撃
 		changeATTACKX,//Xボタン側入れ替え技
 		changeATTACKY,//Yボタン側入れ替え技
-		DODGE,//!回避
-		GUARD,//!ガード
+		FSTEP,
+		BSTEP,
+		RSTEP,
+		LSTEP,//!回避
 		DAMAGE,//!被弾時やられ
 		finishAttack,//!覚醒時フィニッシュ技
-
 		NONE,
 		WAIT,
-		DAMEGE,
+		RUN,
 		STAN,
 		DEAD,
-
+		idol,//!仰ぎ
+		idolT,//!爪
+		kick,//!ハイキック
+		kaiten,//!回転切り
+		jumpattack,//!ジャンプ攻撃
+		magicK,//!魔法　片手
+		magicR,//!魔法　両手
 	};
-	STATUS status //!キャラの行動状態インスタンス
-		, oldEstate = STATUS::NORMAL//!1つ前のキャラの行動状態インスタンス
-		, lastAttackState;//!キャラの最終攻撃インスタンス
+	STATUS status; //!キャラの行動状態インスタンス
+	STATUS	oldEstate = STATUS::NORMAL;//!1つ前のキャラの行動状態インスタンス
+	STATUS	lastAttackState;//!キャラの最終攻撃インスタンス
 
 	/**
 	 * @brief プレイヤーとの距離状態
