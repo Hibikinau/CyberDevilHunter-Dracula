@@ -17,7 +17,7 @@ bool	modeBC::Initialize()
 	menuMessage.emplace_back("　　　　ボス２\n「ライオンマン」");
 	if (_modeServer->_valData.deadBoss.size() >= 2)
 	{
-		menuMessage.emplace_back("　　　　ボス２\n「ラスボス」");
+		menuMessage.emplace_back("　　　　ボス3\n「ラスボス」");
 	}
 	picMenuMaxNum = menuMessage.size() - 1;
 	picMenuNum = 0;

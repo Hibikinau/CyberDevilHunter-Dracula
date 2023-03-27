@@ -137,8 +137,8 @@ bool	modeT::Process()
 	if ((_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A]) && !_modeServer->_valData.isLogoRender && isPut == 2)
 	{
 		StopMusic();
-		_modeServer->Add(std::make_unique<modeE>(_modeServer), 1, MODE_END);
-		//_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+		//_modeServer->Add(std::make_unique<modeE>(_modeServer), 1, MODE_END);
+		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 		return false;
 	}
 	return true;
