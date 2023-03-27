@@ -69,12 +69,12 @@ bool	LastBoss::Process()
 
 	if (status == STATUS::STAN) {
 		animChange(PL_hirumi, &_modelInf, true, true, false);
-		if (time == 0) {
+		if (stanTime == 0) {
 			status = STATUS::WAIT;
-			_statusInf.stanPoint = 200;
 			stanTime = 100;
+			_statusInf.stanPoint = 0;
 		}
-		else { time--; }
+		else { stanTime--; }
 		return true;
 	}
 
@@ -486,6 +486,7 @@ bool LastBoss::HPmath(float Num, float Stan)
 	}
 	if (_statusInf.stanPoint >= 150) {
 		status = STATUS::STAN;
+		_statusInf.stanPoint = 150;
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;

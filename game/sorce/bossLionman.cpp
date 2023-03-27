@@ -63,12 +63,12 @@ bool	BossLion::Process()
 
 	if (status == STATUS::STAN) {
 		animChange(BOSS2_down, &_modelInf, true, true, false);
-		if (time == 0) {
+		if (stanTime == 0) {
 			status = STATUS::WAIT;
-			_statusInf.stanPoint = 200;
 			stanTime = 100;
+			_statusInf.stanPoint = 0;
 		}
-		else { time--; }
+		else { stanTime--; }
 		return true;
 	}
 
@@ -637,6 +637,7 @@ bool BossLion::HPmath(float Num, float Stan)
 	}
 	if (_statusInf.stanPoint >= 150) {
 		status = STATUS::STAN;
+		_statusInf.stanPoint = 150;
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
