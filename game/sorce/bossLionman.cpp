@@ -63,13 +63,19 @@ bool	BossLion::Process()
 	}
 
 	if (status == STATUS::STAN) {
-		animChange(BOSS2_down, &_modelInf, true, true, false);
-		if (time == 0) {
-			status = STATUS::WAIT;
-			_statusInf.stanPoint = 200;
-			stanTime = 100;
+		if (!ActionFlag) {
+			animSpd = 1.0;
+			animChange(BOSS2_down, &_modelInf, true, true, false);
+			ActionFlag=true;
 		}
-		else { time--; }
+		if (stanTime == 0) {
+			status = STATUS::WAIT;
+			time = 0;
+			stanTime = 100;
+			_statusInf.stanPoint = 0;
+			ActionFlag = false;
+		}
+		else { stanTime--; }
 		return true;
 	}
 
@@ -375,7 +381,7 @@ bool BossLion::UtilityJudge() {
 			}
 			else {
 				if (Rand > 50) { status = STATUS::DIVE; }
-				if (Rand <= 50) { status = STATUS::RUN; }
+				if (Rand <= 50) { status = STATUS::RUN; time = 100; }
 			}
 			break;
 		case STATUS::DAMEGE:
@@ -440,7 +446,7 @@ bool BossLion::UtilityJudge() {
 			break;
 		case STATUS::ATTACK3:
 			RangeJ();
-			if (range == RANGE::LongRange && range == RANGE::MidRange) {
+			if (range == RANGE::LongRange || range == RANGE::MidRange) {
 				status = STATUS::DIVE;
 			}
 			if (range == RANGE::CrossRange) {
@@ -487,7 +493,7 @@ bool BossLion::UtilityJudge() {
 			}
 			else {
 				if (Rand > 50) { status = STATUS::DIVE; }
-				if (Rand <= 50) { status = STATUS::RUN; }
+				if (Rand <= 50) { status = STATUS::RUN; time = 50; }
 			}
 			break;
 		case STATUS::DAMEGE:
@@ -552,7 +558,7 @@ bool BossLion::UtilityJudge() {
 			break;
 		case STATUS::ATTACK3:
 			RangeJ();
-			if (range == RANGE::LongRange && range == RANGE::MidRange) {
+			if (range == RANGE::LongRange || range == RANGE::MidRange) {
 				status = STATUS::DIVE;
 			}
 			if (range == RANGE::CrossRange) {
@@ -563,6 +569,7 @@ bool BossLion::UtilityJudge() {
 				if (Rand <= 50) { status = STATUS::TACKLE; }
 				break;
 			}
+			break;
 		case STATUS::HANIATTACK:
 			if (Rand > 50) { status = STATUS::SLAM; }
 			if (Rand <= 50) { status = STATUS::TACKLE; }
@@ -637,6 +644,8 @@ bool BossLion::HPmath(float Num, float Stan)
 	}
 	if (_statusInf.stanPoint >= 150) {
 		status = STATUS::STAN;
+		_statusInf.stanPoint = 150;
+		ActionFlag = false;
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;

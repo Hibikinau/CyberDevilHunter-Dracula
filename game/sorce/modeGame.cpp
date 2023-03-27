@@ -107,7 +107,8 @@ bool	modeG::Initialize()
 
 	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/slash_effect.efkefc", 20.f); }
 	if (_valData->popBossNum == 1) { BGM = LoadSoundMem("game/res/BGM/boss01_BGM_Lemon Fight - Stronger (feat. Jessica Reynoso)-GameEdit [NCS Release].mp3"); }
-	else { BGM = LoadSoundMem("game/res/BGM/boss02_BGM_ReauBeau - Make Waves (feat. Brynja Mary)-GameEdit [NCS Release].mp3"); }
+	else if(_valData->popBossNum == 2){ BGM = LoadSoundMem("game/res/BGM/boss02_BGM_ReauBeau - Make Waves (feat. Brynja Mary)-GameEdit [NCS Release].mp3"); }
+	else { BGM = LoadSoundMem("game/res/BGM/boss03_01_BGM_ANGELPLAYA - PULL UP-inst-GameEdit [NCS Release].mp3"); }
 
 	ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), BGM);
 

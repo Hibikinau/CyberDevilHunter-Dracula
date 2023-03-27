@@ -3,7 +3,6 @@
 牙突
 切抜
 竜閃
-NODATA
 ここまで
 入れ替え技X
 牙突
@@ -56,9 +55,6 @@ ERROR
 マスター音量
 50
 撃破済みBoss
-Boss1
-Boss2
-LBoss
 ここまで
 所持ポイント
 659996
@@ -111,3 +107,5 @@ player_voice_15_B.mp3
 player_voice_15_C.mp3
 ここまで
 開発者モード
+エンドロール
+ここまで

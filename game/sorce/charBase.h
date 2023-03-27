@@ -220,6 +220,8 @@ public:
 	 */
 	void setMasterVolume(int masterValume) { for (int handle : soundHandle) { ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), handle); } }
 
+	static VECTOR getDirVecP(float dir, int powar);
+
 	int type = 0//!キャラクタタイプ(player = 1, boss = 2)
 		, caRecastX = 0, caRecastY = 0, setRecastTime = 0, drawStopF = 0;
 	bool isGround//!設置しているか

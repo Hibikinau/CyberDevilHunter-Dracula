@@ -27,7 +27,7 @@ bool BossKnight::Initialize()
 	_statusInf.stanPoint = 0;
 	ActionFlag = false;
 	PosFlag=false;
-	STABFlag;
+	STABFlag=false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	g = 3.f;
@@ -39,7 +39,7 @@ bool BossKnight::Initialize()
 	AwakeT = 0;
 	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
-
+	impactEfcHandle = LoadEffekseerEffect("game/res/effect/è’åÇîg1/slash_shot.efkefc", 80.f);
 	slamEfcHandle = LoadEffekseerEffect("game/res/effect/ë≈åÇ5/ë≈åÇ5.efkefc", 20.f);
 	return true;
 }
@@ -196,10 +196,19 @@ bool	BossKnight::Process()
 			}
 		}
 		if (ActionFlag == true) {
+			/*int a2 = PlayEffekseer3DEffect(impactEfcHandle);
+			SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
+			SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));*/
 			break;
 		}
 		animSpd = .7f * AwakeSpd;
 		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
+		/*auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
+		auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
+		auto bz = getDirVecP(_modelInf.dir.y, 30);
+		a.y = b.y = _modelInf.pos.y + 100;
+
+		makeAttackCap(a, b, 60.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);*/
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 100, VGet(0, 0, 0), 1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		ActionFlag = true;
@@ -347,7 +356,7 @@ bool	BossKnight::Render(float timeSpeed)
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
-	if (STABFlag)
+	/*if (STABFlag)
 	{
 		SetUseLighting(false);
 		if (PosFlag) {
@@ -360,7 +369,7 @@ bool	BossKnight::Render(float timeSpeed)
 		}
 		int g = drawBPolygon(Efa, Efaz, Efb, Efbz, newSomenHandle);
 		SetUseLighting(true);
-	}
+	}*/
 	return true;
 }
 
