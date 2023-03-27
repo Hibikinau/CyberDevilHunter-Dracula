@@ -62,13 +62,19 @@ bool	BossLion::Process()
 	}
 
 	if (status == STATUS::STAN) {
-		animChange(BOSS2_down, &_modelInf, true, true, false);
-		if (time == 0) {
-			status = STATUS::WAIT;
-			_statusInf.stanPoint = 200;
-			stanTime = 100;
+		if (!ActionFlag) {
+			animSpd = 1.0;
+			animChange(BOSS2_down, &_modelInf, true, true, false);
+			ActionFlag=true;
 		}
-		else { time--; }
+		if (stanTime == 0) {
+			status = STATUS::WAIT;
+			time = 0;
+			stanTime = 100;
+			_statusInf.stanPoint = 0;
+			ActionFlag = false;
+		}
+		else { stanTime--; }
 		return true;
 	}
 
@@ -637,6 +643,8 @@ bool BossLion::HPmath(float Num, float Stan)
 	}
 	if (_statusInf.stanPoint >= 150) {
 		status = STATUS::STAN;
+		_statusInf.stanPoint = 150;
+		ActionFlag = false;
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;
