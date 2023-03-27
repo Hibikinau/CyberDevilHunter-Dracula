@@ -21,7 +21,7 @@ bool LastBoss::Initialize()
 	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
 	weponAttach("game/res/Weapon_Saya/Weapon_saya.mv1", &_modelInf, lWeponParentFrame, 2.f, true, "saya", RS);
 	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
-	status = STATUS::NORMAL;
+	status = STATUS::WAIT;
 	time = 200;
 	stanTime = 200;
 	hittime = 0;
@@ -376,6 +376,7 @@ bool LastBoss::UtilityJudge() {
 		case STATUS::WAIT:
 			RangeJ();
 			status = STATUS::RUN;
+			time = 300;
 			break;
 		case STATUS::DAMAGE:
 			status = STATUS::WAIT;
