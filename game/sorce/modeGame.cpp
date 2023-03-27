@@ -180,8 +180,16 @@ bool	modeG::Process()
 			}
 			else
 			{//‚»‚êˆÈŠO‚Ì€
-				_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
-				_valData->points += 20000;
+				if (i->first == Char_LBOSS)
+				{
+					_modeServer->Add(std::make_unique<modeE>(_modeServer), 1, MODE_END);
+					_valData->points += 99999;
+				}
+				else
+				{
+					_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+					_valData->points += 20000;
+				}
 				for (auto name : _valData->deadBoss) { if (name == i->first) { return false; } }
 				_valData->deadBoss.emplace_back(i->first);
 				return false;

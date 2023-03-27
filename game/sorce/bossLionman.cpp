@@ -374,7 +374,7 @@ bool BossLion::UtilityJudge() {
 			}
 			else {
 				if (Rand > 50) { status = STATUS::DIVE; }
-				if (Rand <= 50) { status = STATUS::RUN; }
+				if (Rand <= 50) { status = STATUS::RUN; time = 100; }
 			}
 			break;
 		case STATUS::DAMEGE:
@@ -439,7 +439,7 @@ bool BossLion::UtilityJudge() {
 			break;
 		case STATUS::ATTACK3:
 			RangeJ();
-			if (range == RANGE::LongRange && range == RANGE::MidRange) {
+			if (range == RANGE::LongRange || range == RANGE::MidRange) {
 				status = STATUS::DIVE;
 			}
 			if (range == RANGE::CrossRange) {
@@ -486,7 +486,7 @@ bool BossLion::UtilityJudge() {
 			}
 			else {
 				if (Rand > 50) { status = STATUS::DIVE; }
-				if (Rand <= 50) { status = STATUS::RUN; }
+				if (Rand <= 50) { status = STATUS::RUN; time = 50; }
 			}
 			break;
 		case STATUS::DAMEGE:
@@ -551,7 +551,7 @@ bool BossLion::UtilityJudge() {
 			break;
 		case STATUS::ATTACK3:
 			RangeJ();
-			if (range == RANGE::LongRange && range == RANGE::MidRange) {
+			if (range == RANGE::LongRange || range == RANGE::MidRange) {
 				status = STATUS::DIVE;
 			}
 			if (range == RANGE::CrossRange) {
@@ -562,6 +562,7 @@ bool BossLion::UtilityJudge() {
 				if (Rand <= 50) { status = STATUS::TACKLE; }
 				break;
 			}
+			break;
 		case STATUS::HANIATTACK:
 			if (Rand > 50) { status = STATUS::SLAM; }
 			if (Rand <= 50) { status = STATUS::TACKLE; }

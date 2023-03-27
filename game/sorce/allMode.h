@@ -10,6 +10,7 @@
 #include"modeEquipmentSelection.h"
 #include"modeSetting.h"
 #include"modeArtsGet.h"
+#include"modeEnd.h"
 
 #define MODE_GAME "game"
 #define MODE_TITLE "title"
@@ -21,3 +22,4 @@
 #define MODE_ES "EquipmentSelection"
 #define MODE_S "setting"
 #define MODE_AG "artsGet"
+#define MODE_END "gameEnding"
