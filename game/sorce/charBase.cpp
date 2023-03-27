@@ -97,6 +97,8 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 			HPmath(-allColl->at(i).damage, allColl->at(i).stan);
 			*damage = allColl->at(i).damage;
 			_isHit = true;
+			//charBox->at(attackChar)->drawStopF += 5;
+			if (attackChar == Char_PL) { _valData->hitstopF = 5; }
 		}
 	}
 

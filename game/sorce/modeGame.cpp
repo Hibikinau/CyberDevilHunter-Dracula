@@ -240,6 +240,11 @@ bool	modeG::Process()
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
 	}
 
+	if (_imputInf._gTrgb[KEY_INPUT_H])
+	{
+		_valData->hitstopF = 10;
+	}
+
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
 		int a = PlayEffekseer3DEffect(_valData->efcHandle);
@@ -268,7 +273,9 @@ bool	modeG::Render()
 	MV1DrawModel(stage.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
+		//if (i->second->drawStopF > 0) { i->second->drawStopF--; i->second->Render(0); }
 		i->second->Render(1);
+
 	}
 
 	ShadowMap_DrawEnd();

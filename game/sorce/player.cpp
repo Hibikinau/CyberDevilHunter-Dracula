@@ -233,7 +233,7 @@ bool	PL::Process()
 			animChange(PL_jaku_1, &_modelInf, false, false, true);//アニメーションを弱攻撃１段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0),1);
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, jakuATK + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		}
 		else if (attackNumOld == 1)
 		{
@@ -364,9 +364,11 @@ bool	PL::Process()
 		recastSet();
 		if (Estate != _estate::GUARD && isFastGuard)
 		{
+			//if()
 			Estate = _estate::GUARD;
-			int a = PlayEffekseer3DEffect(guardEfcHandle);
-			SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y + 100.f, _modelInf.pos.z);
+			insGuardEfcHandle = PlayEffekseer3DEffect(guardEfcHandle);
+			SetPosPlayingEffekseer3DEffect(insGuardEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 100.f, _modelInf.pos.z);
+
 			counterTime = _valData->_counterTime;
 		}
 		nextKey = pushButton::Neutral;
@@ -501,6 +503,11 @@ bool	PL::Render(float timeSpeed)
 	int i = 0;
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+
+	if (IsEffekseer3DEffectPlaying(insGuardEfcHandle) == 0)
+	{
+		SetPosPlayingEffekseer3DEffect(insGuardEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 100.f, _modelInf.pos.z);
+	}
 	return true;
 }
 

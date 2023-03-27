@@ -39,10 +39,7 @@ int WINAPI WinMain(
 
 		appBase->Input();
 		if (!appBase->Process()) { break; }
-
-		ClearDrawScreen();		// ‰æ–Ê‚ğ‰Šú‰»‚·‚é
 		appBase->Render();
-		ScreenFlip();			// — ‰æ–Ê‚Ì“à—e‚ğ•\‰æ–Ê‚É”½‰f‚³‚¹‚é
 	}
 	appBase->Terminate();
 

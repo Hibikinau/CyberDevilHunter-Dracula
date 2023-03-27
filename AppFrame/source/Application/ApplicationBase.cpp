@@ -111,15 +111,25 @@ bool ApplicationBase::Input() {
 }
 
 bool ApplicationBase::Process() {
-	_serverMode->ProcessInit();
-	_serverMode->Process();
-	_serverMode->ProcessFinish();
+	if (_serverMode->_valData.hitstopF > 0) { _serverMode->_valData.hitstopF--; }
+	else
+	{
+		_serverMode->ProcessInit();
+		_serverMode->Process();
+		_serverMode->ProcessFinish();
+	}
 	return true;
 }
 
 bool ApplicationBase::Render() {
-	_serverMode->RenderInit();
-	_serverMode->Render();
-	_serverMode->RenderFinish();
+	if (_serverMode->_valData.hitstopF > 0);
+	else
+	{
+		ClearDrawScreen();		// ‰æ–Ê‚ð‰Šú‰»‚·‚é
+		_serverMode->RenderInit();
+		_serverMode->Render();
+		_serverMode->RenderFinish();
+		ScreenFlip();			// — ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f‚³‚¹‚é
+	}
 	return true;
 }
