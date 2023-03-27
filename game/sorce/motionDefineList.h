@@ -52,13 +52,13 @@
 #define PL_motion_hissatsu 31
 
 //ラスボス
-#define Boss_idol1  32 //仰ぎ
-#define Boss_idol　33 //爪
-#define Boss_kick　34 //ハイキック
-#define Boss_kaiten　35 //回転切り
-#define Boss_jumpattack　36 //ジャンプ攻撃
-#define Boss_magic1　37 //魔法　片手
-#define Boss_magic2　38 //魔法　両手
+#define Boss_idol1 32 //仰ぎ
+#define Boss_idol 33 //爪
+#define Boss_kick 34 //ハイキック
+#define Boss_kaiten 35 //回転切り
+#define Boss_jumpattack 36 //ジャンプ攻撃
+#define Boss_magic1 37 //魔法　片手
+#define Boss_magic2 38 //魔法　両手
 
 //騎士
 #define BOSS1_idel 0
