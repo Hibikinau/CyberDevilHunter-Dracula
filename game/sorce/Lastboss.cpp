@@ -26,6 +26,7 @@ bool LastBoss::Initialize()
 	stanTime = 200;
 	hittime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
+	_statusInf.stanPoint = 0;
 	hitFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
