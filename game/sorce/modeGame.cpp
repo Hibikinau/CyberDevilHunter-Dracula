@@ -240,6 +240,11 @@ bool	modeG::Process()
 		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
 	}
 
+	if (_imputInf._gTrgb[KEY_INPUT_H])
+	{
+		_valData->hitstopF = 10;
+	}
+
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
 		int a = PlayEffekseer3DEffect(_valData->efcHandle);
@@ -268,7 +273,9 @@ bool	modeG::Render()
 	MV1DrawModel(stage.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
+		//if (i->second->drawStopF > 0) { i->second->drawStopF--; i->second->Render(0); }
 		i->second->Render(1);
+
 	}
 
 	ShadowMap_DrawEnd();
@@ -417,11 +424,12 @@ bool	modeG::collHitCheck()
 		float _damage;
 		if (i->second->hitCheck(i->first.c_str(), &hitPos, &hitDir, &_damage))
 		{
-			if (i->first != Char_PL)
-			{
-				popDamageInf insDamage = { hitPos, _damage };
-				damageNumPopList.emplace_back(insDamage);
-			}
+			popDamageInf insDamage;
+			insDamage.pos = hitPos;
+			insDamage.damage = _damage;
+			insDamage.isPl = i->first == Char_PL;
+			damageNumPopList.emplace_back(insDamage);
+
 			auto a = PlayEffekseer3DEffect(_valData->efcHandle);
 			SetPosPlayingEffekseer3DEffect(a, hitPos.x, hitPos.y, hitPos.z);
 			auto D = 45;
@@ -566,9 +574,12 @@ bool modeG::drawUI()
 	//ダメージ表示
 	for (int i = 0; i < damageNumPopList.size(); i++)
 	{
-		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
-		DrawString(screenPos.x, screenPos.y, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(0, 0, 255));
+		//auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
+		VECTOR screenPos;
+		damageNumPopList[i].isPl ? (screenPos.x = 580, screenPos.y = 30) : (screenPos.x = 900, screenPos.y = 630);
+		DrawString(screenPos.x, screenPos.y - damageNumPopList[i].popTime, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(255, 255, 255));
 		//DrawBillboard3D(damageNumPopList[i].pos, .5f, .5f, 500, 0.f, slashLineAnimHandle[damageNumPopList[i].popTime], true);
+
 		if (damageNumPopList[i].popTime < 39) { damageNumPopList[i].popTime++; }
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}

@@ -18,6 +18,7 @@ struct popDamageInf
 	VECTOR pos;
 	float damage;
 	int popTime = 0;
+	bool isPl;
 };
 
 class modeG : public ModeBase
