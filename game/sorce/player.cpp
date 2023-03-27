@@ -528,6 +528,7 @@ void PL::charMove(float Speed, float _Dir, bool isAnimChange)
 
 bool PL::HPmath(float math, float Stan)
 {
+	bool isBlow = false;
 	if (math < 0)
 	{
 		if (counterTime > 0) { isCounter = 1; }
@@ -538,7 +539,7 @@ bool PL::HPmath(float math, float Stan)
 				if (isAwakening == 0)
 				{
 					if (!deadVoice) { PlaySoundMem(soundHandle[voiceStartNum + 27 + rand() % 4], DX_PLAYTYPE_BACK); }
-					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6);
+					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6); isBlow = true;
 				}
 				PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;
@@ -558,7 +559,7 @@ bool PL::HPmath(float math, float Stan)
 	}
 	if (dodgeTime > 0) { PlaySoundMem(soundHandle[voiceStartNum + 24 + rand() % 3], DX_PLAYTYPE_BACK); }
 
-	return true;
+	return isBlow;
 }
 bool PL::BPmath(float math)
 {
@@ -695,16 +696,16 @@ bool PL::CA_change(std::string name, const char* XorY)
 {//changeAttackY = &CA_charge;
 	if ("X" == XorY)
 	{
-		if ("charge" == name) { changeAttackX = &CA_charge; }
-		if ("kirinuke" == name) { changeAttackX = &CA_kirinuke; }
-		if ("debug" == name) { changeAttackX = &CA_debugAttack; }
+		if ("牙突" == name) { changeAttackX = &CA_charge; }
+		if ("切抜" == name) { changeAttackX = &CA_kirinuke; }
+		if ("竜閃" == name) { changeAttackX = &CA_debugAttack; }
 		if ("NODATA" == name) { changeAttackX = &CA_noData; }
 	}
 	else if ("Y" == XorY)
 	{
-		if ("charge" == name) { changeAttackY = &CA_charge; }
-		if ("kirinuke" == name) { changeAttackY = &CA_kirinuke; }
-		if ("debug" == name) { changeAttackY = &CA_debugAttack; }
+		if ("牙突" == name) { changeAttackY = &CA_charge; }
+		if ("切抜" == name) { changeAttackY = &CA_kirinuke; }
+		if ("竜閃" == name) { changeAttackY = &CA_debugAttack; }
 		if ("NODATA" == name) { changeAttackY = &CA_noData; }
 	}
 
@@ -719,7 +720,7 @@ bool PL::CA_debugAttack(PL* insPL)
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 	animChange(PL_motion_hissatsu, &insPL->_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
 	insPL->animSpd = 1.f;
-	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 99999.f, 100000, rWeponParentFrame, VGet(0, 0, 0), 1);
+	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 200.f, 100000, rWeponParentFrame, VGet(0, 0, 0), 1);
 
 	auto a = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y - 90, 300));
 	auto b = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y + 90, 300));
