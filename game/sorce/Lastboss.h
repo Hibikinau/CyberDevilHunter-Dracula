@@ -133,5 +133,6 @@ protected:
 		AwakeMove,//!ŠoÁˆÚ“®—Ê
 		AwakeT,//!ŠoÁ‘Ò‹@ŠÔ
 		AwakeTK;
+	int impactEfcHandle;
 	int DT, hittime;
 };

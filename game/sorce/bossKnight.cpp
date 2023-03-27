@@ -39,7 +39,7 @@ bool BossKnight::Initialize()
 	AwakeT = 0;
 	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
-
+	impactEfcHandle = LoadEffekseerEffect("game/res/effect/è’åÇîg1/slash_shot.efkefc", 80.f);
 	slamEfcHandle = LoadEffekseerEffect("game/res/effect/ë≈åÇ5/ë≈åÇ5.efkefc", 20.f);
 	return true;
 }
@@ -196,6 +196,9 @@ bool	BossKnight::Process()
 			}
 		}
 		if (ActionFlag == true) {
+			int a2 = PlayEffekseer3DEffect(impactEfcHandle);
+			SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
+			SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));
 			break;
 		}
 		animSpd = .7f * AwakeSpd;

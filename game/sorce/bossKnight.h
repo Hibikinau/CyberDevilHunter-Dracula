@@ -125,5 +125,6 @@ protected:
 		AwakeDmg,//!覚醒時追加ダメージ
 		AwakeMove,//!覚醒時移動量
 		AwakeT;//!覚醒時待機時間
+	int impactEfcHandle;
 	VECTOR Efa, Efb, Efaz, Efbz;
 };

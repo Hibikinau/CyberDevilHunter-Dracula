@@ -32,6 +32,7 @@ bool LastBoss::Initialize()
 	ActionFlag = false;
 	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
+	impactEfcHandle = LoadEffekseerEffect("game/res/effect/è’åÇîg1/slash_shot.efkefc", 80.f);
 	ChangeVolumeSoundMem(120, swingSE);
 	Awake = false;
 	AwakeDmg = 1;
@@ -68,11 +69,17 @@ bool	LastBoss::Process()
 	}
 
 	if (status == STATUS::STAN) {
-		animChange(PL_hirumi, &_modelInf, true, true, false);
+		if (!ActionFlag) {
+			animSpd = 1.0;
+			animChange(PL_hirumi, &_modelInf, true, true, false);
+			ActionFlag = true;
+		}
 		if (stanTime == 0) {
 			status = STATUS::WAIT;
+			time = 0;
 			stanTime = 100;
 			_statusInf.stanPoint = 0;
+			ActionFlag = false;
 		}
 		else { stanTime--; }
 		return true;
@@ -246,6 +253,9 @@ bool	LastBoss::Process()
 			}
 		}
 		if (ActionFlag == true) {
+			int a2 = PlayEffekseer3DEffect(impactEfcHandle);
+			SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
+			SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));
 			break;
 		}
 		animSpd = 1.5f * AwakeSpd;
