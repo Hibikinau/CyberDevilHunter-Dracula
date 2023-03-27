@@ -21,6 +21,7 @@ bool	modeMM::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_Window_open/apngframe01_sheet.png", 29, 2, 15, 800, 600, windowAnimHandle);
+	_cg = _modeServer->RS.loadGraphR("game/res/AB.png");
 	if (_modeServer->_valData.menuSoundHandle.size() == 0)
 	{
 		_modeServer->_valData.menuSoundHandle.emplace_back(LoadSoundMem("game/res/SE/system/system_select_01.mp3"));
@@ -122,6 +123,7 @@ bool	modeMM::Render()
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
 	DrawGraph(0, 20, obiHandle, true);
+	DrawGraph(30, 670, _cg, true);
 	SetFontSize(40);
 	int defY = 200;
 	for (int i = 0; i < menuMessage.size(); i++)
