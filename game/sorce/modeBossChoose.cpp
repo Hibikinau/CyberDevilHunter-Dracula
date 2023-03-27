@@ -13,11 +13,11 @@ bool	modeBC::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
-	menuMessage.emplace_back("　　　　ボス１\n「騎士」");
-	menuMessage.emplace_back("　　　　ボス２\n「ライオンマン」");
+	menuMessage.emplace_back("　　エリア A\n    「騎士」");
+	menuMessage.emplace_back("　　エリア B\n「ライオンマン」");
 	if (_modeServer->_valData.deadBoss.size() >= 2)
 	{
-		menuMessage.emplace_back("　　　　ボス２\n「ラスボス」");
+		menuMessage.emplace_back("　　エリア C　\n  「？？？？」");
 	}
 	picMenuMaxNum = menuMessage.size() - 1;
 	picMenuNum = 0;
@@ -224,7 +224,7 @@ bool	modeBC::Render()
 		}
 	}
 	else {
-		DrawGraph(80, defY + (110 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
+		DrawGraph(20, defY + (110 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
 	}
 
 	DrawGraph(0, 20, titleHandle, true);
