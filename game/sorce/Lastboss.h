@@ -74,11 +74,10 @@ public:
 	 */
 	enum class STATUS {
 		NORMAL,//!初期状態
-		JUMP,//!ジャンプ
-		quickATTACK,//!弱攻撃
+		quick,//!弱攻撃
 		slowATTACK,//!強攻撃
-		changeATTACKX,//Xボタン側入れ替え技
-		changeATTACKY,//Yボタン側入れ替え技
+		STAB,//Xボタン側入れ替え技
+		cY,//Yボタン側入れ替え技
 		FSTEP,
 		BSTEP,
 		RSTEP,
