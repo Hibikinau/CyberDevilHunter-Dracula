@@ -79,11 +79,16 @@ bool	modeG::Initialize()
 	BPgaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/BP_waku.png");
 	HPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_HP.png");
 	BPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_BP.png");
-	stunGaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/stun_bar_01.png");
-	stunGaugeHandle = _modeServer->RS.loadGraphR("game/res/stun_bar_02.png");
+	stunGaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/stun_ui_00.png");
+	stunGaugeHandle = _modeServer->RS.loadGraphR("game/res/UI/stun_ui_01.png");
+	stunGaugeHandle2 = _modeServer->RS.loadGraphR("game/res/UI/stun_ui_02.png");
+	stunGaugeHandle3 = _modeServer->RS.loadGraphR("game/res/UI/stun_ui_03.png");
 	swordIcon = _modeServer->RS.loadGraphR("game/res/UI/ken.png");
 	heatIcon = _modeServer->RS.loadGraphR("game/res/UI/heat.png");
 	swordRecastIconHandle = _modeServer->RS.loadGraphR("game/res/UI/ken2.png");
+
+	stunStrHandle = _modeServer->RS.loadGraphR("game/res/UI/STUN.png");
+
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
 	GSAnimNum = 0;
@@ -106,9 +111,24 @@ bool	modeG::Initialize()
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
 	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/slash_effect.efkefc", 20.f); }
-	if (_valData->popBossNum == 1) { BGM = LoadSoundMem("game/res/BGM/boss01_BGM_Lemon Fight - Stronger (feat. Jessica Reynoso)-GameEdit [NCS Release].mp3"); }
-	else if(_valData->popBossNum == 2){ BGM = LoadSoundMem("game/res/BGM/boss02_BGM_ReauBeau - Make Waves (feat. Brynja Mary)-GameEdit [NCS Release].mp3"); }
-	else { BGM = LoadSoundMem("game/res/BGM/boss03_01_BGM_ANGELPLAYA - PULL UP-inst-GameEdit [NCS Release].mp3"); }
+	if (_valData->popBossNum == 1)
+	{
+		bossNamePosX = 285;
+		bossNameStrHandle = _modeServer->RS.loadGraphR("game/res/UI/KNIGHT.png");
+		BGM = LoadSoundMem("game/res/BGM/boss01_BGM_Lemon Fight - Stronger (feat. Jessica Reynoso)-GameEdit [NCS Release].mp3");
+	}
+	else if (_valData->popBossNum == 2)
+	{
+		bossNamePosX = 263;
+		bossNameStrHandle = _modeServer->RS.loadGraphR("game/res/UI/LIONMAN.png");
+		BGM = LoadSoundMem("game/res/BGM/boss02_BGM_ReauBeau - Make Waves (feat. Brynja Mary)-GameEdit [NCS Release].mp3");
+	}
+	else
+	{
+		bossNamePosX = 283;
+		bossNameStrHandle = _modeServer->RS.loadGraphR("game/res/UI/final_boss.png");
+		BGM = LoadSoundMem("game/res/BGM/boss03_01_BGM_ANGELPLAYA - PULL UP-inst-GameEdit [NCS Release].mp3");
+	}
 
 	ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), BGM);
 
@@ -614,12 +634,26 @@ bool modeG::drawUI()
 	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
 	DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false);
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
+	DrawGraph(bossNamePosX, 628, bossNameStrHandle, true);
 
 	//bossスタンバー
-	barLength = 551, barPposX = 640 - barLength / 2, barPosY = 650;
+	barLength = 462, barPposX = 409, barPosY = 666;
 	gauge = ((barLength / 150) * bossStatus.stanPoint);
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
-	DrawRectGraph(barPposX, barPosY + 8, 0, 0, gauge, 53, stunGaugeHandle, true, false);
+	if (gauge < (barLength / 2))
+	{
+		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle, true, false);
+	}
+	else if (gauge < ((barLength / 4) * 3))
+	{
+		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle2, true, false);
+	}
+	else
+	{
+		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle3, true, false);
+	}
+
+	DrawGraph(353, 670, stunStrHandle, true);
 
 	//スキルアイコン
 
