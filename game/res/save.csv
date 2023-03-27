@@ -7,7 +7,7 @@
 入れ替え技X
 牙突
 入れ替え技Y
-切抜
+竜閃
 エフェクトフェード
 1
 ボス1依頼情報
@@ -39,9 +39,9 @@
 20.000pt
 ここまで
 ラスボス依頼情報
-エリアC　「ラスボス戦」
+エリアC　「？？？？戦」
 内容
-「ラスボス」　1体の討伐
+「？？？？」　1体の討伐
 概要
 ERROR
 報酬
@@ -55,9 +55,12 @@ ERROR
 マスター音量
 50
 撃破済みBoss
+Boss1
+Boss2
+LBoss
 ここまで
 所持ポイント
-0
+319997
 プレイヤーボイスリスト
 player_voice_01_A.mp3
 player_voice_01_B.mp3
@@ -108,4 +111,68 @@ player_voice_15_C.mp3
 ここまで
 開発者モード
 エンドロール
+CV
+ 
+有角 紅葉：阪田　理歩（声優学科）
+ 
+ラスボス：渡邊　美咲（声優学科）
+ 
+ 
+STAFF
+企画
+和田 直己 (ゲームクリエイター学科1年)
+池田　萩 (ゲームクリエイター学科1年)
+五十嵐　響輝 (ゲームクリエイター学科1年)
+ 
+プログラム
+山本　莉久 (ゲームプログラマー学科1年)
+松田　裕 (ゲームプログラマー学科1年)
+脇添敏暉 (ゲームプログラマー学科1年)
+ 
+グラフィック
+西野　光 (ゲーム・アニメ3DCG学科1年)
+杉田　樹 (ゲーム・アニメ3DCG学科1年)
+松井　謙典 (ゲーム・アニメ3DCG学科1年)
+長谷川　里奈 (キャラクターデザイン学科1年)
+久原 聡美(ゲーム・アニメ3DCG学科1年)
+ 
+ 
+管理講師・技術指導
+まかべひろし　
+桑原 敏道
+柴崎 武
+初瀬川 泰隆
+ 
+担任
+渡辺 洋幸
+滝本 祐治
+宮川 大樹
+ 
+ 
+使用楽曲
+[Music provided by NoCopyrightSounds]
+ 
+OP
+Song: JNATHYN - Dioma (Demo) 
+ 
+ED
+Song: Jnathyn - Dioma
+ 
+メニューBGM1
+Song: Rob Gasser - Ricochet 
+ 
+メニューBGM2
+Song: ANGELPLAYA - LET THEM HAVE IT
+ 
+BOSS BGM
+ 
+騎士
+Song: Lemon Fight - Stronger 
+(feat. Jessica Reynoso) [Champion Remix]
+ 
+ライオンマン
+Song: ReauBeau - Make Waves (feat. Brynja Mary)
+ 
+ラスボス
+Song: ANGELPLAYA - PULL UP
 ここまで

@@ -77,6 +77,7 @@ bool	modeAG::Render()
 	DrawGraph(80 - 65, defY + (50 * picMenuNum) + 7, arrowAnimHandle[arrowAnimNum], true);
 
 	DrawGraph(0, 0, menuBarHandle, true);
+	DrawString(1100, 660, std::to_string(_modeServer->_valData.points).c_str(), GetColor(255, 255, 255));
 	return true;
 }
 
