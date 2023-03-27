@@ -12,6 +12,7 @@ bool	modeE::Process()
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
 		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+		return false;
 	}
 	return true;
 }
