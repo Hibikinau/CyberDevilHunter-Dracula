@@ -86,6 +86,8 @@ bool	modeG::Initialize()
 	swordIcon = _modeServer->RS.loadGraphR("game/res/UI/ken.png");
 	heatIcon = _modeServer->RS.loadGraphR("game/res/UI/heat.png");
 	swordRecastIconHandle = _modeServer->RS.loadGraphR("game/res/UI/ken2.png");
+	sousaHandle = _modeServer->RS.loadGraphR("game/res/UI/8f56275350eb4bc2.png");
+	burstStrHandle = _modeServer->RS.loadGraphR("game/res/UI/1.png");
 
 	stunStrHandle = _modeServer->RS.loadGraphR("game/res/UI/STUN.png");
 
@@ -613,6 +615,9 @@ bool modeG::drawUI()
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}
 
+	//操作方法の表示
+	DrawGraph(6, 495, sousaHandle, true);
+
 	//HPバー
 	int barPposX = 10, barPosY = 10;
 	float barLength = 462;
@@ -622,12 +627,14 @@ bool modeG::drawUI()
 	DrawGraph(30, 23, HPstrHandle, true);
 
 	//BPバー
-	//500 x 3本
+	//500 x 3本stunStrHandle
 	barLength = 303, barPposX = 90, barPosY = 70;
 	gauge = barLength - ((barLength / plStatus.maxBloodPoint) * plStatus.bloodPoint);
 	DrawRectGraph(barPposX - 5, barPosY - 7, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
 	DrawExtendGraph(barPposX, barPosY, barPposX + barLength - 10, barPosY + 20, BPgaugeHandleWaku, true);
 	DrawGraph(30, 70, BPstrHandle, true);
+	if(plStatus.bloodPoint >= plStatus.maxBloodPoint){ DrawGraph(barPposX - 20, barPosY, burstStrHandle, true); }
+	
 
 	//bossHPバー
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
@@ -652,7 +659,6 @@ bool modeG::drawUI()
 	{
 		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle3, true, false);
 	}
-
 	DrawGraph(353, 670, stunStrHandle, true);
 
 	//スキルアイコン

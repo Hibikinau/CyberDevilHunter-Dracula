@@ -46,7 +46,7 @@ public:
 		, BPstrHandle, stunGaugeHandleWaku, stunGaugeHandle, stunGaugeHandle2, stunGaugeHandle3
 		, shadowMapHandle, animIndexOld, insEfcHamdle, plRecastTimeX, plRecastTimeY, swordIcon, heatIcon
 		, swordGlitchAnimHandle[29], swordGlitchAnimNum, stunStrHandle, bossNameStrHandle, bossNamePosX
-		, recastMaxNumX, recastMaxNumY, plSetRecastTime, swordRecastIconHandle;
+		, recastMaxNumX, recastMaxNumY, plSetRecastTime, swordRecastIconHandle, sousaHandle, burstStrHandle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
 	bool isLockon, isGameOver = false, endVoice = false;
