@@ -44,7 +44,7 @@ public:
 	int _x, _y;
 	int testAttackF, HPgaugeHandle, HPgaugeHandleWaku, BPgaugeHandle, BPgaugeHandleWaku, HPstrHandle
 		, BPstrHandle, stunGaugeHandleWaku, stunGaugeHandle, stunGaugeHandle2, stunGaugeHandle3
-		, shadowMapHandle, animIndexOld, insEfcHamdle, plRecastTimeX, plRecastTimeY, swordIcon, heatIcon
+		, shadowMapHandle, animIndexOld, redTrailHamdle, whiteTrailHamdle, plRecastTimeX, plRecastTimeY, swordIcon, heatIcon
 		, swordGlitchAnimHandle[29], swordGlitchAnimNum, stunStrHandle, bossNameStrHandle, bossNamePosX
 		, recastMaxNumX, recastMaxNumY, plSetRecastTime, swordRecastIconHandle, sousaHandle, burstStrHandle;
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;

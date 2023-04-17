@@ -16,7 +16,7 @@ bool	modeM::Initialize()
 	GetDrawScreenGraph(0, 0, 1280, 720, _cg);
 	_modeServer->disable(MODE_GAME);
 	menuMessage.emplace_back("戦闘をやり直す");
-	menuMessage.emplace_back("ブリーフィングに戻る");
+	menuMessage.emplace_back("メインメニューに戻る");
 	menuMessage.emplace_back("設定");
 	menuMessage.emplace_back("タイトルに戻る");
 	picMenuMaxNum = menuMessage.size() - 1;
@@ -49,7 +49,7 @@ bool	modeM::Process()
 			return false;
 		}
 		else if (picMenuNum == 1)
-		{//ブリーフィングへ
+		{//メインメニューへ
 			_modeServer->Del(MODE_GAME);
 			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 			return false;

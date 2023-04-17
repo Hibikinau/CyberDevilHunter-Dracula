@@ -98,7 +98,8 @@ bool	modeG::Initialize()
 	_modeServer->RS.loadDivGraphR("game/res/slashEfc/nc142771Efc.png", 39, 3, 13, 1080, 1080, slashLineAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	_modeServer->RS.loadDivGraphR("game/res/UI/GlitchUI/kenGlitch_0000_sheet.png", 29, 2, 15, 770, 770, swordGlitchAnimHandle);
-	insEfcHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
+	redTrailHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
+	whiteTrailHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -335,7 +336,11 @@ bool	modeG::Render()
 
 		if (mAllColl.at(i).efcNum == 1)
 		{
-			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, insEfcHamdle);
+			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, redTrailHamdle);
+		}
+		if (mAllColl.at(i).efcNum == 2)
+		{
+			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, whiteTrailHamdle);
 		}
 
 	}
@@ -355,7 +360,7 @@ bool	modeG::Render()
 			{
 				if (mAllColl[i].efcNum == 1)
 				{
-					drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], insEfcHamdle);
+					drawBPolygon(mAllColl[i].rightingEfc.downCornerPos[j], mAllColl[i].rightingEfc.upCornerPos[j], mAllColl[i].rightingEfc.downCornerPos[j - 1], mAllColl[i].rightingEfc.upCornerPos[j - 1], redTrailHamdle);
 				}
 			}
 		}
@@ -368,7 +373,11 @@ bool	modeG::Render()
 			if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_ALPHA, (255 / atkEfc[i].maxLifeTime) * atkEfc[i].lifeTime); }
 			if (atkEfc[i].efcNum == 1)
 			{
-				drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], insEfcHamdle);
+				drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], redTrailHamdle);
+			}
+			if (atkEfc[i].efcNum == 2)
+			{
+				drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], whiteTrailHamdle);
 			}
 		}
 		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }
@@ -634,7 +643,7 @@ bool modeG::drawUI()
 	DrawExtendGraph(barPposX, barPosY, barPposX + barLength - 10, barPosY + 20, BPgaugeHandleWaku, true);
 	DrawGraph(30, 70, BPstrHandle, true);
 	if(plStatus.bloodPoint >= plStatus.maxBloodPoint){ DrawGraph(barPposX - 20, barPosY, burstStrHandle, true); }
-	
+
 
 	//bossHPバー
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
