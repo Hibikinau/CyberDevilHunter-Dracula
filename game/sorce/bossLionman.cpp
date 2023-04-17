@@ -258,10 +258,10 @@ bool	BossLion::Process()
 	case STATUS::TACKLE:
 		if (_modelInf.isAnimEnd == true) {
 			attackStep == 0 ? attackStep++ : UtilityJudge();
-			//if (status != STATUS::TACKLE) {
 			ActionFlag = false;
-			//break;
-		//}
+			if (status != STATUS::TACKLE) {
+			break;
+		}
 		}
 		if (ActionFlag == true) {
 			if (_modelInf.playTime > 5 && _modelInf.playTime < 8)
@@ -308,8 +308,8 @@ bool	BossLion::Process()
 	case STATUS::DIVE:
 		if (_modelInf.isAnimEnd == true) {
 			attackStep == 0 ? attackStep++ : UtilityJudge();
+			ActionFlag = false;
 			if (status != STATUS::DIVE) {
-				ActionFlag = false;
 				break;
 			}
 		}
