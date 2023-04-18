@@ -19,7 +19,7 @@ struct valData
 		, hitstopF = 0;
 	bool isAtkEfcArufa = true, isLogoRender = true, isDebug = false;
 	std::string plChangeAttackX = "charge", plChangeAttackY = "kirinuke", boss1Inf, boss2Inf, lastBossInf;
-	std::vector<std::string> news, changeAttackList, playerVoiceList, deadBoss, credits;
+	std::vector<std::string> news, changeAttackList, playerVoiceList, deadBoss, credits, Tips;
 	std::vector<int> activateWepon, disableWepon, menuSoundHandle;
 };
 

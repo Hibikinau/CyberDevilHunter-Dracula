@@ -81,7 +81,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 				, insCapNow
 				, insCapOld
 				, allColl->at(i).capColl.r);
-			//auto a = DrawCapsule3D(insCapOld, insCapNow, allColl->at(i).capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+			auto a = DrawCapsule3D(insCapOld, insCapNow, allColl->at(i).capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 			if (insCheckHit)
 			{
 				*hitPos = VScale(VAdd(insCapNow, insCapOld), 0.5f);

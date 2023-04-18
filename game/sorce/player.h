@@ -218,7 +218,7 @@ protected:
 		, isAwakening = 0//覚醒中か
 		, voiceStartNum//!音声データコンテナ内の声データの初期値
 		, guardEfcHandle, chargeEfcHandle, healEfcHandle, impactEfcHandle, waitBlowTime
-		, insGuardEfcHandle;
+		, insGuardEfcHandle, insHealEfcHandle;
 	float spd//!キャラの移動速度
 		, dodgeDir;//!キャラの回避方向
 	bool isAnimEnd//!アニメーション再生が終わっているか
