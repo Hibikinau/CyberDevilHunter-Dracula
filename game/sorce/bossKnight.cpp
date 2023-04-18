@@ -385,7 +385,8 @@ bool BossKnight::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			if (range == RANGE::CrossRange) {
+			status = STATUS::SRASH;
+			/*if (range == RANGE::CrossRange) {
 				if (Rand < 40) { status = STATUS::SRASH; }
 				if (Rand >= 40) {
 					status = STATUS::SLAM;
@@ -400,7 +401,7 @@ bool BossKnight::UtilityJudge() {
 				if (Rand < 70) { status = STATUS::JAMPACT; }
 				if (Rand >= 70) { status = STATUS::RUN; }
 				break;
-			}
+			}*/
 			break;
 		case STATUS::DAMEGE:
 			status = STATUS::WAIT;
@@ -477,7 +478,8 @@ bool BossKnight::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			if (range == RANGE::CrossRange) {
+			status = STATUS::SRASH;
+			/*if (range == RANGE::CrossRange) {
 				if (Rand < 40) { status = STATUS::SRASH; }
 				if (Rand >= 40) {
 					status = STATUS::SLAM;
@@ -492,7 +494,7 @@ bool BossKnight::UtilityJudge() {
 				if (Rand < 70) { status = STATUS::JAMPACT; }
 				if (Rand >= 70) { status = STATUS::RUN; }
 				break;
-			}
+			}*/
 			break;
 		case STATUS::DAMEGE:
 			status = STATUS::WAIT;
@@ -596,6 +598,18 @@ void BossKnight::Move(float speed, float radian) {
 	_modelInf.pos.z -= cos(Radian) * Speed;
 }
 
+void BossKnight::ST() {
+
+int a2 = PlayEffekseer3DEffect(impactEfcHandle);
+SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
+SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));
+
+auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
+auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
+auto bz = getDirVecP(_modelInf.dir.y, 30);
+a.y = b.y = _modelInf.pos.y + 100;
+makeAttackCap(a, b, 60.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
+}
 
 bool BossKnight::HPmath(float Num, float Stan)
 {

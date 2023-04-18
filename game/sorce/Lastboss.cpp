@@ -305,55 +305,55 @@ bool	LastBoss::Process()
 	//	PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 	//	ActionFlag = true;
 	//	break;
-	//case STATUS::quick:
-	//	if (isAnimEnd == true) {
-	//		ActionFlag = false;
-	//		if (attackStep < 10)
-	//		{
-	//			attackStep++;
-	//		}
-	//		else {
-	//			UtilityJudge();
-	//			if (status != STATUS::quick) { break; }
-	//		}
-	//	}
-	//	if (ActionFlag == true) { break; }
-	//	if (attackStep == 0 || attackStep == 2|| attackStep == 4)
-	//	{
-	//		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
-	//		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	}
-	//	//animSpd = 1.0f * AwakeSpd;
-	//	animChange(PL_jaku_1 + attackStep , &_modelInf, false, false, true);
-	//	//makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3, VGet(0, 0, 0), 1);
-	//	//PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	ActionFlag = true;
-	//	break;
-	//case STATUS::STAB:
-	//	if (isAnimEnd == true) {
-	//		ActionFlag = false;
-	//		if (attackStep < 3) { 
-	//			attackStep++; }
-	//		else {
-	//			UtilityJudge();
-	//			if (status != STATUS::STAB) { break; }
-	//		}
-	//	}
-	//	if (ActionFlag == true)
-	//	{
-	//		
-	//		if ((attackStep == 1 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f * AwakeMove, .0f); }
-	//		break;
-	//	}
-	//	animSpd = 1.0f * AwakeSpd;
-	//	animChange(PL_arts_tsuki_1 +attackStep ,&_modelInf, false, false, true);
-	//	if (attackStep == 2)
-	//	{
-	//		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
-	//		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	}
-	//	ActionFlag = true;
-	//	break;
+	case STATUS::quick:
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			if (attackStep < 10)
+			{
+				attackStep++;
+			}
+			else {
+				UtilityJudge();
+				if (status != STATUS::quick) { break; }
+			}
+		}
+		if (attackStep == 0 || attackStep == 2 || attackStep == 4)
+		{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
+			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		}
+		if (ActionFlag == true) { break; }
+		animSpd = 3.0f * AwakeSpd;
+		animChange(PL_jaku_1 + attackStep , &_modelInf, false, false, true);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 10.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3, VGet(0, 0, 0), 1);
+		//PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		ActionFlag = true;
+		break;
+	case STATUS::STAB:
+		if (isAnimEnd == true) {
+			ActionFlag = false;
+			if (attackStep < 3) { 
+				attackStep++; }
+			else {
+				UtilityJudge();
+				if (status != STATUS::STAB) { break; }
+			}
+		}
+		if (ActionFlag == true)
+		{
+			
+			if ((attackStep == 1 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f * AwakeMove, .0f); }
+			break;
+		}
+		animSpd = 1.0f * AwakeSpd;
+		animChange(PL_arts_tsuki_1 +attackStep ,&_modelInf, false, false, true);
+		if (attackStep == 2)
+		{
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
+			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		}
+		ActionFlag = true;
+		break;
 	};
 
 	if (isHit && hittime == 0) {
@@ -391,7 +391,7 @@ bool LastBoss::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::RUN;
+			status = STATUS::quick;
 			time = 300;
 			break;
 		case STATUS::DAMAGE:
@@ -440,6 +440,73 @@ bool LastBoss::UtilityJudge() {
 				break;
 			case STATUS::magicR:
 				status = STATUS::quick;
+				break;*/
+		case STATUS::quick:
+				RangeJ();
+				status = STATUS::WAIT;
+				break;
+		case STATUS::STAB:
+				RangeJ();
+				status = STATUS::WAIT;
+				time = 100;
+				break;
+				
+		}
+	}
+	if (Awake) {
+		switch (status) {
+		case STATUS::NONE:
+		case STATUS::WAIT:
+			RangeJ();
+			status = STATUS::RUN;
+			time = 300;
+			break;
+		case STATUS::DAMAGE:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::DEAD:break;
+		case STATUS::RUN:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand > 50) { status = STATUS::kick; }
+				if (Rand <= 50) { status = STATUS::kaiten; }
+			}
+			if (range == RANGE::MidRange) {
+				status = STATUS::FSTEP;
+			}
+			if (range == RANGE::LongRange) {
+				status = STATUS::RUN;
+			}
+			break;
+		case STATUS::FSTEP:
+			status = STATUS::kaiten;
+			break;
+		case STATUS::BSTEP:
+			status = STATUS::jumpattack;
+			break;
+		case STATUS::RSTEP:
+			status = STATUS::BSTEP;
+			break;
+		case STATUS::LSTEP:
+			status = STATUS::FSTEP;;
+			break;
+		case STATUS::kick:
+			status = STATUS::BSTEP;
+			break;
+		case STATUS::kaiten:
+			if (Rand > 50) { status = STATUS::LSTEP; }
+			if (Rand <= 50) { status = STATUS::RSTEP; }
+			break;
+		case STATUS::jumpattack:
+			RangeJ();
+			status = STATUS::WAIT;
+			time = 50;
+			break;
+			/*case STATUS::magicK:
+				status = STATUS::magicR;
+				break;
+			case STATUS::magicR:
+				status = STATUS::quick;
 				break;
 		case STATUS::quick:
 				RangeJ();
@@ -450,10 +517,9 @@ bool LastBoss::UtilityJudge() {
 				status = STATUS::WAIT;
 				time = 100;
 				break;*/
-				
+
 		}
 	}
-
 	
 	return true;
 }

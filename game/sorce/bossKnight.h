@@ -69,6 +69,8 @@ public:
 	 */
 	void Move(float speed, float radian);
 
+	void ST();
+
 	/**
 	 * @brief キャラクターの現在の状態
 	 */
