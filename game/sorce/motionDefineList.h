@@ -59,6 +59,9 @@
 #define Boss_jumpattack 36 //ジャンプ攻撃
 #define Boss_magic1 37 //魔法　片手
 #define Boss_magic2 38 //魔法　両手
+#define Boss_arts_tsuki_1 26
+#define Boss_arts_tsuki_2 27
+#define Boss_arts_tsuki_3 28
 
 //騎士
 #define BOSS1_idel 0
