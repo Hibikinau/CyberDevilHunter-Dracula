@@ -317,7 +317,7 @@ bool	LastBoss::Process()
 				if (status != STATUS::quick) { break; }
 			}
 		}
-		if (attackStep == 0 || attackStep == 2 || attackStep == 4)
+		if (attackStep == 0 || attackStep == 2 || attackStep == 4||attackStep==8)
 		{
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
@@ -337,7 +337,7 @@ bool	LastBoss::Process()
 	case STATUS::STAB:
 		if (isAnimEnd == true) {
 			ActionFlag = false;
-			if (attackStep < 2) { 
+			if (attackStep < 3) { 
 				attackStep++; }
 			else {
 				UtilityJudge();
@@ -353,14 +353,18 @@ bool	LastBoss::Process()
 				/*makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 				PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);*/
 			}
+			if (attackStep == 3) {
+				if (_modelInf.playTime > 5) { Move(30.0f * AwakeMove, .0f); }
+			}
 			break;
 		}
 		if (attackStep == 1) {
 			animSpd = 2.0f * AwakeSpd;
 		}
+		else if(attackStep==2){ animSpd = 3.5f * AwakeSpd; }
 		else { animSpd = 1.2f * AwakeSpd; }
 		animChange(Boss_arts_tsuki_1 +attackStep ,&_modelInf, false, false, true);
-		if (attackStep == 2)
+		if (attackStep == 2 || attackStep == 3)
 		{
 			_modelInf.dir.y = Pdir;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
