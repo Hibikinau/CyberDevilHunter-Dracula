@@ -345,8 +345,8 @@ bool	LastBoss::Process()
 			if (attackStep == 2)
 			{
 				if (_modelInf.playTime > 5) { Move(90.0f * AwakeMove, .0f); }
-				makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
-				PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+				/*makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
+				PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);*/
 			}
 			break;
 		}
@@ -354,6 +354,7 @@ bool	LastBoss::Process()
 		animChange(Boss_arts_tsuki_1 +attackStep ,&_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
+			_modelInf.dir.y = Pdir;
 			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
@@ -396,7 +397,7 @@ bool LastBoss::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::quick;
+			status = STATUS::RUN;
 			time = 300;
 			break;
 		case STATUS::DAMAGE:

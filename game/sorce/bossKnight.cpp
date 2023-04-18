@@ -267,8 +267,9 @@ bool	BossKnight::Process()
 			if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f * AwakeMove, .0f); }
 			break;
 		}
-
-		animSpd = 0.7f * AwakeSpd;
+		if(attackStep==0){ animSpd = 0.18f * AwakeSpd; }
+		else{ animSpd = 0.7f * AwakeSpd; }
+		/*animSpd = 0.7f * AwakeSpd;*/
 		animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 3)
 		{
@@ -385,8 +386,8 @@ bool BossKnight::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::SRASH;
-			/*if (range == RANGE::CrossRange) {
+			//status = STATUS::SRASH;
+			if (range == RANGE::CrossRange) {
 				if (Rand < 40) { status = STATUS::SRASH; }
 				if (Rand >= 40) {
 					status = STATUS::SLAM;
@@ -401,7 +402,7 @@ bool BossKnight::UtilityJudge() {
 				if (Rand < 70) { status = STATUS::JAMPACT; }
 				if (Rand >= 70) { status = STATUS::RUN; }
 				break;
-			}*/
+			}
 			break;
 		case STATUS::DAMEGE:
 			status = STATUS::WAIT;
@@ -478,8 +479,8 @@ bool BossKnight::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::SRASH;
-			/*if (range == RANGE::CrossRange) {
+			//status = STATUS::SRASH;
+			if (range == RANGE::CrossRange) {
 				if (Rand < 40) { status = STATUS::SRASH; }
 				if (Rand >= 40) {
 					status = STATUS::SLAM;
@@ -494,7 +495,7 @@ bool BossKnight::UtilityJudge() {
 				if (Rand < 70) { status = STATUS::JAMPACT; }
 				if (Rand >= 70) { status = STATUS::RUN; }
 				break;
-			}*/
+			}
 			break;
 		case STATUS::DAMEGE:
 			status = STATUS::WAIT;
