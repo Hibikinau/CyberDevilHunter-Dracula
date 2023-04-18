@@ -110,6 +110,16 @@ bool modeT::loadData(const char* dir, valData* _val)
 				i++;
 			}
 		}
+
+		//if (_data[i] == "ƒGƒ“ƒhƒ[ƒ‹")
+		//{
+		//	_val->Tips.clear(); i++;
+		//	while (_data[i] != "‚±‚±‚Ü‚Å")
+		//	{
+		//		_val->Tips.emplace_back(_data[i]);
+		//		i++;
+		//	}
+		//}
 	}
 
 	return true;

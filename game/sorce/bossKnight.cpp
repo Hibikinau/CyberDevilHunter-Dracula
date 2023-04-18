@@ -195,9 +195,8 @@ bool	BossKnight::Process()
 				break;
 			}
 		}
-		if (ActionFlag == true) {
-			//if (_modelInf.playTime = 30) { ST(); }
-		/*	int a2 = PlayEffekseer3DEffect(impactEfcHandle);
+		if (ActionFlag == true) {/*
+			int a2 = PlayEffekseer3DEffect(impactEfcHandle);
 			SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
 			SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));*/
 			break;
@@ -208,8 +207,8 @@ bool	BossKnight::Process()
 		auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
 		auto bz = getDirVecP(_modelInf.dir.y, 30);
 		a.y = b.y = _modelInf.pos.y + 100;
+
 		makeAttackCap(a, b, 60.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);*/
-		//ST();
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 100, VGet(0, 0, 0), 1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		ActionFlag = true;

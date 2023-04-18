@@ -78,11 +78,11 @@ bool	modeGO::Render()
 	for (int i = 0; i < menuMessage.size(); i++)
 	{
 		StrWidth = GetDrawStringWidth(menuMessage[i].c_str(), strlen(menuMessage[i].c_str()));
-		DrawString(640, defY + (90 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
+		DrawString(800, defY + (90 * i), menuMessage[i].c_str(), GetColor(255, 255, 255));
 		if (picMenuNum == i)
 		{
 			arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
-			DrawGraph(640 - 65, defY + (90 * i) + 7, arrowAnimHandle[arrowAnimNum], true);
+			DrawGraph(800 - 65, defY + (90 * i) + 7, arrowAnimHandle[arrowAnimNum], true);
 			//DrawString(640 - 40, defY + (90 * i), "¨", GetColor(255, 255, 255));
 		}
 	}

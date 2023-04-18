@@ -57,6 +57,7 @@ bool	modeG::Initialize()
 	//SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
+
 	_valData = &_modeServer->_valData;
 	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
 	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
@@ -338,18 +339,13 @@ bool	modeG::Render()
 		{
 			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, redTrailHamdle);
 		}
-		if (mAllColl.at(i).efcNum == 2)
-		{
-			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, whiteTrailHamdle);
-		}
 
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
 		if (mAllColl[i].nonActiveTimeF <= 0.f)
 		{
-			MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
-
+			MATRIX M = mAllColl.at(i).Mold;
 			DrawCapsule3D(VTransform(mAllColl.at(i).capColl.underPos, M), VTransform(mAllColl.at(i).capColl.overPos, M), mAllColl[i].capColl.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
 
 			mAllColl[i].rightingEfc.downCornerPos.push_back(VTransform(mAllColl.at(i).capColl.underPos, M));
@@ -374,10 +370,6 @@ bool	modeG::Render()
 			if (atkEfc[i].efcNum == 1)
 			{
 				drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], redTrailHamdle);
-			}
-			if (atkEfc[i].efcNum == 2)
-			{
-				drawBPolygon(atkEfc[i].downCornerPos[j], atkEfc[i].upCornerPos[j], atkEfc[i].downCornerPos[j - 1], atkEfc[i].upCornerPos[j - 1], whiteTrailHamdle);
 			}
 		}
 		if (_valData->isAtkEfcArufa) { SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0); }

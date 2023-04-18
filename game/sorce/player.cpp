@@ -498,6 +498,10 @@ bool	PL::Render(float timeSpeed)
 	{
 		SetPosPlayingEffekseer3DEffect(insGuardEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 100.f, _modelInf.pos.z);
 	}
+	if (IsEffekseer3DEffectPlaying(insHealEfcHandle) == 0)
+	{
+		SetPosPlayingEffekseer3DEffect(insHealEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
+	}
 	return true;
 }
 
@@ -518,7 +522,7 @@ void PL::charMove(float Speed, float _Dir, bool isAnimChange)
 
 bool PL::HPmath(float math, float Stan)
 {
-	bool isBlow = false;
+	isBlow = false;
 	if (math < 0)
 	{
 		if (counterTime > 0) { isCounter = 1; }
@@ -529,11 +533,11 @@ bool PL::HPmath(float math, float Stan)
 				if (isAwakening == 0)
 				{
 					if (!deadVoice) { PlaySoundMem(soundHandle[voiceStartNum + 27 + rand() % 4], DX_PLAYTYPE_BACK); }
-					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6); isBlow = true;
+					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6);
 				}
 				PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;
-				if (math < -30 || waitBlowTime > 0) { isBlow = true; }
+				if (math < -50 || waitBlowTime > 0) { isBlow = true; }
 				else { waitBlowTime = 100; }
 			}
 
@@ -626,8 +630,8 @@ pushButton PL::setAction()
 		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f)
 		{
 			HPmath(100, 10); BPmath(-500);
-			int a = PlayEffekseer3DEffect(healEfcHandle);
-			SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
+			insHealEfcHandle = PlayEffekseer3DEffect(healEfcHandle);
+			SetPosPlayingEffekseer3DEffect(insHealEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
 		}//LBA
 	}
 	else
@@ -671,9 +675,10 @@ pushButton PL::setAction()
 float PL::getMoveDir(bool checkUseCamDir)
 {
 	float _addDir = 0.f;
+
 	//ˆÚ“®æ‚ÌŠp“xŽw’è
-	_addDir = (std::atan2(-_imputInf->lStickX, -_imputInf->lStickY) * 180.f) / DX_PI_F;
-	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
+	_addDir = (std::atan2(-(_imputInf->lStickX), -(_imputInf->lStickY)) * 180.f) / DX_PI_F;
+	if ((_imputInf->lStickY) != 0 && _addDir == 0.f) { _addDir = 360.f; }
 	if (_addDir != 0) { _addDir += *_cameraDir + 180.f; }
 	if (camDir != -1.f && checkUseCamDir)
 	{

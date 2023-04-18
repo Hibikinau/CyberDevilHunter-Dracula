@@ -69,6 +69,11 @@ bool ApplicationBase::Terminate() {
 	return true;
 }
 
+int volumeGate2000(int num)
+{
+	if (std::abs(num) > 2000) { return num; }
+	return 0;
+}
 
 bool ApplicationBase::Input() {
 	//-------------Dpad“ü—Í-------------
@@ -99,10 +104,10 @@ bool ApplicationBase::Input() {
 		_imputInf._gKeyp[i] == 1 && _gTrgbOldX[i] != 1 ? _imputInf._gTrgp[i] = 1 : _imputInf._gTrgp[i] = 0;
 		_imputInf._gKeyp[i] == 0 && _gTrgbOldX[i] != 0 ? _imputInf._gRelp[i] = 1 : _imputInf._gRelp[i] = 0;
 	}
-	_imputInf.lStickX = imputInfX.ThumbLX;
-	_imputInf.lStickY = imputInfX.ThumbLY;
-	_imputInf.rStickX = imputInfX.ThumbRX;
-	_imputInf.rStickY = imputInfX.ThumbRY;
+	_imputInf.lStickX = volumeGate2000(imputInfX.ThumbLX);
+	_imputInf.lStickY = volumeGate2000(imputInfX.ThumbLY);
+	_imputInf.rStickX = volumeGate2000(imputInfX.ThumbRX);
+	_imputInf.rStickY = volumeGate2000(imputInfX.ThumbRY);
 	_imputInf.rTriggerX = imputInfX.RightTrigger;
 	_imputInf.lTriggerX = imputInfX.LeftTrigger;
 
