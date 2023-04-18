@@ -453,7 +453,73 @@ bool LastBoss::UtilityJudge() {
 				
 		}
 	}
+	if (Awake) {
+		switch (status) {
+		case STATUS::NONE:
+		case STATUS::WAIT:
+			RangeJ();
+			status = STATUS::RUN;
+			time = 300;
+			break;
+		case STATUS::DAMAGE:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::DEAD:break;
+		case STATUS::RUN:
+			RangeJ();
+			if (range == RANGE::CrossRange) {
+				if (Rand > 50) { status = STATUS::kick; }
+				if (Rand <= 50) { status = STATUS::kaiten; }
+			}
+			if (range == RANGE::MidRange) {
+				status = STATUS::FSTEP;
+			}
+			if (range == RANGE::LongRange) {
+				status = STATUS::RUN;
+			}
+			break;
+		case STATUS::FSTEP:
+			status = STATUS::kaiten;
+			break;
+		case STATUS::BSTEP:
+			status = STATUS::jumpattack;
+			break;
+		case STATUS::RSTEP:
+			status = STATUS::BSTEP;
+			break;
+		case STATUS::LSTEP:
+			status = STATUS::FSTEP;;
+			break;
+		case STATUS::kick:
+			status = STATUS::BSTEP;
+			break;
+		case STATUS::kaiten:
+			if (Rand > 50) { status = STATUS::LSTEP; }
+			if (Rand <= 50) { status = STATUS::RSTEP; }
+			break;
+		case STATUS::jumpattack:
+			RangeJ();
+			status = STATUS::WAIT;
+			time = 50;
+			break;
+			/*case STATUS::magicK:
+				status = STATUS::magicR;
+				break;
+			case STATUS::magicR:
+				status = STATUS::quick;
+				break;
+		case STATUS::quick:
+				RangeJ();
+				status = STATUS::STAB;
+				break;
+		case STATUS::STAB:
+				RangeJ();
+				status = STATUS::WAIT;
+				time = 100;
+				break;*/
 
+		}
+	}
 	
 	return true;
 }
