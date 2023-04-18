@@ -21,7 +21,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 
 	// DXライブラリの初期化
 	if (AppWindowed()) {
-		ChangeWindowMode(true);							// ウィンドウモードに指定する
+		ChangeWindowMode(false);							// ウィンドウモードに指定する
 	}
 	SetMainWindowText("CyberDevilHunter-Dracula");
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);
@@ -69,9 +69,9 @@ bool ApplicationBase::Terminate() {
 	return true;
 }
 
-int volumeGate2000(int num)
+int volumeGate4000(int num)
 {
-	if (std::abs(num) > 2000) { return num; }
+	if (std::abs(num) > 4000) { return num; }
 	return 0;
 }
 
@@ -104,10 +104,10 @@ bool ApplicationBase::Input() {
 		_imputInf._gKeyp[i] == 1 && _gTrgbOldX[i] != 1 ? _imputInf._gTrgp[i] = 1 : _imputInf._gTrgp[i] = 0;
 		_imputInf._gKeyp[i] == 0 && _gTrgbOldX[i] != 0 ? _imputInf._gRelp[i] = 1 : _imputInf._gRelp[i] = 0;
 	}
-	_imputInf.lStickX = volumeGate2000(imputInfX.ThumbLX);
-	_imputInf.lStickY = volumeGate2000(imputInfX.ThumbLY);
-	_imputInf.rStickX = volumeGate2000(imputInfX.ThumbRX);
-	_imputInf.rStickY = volumeGate2000(imputInfX.ThumbRY);
+	_imputInf.lStickX = volumeGate4000(imputInfX.ThumbLX);
+	_imputInf.lStickY = volumeGate4000(imputInfX.ThumbLY);
+	_imputInf.rStickX = volumeGate4000(imputInfX.ThumbRX);
+	_imputInf.rStickY = volumeGate4000(imputInfX.ThumbRY);
 	_imputInf.rTriggerX = imputInfX.RightTrigger;
 	_imputInf.lTriggerX = imputInfX.LeftTrigger;
 
