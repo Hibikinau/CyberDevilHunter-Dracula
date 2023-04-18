@@ -60,7 +60,6 @@ bool	BossKnight::Process()
 		return true;
 	}
 
-	//if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	if (_statusInf.hitPoint <= 5000) {
 		Awake = true;
 		AwakeSpd = 1.5f;
