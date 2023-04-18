@@ -55,14 +55,15 @@ bool PL::Initialize()
 	CA_change(_valData->plChangeAttackY, "Y");
 
 	//音声データの読み込み
-	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　攻撃ヒット音/SE_Damage_01.mp3"));
-	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃4段目/SE_Player_nATK4_Finish.mp3"));
-	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_01.mp3"));
-	soundHandle.emplace_back(LoadSoundMem("game/res/SE/プレイヤー　弱攻撃三段のSE/SE_Player_ATK_02.mp3"));
+	for (std::string seNameList : _valData->playerSeList)
+	{
+		std::string insName = "game/res/SE/player/" + seNameList;
+		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
+	}
 	voiceStartNum = soundHandle.size();
 	for (std::string voiceNameList : _valData->playerVoiceList)
 	{
-		std::string insName = "game/res/Player01/voice/" + voiceNameList;
+		std::string insName = "game/res/voice/player/" + voiceNameList;
 		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
 	}
 
@@ -192,6 +193,7 @@ bool	PL::Process()
 		spd = 70.f;
 		isCharge = 0;
 		recastSet();
+		PlaySoundMem(soundHandle[3], DX_PLAYTYPE_BACK);
 
 		insDir = getMoveDir(false);
 		if (insDir == 0) { insDir = _modelInf.dir.y; }
@@ -354,10 +356,10 @@ bool	PL::Process()
 		recastSet();
 		if (Estate != _estate::GUARD && isFastGuard)
 		{
-			//if()
 			Estate = _estate::GUARD;
 			insGuardEfcHandle = PlayEffekseer3DEffect(guardEfcHandle);
 			SetPosPlayingEffekseer3DEffect(insGuardEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 100.f, _modelInf.pos.z);
+			PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 
 			counterTime = _valData->_counterTime;
 		}
@@ -535,7 +537,7 @@ bool PL::HPmath(float math, float Stan)
 					if (!deadVoice) { PlaySoundMem(soundHandle[voiceStartNum + 27 + rand() % 4], DX_PLAYTYPE_BACK); }
 					_statusInf.hitPoint += math; BPmath(std::abs(math) * 6);
 				}
-				PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
+				PlaySoundMem(soundHandle[2], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;
 				if (math < -50 || waitBlowTime > 0) { isBlow = true; }
 				else { waitBlowTime = 100; }
@@ -677,8 +679,8 @@ float PL::getMoveDir(bool checkUseCamDir)
 	float _addDir = 0.f;
 
 	//移動先の角度指定
-	_addDir = (std::atan2(-(_imputInf->lStickX), -(_imputInf->lStickY)) * 180.f) / DX_PI_F;
-	if ((_imputInf->lStickY) != 0 && _addDir == 0.f) { _addDir = 360.f; }
+	_addDir = (std::atan2(-_imputInf->lStickX, -_imputInf->lStickY) * 180.f) / DX_PI_F;
+	if (_imputInf->lStickY != 0 && _addDir == 0.f) { _addDir = 360.f; }
 	if (_addDir != 0) { _addDir += *_cameraDir + 180.f; }
 	if (camDir != -1.f && checkUseCamDir)
 	{
