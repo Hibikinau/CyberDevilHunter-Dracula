@@ -207,7 +207,7 @@ bool	LastBoss::Process()
 		}
 		animSpd = 1.5f * AwakeSpd;
 		animChange(Boss_kick, &_modelInf, false, true, true);
-		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 20.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 131, VGet(0, 0, 0),1);
+		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 20.f, 25.f, _modelInf.totalTime * AwakeSpd - 25.f, animSpd, true, 20.f * AwakeDmg, 0, 131, VGet(0, 0, 0),1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
@@ -323,6 +323,11 @@ bool	LastBoss::Process()
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
 		if (ActionFlag == true) { break; }
+		if (attackStep == 7) { 
+			_modelInf.dir = plMI->dir;
+			_modelInf.pos.x = plMI->pos.x;
+			_modelInf.pos.z = plMI->pos.z - 100;
+		}
 		animSpd = 3.0f * AwakeSpd;
 		animChange(PL_jaku_1 + attackStep , &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 10.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3, VGet(0, 0, 0), 1);
@@ -438,7 +443,7 @@ bool LastBoss::UtilityJudge() {
 			break;
 		case STATUS::jumpattack:
 				RangeJ();
-				status = STATUS::WAIT;
+				status = STATUS::quick;
 				time = 50;
 				break;
 			/*case STATUS::magicK:
