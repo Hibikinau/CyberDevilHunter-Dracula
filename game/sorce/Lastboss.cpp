@@ -323,11 +323,11 @@ bool	LastBoss::Process()
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
 		if (ActionFlag == true) { break; }
-		if (attackStep == 7) { 
+		/*if (attackStep == 7) { 
 			_modelInf.dir = plMI->dir;
 			_modelInf.pos.x = plMI->pos.x;
 			_modelInf.pos.z = plMI->pos.z - 100;
-		}
+		}*/
 		animSpd = 3.0f * AwakeSpd;
 		animChange(PL_jaku_1 + attackStep , &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 10.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3, VGet(0, 0, 0), 1);
@@ -355,7 +355,10 @@ bool	LastBoss::Process()
 			}
 			break;
 		}
-		animSpd = 1.0f * AwakeSpd;
+		if (attackStep == 1) {
+			animSpd = 2.0f * AwakeSpd;
+		}
+		else { animSpd = 1.2f * AwakeSpd; }
 		animChange(Boss_arts_tsuki_1 +attackStep ,&_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
