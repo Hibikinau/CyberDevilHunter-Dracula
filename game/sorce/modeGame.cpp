@@ -75,7 +75,10 @@ bool	modeG::Initialize()
 	testAttackCap.r = 30.f;
 
 	HPgaugeHandle = _modeServer->RS.loadGraphR("game/res/UI/bar1.png");
+	HPgaugeHandle2 = _modeServer->RS.loadGraphR("game/res/UI/HP_gauge_01.png");
+	HPgaugeHandle3 = _modeServer->RS.loadGraphR("game/res/UI/HP_gauge_02.png");
 	HPgaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/kara1.png");
+	HPgaugeHandleWakuB = _modeServer->RS.loadGraphR("game/res/UI/kara1B.png");
 	BPgaugeHandle = _modeServer->RS.loadGraphR("game/res/UI/BP.png");
 	BPgaugeHandleWaku = _modeServer->RS.loadGraphR("game/res/UI/BP_waku.png");
 	HPstrHandle = _modeServer->RS.loadGraphR("game/res/UI/moji_HP.png");
@@ -89,6 +92,7 @@ bool	modeG::Initialize()
 	swordRecastIconHandle = _modeServer->RS.loadGraphR("game/res/UI/ken2.png");
 	sousaHandle = _modeServer->RS.loadGraphR("game/res/UI/8f56275350eb4bc2.png");
 	burstStrHandle = _modeServer->RS.loadGraphR("game/res/UI/1.png");
+	nearDeadHandle = _modeServer->RS.loadGraphR("game/res/low_HP.png");
 
 	stunStrHandle = _modeServer->RS.loadGraphR("game/res/UI/STUN.png");
 
@@ -403,6 +407,11 @@ bool	modeG::Render()
 		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 100, 0, lockOnMarkerHandle[LOMarkerNum], true);
 	}
 
+	if (plStatus.hitPoint < 70)
+	{//nearDeadHandle
+		DrawGraph(0, 0, nearDeadHandle, true);
+	}
+
 	drawUI();
 	SetUseZBuffer3D(TRUE);
 
@@ -433,6 +442,7 @@ bool	modeG::Render()
 		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
 		GSAnimNum++;
 	}
+
 
 	return true;
 }
@@ -606,9 +616,9 @@ bool modeG::drawUI()
 	//ダメージ表示
 	for (int i = 0; i < damageNumPopList.size(); i++)
 	{
-		//auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
-		VECTOR screenPos;
-		damageNumPopList[i].isPl ? (screenPos.x = 580, screenPos.y = 30) : (screenPos.x = 900, screenPos.y = 630);
+		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
+		//VECTOR screenPos;
+		//damageNumPopList[i].isPl ? (screenPos.x = 580, screenPos.y = 30) : (screenPos.x = 900, screenPos.y = 630);
 		DrawString(screenPos.x, screenPos.y - damageNumPopList[i].popTime, std::to_string(static_cast<int> (damageNumPopList[i].damage)).c_str(), GetColor(255, 255, 255));
 		//DrawBillboard3D(damageNumPopList[i].pos, .5f, .5f, 500, 0.f, slashLineAnimHandle[damageNumPopList[i].popTime], true);
 
@@ -634,14 +644,16 @@ bool modeG::drawUI()
 	DrawRectGraph(barPposX - 5, barPosY - 7, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
 	DrawExtendGraph(barPposX, barPosY, barPposX + barLength - 10, barPosY + 20, BPgaugeHandleWaku, true);
 	DrawGraph(30, 70, BPstrHandle, true);
-	if(plStatus.bloodPoint >= plStatus.maxBloodPoint){ DrawGraph(barPposX - 20, barPosY, burstStrHandle, true); }
-
+	if (plStatus.bloodPoint >= plStatus.maxBloodPoint) { DrawGraph(barPposX - 20, barPosY, burstStrHandle, true); }
 
 	//bossHPバー
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
 	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
-	DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false);
-	DrawGraph(barPposX, barPosY, HPgaugeHandleWaku, true);
+	if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 3) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle3, true, false); }
+	else if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 5) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle2, true, false); }
+	else { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false); }
+
+	DrawGraph(barPposX, barPosY, HPgaugeHandleWakuB, true);
 	DrawGraph(bossNamePosX, 628, bossNameStrHandle, true);
 
 	//bossスタンバー
