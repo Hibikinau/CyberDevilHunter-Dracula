@@ -53,7 +53,7 @@ bool	modeG::Initialize()
 	SetUseLighting(true);
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
-	SetUseBackCulling(true);
+	SetUseBackCulling(false);
 	//SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする

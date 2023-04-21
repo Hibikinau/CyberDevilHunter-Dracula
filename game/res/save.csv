@@ -66,7 +66,7 @@ Boss2
 LBoss
 ここまで
 所持ポイント
-559998
+639998
 プレイヤーボイスリスト
 player_voice_01_A.mp3
 player_voice_01_B.mp3
@@ -219,3 +219,21 @@ Song: ReauBeau - Make Waves (feat. Brynja Mary)
 ラスボス
 Song: ANGELPLAYA - PULL UP
 ここまで
+自機弱
+99999
+自機強
+200
+自機反撃
+200
+自機竜閃
+100
+自機切抜
+180
+自機牙突1
+200
+自機牙突2
+260
+自機牙突3
+260
+自機必殺
+300

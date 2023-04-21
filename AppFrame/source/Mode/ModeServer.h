@@ -14,7 +14,7 @@
 
 struct valData
 {
-	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f, counterSpd = 4.f;
+	float plAtkSpd1 = 24.f, plAtkSpd2 = 24.f, plAtkSpd3 = 24.f, plAtkSpd4 = 24.f, counterSpd = 4.f, plAtkNum[9] = { 0 };
 	int _counterTime = 20, plCTimeN = 0, efcHandle = -1, bgmSwitchNum = 1, popBossNum = 0, soundMasterValume = 30, mainMenuPicNum = 0, points = 0
 		, hitstopF = 0;
 	bool isAtkEfcArufa = true, isLogoRender = true, isDebug = false;
@@ -30,10 +30,10 @@ class	ModeServer
 public:
 	ModeServer();
 	virtual	~ModeServer();
-	static ModeServer		*_lpInstance;
-	static ModeServer*GetInstance() { return (ModeServer*)_lpInstance; }
+	static ModeServer* _lpInstance;
+	static ModeServer* GetInstance() { return (ModeServer*)_lpInstance; }
 
-	int Add(std::shared_ptr<ModeBase> mode, int layer, const char *name);		// “o˜^‚Í‚·‚é‚ªAˆê“xƒƒCƒ“‚ğ‰ñ‚³‚È‚¢‚Æ‚¢‚¯‚È‚¢
+	int Add(std::shared_ptr<ModeBase> mode, int layer, const char* name);		// “o˜^‚Í‚·‚é‚ªAˆê“xƒƒCƒ“‚ğ‰ñ‚³‚È‚¢‚Æ‚¢‚¯‚È‚¢
 	int Del(const char* name);		// íœ—\–ñ
 	int activate(const char* name);
 	int disable(const char* name);

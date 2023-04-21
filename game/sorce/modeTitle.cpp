@@ -62,6 +62,15 @@ bool modeT::loadData(const char* dir, valData* _val)
 		if (_data[i] == "撃破済みBoss") { i++, _val->deadBoss.clear(); while (_data[i] != "ここまで") { _val->deadBoss.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "所持ポイント") { i++; _val->points = std::atoi(_data[i].c_str()); }
 		if (_data[i] == "開発者モード") { _val->isDebug = true; }
+		if (_data[i] == "自機弱") { i++; _val->plAtkNum[0] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機強") { i++; _val->plAtkNum[1] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機反撃") { i++; _val->plAtkNum[2] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機竜閃") { i++; _val->plAtkNum[3] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機切抜") { i++; _val->plAtkNum[4] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機牙突1") { i++; _val->plAtkNum[5] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機牙突2") { i++; _val->plAtkNum[6] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機牙突3") { i++; _val->plAtkNum[7] = std::atoi(_data[i].c_str()); }
+		if (_data[i] == "自機必殺") { i++; _val->plAtkNum[8] = std::atoi(_data[i].c_str()); }
 
 		if (_data[i] == "ボス1依頼情報")
 		{
