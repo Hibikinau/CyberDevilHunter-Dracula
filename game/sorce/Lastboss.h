@@ -134,4 +134,5 @@ protected:
 		AwakeTK;
 	int impactEfcHandle;
 	int DT, hittime;
+	int voiceStartNum;
 };

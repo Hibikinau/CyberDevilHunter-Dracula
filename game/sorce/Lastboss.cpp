@@ -35,6 +35,20 @@ bool LastBoss::Initialize()
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
 	impactEfcHandle = LoadEffekseerEffect("game/res/effect/ÕŒ‚”g1/slash_shot.efkefc", 80.f);
 	ChangeVolumeSoundMem(120, swingSE);
+
+	//‰¹ºƒf[ƒ^‚Ì“Ç‚Ýž‚Ý
+	/*for (std::string seNameList : _valData->playerSeList)
+	{
+		std::string insName = "game/res/SE/player/" + seNameList;
+		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
+	}*/
+	voiceStartNum = soundHandle.size();
+	for (std::string voiceNameList : _valData->bossVoiceList)
+	{
+		std::string insName = "game/res/voice/boss_voice/" + voiceNameList;
+		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
+	}
+
 	Awake = false;
 	AwakeDmg = 1;
 	AwakeMove = 1;
@@ -115,6 +129,9 @@ bool	LastBoss::Process()
 	case STATUS::WAIT:
 		animSpd = .5f;
 		animChange(Boss_idol1, &_modelInf, true, true, false);
+		if(time==300){
+			PlaySoundMem(soundHandle[voiceStartNum + rand() % 3], DX_PLAYTYPE_BACK);
+		}
 		if (time == 0) {
 			UtilityJudge();
 		}
@@ -409,7 +426,7 @@ bool LastBoss::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::RUN;
+			status = STATUS::WAIT;
 			time = 300;
 			break;
 		case STATUS::DAMAGE:
