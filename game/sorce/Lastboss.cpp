@@ -262,66 +262,6 @@ bool	LastBoss::Process()
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		ActionFlag = true;
 		break;
-	//case STATUS::magicK:
-	//	if (_modelInf.isAnimEnd == true) {
-	//		attackStep == 0 ? attackStep++ : UtilityJudge();
-	//		if (status != STATUS::magicK) {
-	//			ActionFlag = false;
-	//			break;
-	//		}
-	//	}
-	//	if (ActionFlag == true) {
-	//		int a2 = PlayEffekseer3DEffect(impactEfcHandle);
-	//		SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
-	//		SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));
-	//		break;
-	//	}
-	//	animSpd = 1.5f * AwakeSpd;
-	//	animChange(Boss_magic1, &_modelInf, false, true, true);
-	//	auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
-	//	auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
-	//	auto bz = getDirVecP(_modelInf.dir.y, 30);
-	//	a.y = b.y = _modelInf.pos.y + 50;
-
-	//	makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
-	//	//makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, true, 20.f * AwakeDmg, 0, 8, VGet(0, 0, 0), 1);
-	//	PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	ActionFlag = true;
-	//	break;
-	//case STATUS::magicR:
-	//	if (_modelInf.isAnimEnd == true) {
-	//		attackStep == 0 ? attackStep++ : UtilityJudge();
-	//		if (status != STATUS::magicR) {
-	//		ActionFlag = false;
-	//		break;
-	//	}
-	//	}
-	//	if (ActionFlag == true) {
-	//		//_modelInf.dir.y = Pdir;
-	//		auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
-	//		auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
-	//		auto bz = getDirVecP(_modelInf.dir.y, 30);
-	//		a.y = b.y = _modelInf.pos.y + 50;
-	//		if (_modelInf.playTime == 60 ) {
-	//			_modelInf.dir.y = Pdir;
-	//			makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime* AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
-	//		}
-	//		if (_modelInf.playTime == 100 ) {
-	//			_modelInf.dir.y = Pdir;
-	//			makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
-	//		}
-	//		if (_modelInf.playTime ==140 ) {
-	//			_modelInf.dir.y = Pdir;
-	//			makeAttackCap(a, b, 40.f, 10.f, _modelInf.totalTime * AwakeSpd - 10.f, animSpd, false, 300.f, 100000, -1, bz, 1);
-	//		}
-	//		break;
-	//	}
-	//	animSpd = 1.0f * AwakeSpd;
-	//	animChange(Boss_magic2, &_modelInf, false, false, true);
-	//	makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * AwakeSpd, animSpd, true, 50.f * AwakeDmg, 0, 3, VGet(0, 0, 0), 1);
-	//	PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
-	//	ActionFlag = true;
-	//	break;
 	case STATUS::quick:
 		if (isAnimEnd == true) {
 			ActionFlag = false;
@@ -470,12 +410,6 @@ bool LastBoss::UtilityJudge() {
 				status = STATUS::quick;
 				time = 50;
 				break;
-			/*case STATUS::magicK:
-				status = STATUS::magicR;
-				break;
-			case STATUS::magicR:
-				status = STATUS::quick;
-				break;*/
 		case STATUS::quick:
 				RangeJ();
 				status = STATUS::STAB;
@@ -537,12 +471,6 @@ bool LastBoss::UtilityJudge() {
 			status = STATUS::WAIT;
 			time = 50;
 			break;
-			/*case STATUS::magicK:
-				status = STATUS::magicR;
-				break;
-			case STATUS::magicR:
-				status = STATUS::quick;
-				break;
 		case STATUS::quick:
 				RangeJ();
 				status = STATUS::STAB;
@@ -551,7 +479,7 @@ bool LastBoss::UtilityJudge() {
 				RangeJ();
 				status = STATUS::WAIT;
 				time = 100;
-				break;*/
+				break;
 
 		}
 	}
