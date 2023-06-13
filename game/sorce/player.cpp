@@ -572,6 +572,7 @@ bool PL::HPmath(float math, float Stan)
 
 	return isBlow;
 }
+
 bool PL::BPmath(float math)
 {
 	//ŠoÁˆ—

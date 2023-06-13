@@ -138,15 +138,22 @@ bool modeT::loadData(const char* dir, valData* _val)
 
 bool	modeT::Initialize()
 {
-	//"game/res/ZENRYOKUstage/tsStage.mv1"
 	_cg = _modeServer->RS.loadGraphR("game/res/タイトル.png");
 	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
 	titleAnimHandle = _modeServer->RS.loadGraphR("game/res/titleMovie.mp4");
 	titleLogoHandle = _modeServer->RS.loadGraphR("game/res/Titlelogo1.png");
 	pressAtoStart = _modeServer->RS.loadGraphR("game/res/start.png");
 	loadData("game/res/save.csv", &_modeServer->_valData);
+
+	//音声データの読み込み
+	for (int i = 0; i < 7; i++)
+	{
+		std::string insName = "game/res/voice/" + titleCallList[i];
+		titleCallHaldle[i] = LoadSoundMem(insName.c_str());
+	}
+
 	return true;
-}//JNATHYN_-_Dioma_Demo_NCS_Release
+}
 
 bool	modeT::Process()
 {
@@ -158,7 +165,7 @@ bool	modeT::Process()
 	if ((_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A]) && !_modeServer->_valData.isLogoRender && isPut == 2)
 	{
 		StopMusic();
-		//_modeServer->Add(std::make_unique<modeE>(_modeServer), 1, MODE_END);
+		PlaySoundMem(titleCallHaldle[rand() % 7], DX_PLAYTYPE_BACK);
 		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
 		return false;
 	}
