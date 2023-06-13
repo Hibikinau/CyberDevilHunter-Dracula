@@ -280,7 +280,7 @@ bool	LastBoss::Process()
 			PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		}
 		if (ActionFlag == true) { break; }
-		/*if (attackStep == 7) { 
+		/*if (attackStep == 7) {
 			_modelInf.dir = plMI->dir;
 			_modelInf.pos.x = plMI->pos.x;
 			_modelInf.pos.z = plMI->pos.z - 100;
@@ -294,7 +294,7 @@ bool	LastBoss::Process()
 	case STATUS::STAB:
 		if (isAnimEnd == true) {
 			ActionFlag = false;
-			if (attackStep < 3) { 
+			if (attackStep < 3) {
 				attackStep++; }
 			else {
 				UtilityJudge();
@@ -303,7 +303,7 @@ bool	LastBoss::Process()
 		}
 		if (ActionFlag == true)
 		{
-			
+
 			if (attackStep == 2)
 			{
 				if (_modelInf.playTime > 5) { Move(90.0f * AwakeMove, .0f); }
@@ -343,6 +343,11 @@ bool	LastBoss::Process()
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
+	//çUåÇÉqÉbÉgéûÇÃSEçƒê∂
+	if (isHit)
+	{
+		isHit = false;
+	}
 	return true;
 }
 
@@ -419,7 +424,7 @@ bool LastBoss::UtilityJudge() {
 				status = STATUS::WAIT;
 				time = 100;
 				break;
-				
+
 		}
 	}
 	if (Awake) {
@@ -483,7 +488,7 @@ bool LastBoss::UtilityJudge() {
 
 		}
 	}
-	
+
 	return true;
 }
 
