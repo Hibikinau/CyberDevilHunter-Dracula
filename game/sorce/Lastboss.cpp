@@ -345,6 +345,7 @@ bool	LastBoss::Process()
 	//UŒ‚ƒqƒbƒg‚ÌSEÄ¶
 	if (isHit)
 	{
+		PlaySoundMem(soundHandle[voiceStartNum +8+ rand() % 7], DX_PLAYTYPE_BACK);
 		isHit = false;
 	}
 	return true;
