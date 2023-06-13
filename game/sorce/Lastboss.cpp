@@ -67,6 +67,9 @@ bool	LastBoss::Terminate()
 
 bool	LastBoss::Process()
 {
+	//マスター音量の適応
+	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+
 	if (status == STATUS::DEAD) {
 		animSpd = 0.7f;
 		animChange(PL_death, &_modelInf, false, true, false);

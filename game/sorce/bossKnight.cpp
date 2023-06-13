@@ -53,6 +53,9 @@ bool	BossKnight::Terminate()
 
 bool	BossKnight::Process()
 {
+	//マスター音量の適応
+	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+
 	if (status == STATUS::DEAD) {
 		animSpd = 0.7f;
 		animChange(BOSS1_dead, &_modelInf, false, true, false);

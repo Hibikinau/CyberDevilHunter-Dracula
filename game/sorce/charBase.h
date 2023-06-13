@@ -229,7 +229,7 @@ public:
 	bool isGround//!設置しているか
 		, isHit = false//!攻撃がヒットしたか
 		, isImmortal = false//!無敵状態か
-		, isSetSoundValume;//!マスター音量適用をするか
+		, isSetSoundValume = false;//!マスター音量適用をするか
 	float g//!重力値
 		, camDir//!ロックオンカメラ位置情報
 		, * _cameraDir//!カメラ位置情報

@@ -46,6 +46,9 @@ bool	BossLion::Terminate()
 
 bool	BossLion::Process()
 {
+	//マスター音量の適応
+	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+
 	if (status == STATUS::DEAD) {
 		animSpd = 0.7f;
 		animChange(BOSS2_dead, &_modelInf, false, true, false);
