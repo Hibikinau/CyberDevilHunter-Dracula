@@ -104,7 +104,6 @@ bool	LastBoss::Process()
 		if (i->second->getType() == 1)
 		{
 			plMI = i->second->getInf();
-			DT = i->second->dodgeTime;
 		}
 	}
 	if (CheckHitKey(KEY_INPUT_K))
@@ -130,7 +129,7 @@ bool	LastBoss::Process()
 		animSpd = .5f;
 		animChange(Boss_idol1, &_modelInf, true, true, false);
 		if(time==300){
-			PlaySoundMem(soundHandle[voiceStartNum + rand() % 3], DX_PLAYTYPE_BACK);
+			PlaySoundMem(soundHandle[voiceStartNum + rand() % 8], DX_PLAYTYPE_BACK);
 		}
 		if (time == 0) {
 			UtilityJudge();
@@ -366,7 +365,7 @@ bool LastBoss::UtilityJudge() {
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			status = STATUS::WAIT;
+			status = STATUS::RUN;
 			time = 300;
 			break;
 		case STATUS::DAMAGE:
@@ -523,6 +522,7 @@ bool LastBoss::HPmath(float Num, float Stan)
 	if (Num <= -200) {
 		status = STATUS::DAMAGE;
 		ActionFlag = false;
+		PlaySoundMem(soundHandle[voiceStartNum + 15 + rand() % 3], DX_PLAYTYPE_BACK);
 	}
 	if (_statusInf.hitPoint <= 5000) {
 		Awake = true;
@@ -530,6 +530,7 @@ bool LastBoss::HPmath(float Num, float Stan)
 	if (_statusInf.stanPoint >= 150) {
 		status = STATUS::STAN;
 		_statusInf.stanPoint = 150;
+		PlaySoundMem(soundHandle[voiceStartNum + 18 + rand() % 3], DX_PLAYTYPE_BACK);
 	}
 	if (_statusInf.hitPoint <= 0) {
 		status = STATUS::DEAD;

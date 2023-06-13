@@ -133,6 +133,6 @@ protected:
 		AwakeT,//!ŠoÁ‘Ò‹@ŠÔ
 		AwakeTK;
 	int impactEfcHandle;
-	int DT, hittime;
+	int hittime;
 	int voiceStartNum;
 };
