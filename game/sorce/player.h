@@ -200,6 +200,10 @@ public:
 	 * @brief メインゲーム開始時ボイス処理
 	 */
 	void battleStartVoice() override { PlaySoundMem(soundHandle[voiceStartNum + 35 + rand() % 2], DX_PLAYTYPE_BACK); }
+
+	/**
+	 * @brief 入れ替え技のリキャスト時間設定
+	 */
 	bool recastSet()
 	{
 		if (lastAttackState == ExclusiveState::changeATTACKX && caRecastX <= 0) { caRecastX = setRecastTime; }
@@ -217,26 +221,27 @@ protected:
 		, chargeTime//!チャージ時間
 		, isAwakening = 0//覚醒中か
 		, voiceStartNum//!音声データコンテナ内の声データの初期値
-		, guardEfcHandle, chargeEfcHandle, healEfcHandle, impactEfcHandle, waitBlowTime
-		, insGuardEfcHandle, insHealEfcHandle;
-	float spd//!キャラの移動速度
-		, dodgeDir;//!キャラの回避方向
-	bool isAnimEnd//!アニメーション再生が終わっているか
-		, isPushButtonAct//!弱攻撃連打から攻撃受付時間終わりまでに別アクションに切り替えたか
-		, isGuard//!ガード中か
-		, isFastGuard//!ガード準備中か
-		, isBlow;
-	float atkBuff = 0.f;//!加算攻撃バフ値
-	bool isGhost//!別キャラとのすり抜けを許可するか
-		, deadVoice = false;//!死亡音声の再生はしたか
-	int immortalTime//!無敵時間
-		, isCounter = 0;//!カウンター状態か
-	int walkTime//!キャラ移動開始からの経過時間
+		//!各種エフェクト用ハンドル
+		, guardEfcHandle, chargeEfcHandle, healEfcHandle, impactEfcHandle, insGuardEfcHandle, insHealEfcHandle
+		, waitBlowTime//!吹き飛ばされモーション用の受付時間
+		, immortalTime//!無敵時間
+		, isCounter = 0//!カウンター状態か
+		, walkTime//!キャラ移動開始からの経過時間
 		, counterTime//!カウンター再生時間
 		, waitCAChargeTime//!入れ替え技での移動までの待機時間
 		, CAChargeTime//!入れ替え技での移動時間
 		, CAChargeSpd//!入れ替え技での移動スピード
-		, CAChargeAttackNum = 0;
+		, CAChargeAttackNum = 0;//!入れ替え技のチャージ段階
+	float spd//!キャラの移動速度
+		, dodgeDir//!キャラの回避方向
+		, atkBuff = 0.f;//!加算攻撃バフ値
+	bool isAnimEnd//!アニメーション再生が終わっているか
+		, isPushButtonAct//!弱攻撃連打から攻撃受付時間終わりまでに別アクションに切り替えたか
+		, isGuard//!ガード中か
+		, isFastGuard//!ガード準備中か
+		, isBlow//!吹き飛ばされモーション中か
+		, isGhost//!別キャラとのすり抜けを許可するか
+		, deadVoice = false;//!死亡音声の再生はしたか
 	ExclusiveState Estate = ExclusiveState::NORMAL//!キャラの行動状態インスタンス
 		, oldEstate = ExclusiveState::NORMAL//!1つ前のキャラの行動状態インスタンス
 		, lastAttackState;//!キャラの最終攻撃インスタンス

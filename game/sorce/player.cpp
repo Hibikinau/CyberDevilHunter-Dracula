@@ -67,6 +67,7 @@ bool PL::Initialize()
 		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
 	}
 
+	//エフェクト読み込み
 	guardEfcHandle = LoadEffekseerEffect("game/res/effect/ガード/guard_effect_01.efkefc", 20.f);
 	chargeEfcHandle = LoadEffekseerEffect("game/res/effect/チャージエフェクト/charge.efkefc", 20.f);
 	healEfcHandle = LoadEffekseerEffect("game/res/effect/回復1/heal_01.efkefc", 60.f);
@@ -148,11 +149,13 @@ bool	PL::Process()
 	if (CheckHitKey(KEY_INPUT_S)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f, false); }
 	if (CheckHitKey(KEY_INPUT_D)) { spd = runSpd; charMove(spd, *_cameraDir + 180.f + -90.f, false); }
 
+	//次の行動判定処理
 	float addDir = 0.f, insDir, a;
 	bool moveCheck = true;
 	switch (setAction())
 	{
 	case pushButton::Damage://被弾
+		//被弾モーション再生後一回だけする処理
 		if (_modelInf.playTime <= animSpd)
 		{
 			dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
@@ -160,15 +163,20 @@ bool	PL::Process()
 			nextKey = pushButton::Neutral;
 			recastSet();
 		}
+
+		//吹き飛ばされ中の処理
+		//吹き飛び判定が出ているか
 		if (isBlow)
 		{
 			animSpd = 2.f;
 			animChange(PL_huttobi1, &_modelInf, false, false, false);
 			setNextAnim(PL_huttobi2, &_modelInf, false, false);
 			if (_modelInf.playTime > 180.f) { Estate = _estate::NORMAL; }
+			//吹き飛びモーション再生中か
 			auto animName = _modelInf.animHandleOld;
 			if (animName == PL_huttobi1)
 			{
+				//吹き飛びモーション再生後一回だけする処理
 				if (_modelInf.playTime <= animSpd)
 				{
 					_modelInf.dir.y = getMoveDir(true);
@@ -176,50 +184,60 @@ bool	PL::Process()
 					CAChargeTime = 100.f;
 					CAChargeSpd = -30.f;
 				}
+				//吹き飛びモーション中無敵時間の設定
 				immortalTime = getAnimPlayTotalTime() - _modelInf.playTime;
 				if (_modelInf.playTime > 140.f) { Estate = _estate::NORMAL; }
 			}
-		}//アニメーションを被弾モーションに変更}
+		}
 		else
 		{
+			//被弾判定は出ているが吹き飛び判定が出ていないので被弾モーションを再生
 			animChange(PL_hirumi, &_modelInf, false, false, false);
 			if (_modelInf.playTime > 25.f) { Estate = _estate::NORMAL; }
-		}//アニメーションを被弾モーションに変更}
+		}
 
 		break;
 	case pushButton::B://回避
+		//設定処理
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
 		animSpd = 4.f;
 		spd = 70.f;
 		isCharge = 0;
 		recastSet();
-		//PlaySoundMem(soundHandle[3], DX_PLAYTYPE_BACK);
 
+		//回避方向の設定
 		insDir = getMoveDir(false);
 		if (insDir == 0) { insDir = _modelInf.dir.y; }
 		dodgeDir = _modelInf.dir.y - insDir;
 		if (dodgeDir > 360) { dodgeDir -= 360; }
 		else if (dodgeDir < 0) { dodgeDir += 360; }
 
+		//回避方向を基準にしたモーションの選択と再生
 		if (dodgeDir >= 45 && 135 > dodgeDir) { animChange(PL_dodge_L, &_modelInf, false, false, false); }//アニメーションを左回避モーションに変更
 		else if (dodgeDir >= 135 && 225 > dodgeDir) { animChange(PL_dodge_B, &_modelInf, false, false, false); }//アニメーションを後ろ回避モーションに変更
 		else if (dodgeDir >= 225 && 315 > dodgeDir) { animChange(PL_dodge_R, &_modelInf, false, false, false); }//アニメーションを右回避モーションに変更
 		else { animChange(PL_dodge_F, &_modelInf, false, false, false); }//アニメーションを前回避モーションに変更
 
+		//無敵判定の設定
 		dodgeTime = getAnimPlayTotalTime();
 		immortalTime = dodgeTime;
 
 		insDir != 0 ? dodgeDir = insDir : dodgeDir = _modelInf.dir.y;
 		break;
 	case pushButton::X://弱攻撃
+		//設定処理
 		insDir = getMoveDir(true);
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		Estate = _estate::quickATTACK;
 		lastAttackState = _estate::quickATTACK;
 		waitNextAttack = 40;
 		animSpd = 2.f;
+
+		//ボイス再生
 		if (attackNumOld < 3) { PlaySoundMem(soundHandle[voiceStartNum + 0 + rand() % 4], DX_PLAYTYPE_BACK); }
 		else { PlaySoundMem(soundHandle[voiceStartNum + 4 + rand() % 2], DX_PLAYTYPE_BACK); }
+
+		//攻撃が何段目かの判定と攻撃処理
 		if (attackNumOld == 0)
 		{
 			PlaySoundMem(soundHandle[12], DX_PLAYTYPE_BACK);
@@ -276,6 +294,7 @@ bool	PL::Process()
 
 		break;
 	case pushButton::Y://強攻撃
+		//設定処理
 		insDir = getMoveDir(true);
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		Estate = _estate::slowATTACK;
@@ -283,9 +302,9 @@ bool	PL::Process()
 		waitNextAttack = 40;
 		animSpd = 2.f;
 
+		//攻撃が何段目かの判定と攻撃処理
 		if (attackNumOld == 0)
 		{
-
 			animChange(PL_kyou_4_1, &_modelInf, false, false, true);//アニメーションを強攻撃１段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
@@ -301,34 +320,39 @@ bool	PL::Process()
 
 		break;
 	case pushButton::LBX://入れ替えX
+		//設定処理
 		Estate = _estate::changeATTACKX;
 		lastAttackState = _estate::changeATTACKX;
 		attackNumOld = 0;
-		changeAttackX(this);
+		changeAttackX(this);//入れ替え技Xの関数ポインタ呼び出し
 		break;
 	case pushButton::LBY://入れ替えY
+		//設定処理
 		Estate = _estate::changeATTACKY;
 		lastAttackState = _estate::changeATTACKY;
 		attackNumOld = 0;
-		changeAttackY(this);
+		changeAttackY(this);//入れ替え技Xの関数ポインタ呼び出し
 		break;
 	case pushButton::finishAttack://必殺技
+		//設定処理
 		Estate = _estate::finishAttack;
 		lastAttackState = _estate::finishAttack;
 		attackNumOld = 0;
 		insDir = getMoveDir(true);
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
-		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);//ボイス再生
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[finishNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
+		//覚醒時のステータス処理
 		_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f;
 		immortalTime = _modelInf.totalTime;
 		_statusInf.bloodPoint = 0;
 		break;
 	case pushButton::Lstick://ダッシュ
+		//設定処理
 		Estate = _estate::NORMAL;
 		attackNumOld = 0;
-		//isDash = true;//------------------------------------------------------------------------------------
+
 		//移動先の角度をベクトルにして移動ベクトルに加算
 		addDir = getMoveDir(false);
 		spd = runSpd;//walkTime
@@ -336,8 +360,11 @@ bool	PL::Process()
 		moveCheck = false;
 		break;
 	case pushButton::R1://ガード
+		//設定処理
 		dodgeTime = 0, chargeLevel = 0, waitCAChargeTime = 0, CAChargeTime = 0, isGhost = false, _modelInf.animHandleNext = -1, attackNumOld = 0, waitNextAttack = 0, CAChargeAttackNum = 0;
 		recastSet();
+
+		//ガード使用時一回だけ呼ぶ処理
 		if (Estate != _estate::GUARD && isFastGuard)
 		{
 			Estate = _estate::GUARD;
@@ -347,30 +374,36 @@ bool	PL::Process()
 
 			counterTime = _valData->_counterTime;
 		}
+		//ガードをキャンセルして動けるように処理
 		nextKey = pushButton::Neutral;
+
+		//カウンター判定が出ているか判定
 		if (isCounter == 1)
 		{
+			//設定処理
 			insDir = getMoveDir(true);
 			if (insDir != 0) { _modelInf.dir.y = insDir; }
 			animSpd = 2.f;
-			KATANAIO(&_modelInf, true);
-			PlaySoundMem(soundHandle[15], DX_PLAYTYPE_BACK);
-			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
-			animChange(PL_counter, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[counterNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 			isFastGuard = true, isCounter = 2, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
 			auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
 			auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
 			auto bz = getDirVecP(_modelInf.dir.y, 30);
 			a.y = b.y = _modelInf.pos.y + 200;
-
+			KATANAIO(&_modelInf, true);//カタナの鞘をカタナにつけるか腰につけるかの設定変更
+			//音声の再生
+			PlaySoundMem(soundHandle[15], DX_PLAYTYPE_BACK);
+			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
+			animChange(PL_counter, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[counterNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 			makeAttackCap(a, b, 40.f, 10.f, getAnimPlayTotalTime() - 10.f, animSpd, false, 75.f, 20, -1, bz, 0);
 
+			//エフェクト再生
 			int a2 = PlayEffekseer3DEffect(impactEfcHandle);
 			SetPosPlayingEffekseer3DEffect(a2, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
 			SetRotationPlayingEffekseer3DEffect(a2, _modelInf.dir.x * (DX_PI_F / 180), _modelInf.dir.y * (DX_PI_F / 180), _modelInf.dir.z * (DX_PI_F / 180));
 		}
+		//ガード中だがカウンター判定が出ていない
 		else if (isFastGuard && isCounter == 0)
 		{
 			animSpd = 10.f;
@@ -385,13 +418,16 @@ bool	PL::Process()
 		}
 		break;
 	case pushButton::Neutral://入力なし
+		//一部判定中待機モーションに移行しないよう設定
 		if (_modelInf.animHandleOld == PL_huttobi1 || _modelInf.animHandleOld == PL_huttobi2) { break; }
 		if (attackNumOld > 0) { break; }
+
+		//待機モーションに移行
 		Estate = _estate::NORMAL;
 		animChange(PL_idel, &_modelInf, true, true, false);//アニメーションを待機モーションに変更
 		spd = 0.f;
 		break;
-	default:
+	default://その他
 		break;
 	}
 
@@ -444,27 +480,11 @@ bool	PL::Process()
 	caRecastX > 0 ? caRecastX -= insNum : caRecastX = 0;
 	caRecastY > 0 ? caRecastY -= insNum : caRecastY = 0;
 	waitBlowTime > 0 ? waitBlowTime-- : waitBlowTime = 0;
-	//首振り-------------
-	//if (CheckHitKey(KEY_INPUT_RIGHT)) { neckDir += 0.01f; }
-	//if (CheckHitKey(KEY_INPUT_LEFT)) { neckDir -= 0.01f; }
 
-	//MV1ResetFrameUserLocalMatrix(_modelInf.modelHandle, 103);
-	//MATRIX neckDirMAT = MGetRotY(neckDir);
-	//MATRIX neckPosMAT = MV1GetFrameLocalMatrix(_modelInf.modelHandle, 103);
-	//MATRIX neckMAT = MMult(neckDirMAT, neckPosMAT);
-	//MV1SetFrameUserLocalMatrix(_modelInf.modelHandle, 103, neckMAT);
-	//------------------
-
-	////攻撃ヒット時のSE再生
+	//攻撃ヒット時のSE再生
 	if (isHit)
 	{
 		BPmath(100);
-	//	if (lastAttackState == _estate::quickATTACK)
-	//	{
-	//		int soundNum = 0;
-	//		attackNumOld >= 5 ? soundNum = 1 : soundNum = 2 + rand() % 3;
-	//		PlaySoundMem(soundHandle[soundNum], DX_PLAYTYPE_BACK);
-	//	}
 		isHit = false;
 	}
 
@@ -477,9 +497,9 @@ bool	PL::Process()
 bool	PL::Render(float timeSpeed)
 {
 	int i = 0;
-	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
-	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 255), GetColor(0, 0, 0), false);
+	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);//アニメーション再生
 
+	//回復、ガードエフェクトがキャラに追従するように
 	if (IsEffekseer3DEffectPlaying(insGuardEfcHandle) == 0)
 	{
 		SetPosPlayingEffekseer3DEffect(insGuardEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 100.f, _modelInf.pos.z);
@@ -493,11 +513,13 @@ bool	PL::Render(float timeSpeed)
 
 void PL::charMove(float Speed, float _Dir, bool isAnimChange)
 {
+	//設定処理
 	_Dir -= 180.f;
 	float radian = _Dir * DX_PI_F / 180.0f;
 	_modelInf.vec.x += sin(radian) * Speed;
 	_modelInf.vec.z += cos(radian) * Speed;
 
+	//キャラ移動時アニメーション変更処理
 	if (isAnimChange)
 	{
 		animChange(PL_run, &_modelInf, true, true, false);//アニメーションを走りモーションに変更
@@ -509,13 +531,17 @@ void PL::charMove(float Speed, float _Dir, bool isAnimChange)
 bool PL::HPmath(float math, float Stan)
 {
 	isBlow = false;
+	//ダメージか回復かの判定
 	if (math < 0)
 	{
+		//カウンター判定処理
 		if (counterTime > 0) { isCounter = 1; }
 		else if (immortalTime <= 0)
 		{
+			//ガード中か判定
 			if (!isGuard || isFastGuard)
 			{
+				//覚醒時無敵判定
 				if (isAwakening == 0)
 				{
 					if (!deadVoice) { PlaySoundMem(soundHandle[voiceStartNum + 27 + rand() % 4], DX_PLAYTYPE_BACK); }
@@ -523,10 +549,12 @@ bool PL::HPmath(float math, float Stan)
 				}
 				PlaySoundMem(soundHandle[11], DX_PLAYTYPE_BACK);
 				Estate = _estate::DAMAGE;
+				//吹き飛びモーションに移行するかの判定
 				if (math < -50 || waitBlowTime > 0) { isBlow = true; }
 				else { waitBlowTime = 100; }
 			}
 
+			//ノックバック処理
 			auto ACDisV = VSub(_modelInf.pos, charBox->find(attackChar)->second->_modelInf.pos);
 			ACDisV = VNorm(ACDisV);
 			_modelInf.vec = VScale(ACDisV, 50);
@@ -534,19 +562,23 @@ bool PL::HPmath(float math, float Stan)
 	}
 	else
 	{
+		//回復処理
 		_statusInf.hitPoint += math;
 		if (_statusInf.hitPoint > _statusInf.maxHitPoint) { _statusInf.hitPoint = _statusInf.maxHitPoint; }
 	}
+
+	//回避成功時ボイス再生
 	if (dodgeTime > 0) { PlaySoundMem(soundHandle[voiceStartNum + 24 + rand() % 3], DX_PLAYTYPE_BACK); }
 
 	return isBlow;
 }
+
 bool PL::BPmath(float math)
 {
-	if (isAwakening > 0 && math > 0)
-	{
-		return false;
-	}
+	//覚醒時処理
+	if (isAwakening > 0 && math > 0) { return false; }
+
+	//BP増減処理
 	_statusInf.bloodPoint += math;
 	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
 	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
@@ -556,12 +588,16 @@ bool PL::BPmath(float math)
 
 pushButton PL::setAction()
 {
+	//設定処理
 	bool isNext = false;
 	isPushButtonAct = false;
 	pushButton insEnum = pushButton::Neutral;
 
+	//一部モーション時判定スキップ
 	if (Estate == _estate::DAMAGE) { return pushButton::Damage; }
 	if (isCounter == 1) { return pushButton::R1; }
+
+	//アニメーションの再生終了後の判定
 	if (_modelInf.isAnimEnd)
 	{
 		isAnimEnd = false, isGhost = false, isBlow = false;
@@ -575,15 +611,16 @@ pushButton PL::setAction()
 	}
 	else if (Estate != _estate::NORMAL) { isNext = true; }
 
+	//先行入力処理
 	if (nextKey != pushButton::Neutral && !isNext && isCharge != 1 && !isGuard && Estate != _estate::DODGE) { insEnum = nextKey, nextKey = pushButton::Neutral; return insEnum; }
 
-	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//B
+	if (checkTrgImput(KEY_INPUT_SPACE, XINPUT_BUTTON_B))//回避
 	{
 		attackNumOld = 0;
 		Estate = _estate::DODGE;
 		return insEnum = pushButton::B;
 	}
-	else if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)
+	else if (checkKeyImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER) && dodgeTime <= 0)//ガード
 	{
 		if (isFastGuard && _modelInf.playTime > 17.5f) { KATANAIO(&_modelInf, false); }
 		if (checkTrgImput(KEY_INPUT_G, XINPUT_BUTTON_RIGHT_SHOULDER)) { isFastGuard = true, isGuard = true; }
@@ -596,65 +633,75 @@ pushButton PL::setAction()
 		isGuard = false, counterTime = 0;
 	}
 
-	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0) {
+	//移動
+	if (checkKeyImput(KEY_INPUT_LSHIFT, XINPUT_BUTTON_LEFT_THUMB) || getMoveDir(false) != 0)
+	{
 		if (Estate != _estate::slowATTACK) { insEnum = pushButton::Lstick; }
 		walkTime < 10 ? walkTime++ : walkTime = 10;
-	}//Lstick
+	}
 	else { walkTime = 0; }
 	if (isNext) { insEnum = pushButton::Irregular; }
 
+	//入れ替え技
 	if (checkKeyImput(KEY_INPUT_C, XINPUT_BUTTON_LEFT_SHOULDER))
-	{//入れ替え技
+	{
+		//X入力入れ替え技
 		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X) && caRecastX <= 0) {
 			if (isNext) { if (Estate != _estate::changeATTACKX) { nextKey = pushButton::LBX; } }
 			else { insEnum = pushButton::LBX; }
-		}//LBX
+		}
+		//Y入力入れ替え技
 		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y) && caRecastY <= 0) {
 			if (isNext) { if (Estate != _estate::changeATTACKY) { nextKey = pushButton::LBY; } }
 			else { insEnum = pushButton::LBY; }
-		}//LBY
+		}
+		//回復
 		if (checkTrgImput(KEY_INPUT_V, XINPUT_BUTTON_A) && _statusInf.bloodPoint > 500.f)
 		{
 			HPmath(100, 10); BPmath(-500);
 			insHealEfcHandle = PlayEffekseer3DEffect(healEfcHandle);
 			SetPosPlayingEffekseer3DEffect(insHealEfcHandle, _modelInf.pos.x, _modelInf.pos.y + 120.f, _modelInf.pos.z);
 			PlaySoundMem(soundHandle[1], DX_PLAYTYPE_BACK);
-		}//LBA
+		}
 	}
 	else
-	{//通常技
+	{
+		//弱攻撃
 		if (checkTrgImput(KEY_INPUT_Z, XINPUT_BUTTON_X))
 		{
 			if (isNext) { if (attackNumOld != 4) { nextKey = pushButton::X; } }
 			else { insEnum = pushButton::X; }
 			isPushButtonAct = true;
-		}//X
-		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }//Y
+		}
+		//強攻撃
+		if (checkTrgImput(KEY_INPUT_X, XINPUT_BUTTON_Y)) { isNext ? nextKey = pushButton::Y : insEnum = pushButton::Y; }
 	}
 
-	if (checkKeyImput(KEY_INPUT_Z, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)//LBXチャージ
+	//X入力時入れ替え技のチャージ判定
+	if (checkKeyImput(KEY_INPUT_Z, XINPUT_BUTTON_X) && Estate == _estate::changeATTACKX)
 	{
 		if (isCharge >= 1) { insEnum = pushButton::LBX; }
 	}
-	else { if (isCharge > 0 && Estate == _estate::changeATTACKX) { insEnum = pushButton::LBX, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,X離したとき
-	if (checkKeyImput(KEY_INPUT_X, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)//LBYチャージ
+	else { if (isCharge > 0 && Estate == _estate::changeATTACKX) { insEnum = pushButton::LBX, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }
+	//Y入力時入れ替え技のチャージ判定
+	if (checkKeyImput(KEY_INPUT_X, XINPUT_BUTTON_Y) && Estate == _estate::changeATTACKY)
 	{
 		if (isCharge >= 1) { insEnum = pushButton::LBY; }
 	}
-	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }//LB,Y離したとき
+	else { if (isCharge > 0 && Estate == _estate::changeATTACKY) { insEnum = pushButton::LBY, isCharge = 2, isNext = false, nextKey = pushButton::Neutral; } }
 
+	//覚醒時フィニッシュ技
 	if (_imputInf->lTriggerX > 100 && _imputInf->rTriggerX > 100 && isAwakening == 2)
 	{
 		isNext ? nextKey = pushButton::finishAttack : insEnum = pushButton::finishAttack;
 	}
-
 	if (Estate == _estate::finishAttack) { return pushButton::Irregular; }
 
+	//弱攻撃後無入力で出る抜刀攻撃
 	if (waitNextAttack <= 0 && lastAttackState == _estate::quickATTACK && attackNumOld == 4)
 	{
 		insEnum = pushButton::X;
 	}
-
 
 	return insEnum;
 }
@@ -671,11 +718,13 @@ float PL::getMoveDir(bool checkUseCamDir)
 	{
 		_addDir = camDir;
 	}
+
 	return _addDir;
 }
 
 bool PL::CA_change(std::string name, const char* XorY)
-{//changeAttackY = &CA_charge;
+{
+	//X入力時入れ替え技設定
 	if ("X" == XorY)
 	{
 		if ("牙突" == name) { changeAttackX = &CA_charge; }
@@ -683,6 +732,7 @@ bool PL::CA_change(std::string name, const char* XorY)
 		if ("竜閃" == name) { changeAttackX = &CA_debugAttack; }
 		if ("NODATA" == name) { changeAttackX = &CA_noData; }
 	}
+	//Y入力時入れ替え技設定
 	else if ("Y" == XorY)
 	{
 		if ("牙突" == name) { changeAttackY = &CA_charge; }
@@ -697,6 +747,7 @@ bool PL::CA_change(std::string name, const char* XorY)
 
 bool PL::CA_debugAttack(PL* insPL)
 {
+	//設定処理
 	insPL->setRecastTime = 60;
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
@@ -704,13 +755,14 @@ bool PL::CA_debugAttack(PL* insPL)
 	insPL->animSpd = 1.f;
 	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, 200.f + insPL->atkBuff, 5.f, rWeponParentFrame, VGet(0, 0, 0), 1);
 
+	//飛ぶ斬撃用ベクトル算出
 	auto a = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y - 90, 300));
 	auto b = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y + 90, 300));
 	auto bz = getDirVecP(insPL->_modelInf.dir.y, 30);
 	a.y = b.y = insPL->_modelInf.pos.y + 200;
-
 	insPL->makeAttackCap(a, b, 40.f, 10.f, 50 - 10.f, insPL->animSpd, false, insPL->_valData->plAtkNum[debugNum] + insPL->atkBuff, 5.f, -1, bz, 0);
 
+	//エフェクト、SE再生
 	int a2 = PlayEffekseer3DEffect(insPL->impactEfcHandle);
 	SetPosPlayingEffekseer3DEffect(a2, insPL->_modelInf.pos.x, insPL->_modelInf.pos.y + 120.f, insPL->_modelInf.pos.z);
 	SetRotationPlayingEffekseer3DEffect(a2, insPL->_modelInf.dir.x * (DX_PI_F / 180), insPL->_modelInf.dir.y * (DX_PI_F / 180), insPL->_modelInf.dir.z * (DX_PI_F / 180));
@@ -720,11 +772,12 @@ bool PL::CA_debugAttack(PL* insPL)
 
 bool PL::CA_charge(PL* insPL)
 {
+	//チャージ攻撃後の飛ぶ斬撃処理
 	if (insPL->CAChargeAttackNum > 0)
 	{
+		//設定処理
 		auto insDir = insPL->getMoveDir(true);
 		if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
-
 		insPL->animSpd = 3.f;
 		PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 		animChange(PL_counter, &insPL->_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
@@ -735,13 +788,14 @@ bool PL::CA_charge(PL* insPL)
 		insPL->immortalTime = insPL->_modelInf.totalTime;
 		insPL->CAChargeAttackNum--;
 
+		//飛ぶ斬撃用ベクトル算出
 		auto a = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y - 90, 300));
 		auto b = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y + 90, 300));
 		auto bz = getDirVecP(insPL->_modelInf.dir.y, 30);
 		a.y = b.y = insPL->_modelInf.pos.y + 200;
-
 		insPL->makeAttackCap(a, b, 40.f, 10.f, insPL->getAnimPlayTotalTime() - 10.f, insPL->animSpd, false, insPL->_valData->plAtkNum[debugNum] + insPL->atkBuff, 5.f, -1, bz, 0);
 
+		//エフェクト、SE再生
 		int a2 = PlayEffekseer3DEffect(insPL->impactEfcHandle);
 		SetPosPlayingEffekseer3DEffect(a2, insPL->_modelInf.pos.x, insPL->_modelInf.pos.y + 120.f, insPL->_modelInf.pos.z);
 		SetRotationPlayingEffekseer3DEffect(a2, insPL->_modelInf.dir.x * (DX_PI_F / 180), insPL->_modelInf.dir.y * (DX_PI_F / 180), insPL->_modelInf.dir.z * (DX_PI_F / 180));
@@ -749,9 +803,11 @@ bool PL::CA_charge(PL* insPL)
 		return true;
 	}
 
+	//コントローラー振動
 	insPL->chargeTime < 1000 ? insPL->chargeTime += 12 : insPL->chargeTime = 100;
-
 	StartJoypadVibration(DX_INPUT_PAD1, insPL->chargeTime, -1);
+
+	//チャージ開始後一度だけの処理
 	if (insPL->isCharge == 0)
 	{
 		insPL->isCharge = 1;
@@ -760,9 +816,13 @@ bool PL::CA_charge(PL* insPL)
 		animChange(PL_arts_tsuki_1, &insPL->_modelInf, false, false, true);//アニメーションを突きモーション１に変更
 		setNextAnim(PL_arts_tsuki_2, &insPL->_modelInf, true, true);//次モーションに突きモーション２をセット
 	}
+	//チャージ解放後処理
 	if (insPL->isCharge == 2)
 	{
+		//コントローラー振動停止
 		StopJoypadVibration(DX_INPUT_PAD1);
+
+		//チャージ強度判定
 		if (insPL->_modelInf.animHandleNext == -1)
 		{
 			insPL->chargeLevel = 2;
@@ -773,11 +833,14 @@ bool PL::CA_charge(PL* insPL)
 		}
 		insPL->_modelInf.animHandleNext = -1;
 
+		//設定処理
 		auto insDir = insPL->getMoveDir(true);
 		if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 		insPL->isCharge = 0;
+
+		//最大チャージ時処理
 		if (insPL->chargeLevel == 2)
-		{//フルチャージ
+		{
 			insPL->animSpd = 3.f;
 			PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 			PlaySoundMem(insPL->soundHandle[4], DX_PLAYTYPE_BACK);
@@ -789,12 +852,15 @@ bool PL::CA_charge(PL* insPL)
 			insPL->immortalTime = insPL->_modelInf.totalTime;
 			insPL->CAChargeAttackNum = 2;
 		}
+		//無チャージ時処理
 		else
-		{//ノンチャ
+		{
 			insPL->animSpd = 3.f;
 			PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
 			PlaySoundMem(insPL->soundHandle[4], DX_PLAYTYPE_BACK);
 			animChange(PL_arts_tsuki_3, &insPL->_modelInf, false, false, true);//アニメーションを突きモーション３に変更
+
+			//攻撃時設定適用
 			float insDamage = insPL->atkBuff;
 			insPL->chargeLevel == 1 ? insDamage += insPL->_valData->plAtkNum[charge2Num] : insDamage += insPL->_valData->plAtkNum[charge1Num];
 			insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 16.f, 41.f, insPL->animSpd, true, insDamage, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
@@ -805,7 +871,6 @@ bool PL::CA_charge(PL* insPL)
 		insPL->isCharge = 0;
 		insPL->chargeLevel = 0;
 		insPL->setRecastTime = 60;
-		//insPL->isGhost = true;
 	}
 
 	return true;
@@ -813,12 +878,16 @@ bool PL::CA_charge(PL* insPL)
 
 bool PL::CA_kirinuke(PL* insPL)
 {
+	//設定処理
 	insPL->animSpd = 1.f;
 	auto insDir = insPL->getMoveDir(true);
 	if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
+	//SE、ボイス再生
 	PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 22 + rand() % 2], DX_PLAYTYPE_BACK);
 	PlaySoundMem(insPL->soundHandle[4], DX_PLAYTYPE_BACK);
 	animChange(PL_arts_kirinuke, &insPL->_modelInf, false, false, true);//アニメーションを切り抜けモーションに変更
+
+	//攻撃時設定適用
 	insPL->makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, insPL->getAnimPlayTotalTime(), insPL->animSpd, true, insPL->_valData->plAtkNum[kirinukeNum] + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 	insPL->waitCAChargeTime = 12.f;
 	insPL->CAChargeTime = 53.f - insPL->waitCAChargeTime;
@@ -828,6 +897,5 @@ bool PL::CA_kirinuke(PL* insPL)
 
 	return true;
 }
-
 
 bool PL::CA_noData(PL* insPL) { return false; }

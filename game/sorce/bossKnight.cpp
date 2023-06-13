@@ -332,10 +332,14 @@ bool	BossKnight::Process()
 		break;
 	};
 
-
 	_modelInf.pos = VAdd(_modelInf.pos, _modelInf.vec);
 	_modelInf.vec.x = 0.f, _modelInf.vec.z = 0.f;
 
+	//UŒ‚ƒqƒbƒg‚ÌSEÄ¶
+	if (isHit)
+	{
+		isHit = false;
+	}
 	return true;
 }
 

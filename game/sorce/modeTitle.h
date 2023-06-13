@@ -21,9 +21,13 @@ public:
 	virtual bool	Render();
 	static bool loadData(const char* dir, valData* _val);
 	static bool save(const char* dir, valData* _val);
+
 protected:
 	int _cg, logoHandle, logoAlphaNum = 0, titleAnimHandle = -1, titleLogoHandle = -1, isPut = 0, pressAtoStart, waveAlphaNum;
 	bool isFirstMovie = true;
 	ModeServer* _modeServer;
 	imputInf _imputInf;
+	std::string titleCallList[7] = { {"player/player_voice_15_A.mp3"},{"player/player_voice_15_B.mp3"}, {"player/player_voice_15_C.mp3"}
+		,{"boss_voice/boss_voice_09_A.mp3"}, {"boss_voice/boss_voice_09_B.mp3"}, {"boss_voice/boss_voice_09_C.mp3"}, {"boss_voice/boss_voice_09_D.mp3"} };
+	int titleCallHaldle[7];
 };

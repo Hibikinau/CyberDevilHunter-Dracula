@@ -226,11 +226,6 @@ bool	modeG::Process()
 		}
 	}
 
-	/*if (charBox.size() >= 2)
-	{
-		cameraNtDir = cameraLockDir;
-	}*/
-
 	//コマンド呼び出し部分
 	useCommand();
 
@@ -450,7 +445,7 @@ bool	modeG::Render()
 bool	modeG::collHitCheck()
 {
 	for (int i = 0; i < mAllColl.size(); i++)
-	{//
+	{
 		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
 		else if (mAllColl.at(i).activeTimeF > 0) { mAllColl.at(i).activeTimeF--; }
 		else

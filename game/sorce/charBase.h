@@ -41,7 +41,7 @@ struct weaponEffect
 	float lifeTime = 10//!描画時間
 		, maxLifeTime = 10;//!最大描画時間
 	int efcPicHandle//画像ハンドル
-		,efcNum;
+		, efcNum;
 };
 
 /**
@@ -223,17 +223,17 @@ public:
 	static VECTOR getDirVecP(float dir, int powar);
 
 	int type = 0//!キャラクタタイプ(player = 1, boss = 2)
-		, caRecastX = 0, caRecastY = 0, setRecastTime = 0, drawStopF = 0;
+		, caRecastX = 0, caRecastY = 0, setRecastTime = 0, drawStopF = 0//!リキャスト設定
+		, isDead//!キャラが志望常態か(0.生きてる 1.死亡モーション中 2.インスタンス解放)
+		, dodgeTime;//!回避時間
 	bool isGround//!設置しているか
-		, isHit//!攻撃がヒットしたか
+		, isHit = false//!攻撃がヒットしたか
+		, isImmortal = false//!無敵状態か
 		, isSetSoundValume;//!マスター音量適用をするか
 	float g//!重力値
 		, camDir//!ロックオンカメラ位置情報
 		, * _cameraDir//!カメラ位置情報
 		, animSpd;//!アニメーション
-	int isDead;//!キャラが志望常態か(0.生きてる 1.死亡モーション中 2.インスタンス解放)
-	int isImmortal = false//!無敵状態か
-		, dodgeTime;//!回避時間
 	std::string name//!自キャラの名前
 		, attackChar;//!攻撃してきたキャラの名前
 	modelInf _modelInf//!モデル情報インスタンス
