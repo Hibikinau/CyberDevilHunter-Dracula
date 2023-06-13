@@ -21,7 +21,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 
 	// DXライブラリの初期化
 	if (AppWindowed()) {
-		ChangeWindowMode(false);							// ウィンドウモードに指定する
+		ChangeWindowMode(true);							// ウィンドウモードに指定する
 	}
 	SetMainWindowText("CyberDevilHunter-Dracula");
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);

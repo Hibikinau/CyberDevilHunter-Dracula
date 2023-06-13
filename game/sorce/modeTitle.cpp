@@ -58,6 +58,7 @@ bool modeT::loadData(const char* dir, valData* _val)
 		if (_data[i] == "ニュース") { i++, _val->news.clear(); while (_data[i] != "ここまで") { _val->news.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "入れ替え技一覧") { i++, _val->changeAttackList.clear(); while (_data[i] != "ここまで") { _val->changeAttackList.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "プレイヤーボイスリスト") { i++, _val->playerVoiceList.clear(); while (_data[i] != "ここまで") { _val->playerVoiceList.emplace_back(_data[i]); i++; } }
+		if (_data[i] == "ラスボスボイスリスト") { i++, _val->bossVoiceList.clear(); while (_data[i] != "ここまで") { _val->bossVoiceList.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "プレイヤーSEリスト") { i++, _val->playerSeList.clear(); while (_data[i] != "ここまで") { _val->playerSeList.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "撃破済みBoss") { i++, _val->deadBoss.clear(); while (_data[i] != "ここまで") { _val->deadBoss.emplace_back(_data[i]); i++; } }
 		if (_data[i] == "所持ポイント") { i++; _val->points = std::atoi(_data[i].c_str()); }
