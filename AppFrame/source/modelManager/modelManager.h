@@ -14,7 +14,7 @@
 #include<DxLib.h>
 #include "../AppFrame/source/ResourceServer/ResourceServer.h"
 
-#define Char_PL "Player"
+#define Char_PL "player"
 #define Char_BOSS1 "Boss1"
 #define Char_BOSS2 "Boss2"
 #define Char_LBOSS "LBoss"
@@ -56,7 +56,7 @@ namespace model
 	bool modelDelete(modelInf* MI);
 	//ロードした3dモデルのサイズ変更
 	bool changeScale(modelInf* MI);
-
+	//板ポリゴンの描画(左下座標、左上座標、右下座標、右上座標、描画する画像ハンドル)
 	bool drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle);
 
 };

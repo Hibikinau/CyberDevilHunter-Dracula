@@ -38,13 +38,13 @@ public:
 	int activate(const char* name);
 	int disable(const char* name);
 	void Clear();
-	int	LayerTop() { return INT32_MAX; }
+	int LayerTop() { return INT32_MAX; }
 
 	static bool modeSort(const std::shared_ptr<ModeBase> x, const std::shared_ptr<ModeBase> y) {
 		return x->_layer < y->_layer;
 	}
 
-	int	Imput(imputInf* iInf);
+	int Imput(imputInf* iInf);
 
 	int ProcessInit();	// プロセスを回すための初期化
 	int Process();		// レイヤーの上の方から処理
@@ -64,11 +64,11 @@ public:
 	imputInf* _imputInf;
 	valData _valData;
 	Rserver RS;
-	lstModeBase		_vMode;			// モードリスト
+	lstModeBase _vMode; // モードリスト
 
 private:
-	int				_uid_count;		// uidカウンタ
-	lstModeBase		_vModeAdd;		// 追加予約
+	int _uid_count;		// uidカウンタ
+	lstModeBase _vModeAdd;		// 追加予約
 	std::vector<std::string> _vModeDel;		// 削除予約
 
 	std::vector<std::string> _nowMode;		// 現在呼び出し中のモード

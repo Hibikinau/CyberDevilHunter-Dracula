@@ -1,6 +1,6 @@
 #pragma once
 
-//PL
+//player
 #define PL_idel 0
 #define PL_run 1
 #define PL_damage 2

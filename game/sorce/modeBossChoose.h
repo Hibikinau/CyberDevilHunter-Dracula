@@ -8,11 +8,11 @@
 #pragma once
 #include"appframe.h"
 
-class modeBC : public ModeBase
+class modeBossChoose : public ModeBase
 {
 public:
-	modeBC(ModeServer* MS) { _modeServer = MS; };
-	~modeBC() {};
+	modeBossChoose(ModeServer* MS) { _modeServer = MS; };
+	~modeBossChoose() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();

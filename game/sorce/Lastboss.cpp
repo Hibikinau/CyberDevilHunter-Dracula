@@ -60,7 +60,7 @@ bool LastBoss::Initialize()
 
 bool	LastBoss::Terminate()
 {
-	CB::Terminate();
+	CharBase::Terminate();
 	DeleteSoundMem(swingSE);
 	return true;
 }

@@ -21,7 +21,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 
 	// DXライブラリの初期化
 	if (AppWindowed()) {
-		ChangeWindowMode(true);							// ウィンドウモードに指定する
+		ChangeWindowMode(true);// ウィンドウモードに指定する
 	}
 	SetMainWindowText("CyberDevilHunter-Dracula");
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);
@@ -34,7 +34,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 	{	// エラーが起きたら直ちに終了
 		return false;
 	}
-	SetDrawScreen(DX_SCREEN_BACK);		// 描画先画面を裏画面にセット
+	SetDrawScreen(DX_SCREEN_BACK);// 描画先画面を裏画面にセット
 	// Effekseerを初期化する。
 	// 引数には画面に表示する最大パーティクル数を設定する。
 	if (Effekseer_Init(8000) == -1)

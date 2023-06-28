@@ -39,7 +39,7 @@ bool BossLion::Initialize()
 
 bool	BossLion::Terminate()
 {
-	CB::Terminate();
+	CharBase::Terminate();
 	DeleteSoundMem(swingSE);
 	return true;
 }

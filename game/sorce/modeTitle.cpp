@@ -9,7 +9,7 @@
 #include <fstream>
 #include <sstream>
 
-bool modeT::save(const char* dir, valData* _val)
+bool modeTitle::save(const char* dir, valData* _val)
 {
 	std::vector<std::string> _data;
 	int points = _val->points;
@@ -39,7 +39,7 @@ bool modeT::save(const char* dir, valData* _val)
 	return true;
 }
 
-bool modeT::loadData(const char* dir, valData* _val)
+bool modeTitle::loadData(const char* dir, valData* _val)
 {
 	std::vector<std::string> _data;
 	fileIO::loadCSV(&_data, dir, false);
@@ -126,7 +126,7 @@ bool modeT::loadData(const char* dir, valData* _val)
 	return true;
 }
 
-bool	modeT::Initialize()
+bool	modeTitle::Initialize()
 {
 	_cg = _modeServer->RS.loadGraphR("game/res/ƒ^ƒCƒgƒ‹.png");
 	logoHandle = _modeServer->RS.loadGraphR("game/res/AMG-LOGO.png");
@@ -145,7 +145,7 @@ bool	modeT::Initialize()
 	return true;
 }
 
-bool	modeT::Process()
+bool	modeTitle::Process()
 {
 	if (!CheckMusic() && !_modeServer->_valData.isLogoRender) {
 		PlayMusic("game/res/BGM/JNATHYN_-_Dioma_Demo_NCS_Release.mp3", DX_PLAYTYPE_BACK);		SetVolumeMusic(255 * (0.01 * 70));
@@ -156,13 +156,13 @@ bool	modeT::Process()
 	{
 		StopMusic();
 		PlaySoundMem(titleCallHaldle[rand() % 7], DX_PLAYTYPE_BACK);
-		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+		_modeServer->Add(std::make_unique<modeMainMenu>(_modeServer), 1, MODE_MAINMENU);
 		return false;
 	}
 	return true;
 }
 
-bool	modeT::Render()
+bool	modeTitle::Render()
 {
 
 	if (_modeServer->_valData.isLogoRender)
@@ -191,7 +191,7 @@ bool	modeT::Render()
 	return true;
 }
 
-bool	modeT::Terminate()
+bool	modeTitle::Terminate()
 {
 	StopMusic();
 	return true;

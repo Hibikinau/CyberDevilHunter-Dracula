@@ -7,7 +7,7 @@
  *********************************************************************/
 #include"allMode.h"
 
-bool	modeAG::Initialize()
+bool	modeArtsGet::Initialize()
 {
 	_modeServer->RS.loadDivGraphR("game/res/CCF_Cyber_BG_E/apngframe01_sheet.png", 90, 3, 30, 600, 450, backAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
@@ -24,7 +24,7 @@ bool	modeAG::Initialize()
 	return true;
 }
 
-bool	modeAG::Process()
+bool	modeArtsGet::Process()
 {
 	if (!CheckMusic())
 	{
@@ -50,7 +50,7 @@ bool	modeAG::Process()
 	}
 	else if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 	{
-		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+		_modeServer->Add(std::make_unique<modeMainMenu>(_modeServer), 1, MODE_MAINMENU);
 		PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
 		return false;
 	}
@@ -59,7 +59,7 @@ bool	modeAG::Process()
 	return true;
 }
 
-bool	modeAG::Render()
+bool	modeArtsGet::Render()
 {
 	arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
@@ -81,7 +81,7 @@ bool	modeAG::Render()
 	return true;
 }
 
-bool	modeAG::Terminate()
+bool	modeArtsGet::Terminate()
 {
 	SetFontSize(DeffontSize);
 	return true;

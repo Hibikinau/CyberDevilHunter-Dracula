@@ -29,7 +29,7 @@ typedef ExclusiveState _estate;
 using namespace model;
 
 
-bool PL::Initialize()
+bool player::Initialize()
 {
 	//各変数の初期化
 	spd = runSpd;
@@ -77,9 +77,9 @@ bool PL::Initialize()
 }
 
 
-bool	PL::Terminate()
+bool	player::Terminate()
 {
-	CB::Terminate();
+	CharBase::Terminate();
 	//音声データのメモリ解放
 	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
 	return true;
@@ -100,7 +100,7 @@ bool KATANAIO(modelInf* MI, bool isIO)
 	return true;
 }
 
-bool	PL::Process()
+bool	player::Process()
 {
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
@@ -494,7 +494,7 @@ bool	PL::Process()
 	return true;
 }
 
-bool	PL::Render(float timeSpeed)
+bool	player::Render(float timeSpeed)
 {
 	int i = 0;
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);//アニメーション再生
@@ -511,7 +511,7 @@ bool	PL::Render(float timeSpeed)
 	return true;
 }
 
-void PL::charMove(float Speed, float _Dir, bool isAnimChange)
+void player::charMove(float Speed, float _Dir, bool isAnimChange)
 {
 	//設定処理
 	_Dir -= 180.f;
@@ -528,7 +528,7 @@ void PL::charMove(float Speed, float _Dir, bool isAnimChange)
 	}
 }
 
-bool PL::HPmath(float math, float Stan)
+bool player::HPmath(float math, float Stan)
 {
 	isBlow = false;
 	//ダメージか回復かの判定
@@ -573,7 +573,7 @@ bool PL::HPmath(float math, float Stan)
 	return isBlow;
 }
 
-bool PL::BPmath(float math)
+bool player::BPmath(float math)
 {
 	//覚醒時処理
 	if (isAwakening > 0 && math > 0) { return false; }
@@ -586,7 +586,7 @@ bool PL::BPmath(float math)
 	return true;
 }
 
-pushButton PL::setAction()
+pushButton player::setAction()
 {
 	//設定処理
 	bool isNext = false;
@@ -706,7 +706,7 @@ pushButton PL::setAction()
 	return insEnum;
 }
 
-float PL::getMoveDir(bool checkUseCamDir)
+float player::getMoveDir(bool checkUseCamDir)
 {
 	float _addDir = 0.f;
 
@@ -722,7 +722,7 @@ float PL::getMoveDir(bool checkUseCamDir)
 	return _addDir;
 }
 
-bool PL::CA_change(std::string name, const char* XorY)
+bool player::CA_change(std::string name, const char* XorY)
 {
 	//X入力時入れ替え技設定
 	if ("X" == XorY)
@@ -745,7 +745,7 @@ bool PL::CA_change(std::string name, const char* XorY)
 }
 
 
-bool PL::CA_debugAttack(PL* insPL)
+bool player::CA_debugAttack(player* insPL)
 {
 	//設定処理
 	insPL->setRecastTime = 60;
@@ -770,7 +770,7 @@ bool PL::CA_debugAttack(PL* insPL)
 	return true;
 }
 
-bool PL::CA_charge(PL* insPL)
+bool player::CA_charge(player* insPL)
 {
 	//チャージ攻撃後の飛ぶ斬撃処理
 	if (insPL->CAChargeAttackNum > 0)
@@ -876,7 +876,7 @@ bool PL::CA_charge(PL* insPL)
 	return true;
 }
 
-bool PL::CA_kirinuke(PL* insPL)
+bool player::CA_kirinuke(player* insPL)
 {
 	//設定処理
 	insPL->animSpd = 1.f;
@@ -898,4 +898,4 @@ bool PL::CA_kirinuke(PL* insPL)
 	return true;
 }
 
-bool PL::CA_noData(PL* insPL) { return false; }
+bool player::CA_noData(player* insPL) { return false; }

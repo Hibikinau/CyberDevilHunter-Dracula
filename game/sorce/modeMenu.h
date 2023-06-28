@@ -1,5 +1,5 @@
 /*****************************************************************//**
- * \file   modeMenu.h
+ * \file   modeMenuenu.h
  * \brief  メニュー画面のクラス
  *
  * \author 山本莉久
@@ -8,11 +8,11 @@
 #pragma once
 #include"appframe.h"
 
-class modeM : public ModeBase
+class modeMenu : public ModeBase
 {
 public:
-	modeM(ModeServer* MS) { _modeServer = MS; };
-	~modeM() {};
+	modeMenu(ModeServer* MS) { _modeServer = MS; };
+	~modeMenu() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();

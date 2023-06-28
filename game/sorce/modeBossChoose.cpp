@@ -7,7 +7,7 @@
  *********************************************************************/
 #include"allMode.h"
 
-bool	modeBC::Initialize()
+bool	modeBossChoose::Initialize()
 {
 	//_cg = LoadGraph("game/res/chooseBoss.png");
 	_modeServer->RS.loadDivGraphR("game/res/mission_UI_animation_01/mission_UI_animation_sheet.png", 62, 1, 62, 600, 450, mapAnimHandol);
@@ -49,7 +49,7 @@ bool	modeBC::Initialize()
 	return true;
 }
 
-bool	modeBC::Process()
+bool	modeBossChoose::Process()
 {
 	if (!CheckMusic())
 	{
@@ -74,7 +74,7 @@ bool	modeBC::Process()
 		{
 			if (pic)
 			{//ƒQ[ƒ€‚ÖˆÚs
-				_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+				_modeServer->Add(std::make_unique<modeGame>(_modeServer), 1, MODE_GAME);
 				PlaySoundMem(_modeServer->_valData.menuSoundHandle[2], DX_PLAYTYPE_BACK);
 				StopMusic();
 				return false;
@@ -126,7 +126,7 @@ bool	modeBC::Process()
 		if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 		{
 			PlaySoundMem(_modeServer->_valData.menuSoundHandle[3], DX_PLAYTYPE_BACK);
-			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+			_modeServer->Add(std::make_unique<modeMainMenu>(_modeServer), 1, MODE_MAINMENU);
 			return false;
 		}
 	}
@@ -134,7 +134,7 @@ bool	modeBC::Process()
 	return true;
 }
 //680, 120
-bool	modeBC::Render()
+bool	modeBossChoose::Render()
 {
 	SetFontSize(36);
 	arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
@@ -235,7 +235,7 @@ bool	modeBC::Render()
 	return true;
 }
 
-bool	modeBC::Terminate()
+bool	modeBossChoose::Terminate()
 {
 	SetFontSize(DeffontSize);
 	return true;

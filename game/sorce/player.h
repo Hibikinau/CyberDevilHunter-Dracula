@@ -44,14 +44,14 @@ enum class pushButton
 };
 
 /**
- * @class PL
+ * @class player
  * @brief プレイヤクラス
  */
-class PL : public CB
+class player : public CharBase
 {
 public:
-	PL() {};
-	~PL() {};
+	player() {};
+	~player() {};
 
 	/**
 	 * @brief 初期化処理
@@ -150,40 +150,40 @@ public:
 	 * @param insPL プレイヤクラスポインタ
 	 * @return true
 	 */
-	static bool CA_charge(PL* insPL);
+	static bool CA_charge(player* insPL);
 
 	/**
 	 * @brief 入れ替え技(切り抜け)
 	 * @param insPL プレイヤクラスポインタ
 	 * @return true
 	 */
-	static bool CA_kirinuke(PL* insPL);
+	static bool CA_kirinuke(player* insPL);
 
 	/**
 	 * @brief 入れ替え技(デバック用攻撃)
 	 * @param insPL プレイヤクラスポインタ
 	 * @return true
 	 */
-	static bool CA_debugAttack(PL* insPL);
+	static bool CA_debugAttack(player* insPL);
 
 	/**
 	 * @brief 入れ替え技(非設定)
 	 * @param insPL プレイヤクラスポインタ
 	 * @return false
 	 */
-	static bool CA_noData(PL* insPL);
+	static bool CA_noData(player* insPL);
 
 	/**
 	 * @brief 入れ替え技用関数ポインタ
 	 * @param insPL プレイヤクラスポインタ
 	 */
-	bool (*changeAttackX)(PL* insPL);
+	bool (*changeAttackX)(player* insPL);
 
 	/**
 	 * @brief 入れ替え技用関数ポインタ
 	 * @param insPL プレイヤクラスポインタ
 	 */
-	bool (*changeAttackY)(PL* insPL);
+	bool (*changeAttackY)(player* insPL);
 
 	/**
 	 * @brief アニメーション総再生時間取得処理

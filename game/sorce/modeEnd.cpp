@@ -3,9 +3,9 @@
 #include <string>
 #include <sstream>
 
-bool	modeE::Initialize()
+bool	modeEnd::Initialize()
 {
-	modeT::save("game/res/save.csv", &_modeServer->_valData);
+	modeTitle::save("game/res/save.csv", &_modeServer->_valData);
 	creditsY = 720;
 	DeffontSize = GetFontSize();
 	SetFontSize(40);
@@ -13,7 +13,7 @@ bool	modeE::Initialize()
 	return true;
 }
 
-bool	modeE::Process()
+bool	modeEnd::Process()
 {
 	if (!CheckMusic()) {
 		PlayMusic("game/res/BGM/Jnathyn_-_Dioma_NCS_Release.mp3", DX_PLAYTYPE_BACK);		SetVolumeMusic(255 * (0.01 * 40));
@@ -26,19 +26,19 @@ bool	modeE::Process()
 
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
-		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+		_modeServer->Add(std::make_unique<modeTitle>(_modeServer), 1, MODE_TITLE);
 		return false;
 	}
 
 	if (creditsY + static_cast<int>(_modeServer->_valData.credits.size()) * 42 < 0)
 	{
-		_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+		_modeServer->Add(std::make_unique<modeTitle>(_modeServer), 1, MODE_TITLE);
 		return false;
 	}
 	return true;
 }
 
-bool	modeE::Render()
+bool	modeEnd::Render()
 {
 	for (int i = 0; i < _modeServer->_valData.credits.size(); i++)
 	{
@@ -51,7 +51,7 @@ bool	modeE::Render()
 	return true;
 }
 
-bool	modeE::Terminate()
+bool	modeEnd::Terminate()
 {
 	SetFontSize(DeffontSize);
 	StopMusic();

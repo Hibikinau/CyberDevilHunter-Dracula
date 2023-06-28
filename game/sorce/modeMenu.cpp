@@ -1,5 +1,5 @@
 /*****************************************************************//**
- * \file   modeMenu.h
+ * \file   modeMenuenu.h
  * \brief  メニュー画面のクラス
  *
  * \author 山本莉久
@@ -7,7 +7,7 @@
  *********************************************************************/
 #include"allMode.h"
 
-bool	modeM::Initialize()
+bool	modeMenu::Initialize()
 {
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
 	DeffontSize = GetFontSize();
@@ -23,7 +23,7 @@ bool	modeM::Initialize()
 	return true;
 }
 
-bool	modeM::Process()
+bool	modeMenu::Process()
 {
 	if (_imputInf._gTrgb[KEY_INPUT_X] || _imputInf._gTrgp[XINPUT_BUTTON_B])
 	{
@@ -45,13 +45,13 @@ bool	modeM::Process()
 		if (picMenuNum == 0)
 		{//戦闘のやり直し
 			_modeServer->Del(MODE_GAME);
-			_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+			_modeServer->Add(std::make_unique<modeGame>(_modeServer), 1, MODE_GAME);
 			return false;
 		}
 		else if (picMenuNum == 1)
 		{//メインメニューへ
 			_modeServer->Del(MODE_GAME);
-			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+			_modeServer->Add(std::make_unique<modeMainMenu>(_modeServer), 1, MODE_MAINMENU);
 			return false;
 		}
 		else if (picMenuNum == 2)
@@ -61,14 +61,14 @@ bool	modeM::Process()
 		else if (picMenuNum == 3)
 		{//タイトルへ
 			_modeServer->Del(MODE_GAME);
-			_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+			_modeServer->Add(std::make_unique<modeTitle>(_modeServer), 1, MODE_TITLE);
 			return false;
 		}
 	}
 	return true;
 }
 
-bool	modeM::Render()
+bool	modeMenu::Render()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
 	DrawGraph(0, 0, _cg, false);
@@ -92,7 +92,7 @@ bool	modeM::Render()
 	return true;
 }
 
-bool	modeM::Terminate()
+bool	modeMenu::Terminate()
 {
 	DeleteGraph(_cg);
 	SetFontSize(DeffontSize);

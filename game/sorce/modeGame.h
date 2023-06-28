@@ -1,5 +1,5 @@
 /*****************************************************************//**
- * \file   modeGame.h
+ * \file   modeGameame.h
  * \brief  ゲーム画面のクラス
  *
  * \author 山本莉久
@@ -21,11 +21,11 @@ struct popDamageInf
 	bool isPl;
 };
 
-class modeG : public ModeBase
+class modeGame : public ModeBase
 {
 public:
-	modeG(ModeServer* MS) { _modeServer = MS; }
-	~modeG() {};
+	modeGame(ModeServer* MS) { _modeServer = MS; }
+	~modeGame() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();
@@ -51,7 +51,7 @@ public:
 	float spd, cameraDir, cameraLockDir, cameraNtDir, cameraHigh;
 	int startTime, countTime, FPS, FPScount;
 	bool isLockon, isGameOver = false, endVoice = false;
-	std::map<std::string, std::shared_ptr<CB> > charBox;
+	std::map<std::string, std::shared_ptr<CharBase> > charBox;
 	VECTOR cameraPos, cameraFor;
 	modelInf* plMI, stage, * bossMI, skyDoom, sakuHandle;
 	std::string NS;

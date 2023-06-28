@@ -7,7 +7,7 @@
  *********************************************************************/
 #include"allMode.h"
 
-bool	modeMM::Initialize()
+bool	modeMainMenu::Initialize()
 {
 	DeffontSize = GetFontSize();
 	menuMessage.emplace_back("ミッション選択");
@@ -37,7 +37,7 @@ bool	modeMM::Initialize()
 	return true;
 }
 
-bool	modeMM::Process()
+bool	modeMainMenu::Process()
 {
 	if (!CheckMusic())
 	{
@@ -83,7 +83,7 @@ bool	modeMM::Process()
 			if (isBackTitlePic)
 			{
 				StopMusic();
-				_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+				_modeServer->Add(std::make_unique<modeTitle>(_modeServer), 1, MODE_TITLE);
 				PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 				return false;
 			}
@@ -95,22 +95,22 @@ bool	modeMM::Process()
 			PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 			if (picMenuNum == 0)
 			{//討伐ボス選択
-				_modeServer->Add(std::make_unique<modeBC>(_modeServer), 1, MODE_BC);
+				_modeServer->Add(std::make_unique<modeBossChoose>(_modeServer), 1, MODE_BOSSCHOICE);
 				return false;
 			}
 			else if (picMenuNum == 1)
 			{//装備変更
-				_modeServer->Add(std::make_unique<modeES>(_modeServer), 1, MODE_ES);
+				_modeServer->Add(std::make_unique<modeEquipmentSelection>(_modeServer), 1, MODE_EQUIPMENTSELECTION);
 				return false;
 			}
 			else if (picMenuNum == 2)
 			{//アーツ取得
-				_modeServer->Add(std::make_unique<modeAG>(_modeServer), 1, MODE_AG);
+				_modeServer->Add(std::make_unique<modeArtsGet>(_modeServer), 1, MODE_ARTSGET);
 				return false;
 			}
 			else if (picMenuNum == 3)
 			{//設定
-				_modeServer->Add(std::make_unique<modeS>(_modeServer), 1, MODE_S);
+				_modeServer->Add(std::make_unique<modeSetting>(_modeServer), 1, MODE_SETTING);
 				return false;
 			}
 		}
@@ -118,7 +118,7 @@ bool	modeMM::Process()
 	return true;
 }
 
-bool	modeMM::Render()
+bool	modeMainMenu::Render()
 {
 	backAnimNum < 89 ? backAnimNum++ : backAnimNum = 0;
 	DrawExtendGraph(0, 0, 1280, 720, backAnimHandle[backAnimNum], false);
@@ -152,7 +152,7 @@ bool	modeMM::Render()
 	return true;
 }
 
-bool	modeMM::Terminate()
+bool	modeMainMenu::Terminate()
 {
 	SetFontSize(DeffontSize);
 	if (_modeServer->_valData.bgmSwitchNum > 1) { _modeServer->_valData.bgmSwitchNum--; }

@@ -7,7 +7,7 @@
  *********************************************************************/
 #include"allMode.h"
 
-bool	modeGO::Initialize()
+bool	modeGameOver::Initialize()
 {
 	_modeServer->RS.loadDivGraphR("game/res/deadEnd/apngframe01_sheet.png", 80, 3, 27, 600, 240, gameOverAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/arrow/apngframe01_sheet.png", 16, 13, 2, 75, 25, arrowAnimHandle);
@@ -25,7 +25,7 @@ bool	modeGO::Initialize()
 	return true;
 }
 
-bool	modeGO::Process()
+bool	modeGameOver::Process()
 {
 	if (_imputInf._gTrgb[KEY_INPUT_DOWN] || _imputInf._gTrgp[XINPUT_BUTTON_DPAD_DOWN])
 	{
@@ -42,15 +42,15 @@ bool	modeGO::Process()
 	{
 		if (picMenuNum == 0)
 		{//戦闘のやり直し
-			_modeServer->Add(std::make_unique<modeG>(_modeServer), 1, MODE_GAME);
+			_modeServer->Add(std::make_unique<modeGame>(_modeServer), 1, MODE_GAME);
 		}
 		else if (picMenuNum == 1)
 		{//ブリーフィングへ
-			_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+			_modeServer->Add(std::make_unique<modeMainMenu>(_modeServer), 1, MODE_MAINMENU);
 		}
 		else if (picMenuNum == 2)
 		{//タイトルへ
-			_modeServer->Add(std::make_unique<modeT>(_modeServer), 1, MODE_TITLE);
+			_modeServer->Add(std::make_unique<modeTitle>(_modeServer), 1, MODE_TITLE);
 		}
 		_modeServer->Del(MODE_GAME);
 		PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
@@ -59,7 +59,7 @@ bool	modeGO::Process()
 	return true;
 }
 
-bool	modeGO::Render()
+bool	modeGameOver::Render()
 {/*
 	SetFontSize(80);
 	int insMenuFontSize = GetDrawStringWidth("GAME OVER", strlen("GAME OVER"));
@@ -90,7 +90,7 @@ bool	modeGO::Render()
 	return true;
 }
 
-bool	modeGO::Terminate()
+bool	modeGameOver::Terminate()
 {
 	DeleteGraph(_cg);
 	SetFontSize(DeffontSize);

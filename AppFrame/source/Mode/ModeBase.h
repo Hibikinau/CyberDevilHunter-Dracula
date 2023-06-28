@@ -23,12 +23,12 @@ public:
 	ModeBase();
 	virtual ~ModeBase();
 
-	virtual bool	Initialize();
-	virtual bool	Terminate();
-	virtual bool	Imput(imputInf* iInf);
-	virtual bool	Process();
-	virtual bool	Render();
-	virtual bool	popBoss(int bossType, const char* _nameA) { return false; }
+	virtual bool Initialize();
+	virtual bool Terminate();
+	virtual bool Imput(imputInf* iInf);
+	virtual bool Process();
+	virtual bool Render();
+	virtual bool popBoss(int bossType, const char* _nameA) { return false; }
 
 public:
 	int	GetModeCount() { return _cntMode; }			// このモードが始まってからのカウンタ
@@ -43,27 +43,27 @@ public:
 private:
 	friend	ModeServer;
 	// ModeServer用
-	std::string		_szName;
-	std::string		nextStage;
+	std::string _szName;
+	std::string nextStage;
 	imputInf _imputInf;
-	int				_uid;
-	int				_layer;
+	int _uid;
+	int _layer;
 
 	void StepTime(unsigned long tmNow);
 	void StepCount();
 public:
 	// モード内処理用
-	int		_cntMode;	// 本モードに入ってからのカウンタ, 0スタート
-	unsigned long	_tmMode;	// 本モードに入ってからの時間。ms
-	unsigned long	_tmStep;	// 前フレームからの経過時間。ms
-	unsigned long	_tmModeBase;	// このモードが始まった時間。ms
-	unsigned long	_tmPauseBase;	// ポーズ中のベース時間。ms
-	unsigned long	_tmPauseStep;	// ポーズ中の積算時間。ms 動作中、この値を _tmMode に用いる
-	unsigned long	_tmOldFrame;	// 前フレームの時間。ms
+	int _cntMode;	// 本モードに入ってからのカウンタ, 0スタート
+	unsigned long _tmMode;	// 本モードに入ってからの時間。ms
+	unsigned long _tmStep;	// 前フレームからの経過時間。ms
+	unsigned long _tmModeBase;	// このモードが始まった時間。ms
+	unsigned long _tmPauseBase;	// ポーズ中のベース時間。ms
+	unsigned long _tmPauseStep;	// ポーズ中の積算時間。ms 動作中、この値を _tmMode に用いる
+	unsigned long _tmOldFrame;	// 前フレームの時間。ms
 
 	// CallPerFrame / CallOfCount用
-	int		_callPerFrame, _callPerFrame_cnt;
-	int		_callOfCount;
+	int _callPerFrame, _callPerFrame_cnt;
+	int _callOfCount;
 	int arrowAnimHandle[16] = { -1 }, arrowAnimNum = 0;
 	int backAnimHandle[90] = { -1 }, backAnimNum = 0;
 };

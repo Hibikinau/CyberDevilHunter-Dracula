@@ -9,7 +9,7 @@
 
 using namespace model;
 
-VECTOR CB::getDirVecP(float dir, int powar)
+VECTOR CharBase::getDirVecP(float dir, int powar)
 {
 	float _Dir = dir - 180.f;
 	float radian = _Dir * DX_PI_F / 180.0f;
@@ -20,7 +20,7 @@ VECTOR CB::getDirVecP(float dir, int powar)
 	return dirZ;
 }
 
-bool	CB::gravity()
+bool	CharBase::gravity()
 {
 	if (_modelInf.pos.y < 1100)
 	{
@@ -44,7 +44,7 @@ bool	CB::gravity()
 	return true;
 }
 
-bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damage)
+bool	CharBase::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damage)
 {
 	bool _isHit = false;
 	for (int i = 0; i < allColl->size(); i++)
@@ -116,7 +116,7 @@ bool	CB::hitCheck(const char* name, VECTOR* hitPos, VECTOR* hitDir, float* damag
 	return _isHit;
 }
 
-bool	CB::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
+bool	CharBase::makeAttackCap(VECTOR _underPos, VECTOR _overPos, float r
 	, int nonActiveTimeF, int activeTimeF, int timeSpeed, bool isUseMat, float damage, float stan, int frameNum, VECTOR _dir, int _efcNum)
 {
 	attackColl acoll;

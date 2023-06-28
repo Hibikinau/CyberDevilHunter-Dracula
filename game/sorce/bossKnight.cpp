@@ -46,7 +46,7 @@ bool BossKnight::Initialize()
 
 bool	BossKnight::Terminate()
 {
-	CB::Terminate();
+	CharBase::Terminate();
 	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
 	return true;
 }

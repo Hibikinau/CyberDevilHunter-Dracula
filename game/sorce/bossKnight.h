@@ -13,7 +13,7 @@
  * @class BossKnight
  * @brief ボス「騎士」クラス
  */
-class BossKnight : public CB
+class BossKnight : public CharBase
 {
 public:
 	/**

@@ -8,11 +8,11 @@
 #pragma once
 #include"appframe.h"
 
-class modeGO : public ModeBase
+class modeGameOver : public ModeBase
 {
 public:
-	modeGO(ModeServer* MS) { _modeServer = MS; };
-	~modeGO() {};
+	modeGameOver(ModeServer* MS) { _modeServer = MS; };
+	~modeGameOver() {};
 
 	virtual bool	Initialize();
 	virtual bool	Terminate();

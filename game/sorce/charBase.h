@@ -64,14 +64,14 @@ struct attackColl
 };
 
 /**
- * @class CB
+ * @class CharBase
  * @brief キャラクタの基底クラス
  */
-class CB
+class CharBase
 {
 public:
-	CB() {};
-	virtual ~CB() {};
+	CharBase() {};
+	virtual ~CharBase() {};
 
 	/**
 	 * @brief 初期化処理
@@ -113,7 +113,7 @@ public:
 	/**
 	 * @brief charBoxコンテナのポインタ取得
 	 */
-	void setCB(std::map<std::string, std::shared_ptr<CB> >* _CB) { charBox = _CB; }
+	void setCB(std::map<std::string, std::shared_ptr<CharBase> >* _CB) { charBox = _CB; }
 
 	/**
 	 * @brief リソースサーバーのポインタ取得
@@ -239,7 +239,7 @@ public:
 	modelInf _modelInf//!モデル情報インスタンス
 		, * _GrounfInf;//!ステージ情報インスタンス
 	statusInf _statusInf;//ステータス情報インスタンス
-	std::map<std::string, std::shared_ptr<CB> >* charBox;//!全キャラコンテナ用ポインタ
+	std::map<std::string, std::shared_ptr<CharBase> >* charBox;//!全キャラコンテナ用ポインタ
 	valData* _valData;//!共有データ用ポインタ
 	MV1_COLL_RESULT_POLY hitCheckGround;//ステージの当たり判定情報
 	collCapsule collCap;//!当たり判定用カプセルのインスタンス

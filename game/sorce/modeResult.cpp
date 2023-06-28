@@ -7,27 +7,27 @@
  *********************************************************************/
 #include"allMode.h"
 
-bool	modeR::Initialize()
+bool	modeResult::Initialize()
 {
 	_cg = _modeServer->RS.loadGraphR("game/res/result.png");
 	DeffontSize = GetFontSize();
 	PlaySoundMem(_modeServer->_valData.menuSoundHandle[7], DX_PLAYTYPE_BACK);
-	modeT::save("game/res/save.csv", &_modeServer->_valData);
+	modeTitle::save("game/res/save.csv", &_modeServer->_valData);
 	return true;
 }
 
-bool	modeR::Process()
+bool	modeResult::Process()
 {
 	if (_imputInf._gTrgb[KEY_INPUT_RETURN] || _imputInf._gTrgp[XINPUT_BUTTON_A])
 	{
-		_modeServer->Add(std::make_unique<modeMM>(_modeServer), 1, MODE_MM);
+		_modeServer->Add(std::make_unique<modeMainMenu>(_modeServer), 1, MODE_MAINMENU);
 		PlaySoundMem(_modeServer->_valData.menuSoundHandle[1], DX_PLAYTYPE_BACK);
 		return false;
 	}
 	return true;
 }
 
-bool	modeR::Render()
+bool	modeResult::Render()
 {
 	DrawGraph(0, 0, _cg, true);
 	SetFontSize(120);
@@ -39,7 +39,7 @@ bool	modeR::Render()
 	return true;
 }
 
-bool	modeR::Terminate()
+bool	modeResult::Terminate()
 {
 	SetFontSize(DeffontSize);
 	return true;

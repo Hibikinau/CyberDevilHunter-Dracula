@@ -13,7 +13,7 @@
   * @class LastBoss
   * @brief ラスボスクラス
   */
-class LastBoss : public CB
+class LastBoss : public CharBase
 {
 public:
 	/**

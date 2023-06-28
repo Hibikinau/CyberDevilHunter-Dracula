@@ -10,7 +10,7 @@
 
 using namespace model;
 
-bool makeChar(modeG* insMG, Rserver* _rs, std::shared_ptr<CB> charPoint, const char* nameA)
+bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint, const char* nameA)
 {
 	charPoint->_valData = insMG->_valData;
 	charPoint->setRS(&insMG->_modeServer->RS);
@@ -23,14 +23,14 @@ bool makeChar(modeG* insMG, Rserver* _rs, std::shared_ptr<CB> charPoint, const c
 	insMG->charBox.emplace(nameA, std::move(charPoint));
 	return true;
 }
-bool	modeG::popBoss(int bossType, const char* _nameA)
+bool	modeGame::popBoss(int bossType, const char* _nameA)
 {
 	if (bossType == 1) { makeChar(this, &_modeServer->RS, std::shared_ptr<BossKnight>(), _nameA); }
 
 	return true;
 }
 
-bool	modeG::ASyncLoadAnim()
+bool	modeGame::ASyncLoadAnim()
 {
 	SetUseASyncLoadFlag(false);
 	SetDrawScreen(DX_SCREEN_BACK);
@@ -48,7 +48,7 @@ bool	modeG::ASyncLoadAnim()
 	return GetASyncLoadNum();
 }
 
-bool	modeG::Initialize()
+bool	modeGame::Initialize()
 {
 	SetUseLighting(true);
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
@@ -62,7 +62,7 @@ bool	modeG::Initialize()
 	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
 	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
 	modelImport("game/res/saku/saku.mv1", 380.f, &sakuHandle, &_modeServer->RS);
-	makeChar(this, &_modeServer->RS, std::make_unique<PL>(), Char_PL);
+	makeChar(this, &_modeServer->RS, std::make_unique<player>(), Char_PL);
 
 	if (_valData->popBossNum == 1) { makeChar(this, &_modeServer->RS, std::make_shared<BossKnight>(), Char_BOSS1); }
 	if (_valData->popBossNum == 2) { makeChar(this, &_modeServer->RS, std::make_shared<BossLion>(), Char_BOSS2); }
@@ -159,7 +159,7 @@ bool	modeG::Initialize()
 	return true;
 }
 
-bool	modeG::Process()
+bool	modeGame::Process()
 {
 	if (BGMdelay == 300)
 	{
@@ -203,7 +203,7 @@ bool	modeG::Process()
 		{
 			if (i->second->type == 1 && !isGameOver)
 			{//自機の死
-				_modeServer->Add(std::make_unique<modeGO>(_modeServer), 1, MODE_GO);
+				_modeServer->Add(std::make_unique<modeGameOver>(_modeServer), 1, MODE_GAMEOVER);
 				//StopSoundMem(BGM);
 				isGameOver = true;
 			}
@@ -211,12 +211,12 @@ bool	modeG::Process()
 			{//それ以外の死
 				if (i->first == Char_LBOSS)
 				{
-					_modeServer->Add(std::make_unique<modeE>(_modeServer), 1, MODE_END);
+					_modeServer->Add(std::make_unique<modeEnd>(_modeServer), 1, MODE_GAMEENDING);
 					_valData->points += 99999;
 				}
 				else
 				{
-					_modeServer->Add(std::make_unique<modeR>(_modeServer), 1, MODE_RESULT);
+					_modeServer->Add(std::make_unique<modeResult>(_modeServer), 1, MODE_RESULT);
 					_valData->points += 20000;
 				}
 				for (auto name : _valData->deadBoss) { if (name == i->first) { return false; } }
@@ -269,7 +269,7 @@ bool	modeG::Process()
 	//メニュー画面呼び出し
 	if (_imputInf._gTrgb[KEY_INPUT_M] || _imputInf._gTrgp[XINPUT_BUTTON_START])
 	{
-		_modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU);
+		_modeServer->Add(std::make_unique<modeMenu>(_modeServer), 1, MODE_MENU);
 	}
 
 	if (_imputInf._gTrgb[KEY_INPUT_H])
@@ -289,7 +289,7 @@ bool	modeG::Process()
 	return true;
 }
 
-bool	modeG::Render()
+bool	modeGame::Render()
 {
 	if (GSAnimNum < 40) {
 		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
@@ -442,7 +442,7 @@ bool	modeG::Render()
 	return true;
 }
 
-bool	modeG::collHitCheck()
+bool	modeGame::collHitCheck()
 {
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -478,7 +478,7 @@ bool	modeG::collHitCheck()
 	return true;
 }
 
-bool	modeG::Terminate()
+bool	modeGame::Terminate()
 {
 	StopSoundMem(BGM);
 	//MV1TerminateCollInfo(stage.modelHandle, -1);
@@ -491,11 +491,11 @@ bool	modeG::Terminate()
 	charBox.clear();
 	debugWardBox.clear();
 	DeleteLightHandleAll();
-	modeT::save("game/res/save.csv", _valData);
+	modeTitle::save("game/res/save.csv", _valData);
 	return true;
 }
 
-void modeG::cameraMove()
+void modeGame::cameraMove()
 {
 	if (isLockon)
 	{
@@ -548,7 +548,7 @@ std::string getChar(std::string data, int Num)
 	return input;
 }
 
-int modeG::useCommand()
+int modeGame::useCommand()
 {
 	if (!_imputInf._gTrgb[KEY_INPUT_RETURN]) { return 1; }
 	DrawBox(10, 700, 1270, 730, GetColor(0, 0, 0), true);
@@ -567,7 +567,7 @@ int modeG::useCommand()
 			std::getline(a, data, '/');
 
 			if (data == "debug") { debugMode ? debugMode = false : debugMode = true;	return 2; }
-			if (data == "menu") { _modeServer->Add(std::make_unique<modeM>(_modeServer), 1, MODE_MENU); }
+			if (data == "menu") { _modeServer->Add(std::make_unique<modeMenu>(_modeServer), 1, MODE_MENU); }
 			if (data.find("atkF1") != std::string::npos) { _valData->plAtkSpd1 = getNum(data, 1); }
 			if (data.find("atkF2") != std::string::npos) { _valData->plAtkSpd2 = getNum(data, 1); }
 			if (data.find("atkF3") != std::string::npos) { _valData->plAtkSpd3 = getNum(data, 1); }
@@ -591,7 +591,7 @@ int modeG::useCommand()
 			}
 			if (data == "csv")
 			{
-				modeT::loadData("game/res/save.csv", &_modeServer->_valData);
+				modeTitle::loadData("game/res/save.csv", &_modeServer->_valData);
 			}
 			if (data == "test")
 			{
@@ -604,7 +604,7 @@ int modeG::useCommand()
 	return -1;
 }
 
-bool modeG::drawUI()
+bool modeGame::drawUI()
 {
 	auto DeffontSize = GetFontSize();
 	SetFontSize(30);

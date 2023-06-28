@@ -13,7 +13,7 @@
   * @class BossLionman
   * @brief ボス「ライオンマン」クラス
   */
-class BossLion : public CB
+class BossLion : public CharBase
 {
 public:
 	/**
