@@ -58,7 +58,7 @@ bool	modeGame::Initialize()
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(false);
 	SetAlwaysRunFlag(true);
-	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
+	//Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
 	_modeServer->RS.loadDivGraphR("game/res/loading/1_sheet.png", 27, 27, 1, 28, 28, loadingAnimHandle);
 

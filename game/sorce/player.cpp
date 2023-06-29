@@ -390,6 +390,7 @@ bool	player::Process()
 			animSpd = 2.f;
 			isFastGuard = true, isCounter = 2, counterTime = 0;
 			immortalTime = getAnimPlayTotalTime();
+			_valData->hitstopF = 5;//ヒットストップ
 			auto a = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y - 90, 300));
 			auto b = VAdd(_modelInf.pos, getDirVecP(_modelInf.dir.y + 90, 300));
 			auto bz = getDirVecP(_modelInf.dir.y, 30);
