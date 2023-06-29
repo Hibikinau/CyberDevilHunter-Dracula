@@ -33,7 +33,6 @@ bool LastBoss::Initialize()
 	ActionFlag = false;
 	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
-	impactEfcHandle = LoadEffekseerEffect("game/res/effect/è’åÇîg1/slash_shot.efkefc", 80.f);
 	ChangeVolumeSoundMem(120, swingSE);
 
 	//âπê∫ÉfÅ[É^ÇÃì«Ç›çûÇ›
@@ -57,6 +56,14 @@ bool LastBoss::Initialize()
 	AwakeTK = 0;
 	return true;
 }
+
+void LastBoss::loadEfekseer()
+{
+	impactEfcHandle = LoadEffekseerEffect("game/res/effect/è’åÇîg1/slash_shot.efkefc", 80.f);
+
+	return;
+}
+
 
 bool	LastBoss::Terminate()
 {

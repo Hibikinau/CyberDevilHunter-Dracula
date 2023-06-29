@@ -159,6 +159,11 @@ public:
 	virtual void battleStartVoice() { return; }
 
 	/**
+	 * @brief エフェクト読み込み用関数
+	 */
+	virtual void loadEfekseer() { return; }
+
+	/**
 	 * @brief 名前情報セット処理
 	 * @param 名前
 	 * @return true

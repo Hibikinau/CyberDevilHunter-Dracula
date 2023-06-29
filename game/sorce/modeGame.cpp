@@ -39,8 +39,11 @@ bool	modeGame::ASyncLoadAnim()
 	{
 		ProcessMessage();
 		ClearDrawScreen();
-		i++;
-		DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
+
+		DrawGraph(30, 670, loadingAnimHandle[loadingAnimNum], true);
+		loadingAnimNum < 27 ? loadingAnimNum++ : loadingAnimNum = 0;
+		//i++;
+		//DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
 
 		ScreenFlip();
 	}
@@ -54,10 +57,12 @@ bool	modeGame::Initialize()
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
 	SetUseBackCulling(false);
-	//SetUseASyncLoadFlag(true);
 	SetAlwaysRunFlag(true);
 	Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
+	_modeServer->RS.loadDivGraphR("game/res/loading/1_sheet.png", 27, 27, 1, 28, 28, loadingAnimHandle);
+
+	SetUseASyncLoadFlag(true);
 	_valData = &_modeServer->_valData;
 	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
 	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
@@ -140,10 +145,11 @@ bool	modeGame::Initialize()
 
 	ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), BGM);
 
-	//読み込んだ3dモデルのサイズ調整
+	//読み込んだ3dモデルのサイズ調整とエフェクトのロード
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
 		changeScale(&i->second->_modelInf);
+		i->second->loadEfekseer();
 	}
 	changeScale(&stage);
 	changeScale(&skyDoom);

@@ -21,7 +21,7 @@ int Rserver::modelImportR(const char* dir)
 	insHandle = MV1LoadModel(dir);
 	modelHandleInf insInf = { dir, insHandle };
 	modelHandleList.emplace_back(insInf);
-	return MV1DuplicateModel(insHandle);
+	return insHandle;
 }
 
 int Rserver::loadGraphR(const char* dir)

@@ -67,15 +67,19 @@ bool player::Initialize()
 		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
 	}
 
+	return true;
+}
+
+void player::loadEfekseer()
+{
 	//エフェクト読み込み
 	guardEfcHandle = LoadEffekseerEffect("game/res/effect/ガード/guard_effect_01.efkefc", 20.f);
 	chargeEfcHandle = LoadEffekseerEffect("game/res/effect/チャージエフェクト/charge.efkefc", 20.f);
 	healEfcHandle = LoadEffekseerEffect("game/res/effect/回復1/heal_01.efkefc", 60.f);
 	impactEfcHandle = LoadEffekseerEffect("game/res/effect/衝撃波1/slash_shot.efkefc", 80.f);
 
-	return true;
+	return;
 }
-
 
 bool	player::Terminate()
 {

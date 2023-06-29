@@ -138,6 +138,11 @@ public:
 	bool BPmath(float math) override;
 
 	/**
+	 * @brief エフェクト読み込み用関数
+	 */
+	void loadEfekseer() override;
+
+	/**
 	 * @brief 自機入れ替え技変更処理
 	 * @param name 入れ替え技名
 	 * @param XorY 2つあるうちどちらの入れ替え技を変えるか

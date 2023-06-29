@@ -39,9 +39,15 @@ bool BossKnight::Initialize()
 	AwakeT = 0;
 	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
+	return true;
+}
+
+void BossKnight::loadEfekseer()
+{
 	impactEfcHandle = LoadEffekseerEffect("game/res/effect/ÕŒ‚”g1/slash_shot.efkefc", 80.f);
 	slamEfcHandle = LoadEffekseerEffect("game/res/effect/‘ÅŒ‚5/‘ÅŒ‚5.efkefc", 20.f);
-	return true;
+
+	return;
 }
 
 bool	BossKnight::Terminate()

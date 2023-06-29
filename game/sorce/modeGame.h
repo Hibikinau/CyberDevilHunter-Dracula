@@ -68,6 +68,7 @@ public:
 	int lockOnMarkerHandle[30] = { -1 }, LOMarkerNum = 0;
 	int gameStartAnimHandle[89] = { -1 }, GSAnimNum;
 	int slashLineAnimHandle[39] = { -1 };
+	int loadingAnimHandle[27] = { -1 }, loadingAnimNum;
 
 	int StageModelHandle;
 	int CharaModelHandle;

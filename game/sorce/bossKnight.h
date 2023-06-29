@@ -69,6 +69,10 @@ public:
 	 */
 	void Move(float speed, float radian);
 
+	/**
+	 * @brief エフェクト読み込み用関数
+	 */
+	void loadEfekseer() override;
 
 	/**
 	 * @brief キャラクターの現在の状態
