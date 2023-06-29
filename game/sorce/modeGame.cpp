@@ -12,6 +12,7 @@ using namespace model;
 
 bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint, const char* nameA)
 {
+	//キャラクラス起動処理
 	charPoint->_valData = insMG->_valData;
 	charPoint->setRS(&insMG->_modeServer->RS);
 	charPoint->Initialize();
@@ -21,20 +22,17 @@ bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint
 	charPoint->allColl = &insMG->mAllColl;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insMG->charBox.emplace(nameA, std::move(charPoint));
-	return true;
-}
-bool	modeGame::popBoss(int bossType, const char* _nameA)
-{
-	if (bossType == 1) { makeChar(this, &_modeServer->RS, std::shared_ptr<BossKnight>(), _nameA); }
 
 	return true;
 }
 
 bool	modeGame::ASyncLoadAnim()
 {
+	//設定処理
 	SetUseASyncLoadFlag(false);
 	SetDrawScreen(DX_SCREEN_BACK);
 	int i = 0;
+	//非同期読み込み終了までの間連番画像でのアニメーション再生
 	while (GetASyncLoadNum() > 0)
 	{
 		ProcessMessage();
@@ -53,6 +51,7 @@ bool	modeGame::ASyncLoadAnim()
 
 bool	modeGame::Initialize()
 {
+	//設定処理
 	SetUseLighting(true);
 	SetUseZBuffer3D(true);// Ｚバッファを有効にする
 	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
@@ -60,25 +59,26 @@ bool	modeGame::Initialize()
 	SetAlwaysRunFlag(true);
 	//Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
 
+	//ロードアニメーション画像の読み込み
 	_modeServer->RS.loadDivGraphR("game/res/loading/1_sheet.png", 27, 27, 1, 28, 28, loadingAnimHandle);
 
+	//3dモデル読み込み
 	SetUseASyncLoadFlag(true);
-	_valData = &_modeServer->_valData;
+	_valData = &_modeServer->_valData;//共有コンテナの取得
 	modelImport("game/res/Stage1/Stage1.mv1", 10.f, &stage, &_modeServer->RS);
 	modelImport("game/res/skyDoom/incskies_029_16k.x", 20.f, &skyDoom, &_modeServer->RS);
 	modelImport("game/res/saku/saku.mv1", 380.f, &sakuHandle, &_modeServer->RS);
 	makeChar(this, &_modeServer->RS, std::make_unique<player>(), Char_PL);
 
+	//ボスキャラクター生成処理
 	if (_valData->popBossNum == 1) { makeChar(this, &_modeServer->RS, std::make_shared<BossKnight>(), Char_BOSS1); }
 	if (_valData->popBossNum == 2) { makeChar(this, &_modeServer->RS, std::make_shared<BossLion>(), Char_BOSS2); }
 	if (_valData->popBossNum == 3) { makeChar(this, &_modeServer->RS, std::make_shared<LastBoss>(), Char_LBOSS); }
 
+	//開始時間の取得
 	countTime = GetNowCount();
 
-	testAttackCap.underPos = VGet(0.f, 30.f, 0.f);
-	testAttackCap.overPos = VGet(0.f, 170.f, 0.f);
-	testAttackCap.r = 30.f;
-
+	//UIなどの画像読み込み
 	HPgaugeHandle = _modeServer->RS.loadGraphR("game/res/UI/bar1.png");
 	HPgaugeHandle2 = _modeServer->RS.loadGraphR("game/res/UI/HP_gauge_01.png");
 	HPgaugeHandle3 = _modeServer->RS.loadGraphR("game/res/UI/HP_gauge_02.png");
@@ -98,18 +98,15 @@ bool	modeGame::Initialize()
 	sousaHandle = _modeServer->RS.loadGraphR("game/res/UI/8f56275350eb4bc2.png");
 	burstStrHandle = _modeServer->RS.loadGraphR("game/res/UI/1.png");
 	nearDeadHandle = _modeServer->RS.loadGraphR("game/res/low_HP.png");
-
 	stunStrHandle = _modeServer->RS.loadGraphR("game/res/UI/STUN.png");
-
 	_modeServer->RS.loadDivGraphR("game/res/lockon/lockon_ui01_sheet.png", 30, 14, 3, 72, 72, lockOnMarkerHandle);
 	_modeServer->RS.loadDivGraphR("game/res/battleStart/apngframe01_sheet.png", 89, 3, 30, 600, 450, gameStartAnimHandle);
-	GSAnimNum = 0;
-
 	_modeServer->RS.loadDivGraphR("game/res/slashEfc/nc142771Efc.png", 39, 3, 13, 1080, 1080, slashLineAnimHandle);
 	_modeServer->RS.loadDivGraphR("game/res/keepout.png", 180, 1, 180, 2400, 120, keepout);
 	_modeServer->RS.loadDivGraphR("game/res/UI/GlitchUI/kenGlitch_0000_sheet.png", 29, 2, 15, 770, 770, swordGlitchAnimHandle);
 	redTrailHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
 	whiteTrailHamdle = _modeServer->RS.loadGraphR("game/res/kari2.png");
+	GSAnimNum = 0;
 
 	//ここまで非同期ロード-------------------------------------------------------------------
 	ASyncLoadAnim();
@@ -123,7 +120,7 @@ bool	modeGame::Initialize()
 	// シャドウマップに描画する範囲を設定
 	SetShadowMapDrawArea(ShadowMapHandle, VGet(-5000.0f, -1.0f, -5000.0f), VGet(5000.0f, 1000.0f, 5000.0f));
 
-	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/slash_effect.efkefc", 20.f); }
+	//ボス用UIとBGMの読み込み
 	if (_valData->popBossNum == 1)
 	{
 		bossNamePosX = 285;
@@ -143,6 +140,7 @@ bool	modeGame::Initialize()
 		BGM = LoadSoundMem("game/res/BGM/boss03_01_BGM_ANGELPLAYA - PULL UP-inst-GameEdit [NCS Release].mp3");
 	}
 
+	//マスターボリュームの適応
 	ChangeVolumeSoundMem(255 * (0.01 * _valData->soundMasterValume), BGM);
 
 	//読み込んだ3dモデルのサイズ調整とエフェクトのロード
@@ -151,6 +149,7 @@ bool	modeGame::Initialize()
 		changeScale(&i->second->_modelInf);
 		i->second->loadEfekseer();
 	}
+	if (_valData->efcHandle == -1) { _valData->efcHandle = LoadEffekseerEffect("game/res/slash_effect.efkefc", 20.f); }
 	changeScale(&stage);
 	changeScale(&skyDoom);
 	changeScale(&sakuHandle);
@@ -167,15 +166,15 @@ bool	modeGame::Initialize()
 
 bool	modeGame::Process()
 {
+	//BGMを指定フレーム経過後に再生
 	if (BGMdelay == 300)
 	{
 		PlaySoundMem(BGM, DX_PLAYTYPE_LOOP);
 		BGMdelay++;
 	}
-	else
-	{
-		BGMdelay++;
-	}
+	else if (BGMdelay < 300) { BGMdelay++; }
+
+	//キャラクター情報の取得
 	plStatus = { 0.f };
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
@@ -205,6 +204,7 @@ bool	modeGame::Process()
 			debugWardBox.emplace_back("敵のスタン値 = " + std::to_string(bossStatus.stanPoint));
 		}
 
+		//キャラクターの死亡判定処理
 		if (i->second->isDead == 2 || i->second->_modelInf.pos.y < -500)
 		{
 			if (i->second->type == 1 && !isGameOver)
@@ -235,7 +235,7 @@ bool	modeGame::Process()
 	//コマンド呼び出し部分
 	useCommand();
 
-	//カメラ制御---------------------------------------------
+	//カメラ制御
 	if (CheckHitKey(KEY_INPUT_RIGHT)) { cameraNtDir += 1.f; }
 	if (CheckHitKey(KEY_INPUT_LEFT)) { cameraNtDir -= 1.f; }
 	cameraNtDir += _imputInf.rStickX / 5000;
@@ -244,30 +244,12 @@ bool	modeGame::Process()
 	SetCameraPositionAndTarget_UpVecY(cameraPos, cameraFor);
 	Effekseer_Sync3DSetting();
 
-	//影の明るさ調整-----------------------------------------
+	//影の明るさ調整
 	if (CheckHitKey(KEY_INPUT_UP)) { bright += .01f; }
 	if (CheckHitKey(KEY_INPUT_DOWN)) { bright -= .01f; }
 	if (bright < 0) { bright = 0; }
 	if (bright > 1) { bright = 1; }
 	SetGlobalAmbientLight(GetColorF(bright, bright, bright, 0.0f));
-	debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
-	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
-	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
-	debugWardBox.emplace_back(std::to_string(
-		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
-	debugWardBox.emplace_back("入れ替え技Xのリキャスト = " + std::to_string(plRecastTimeX));
-	debugWardBox.emplace_back("入れ替え技Yのリキャスト = " + std::to_string(plRecastTimeY));
-	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
-	debugWardBox.emplace_back("弱攻撃1のフレーム数/" + std::to_string(_valData->plAtkSpd1));
-	debugWardBox.emplace_back("弱攻撃2のフレーム数/" + std::to_string(_valData->plAtkSpd2));
-	debugWardBox.emplace_back("弱攻撃3のフレーム数/" + std::to_string(_valData->plAtkSpd3));
-	debugWardBox.emplace_back("弱攻撃4のフレーム数/" + std::to_string(_valData->plAtkSpd4));
-	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData->counterSpd));
-	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData->_counterTime));
-	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData->plCTimeN));
-	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
-		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
-		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 
 	//当たり判定計算呼び出し
 	collHitCheck();
@@ -278,62 +260,66 @@ bool	modeGame::Process()
 		_modeServer->Add(std::make_unique<modeMenu>(_modeServer), 1, MODE_MENU);
 	}
 
+	//ヒットストップデバッグ用
 	if (_imputInf._gTrgb[KEY_INPUT_H])
 	{
 		_valData->hitstopF = 10;
 	}
 
+	//エフェクシアデバッグ用
 	if (_imputInf._gTrgb[KEY_INPUT_E])
 	{
 		int a = PlayEffekseer3DEffect(_valData->efcHandle);
 		SetPosPlayingEffekseer3DEffect(a, 0, 1300, 0);
 	}
-
 	if (_imputInf._gTrgb[KEY_INPUT_A]) { swordGlitchAnimNum = 0; }
+
 	// Effekseerにより再生中のエフェクトを更新する。
 	UpdateEffekseer3D();
+
 	return true;
 }
 
 bool	modeGame::Render()
 {
+	//戦闘開始時演出
 	if (GSAnimNum < 40) {
 		DrawExtendGraph(0, 0, 1280, 720, gameStartAnimHandle[GSAnimNum], true);
 		if (GSAnimNum == 15) { PlaySoundMem(_modeServer->_valData.menuSoundHandle[7], DX_PLAYTYPE_BACK); }
 		GSAnimNum++;
 		return true;
 	}
+	//ステージ描画
 	MV1DrawModel(skyDoom.modelHandle);
 
-	//シャドウマップココカラ-----------------------------------------
+	//シャドウマップ開始処理
 	ShadowMap_DrawSetup(ShadowMapHandle);
-	//3dモデルの描画
 	MV1DrawModel(stage.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		//if (i->second->drawStopF > 0) { i->second->drawStopF--; i->second->Render(0); }
 		i->second->Render(1);
-
 	}
 
+	//シャドウマップ切り替え処理
 	ShadowMap_DrawEnd();
 	SetUseShadowMap(0, ShadowMapHandle);
+
 	//影用の3dモデルの描画
 	MV1DrawModel(stage.modelHandle);
 	for (auto i = charBox.begin(); i != charBox.end(); ++i)
 	{
 		i->second->Render(0);
 	}
-
+	//シャドウマップ終了処理
 	SetUseShadowMap(0, -1);
-	//シャドウマップここまで-----------------------------------------
 
 	SetUseLighting(false);
-
 	MV1DrawModel(sakuHandle.modelHandle);
+
+	//トレイル描画処理
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
-
 		MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
 		auto insUnderPos = VTransform(mAllColl.at(i).capColl.underPos, M);
 		auto insOverPos = VTransform(mAllColl.at(i).capColl.overPos, M);
@@ -344,7 +330,6 @@ bool	modeGame::Render()
 		{
 			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, redTrailHamdle);
 		}
-
 	}
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
@@ -367,6 +352,7 @@ bool	modeGame::Render()
 		}
 	}
 
+	//トレイル透過付き描画処理
 	for (int i = 0; i < atkEfc.size(); i++)
 	{
 		for (int j = 1; j < atkEfc[i].downCornerPos.size(); j++)
@@ -383,51 +369,53 @@ bool	modeGame::Render()
 	}
 	SetUseLighting(true);
 
-
+	//FPS値の算出
 	int nowTime = GetNowCount();
 	if (countTime + 1000 <= nowTime) { FPS = FPScount, FPScount = 0, countTime += 1000; }
 	else { FPScount++; }
 
-	//if (charBox.find(Char_PL) != charBox.end())
-	//{
-	//	DrawString(1000, 0, "自機のHP", GetColor(255.f, 0.f, 0.f));
-	//	DrawString(1000, 20, std::to_string(charBox[Char_PL]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
-	//}
-	//if (charBox.find(Char_BOSS1) != charBox.end())
-	//{
-	//	DrawString(1000, 50, "騎士のHP", GetColor(255.f, 0.f, 0.f));
-	//	DrawString(1000, 70, std::to_string(charBox[Char_BOSS1]->getStatus().hitPoint).c_str(), GetColor(255.f, 0.f, 0.f));
-	//}
-
 	DrawEffekseer3D();// Effekseerにより再生中のエフェクトを描画する。
 
+	//UI描画
 	SetUseZBuffer3D(FALSE);
 	if (isLockon)
 	{
 		LOMarkerNum < 29 ? LOMarkerNum++ : LOMarkerNum = 0;
 		auto a = DrawBillboard3D(VAdd(cameraFor, VGet(0, 170, 0)), .5, .5, 100, 0, lockOnMarkerHandle[LOMarkerNum], true);
 	}
-
 	if (plStatus.hitPoint < 70)
 	{//nearDeadHandle
 		DrawGraph(0, 0, nearDeadHandle, true);
 	}
-
 	drawUI();
 	SetUseZBuffer3D(TRUE);
 
+	//デバッグ用情報描画の用意
+	debugWardBox.emplace_back("影の明るさ  = " + std::to_string(bright));
+	debugWardBox.emplace_back("自機のHP = " + std::to_string(plStatus.hitPoint));
+	debugWardBox.emplace_back("自機のBP = " + std::to_string(plStatus.bloodPoint));
+	debugWardBox.emplace_back(std::to_string(
+		(std::atan2(-_imputInf.lStickX, _imputInf.lStickY) * 180.f) / DX_PI_F));
+	debugWardBox.emplace_back("入れ替え技Xのリキャスト = " + std::to_string(plRecastTimeX));
+	debugWardBox.emplace_back("入れ替え技Yのリキャスト = " + std::to_string(plRecastTimeY));
+	debugWardBox.emplace_back("現在のFPS値/" + std::to_string(FPS));
+	debugWardBox.emplace_back("ガード出だしのモーションスピード/" + std::to_string(_valData->counterSpd));
+	debugWardBox.emplace_back("カウンターの総受付時間/" + std::to_string(_valData->_counterTime));
+	debugWardBox.emplace_back("残りのカウンター受付時間/" + std::to_string(_valData->plCTimeN));
+	debugWardBox.emplace_back("x." + std::to_string(static_cast<int>(plMI->pos.x))
+		+ "/y." + std::to_string(static_cast<int>(plMI->pos.y))
+		+ "/z." + std::to_string(static_cast<int>(plMI->pos.z)));
 	debugWardBox.emplace_back(std::to_string(plMI->playTime));
 	debugWardBox.emplace_back(std::to_string(plMI->playTimeOld));
-	//debugWardBox.emplace_back("-------武器セット一覧-------");
 	debugWardBox.emplace_back("-------コマンド一覧-------");
 	debugWardBox.emplace_back("/debug(デバッグモードの切り替え)");
 	debugWardBox.emplace_back("/menu(メニュー画面表示)");
-	debugWardBox.emplace_back("/atkF1 ~ 4^フレーム数^(自機の1 ~ 4番目の攻撃モーションの総フレーム数変更)");
-	debugWardBox.emplace_back("/atkFall^フレーム数^(自機のすべての攻撃モーションの総フレーム数変更)");
 	debugWardBox.emplace_back("/GSpd^フレーム数^(ガード出だしのモーションの速さ)");
 	debugWardBox.emplace_back("/CTime^フレーム数^(カウンターの受付時間、標準で40)");
 	debugWardBox.emplace_back("/effectChange^ファイル名^^スケール^(Eキーで再生されるエフェクトの変更、拡張子不要/resからの相対パス必要)");
 	debugWardBox.emplace_back("/csv(csvファイル更新)");
+
+	//デバッグ時情報描画
 	for (int i = 0; i < debugWardBox.size() && debugMode; i++)
 	{
 		int sizeX, sizeY, lineCount;
@@ -437,6 +425,7 @@ bool	modeGame::Render()
 	}
 	debugWardBox.clear();
 
+	//戦闘開始時演出処理
 	if (GSAnimNum < 89)
 	{
 		if (GSAnimNum == 42) { charBox[Char_PL]->battleStartVoice(); }
@@ -444,12 +433,12 @@ bool	modeGame::Render()
 		GSAnimNum++;
 	}
 
-
 	return true;
 }
 
 bool	modeGame::collHitCheck()
 {
+	//攻撃判定の有効化処理
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
 		if (mAllColl.at(i).nonActiveTimeF > 0) { mAllColl.at(i).nonActiveTimeF--; }
@@ -461,6 +450,7 @@ bool	modeGame::collHitCheck()
 		}
 	}
 
+	//当たり判定処理の呼び出しとヒット時演出処理
 	for (auto i = charBox.begin(); i != charBox.end(); i++)
 	{
 		VECTOR hitPos = { -1 }, hitDir = { -1 };
@@ -486,17 +476,20 @@ bool	modeGame::collHitCheck()
 
 bool	modeGame::Terminate()
 {
+	//BGMの停止
 	StopSoundMem(BGM);
-	//MV1TerminateCollInfo(stage.modelHandle, -1);
+
+	//メモリ解放処理
 	MV1DeleteModel(stage.modelHandle);
 	MV1DeleteModel(skyDoom.modelHandle);
 	MV1DeleteModel(sakuHandle.modelHandle);
-
 	for (auto i = charBox.begin(); i != charBox.end(); ++i) { i->second->Terminate(); i->second.reset(); }
 	mAllColl.clear();
 	charBox.clear();
 	debugWardBox.clear();
 	DeleteLightHandleAll();
+
+	//データの保存処理
 	modeTitle::save("game/res/save.csv", _valData);
 	return true;
 }
@@ -505,6 +498,7 @@ void modeGame::cameraMove()
 {
 	if (isLockon)
 	{
+		//ロックオン時カメラ処理
 		auto EtoPdir = VSub(bossMI->pos, plMI->pos);
 		cameraFor = VAdd(bossMI->pos, VGet(0.f, 100.f, 0.f));
 		cameraPos = VAdd(VAdd(plMI->pos, VScale(VNorm(EtoPdir), -400.f)), VGet(0.f, 250.f, 0.f));
@@ -515,6 +509,7 @@ void modeGame::cameraMove()
 	}
 	else
 	{
+		//非ロックオン時カメラ処理
 		float radian = cameraNtDir * DX_PI_F / 180.0f;
 		auto InsV = VScale(VGet(sin(radian) * 100.f, 100, cos(radian) * 100.f), 3.f);
 		auto _pos = cameraPos = VAdd(plMI->pos, InsV);
@@ -612,9 +607,11 @@ int modeGame::useCommand()
 
 bool modeGame::drawUI()
 {
+	//フォント設定の変更
 	auto DeffontSize = GetFontSize();
 	SetFontSize(30);
-	//ダメージ表示
+
+	//ダメージ数の描画処理
 	for (int i = 0; i < damageNumPopList.size(); i++)
 	{
 		auto screenPos = ConvWorldPosToScreenPos(damageNumPopList[i].pos);
@@ -627,10 +624,10 @@ bool modeGame::drawUI()
 		else { damageNumPopList.erase(damageNumPopList.begin() + i); }
 	}
 
-	//操作方法の表示
+	//操作方法の描画
 	DrawGraph(6, 495, sousaHandle, true);
 
-	//HPバー
+	//自機HPバー描画
 	int barPposX = 10, barPosY = 10;
 	float barLength = 462;
 	float gauge = barLength - ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint);
@@ -638,8 +635,7 @@ bool modeGame::drawUI()
 	DrawGraph(90, 15, HPgaugeHandleWaku, true);
 	DrawGraph(30, 23, HPstrHandle, true);
 
-	//BPバー
-	//500 x 3本stunStrHandle
+	//自機BPバー描画
 	barLength = 303, barPposX = 90, barPosY = 70;
 	gauge = barLength - ((barLength / plStatus.maxBloodPoint) * plStatus.bloodPoint);
 	DrawRectGraph(barPposX - 5, barPosY - 7, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
@@ -647,7 +643,7 @@ bool modeGame::drawUI()
 	DrawGraph(30, 70, BPstrHandle, true);
 	if (plStatus.bloodPoint >= plStatus.maxBloodPoint) { DrawGraph(barPposX - 20, barPosY, burstStrHandle, true); }
 
-	//bossHPバー
+	//bossHPバー描画
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
 	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
 	if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 3) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle3, true, false); }
@@ -657,7 +653,7 @@ bool modeGame::drawUI()
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWakuB, true);
 	DrawGraph(bossNamePosX, 628, bossNameStrHandle, true);
 
-	//bossスタンバー
+	//bossスタンバー描画
 	barLength = 462, barPposX = 409, barPosY = 666;
 	gauge = ((barLength / 150) * bossStatus.stanPoint);
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
@@ -675,11 +671,7 @@ bool modeGame::drawUI()
 	}
 	DrawGraph(353, 670, stunStrHandle, true);
 
-	//スキルアイコン
-
-	//swordRecastIconHandle
-	//swordGlitchAnimNum < 13 ? swordGlitchAnimNum++ : swordGlitchAnimNum = 28;
-	//DrawExtendGraph(1070, 450, 1190, 570, swordGlitchAnimHandle[28], true);//上
+	//スキルアイコン描画
 	if (plRecastTimeY <= 0)
 	{
 		recastMaxNumY = plSetRecastTime;
@@ -706,15 +698,15 @@ bool modeGame::drawUI()
 	}
 	DrawString(995 + 80, 520 + 70, "X", GetColor(255, 255, 255));
 
-	DrawExtendGraph(1145, 520, 1265, 640, swordIcon, true);//右
+	DrawExtendGraph(1145, 520, 1265, 640, swordIcon, true);
 	DrawString(1145 + 80, 520 + 70, "B", GetColor(255, 255, 255));
 
-	DrawExtendGraph(1070, 590, 1190, 710, heatIcon, true);//下
+	DrawExtendGraph(1070, 590, 1190, 710, heatIcon, true);
 	DrawString(1070 + 80, 590 + 70, "A", GetColor(255, 255, 255));
 
 	DrawString(995, 660, "L+", GetColor(255, 255, 255));
-	//1070, 450, 1190, 570	//swordIcon, heatIcon
 
+	//フォント設定の初期化
 	SetFontSize(DeffontSize);
 	return true;
 }

@@ -17,11 +17,13 @@ VECTOR CharBase::getDirVecP(float dir, int powar)
 	dirZ.x = sin(radian) * powar;
 	dirZ.z = cos(radian) * powar;
 	dirZ.y = 0;
+
 	return dirZ;
 }
 
 bool	CharBase::gravity()
 {
+	//d—Íˆ—AÚ’n”»’è
 	if (_modelInf.pos.y < 1100)
 	{
 		_modelInf.pos.y = 1090;
@@ -41,6 +43,7 @@ bool	CharBase::gravity()
 	{
 		_modelInf.pos = VScale(VNorm(a), 4600.f);
 	}
+
 	return true;
 }
 

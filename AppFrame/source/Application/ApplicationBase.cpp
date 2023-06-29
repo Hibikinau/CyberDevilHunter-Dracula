@@ -10,14 +10,12 @@
 ApplicationBase* ApplicationBase::_lpInstance = NULL;
 
 
-ApplicationBase::ApplicationBase() {
-	_lpInstance = this;
-}
+ApplicationBase::ApplicationBase() { _lpInstance = this; }
 
-ApplicationBase::~ApplicationBase() {
-}
+ApplicationBase::~ApplicationBase() {}
 
-bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
+bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms)
+{
 
 	// DXライブラリの初期化
 	if (AppWindowed()) {
@@ -60,7 +58,8 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms) {
 	return true;
 }
 
-bool ApplicationBase::Terminate() {
+bool ApplicationBase::Terminate()
+{
 	// Effekseerを終了する。
 	Effkseer_End();
 	// DXライブラリ開放
@@ -75,7 +74,8 @@ int volumeGate4000(int num)
 	return 0;
 }
 
-bool ApplicationBase::Input() {
+bool ApplicationBase::Input()
+{
 	//-------------Dpad入力-------------
 	//_gTrgp、_gTrgpが変数の方的なアレで動かない
 	//int keyold = _imputInf._gKeyp;
@@ -115,7 +115,8 @@ bool ApplicationBase::Input() {
 	return true;
 }
 
-bool ApplicationBase::Process() {
+bool ApplicationBase::Process()
+{
 	if (_serverMode->_valData.hitstopF > 0) { _serverMode->_valData.hitstopF--; }
 	else
 	{
@@ -126,7 +127,8 @@ bool ApplicationBase::Process() {
 	return true;
 }
 
-bool ApplicationBase::Render() {
+bool ApplicationBase::Render()
+{
 	if (_serverMode->_valData.hitstopF > 0);
 	else
 	{

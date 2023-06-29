@@ -58,23 +58,4 @@ namespace model
 	bool changeScale(modelInf* MI);
 	//板ポリゴンの描画(左下座標、左上座標、右下座標、右上座標、描画する画像ハンドル)
 	bool drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle);
-
 };
-
-
-//SetUseASyncLoadFlag(true);
-//SetUseASyncLoadFlag(false);
-//SetDrawScreen(DX_SCREEN_BACK);
-//int i = 0;
-//ProcessMessage();
-//int B = GetASyncLoadNum();
-//while (GetASyncLoadNum() > 0)
-//{
-//	ClearDrawScreen();
-//	if (i < 20) { DrawString(640, 360, "loading.", GetColor(255, 255, 255)); }
-//	else if (i < 40) { DrawString(640, 360, "loading..", GetColor(255, 255, 255)); }
-//	else if (i < 60) { DrawString(640, 360, "loading...", GetColor(255, 255, 255)); }
-//	else { i = 0; }
-//	i++;
-//	ScreenFlip();
-//}

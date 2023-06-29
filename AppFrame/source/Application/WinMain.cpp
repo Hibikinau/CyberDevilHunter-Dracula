@@ -10,12 +10,8 @@
  //
  // WinMain(). プログラム起動関数
  //
-int WINAPI WinMain(
-	HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR lpCmdLine,
-	int nCmdShow
-) {
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
 	ApplicationBase* appBase = ApplicationBase::GetInstance();
 	ModeServer _modeServer;
 	SetOutApplicationLogValidFlag(false);
@@ -30,7 +26,7 @@ int WINAPI WinMain(
 	int setTime = GetNowCount();//1000=1秒
 	bool two = false;
 	// 1フレームループを組む ----------------------------------------------------------
-	while (true)		// プログラムが終了するまでループ
+	while (true)// プログラムが終了するまでループ
 	{
 		if (two) { if (ProcessMessage() != 0) { break; } }
 		two = !two;

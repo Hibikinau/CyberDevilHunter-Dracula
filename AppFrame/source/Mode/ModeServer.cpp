@@ -10,7 +10,7 @@
 #include "ModeServer.h"
 
 
-/// インスタンス
+ /// インスタンス
 ModeServer* ModeServer::_lpInstance = NULL;
 
 // --------------------------------------------------------------------------
@@ -34,7 +34,8 @@ ModeServer::~ModeServer()
 
 
 // 登録はするが、一度メインを回さないといけない
-int ModeServer::Add(std::shared_ptr<ModeBase> mode, int layer, const char* name) {
+int ModeServer::Add(std::shared_ptr<ModeBase> mode, int layer, const char* name)
+{
 	mode->_uid = _uid_count;
 	_uid_count++;
 	mode->_layer = layer;
@@ -45,14 +46,16 @@ int ModeServer::Add(std::shared_ptr<ModeBase> mode, int layer, const char* name)
 }
 
 // 削除予約
-int ModeServer::Del(const char* name) {
+int ModeServer::Del(const char* name)
+{
 
 	_vModeDel.emplace_back(name);
 	return 0;
 }
 
 // 削除＆delete
-int ModeServer::Release(const char* name, bool isDel) {
+int ModeServer::Release(const char* name, bool isDel)
+{
 	if (isDel)
 	{
 		for (int i = 0; i < _vModeDel.size(); i++)
@@ -77,7 +80,8 @@ int ModeServer::Release(const char* name, bool isDel) {
 }
 
 // 全部削除
-void ModeServer::Clear() {
+void ModeServer::Clear()
+{
 	OutputDebugString("error!");
 	try
 	{
@@ -99,7 +103,8 @@ void ModeServer::Clear() {
 }
 
 // 削除予約されているか？
-bool ModeServer::IsDelRegist(const char* name) {
+bool ModeServer::IsDelRegist(const char* name)
+{
 	for (int i = 0; i < _vModeDel.size(); i++)
 	{
 		if (_vModeDel[i] == name) { return true; }
@@ -126,7 +131,8 @@ int ModeServer::disable(const char* name)
 }
 
 // プロセスを回すための初期化
-int ModeServer::ProcessInit() {
+int ModeServer::ProcessInit()
+{
 	// 削除予約されていたものを削除
 	for (int i = 0; i < _vModeDel.size(); i++)
 	{
@@ -150,7 +156,8 @@ int ModeServer::ProcessInit() {
 	return 0;
 }
 
-int ModeServer::Imput(imputInf* iInf) {
+int ModeServer::Imput(imputInf* iInf)
+{
 	for (int i = 0; i < _nowMode.size(); i++)
 	{
 		if (_vMode.size() == 0 || _nowMode[i].c_str() == "") { continue; }
@@ -162,7 +169,8 @@ int ModeServer::Imput(imputInf* iInf) {
 	return 0;
 }
 
-int ModeServer::Process() {
+int ModeServer::Process()
+{
 
 	// 現在の時間を取得
 	unsigned int t = GetNowCount();
@@ -203,12 +211,11 @@ int ModeServer::Process() {
 }
 
 // プロセスを回した後の後始末
-int ModeServer::ProcessFinish() {
-	return 0;
-}
+int ModeServer::ProcessFinish() { return 0; }
 
 // 描画を回すための初期化
-int ModeServer::RenderInit() {
+int ModeServer::RenderInit()
+{
 	return 0;
 }
 
@@ -227,6 +234,4 @@ int ModeServer::Render() {
 }
 
 // 描画を回した後の後始末
-int ModeServer::RenderFinish() {
-	return 0;
-}
+int ModeServer::RenderFinish() { return 0; }

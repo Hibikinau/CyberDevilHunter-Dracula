@@ -37,7 +37,6 @@ public:
 	bool ASyncLoadAnim();
 	bool collHitCheck();
 	bool drawUI();
-	bool	popBoss(int bossType, const char* _nameA)override;
 
 public:
 	ModeServer* _modeServer;

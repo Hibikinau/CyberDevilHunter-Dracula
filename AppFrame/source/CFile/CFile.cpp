@@ -20,7 +20,8 @@ vector<string> fileIO::split(string& input, char delimiter)
 	return result;
 }
 
-string fileIO::UTF8toSjis(string srcUTF8) {
+string fileIO::UTF8toSjis(string srcUTF8)
+{
 	//Unicode‚Ö•ÏŠ·Œã‚Ì•¶Žš—ñ’·‚ð“¾‚é
 	int lenghtUnicode = MultiByteToWideChar(CP_UTF8, 0, srcUTF8.c_str(), srcUTF8.size() + 1, NULL, 0);
 
