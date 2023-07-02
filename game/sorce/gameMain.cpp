@@ -5,7 +5,7 @@
 using namespace DxLib;
 
 // ŽÀ‘Ì
-gameMain				appFrame;
+gameMain appFrame;
 
 bool gameMain::Initialize(HINSTANCE hInstance, ModeServer* ms)
 {
@@ -22,7 +22,6 @@ bool gameMain::Terminate()
 	base::Terminate();
 	return true;
 }
-
 
 bool gameMain::Input()
 {

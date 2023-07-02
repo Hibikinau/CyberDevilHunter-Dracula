@@ -210,7 +210,6 @@ bool	modeGame::Process()
 			if (i->second->type == 1 && !isGameOver)
 			{//自機の死
 				_modeServer->Add(std::make_unique<modeGameOver>(_modeServer), 1, MODE_GAMEOVER);
-				//StopSoundMem(BGM);
 				isGameOver = true;
 			}
 			else
@@ -232,7 +231,7 @@ bool	modeGame::Process()
 		}
 	}
 
-	//コマンド呼び出し部分
+	//コマンド関数の呼び出し
 	useCommand();
 
 	//カメラ制御

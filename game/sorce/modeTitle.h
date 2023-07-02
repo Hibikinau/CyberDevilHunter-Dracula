@@ -14,11 +14,11 @@ public:
 	modeTitle(ModeServer* MS) { _modeServer = MS; };
 	~modeTitle() {};
 
-	virtual bool	Initialize();
-	virtual bool	Terminate();
-	virtual bool	Imput(imputInf* iInf) { _imputInf = *iInf; return true; };
-	virtual bool	Process();
-	virtual bool	Render();
+	bool Initialize() override;
+	bool Terminate() override;
+	bool Imput(imputInf* iInf) override { _imputInf = *iInf; return true; };
+	bool Process() override;
+	bool Render() override;
 	static bool loadData(const char* dir, valData* _val);
 	static bool save(const char* dir, valData* _val);
 

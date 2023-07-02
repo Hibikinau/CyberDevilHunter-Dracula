@@ -77,26 +77,26 @@ public:
 	 * @brief 初期化処理
 	 * @return true
 	 */
-	virtual bool	Initialize() { return true; }
+	virtual bool Initialize() { return true; }
 
 	/**
 	 * @brief 削除処理
 	 * @return modelDeleteが成功したか
 	 */
-	virtual bool	Terminate() { return model::modelDelete(&_modelInf); };
+	virtual bool Terminate() { return model::modelDelete(&_modelInf); };
 
 	/**
 	 * @brief 更新処理
 	 * @return true
 	 */
-	virtual bool	Process() { return true; }
+	virtual bool Process() { return true; }
 
 	/**
 	 * @brief 描画処理
 	 * @param 再生速度
 	 * @return true
 	 */
-	virtual bool	Render(float timeSpeed) { return true; }
+	virtual bool Render(float timeSpeed) { return true; }
 
 	/**
 	 * @brief 重力処理

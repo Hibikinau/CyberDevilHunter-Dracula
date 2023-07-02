@@ -9,10 +9,10 @@
 #include"charBase.h"
 #include"player.h"
 
-/**
- * @class BossKnight
- * @brief ボス「騎士」クラス
- */
+ /**
+	* @class BossKnight
+	* @brief ボス「騎士」クラス
+	*/
 class BossKnight : public CharBase
 {
 public:
@@ -26,39 +26,39 @@ public:
 	~BossKnight() {};
 	/**
 	 * @brief 初期化処理
-	 * @return true 
+	 * @return true
 	 */
-	virtual bool Initialize();
+	bool Initialize() override;
 	/**
 	 * @brief 削除処理
 	 * @return true
 	 */
-	virtual bool Terminate();
+	bool Terminate() override;
 	/**
-	 * @brief 更新
+	 * @brief 更新処理
 	 * @return true
 	 */
-	virtual bool Process();
+	bool Process() override;
 	/**
-	 * @brief 描画
-	 * @param timeSpeed アニメーションの再生速度
+	 * @brief 描画処理
+	 * @param 再生速度
 	 * @return true
 	 */
-	virtual bool Render(float timeSpeed);
+	bool Render(float timeSpeed) override;
 	/**
 	 * @brief 体力計算処理
 	 * @param 数値
 	 * @return true
 	 */
-	bool HPmath(float Num,float Stan) override;
+	bool HPmath(float Num, float Stan) override;
 	/**
 	 * @brief 行動判断AI
-	 * @return true 
+	 * @return true
 	 */
 	bool UtilityJudge();
 	/**
 	 * @brief プレイヤーとの距離判定
-	 * @return true 
+	 * @return true
 	 */
 	bool RangeJ();
 	/**
@@ -110,7 +110,7 @@ public:
 
 protected:
 	float animSpd//!アニメーションのスピード
-		 ,stanTime;//!スタン時間
+		, stanTime;//!スタン時間
 	int  time,//!待機時間
 		attackStep//!行動番号
 		, slamEfcHandle;
@@ -122,7 +122,7 @@ protected:
 	bool STABFlag;
 	int  swingSE, //!斬撃SEハンドル
 		newSomenHandle;//エフェクトハンドル
-	float Pdir,//!プレイヤーの方向 
+	float Pdir,//!プレイヤーの方向
 		Prange,//!プレイヤーとの距離
 		PrangeA;//!プレイヤーとの距離その２
 	bool Awake;//!覚醒したかどうか

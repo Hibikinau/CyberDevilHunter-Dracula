@@ -60,15 +60,9 @@ bool	modeGameOver::Process()
 }
 
 bool	modeGameOver::Render()
-{/*
-	SetFontSize(80);
-	int insMenuFontSize = GetDrawStringWidth("GAME OVER", strlen("GAME OVER"));
-	DrawString(640 - (insMenuFontSize / 2), 20, "GAME OVER", GetColor(255, 255, 255));
-	*/
-	//360
+{
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 120);
 	DrawGraph(0, 0, _cg, false);
-	//DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	GOAnimNum < 79 ? GOAnimNum += 0.5f : GOAnimNum = 79 - rand() % 10;
@@ -83,7 +77,6 @@ bool	modeGameOver::Render()
 		{
 			arrowAnimNum < 16 ? arrowAnimNum++ : arrowAnimNum = 0;
 			DrawGraph(800 - 65, defY + (90 * i) + 7, arrowAnimHandle[arrowAnimNum], true);
-			//DrawString(640 - 40, defY + (90 * i), "¨", GetColor(255, 255, 255));
 		}
 	}
 

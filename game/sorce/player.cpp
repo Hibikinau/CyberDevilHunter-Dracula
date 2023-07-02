@@ -28,7 +28,6 @@
 typedef ExclusiveState _estate;
 using namespace model;
 
-
 bool player::Initialize()
 {
 	//各変数の初期化
@@ -138,11 +137,7 @@ bool	player::Process()
 	}
 
 	//L2/R2ボタンの入力値から連続で処理がされないように調整
-	if (_imputInf->lTriggerX < 20 && _imputInf->rTriggerX < 20)
-	{
-		if (isAwakening == 1) { isAwakening = 2; }
-		//if (isAwakening == -1) { isAwakening = 0; }
-	}
+	if (_imputInf->lTriggerX < 20 && _imputInf->rTriggerX < 20 && isAwakening == 1) { isAwakening = 2; }
 
 	//覚醒中にブラッドポイントの減少、尽きた際の覚醒解除処理
 	if (isAwakening > 0) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
@@ -396,6 +391,7 @@ bool	player::Process()
 			auto bz = getDirVecP(_modelInf.dir.y, 30);
 			a.y = b.y = _modelInf.pos.y + 200;
 			KATANAIO(&_modelInf, true);//カタナの鞘をカタナにつけるか腰につけるかの設定変更
+
 			//音声の再生
 			PlaySoundMem(soundHandle[15], DX_PLAYTYPE_BACK);
 			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
@@ -415,7 +411,8 @@ bool	player::Process()
 			animSpd = _valData->counterSpd;
 			animChange(PL_guard_1, &_modelInf, false, false, false);//アニメーションをガードモーション１に変更
 		}
-		else if (isCounter != 2) {
+		else if (isCounter != 2)
+		{
 			animSpd = 1.f;
 			animChange(PL_guard_2, &_modelInf, true, false, false);//アニメーションをガードモーション２に変更
 			Estate = _estate::NORMAL;

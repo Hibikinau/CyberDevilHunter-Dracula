@@ -10,15 +10,15 @@ class gameMain : public ApplicationBase
 {
 	typedef ApplicationBase base;
 public:
-	virtual bool Initialize(HINSTANCE hInstance, ModeServer* ms);
-	virtual bool Terminate();
-	virtual bool Input();
-	virtual bool Process();
-	virtual bool Render();
+	bool Initialize(HINSTANCE hInstance, ModeServer* ms) override;
+	bool Terminate() override;
+	bool Input() override;
+	bool Process() override;
+	bool Render() override;
 
-	virtual bool AppWindowed() { return true; }
-	virtual int DispSizeW() { return 1280; }
-	virtual int DispSizeH() { return 720; }
+	bool AppWindowed() override { return true; }
+	int DispSizeW() override { return 1280; }
+	int DispSizeH() override { return 720; }
 	ModeServer& getModeServer() { return *_modeServer; };
 
 protected:

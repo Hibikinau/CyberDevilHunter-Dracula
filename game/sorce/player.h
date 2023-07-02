@@ -57,26 +57,26 @@ public:
 	 * @brief 初期化処理
 	 * @return true
 	 */
-	virtual bool	Initialize();
+	bool Initialize() override;
 
 	/**
 	 * @brief 削除処理
 	 * @return true
 	 */
-	virtual bool	Terminate();
+	bool Terminate() override;
 
 	/**
 	 * @brief 更新処理
 	 * @return true
 	 */
-	virtual bool	Process();
+	bool Process() override;
 
 	/**
 	 * @brief 描画処理
 	 * @param 再生速度
 	 * @return true
 	 */
-	virtual bool	Render(float timeSpeed);
+	bool Render(float timeSpeed) override;
 
 	/**
 	 * @brief キャラ移動処理
