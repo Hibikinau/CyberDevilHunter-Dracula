@@ -19,7 +19,7 @@ struct valData
 		, hitstopF = 0;
 	bool isAtkEfcArufa = true, isLogoRender = true, isDebug = false;
 	std::string plChangeAttackX = "charge", plChangeAttackY = "kirinuke", boss1Inf, boss2Inf, lastBossInf;
-	std::vector<std::string> news, changeAttackList, playerVoiceList, playerSeList,bossVoiceList,bossSeList, deadBoss, credits, Tips;
+	std::vector<std::string> news, changeAttackList, playerVoiceList, playerSeList, bossVoiceList, bossSeList, deadBoss, credits, Tips;
 	std::vector<int> activateWepon, disableWepon, menuSoundHandle;
 };
 
@@ -40,9 +40,7 @@ public:
 	void Clear();
 	int LayerTop() { return INT32_MAX; }
 
-	static bool modeSort(const std::shared_ptr<ModeBase> x, const std::shared_ptr<ModeBase> y) {
-		return x->_layer < y->_layer;
-	}
+	static bool modeSort(const std::shared_ptr<ModeBase> x, const std::shared_ptr<ModeBase> y) { return x->_layer < y->_layer; }
 
 	int Imput(imputInf* iInf);
 
@@ -57,8 +55,6 @@ public:
 private:
 	int Release(const char* name, bool isDel);		// 削除＆delete
 	bool IsDelRegist(const char* name);	// 削除予約されているか？
-	//bool IsAdd(const char* name);		// リストにあるか？
-
 
 public:
 	imputInf* _imputInf;

@@ -14,9 +14,8 @@ vector<string> fileIO::split(string& input, char delimiter)
 	istringstream stream(input);
 	string field;
 	vector<string> result;
-	while (getline(stream, field, delimiter)) {
-		result.push_back(field);
-	}
+	while (getline(stream, field, delimiter)) { result.push_back(field); }
+
 	return result;
 }
 
@@ -53,10 +52,12 @@ bool fileIO::loadCSV(vector<string>* data, const char* dir, bool isComUtoS)
 	ifstream ifs(dir);
 
 	string line;
-	while (getline(ifs, line)) {
+	while (getline(ifs, line))
+	{
 		auto insText = split(line, ',');
 
-		for (int i = 0; i < insText.size(); i++) {
+		for (int i = 0; i < insText.size(); i++)
+		{
 			if (isComUtoS) { data->emplace_back(UTF8toSjis(insText.at(i))); }
 			else { data->emplace_back(insText.at(i)); }
 		}

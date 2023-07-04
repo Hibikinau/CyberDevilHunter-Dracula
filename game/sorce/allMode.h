@@ -23,3 +23,8 @@
 #define MODE_SETTING "setting"
 #define MODE_ARTSGET "artsGet"
 #define MODE_GAMEENDING "gameEnding"
+
+#define Char_PL "player"
+#define Char_BOSS1 "Boss1"
+#define Char_BOSS2 "Boss2"
+#define Char_LBOSS "LBoss"

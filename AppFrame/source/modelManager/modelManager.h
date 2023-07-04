@@ -14,11 +14,6 @@
 #include<DxLib.h>
 #include "../AppFrame/source/ResourceServer/ResourceServer.h"
 
-#define Char_PL "player"
-#define Char_BOSS1 "Boss1"
-#define Char_BOSS2 "Boss2"
-#define Char_LBOSS "LBoss"
-
  //•Šíƒ‚ƒfƒ‹—p
 struct weponModelInf
 {
