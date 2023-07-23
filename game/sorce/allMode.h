@@ -28,3 +28,4 @@
 #define Char_BOSS1 "Boss1"
 #define Char_BOSS2 "Boss2"
 #define Char_LBOSS "LBoss"
+#define Char_TARGET "target"

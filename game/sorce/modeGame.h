@@ -11,6 +11,7 @@
 #include"bossKnight.h"
 #include"bossLionman.h"
 #include"Lastboss.h"
+#include"targetEnemy.h"
 #include<memory>
 
 struct popDamageInf

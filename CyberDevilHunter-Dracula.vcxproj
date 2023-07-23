@@ -184,6 +184,7 @@
     <ClCompile Include="game\sorce\modeSetting.cpp" />
     <ClCompile Include="game\sorce\modeTitle.cpp" />
     <ClCompile Include="game\sorce\player.cpp" />
+    <ClCompile Include="game\sorce\targetEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\allMode.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="game\sorce\modeTitle.h" />
     <ClInclude Include="game\sorce\motionDefineList.h" />
     <ClInclude Include="game\sorce\player.h" />
+    <ClInclude Include="game\sorce\targetEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="game\res\save.csv" />

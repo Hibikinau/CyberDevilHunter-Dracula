@@ -74,6 +74,7 @@ bool	modeGame::Initialize()
 	if (_valData->popBossNum == 1) { makeChar(this, &_modeServer->RS, std::make_shared<BossKnight>(), Char_BOSS1); }
 	if (_valData->popBossNum == 2) { makeChar(this, &_modeServer->RS, std::make_shared<BossLion>(), Char_BOSS2); }
 	if (_valData->popBossNum == 3) { makeChar(this, &_modeServer->RS, std::make_shared<LastBoss>(), Char_LBOSS); }
+	makeChar(this, &_modeServer->RS, std::make_shared<targetEnemy>(), Char_TARGET);
 
 	//ŠJnŠÔ‚Ìæ“¾
 	countTime = GetNowCount();
@@ -190,6 +191,10 @@ bool	modeGame::Process()
 			plRecastTimeX = i->second->caRecastX;
 			plRecastTimeY = i->second->caRecastY;
 			plSetRecastTime = i->second->setRecastTime;
+		}
+		else if (i->second->getType() == -1)
+		{
+			i->second->Process();
 		}
 		else
 		{
