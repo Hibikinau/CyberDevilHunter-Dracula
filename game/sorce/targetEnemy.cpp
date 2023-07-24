@@ -44,7 +44,9 @@ bool targetEnemy::Process()
 
 bool targetEnemy::Render(float timeSpeed)
 {
-	drawCube(VAdd(_modelInf.pos, VGet(0.f, siz.y / 2, 0.f)), siz, GetColorU8(255, 0, 0, 255), GetColorU8(0, 0, 0, 255));
+	SetUseLighting(false);
+	drawCube(VAdd(_modelInf.pos, VGet(0.f, siz.y / 2, 0.f)), siz, GetColorU8(rand() % 255, 0, 0, rand() % 255), GetColorU8(rand() % 255, 0, 0, rand() % 255));
+	SetUseLighting(true);
 
 	return true;
 }

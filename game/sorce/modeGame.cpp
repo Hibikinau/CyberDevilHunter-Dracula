@@ -332,7 +332,8 @@ bool	modeGame::Render()
 
 		if (mAllColl.at(i).efcNum == 1)
 		{
-			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, redTrailHamdle);
+
+			auto a = drawBord(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));///drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, redTrailHamdle);
 		}
 	}
 	for (int i = 0; i < mAllColl.size(); i++)

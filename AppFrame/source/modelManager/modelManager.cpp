@@ -220,12 +220,12 @@ bool model::drawBord(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, DxLib::
 bool model::drawCube(VECTOR pos, VECTOR siz, DxLib::COLOR_U8 difColor, DxLib::COLOR_U8 spcColor)
 {
 	siz = VScale(siz, 0.5);
-	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), difColor, spcColor);
-	drawBord(VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), difColor, spcColor);
-	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), difColor, spcColor);
-	drawBord(VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), difColor, spcColor);
-	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), difColor, spcColor);
-	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), difColor, spcColor);
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
 
 	return true;
 }
