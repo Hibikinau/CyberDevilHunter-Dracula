@@ -319,19 +319,6 @@ bool	modeGame::Render()
 	//ƒgƒŒƒCƒ‹•`‰æˆ—
 	for (int i = 0; i < mAllColl.size(); i++)
 	{
-		MATRIX M = MV1GetFrameLocalWorldMatrix(mAllColl.at(i).capColl.parentModelHandle, mAllColl.at(i).capColl.frameNum);
-		auto insUnderPos = VTransform(mAllColl.at(i).capColl.underPos, M);
-		auto insOverPos = VTransform(mAllColl.at(i).capColl.overPos, M);
-		auto insUnderPosOld = mAllColl.at(i).capCollOld.underPos;
-		auto insOverPosOld = mAllColl.at(i).capCollOld.overPos;
-
-		if (mAllColl.at(i).efcNum == 1)
-		{
-			auto a = drawBPolygon(insUnderPosOld, insOverPosOld, insUnderPos, insOverPos, redTrailHamdle);
-		}
-	}
-	for (int i = 0; i < mAllColl.size(); i++)
-	{
 		if (mAllColl[i].nonActiveTimeF <= 0.f)
 		{
 			MATRIX M = mAllColl.at(i).Mold;

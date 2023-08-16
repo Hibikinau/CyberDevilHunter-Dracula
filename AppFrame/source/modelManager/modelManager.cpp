@@ -148,43 +148,26 @@ bool model::drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int
 {
 	VERTEX3D Vertex[4];
 	WORD Index[6];
+	DxLib::COLOR_U8 _difColor = GetColorU8(255, 255, 255, 255), _spcColor = GetColorU8(0, 0, 0, 0);
 
 	// ４頂点分のデータをセット
 	Vertex[0].pos = rdown;//右下
-	Vertex[0].norm = VGet(0.0f, 0.0f, -1.0f);
-	Vertex[0].dif = GetColorU8(255, 255, 255, 255);
-	Vertex[0].spc = GetColorU8(0, 0, 0, 0);
 	Vertex[0].u = 1.f;
 	Vertex[0].v = 1.f;
-	Vertex[0].su = 0.0f;
-	Vertex[0].sv = 0.0f;
-
 	Vertex[1].pos = ldown;//左下
-	Vertex[1].norm = VGet(0.0f, 0.0f, -1.0f);
-	Vertex[1].dif = GetColorU8(255, 255, 255, 255);
-	Vertex[1].spc = GetColorU8(0, 0, 0, 0);
 	Vertex[1].u = 0.f;
 	Vertex[1].v = 1.0f;
-	Vertex[1].su = 0.0f;
-	Vertex[1].sv = 0.0f;
-
 	Vertex[2].pos = rup;//右上
-	Vertex[2].norm = VGet(0.0f, 0.0f, -1.0f);
-	Vertex[2].dif = GetColorU8(255, 255, 255, 255);
-	Vertex[2].spc = GetColorU8(0, 0, 0, 0);
 	Vertex[2].u = 1.f;
 	Vertex[2].v = 0.f;
-	Vertex[2].su = 0.0f;
-	Vertex[2].sv = 0.0f;
-
 	Vertex[3].pos = lup;//左上
-	Vertex[3].norm = VGet(0.0f, 0.0f, -1.0f);
-	Vertex[3].dif = GetColorU8(255, 255, 255, 255);
-	Vertex[3].spc = GetColorU8(0, 0, 0, 0);
 	Vertex[3].u = 0.0f;
 	Vertex[3].v = 0.0f;
-	Vertex[3].su = 0.0f;
-	Vertex[3].sv = 0.0f;
+	Vertex[0].norm = Vertex[1].norm = Vertex[2].norm = Vertex[3].norm = VGet(0.0f, 0.0f, -1.0f);
+	Vertex[0].dif = Vertex[1].dif = Vertex[2].dif = Vertex[3].dif = _difColor;
+	Vertex[0].spc = Vertex[1].spc = Vertex[2].spc = Vertex[3].spc = _spcColor;
+	Vertex[0].su = Vertex[1].su = Vertex[2].su = Vertex[3].su = 0.0f;
+	Vertex[0].sv = Vertex[1].sv = Vertex[2].sv = Vertex[3].sv = 0.0f;
 
 	// ２ポリゴン分のインデックスデータをセット
 	Index[0] = 0;//右下
@@ -196,4 +179,53 @@ bool model::drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int
 
 	auto K = DrawPolygonIndexed3D(Vertex, 4, Index, 2, grHandle, true);
 	return K;
+}
+
+bool model::drawBord(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, DxLib::COLOR_U8 difColor, DxLib::COLOR_U8 spcColor)
+{
+	VERTEX3D Vertex[4];
+	WORD Index[6];
+
+	// ４頂点分のデータをセット
+	Vertex[0].pos = rdown;//右下
+	Vertex[0].u = 1.f;
+	Vertex[0].v = 1.f;
+	Vertex[1].pos = ldown;//左下
+	Vertex[1].u = 0.f;
+	Vertex[1].v = 1.0f;
+	Vertex[2].pos = rup;//右上
+	Vertex[2].u = 1.f;
+	Vertex[2].v = 0.f;
+	Vertex[3].pos = lup;//左上
+	Vertex[3].u = 0.0f;
+	Vertex[3].v = 0.0f;
+	Vertex[0].dif = Vertex[1].dif = Vertex[2].dif = Vertex[3].dif = difColor;
+	Vertex[0].spc = Vertex[1].spc = Vertex[2].spc = Vertex[3].spc = spcColor;
+	Vertex[0].su = Vertex[1].su = Vertex[2].su = Vertex[3].su = 0.0f;
+	Vertex[0].sv = Vertex[1].sv = Vertex[2].sv = Vertex[3].sv = 0.0f;
+	Vertex[0].norm = Vertex[1].norm = Vertex[2].norm = Vertex[3].norm = VGet(0.0f, 0.0f, -1.0f);
+
+	// ２ポリゴン分のインデックスデータをセット
+	Index[0] = 0;//右下
+	Index[1] = 1;//左下
+	Index[2] = 3;//右上
+	Index[3] = 0;//左上
+	Index[4] = 3;//右上
+	Index[5] = 2;//左下
+
+	auto K = DrawPolygonIndexed3D(Vertex, 4, Index, 2, DX_NONE_GRAPH, true);
+	return K;
+}
+
+bool model::drawCube(VECTOR pos, VECTOR siz, DxLib::COLOR_U8 difColor, DxLib::COLOR_U8 spcColor)
+{
+	siz = VScale(siz, 0.5);
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z - siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z - siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z - siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+	drawBord(VGet(pos.x - siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y - siz.y, pos.z + siz.z), VGet(pos.x - siz.x, pos.y + siz.y, pos.z + siz.z), VGet(pos.x + siz.x, pos.y + siz.y, pos.z + siz.z), GetColorU8(0, 0, 255, 255), GetColorU8(0, 0, 255, 255));
+
+	return true;
 }

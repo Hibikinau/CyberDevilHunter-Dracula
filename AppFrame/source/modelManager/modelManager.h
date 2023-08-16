@@ -53,4 +53,8 @@ namespace model
 	bool changeScale(modelInf* MI);
 	//板ポリゴンの描画(左下座標、左上座標、右下座標、右上座標、描画する画像ハンドル)
 	bool drawBPolygon(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, int grHandle);
+	//3D空間に板を描画する(左下座標、左上座標、右下座標、右上座標、元の色、反射の色)
+	bool drawBord(VECTOR ldown, VECTOR lup, VECTOR rdown, VECTOR rup, DxLib::COLOR_U8 difColor, DxLib::COLOR_U8 spcColor);
+	//3D空間に立方体を描画する(中心座標、サイズ、元の色、反射の色)
+	bool drawCube(VECTOR pos, VECTOR siz, DxLib::COLOR_U8 difColor, DxLib::COLOR_U8 spcColor);
 };

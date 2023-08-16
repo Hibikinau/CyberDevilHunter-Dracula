@@ -391,13 +391,13 @@ bool	player::Process()
 			auto bz = getDirVecP(_modelInf.dir.y, 30);
 			a.y = b.y = _modelInf.pos.y + 200;
 			KATANAIO(&_modelInf, true);//カタナの鞘をカタナにつけるか腰につけるかの設定変更
+			animChange(PL_counter, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
+			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[counterNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
+			makeAttackCap(a, b, 40.f, 10.f, getAnimPlayTotalTime() - 10.f, animSpd, false, 75.f, 20, -1, bz, 0);
 
 			//音声の再生
 			PlaySoundMem(soundHandle[15], DX_PLAYTYPE_BACK);
 			PlaySoundMem(soundHandle[voiceStartNum + 37 + rand() % 2], DX_PLAYTYPE_BACK);
-			animChange(PL_counter, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
-			makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 200.f), 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[counterNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
-			makeAttackCap(a, b, 40.f, 10.f, getAnimPlayTotalTime() - 10.f, animSpd, false, 75.f, 20, -1, bz, 0);
 
 			//エフェクト再生
 			int a2 = PlayEffekseer3DEffect(impactEfcHandle);
