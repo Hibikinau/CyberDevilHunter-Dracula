@@ -218,6 +218,22 @@ public:
 		return true;
 	};
 
+	/**
+	 * @brief 飛ぶ斬撃用vectorの数値計算
+	 * @param _underPos　当たり判定カプセルの根元位置
+	 * @param _overPos　当たり判定カプセルの先端位置
+	 * @param _moveDir 当たり判定カプセルの移動方向
+	 * @param insPL　プレイヤクラスポインタ
+	 * @return true
+	 */
+	void mathFlyingSlashPos(VECTOR* _underPos, VECTOR* _overPos, VECTOR* _moveDir, player* insPL)
+	{
+		*_underPos = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y - 90, 300));
+		*_overPos = VAdd(insPL->_modelInf.pos, getDirVecP(insPL->_modelInf.dir.y + 90, 300));
+		*_moveDir = getDirVecP(insPL->_modelInf.dir.y, 30);
+		_underPos->y = _overPos->y = insPL->_modelInf.pos.y + 200;
+	}
+
 protected:
 	int attackNumOld//!弱/強攻撃が何段目か
 		, waitNextAttack//!弱/強攻撃受付時間
