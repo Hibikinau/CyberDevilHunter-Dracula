@@ -86,7 +86,7 @@ bool	BossLion::Process()
 		if (i->second->getType() == 1)
 		{
 			plMI = i->second->getInf();
-			DT = i->second->dodgeTime;
+			dodgeT = i->second->dodgeTime;
 		}
 	}
 	if (CheckHitKey(KEY_INPUT_K))
@@ -325,7 +325,7 @@ bool	BossLion::Process()
 			}
 			if (_modelInf.playTime > 29 && _modelInf.playTime < 80)
 			{
-				if (DT == 0 && !hitFlag) {
+				if (dodgeT == 0 && !hitFlag) {
 					_modelInf.dir.y = Pdir;
 				}
 				Move(Prange / 25, .0f);

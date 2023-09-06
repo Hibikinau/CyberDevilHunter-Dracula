@@ -105,24 +105,25 @@ public:
 	RANGE range;
 
 protected:
-	float animSpd//!アニメーションのスピード
-		, stanTime;//!スタン時間
-	int  time,//!待機時間
-		attackStep;//!行動番号
-	bool isAnimEnd;//アニメーション終わったかどうか
-	modelInf* plMI;//!プレイヤー情報のインスタンス
-	bool ActionFlag;//!行動してるかどうか
-	bool hitFlag;
-	int  swingSE, //!斬撃SEハンドル
-		newSomenHandle;//エフェクトハンドル
-	float Pdir,//!プレイヤーの方向
-		Prange,//!プレイヤーとの距離
-		PrangeA;//!プレイヤーとの距離その２
-	bool Awake;//!覚醒したかどうか
-	float AwakeSpd,//!覚醒時スピード
-		AwakeDmg,//!覚醒時追加ダメージ
-		AwakeMove,//!覚醒時移動量
-		AwakeT,//!覚醒時待機時間
-	    AwakeTK;
-	int DT,hittime;
+	float  animSpd,    //!アニメーションのスピード
+		stanTime;   //!スタン時間
+	int    time,       //!待機時間
+		attackStep; //!行動番号
+	bool   isAnimEnd;  //アニメーション終わったかどうか
+	modelInf* plMI;    //!プレイヤー情報のインスタンス
+	bool   ActionFlag; //!行動してるかどうか
+	bool   hitFlag;
+	int    swingSE,    //!斬撃SEハンドル
+		newSomenHandle;  //エフェクトハンドル
+	float  Pdir,       //!プレイヤーの方向
+		Prange,     //!プレイヤーとの距離
+		PrangeA;    //!プレイヤーとの距離その２
+	bool   Awake;      //!覚醒したかどうか
+	float  AwakeSpd,   //!覚醒時スピード
+		AwakeDmg,   //!覚醒時追加ダメージ
+		AwakeMove,  //!覚醒時移動量
+		AwakeT,     //!覚醒時待機時間
+		AwakeTK;    //!覚醒時攻撃モーション移動量追加
+	int    dodgeT,
+		hittime;
 };
