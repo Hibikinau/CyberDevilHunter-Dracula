@@ -26,29 +26,6 @@ bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint
 	return true;
 }
 
-bool	modeGame::ASyncLoadAnim()
-{
-	//設定処理
-	SetUseASyncLoadFlag(false);
-	SetDrawScreen(DX_SCREEN_BACK);
-	int i = 0;
-	//非同期読み込み終了までの間連番画像でのアニメーション再生
-	while (GetASyncLoadNum() > 0)
-	{
-		ProcessMessage();
-		ClearDrawScreen();
-
-		DrawGraph(30, 670, loadingAnimHandle[loadingAnimNum], true);
-		loadingAnimNum < 27 ? loadingAnimNum++ : loadingAnimNum = 0;
-		//i++;
-		//DrawBox(0, 0, i, 20, GetColor(255, 255, 255), true);
-
-		ScreenFlip();
-	}
-
-	return GetASyncLoadNum();
-}
-
 bool	modeGame::Initialize()
 {
 	//設定処理
@@ -162,6 +139,33 @@ bool	modeGame::Initialize()
 	isLockon = true;
 
 	return true;
+}
+
+bool	modeGame::ASyncLoadAnim()
+{
+	//設定処理
+	SetUseASyncLoadFlag(false);
+	SetDrawScreen(DX_SCREEN_BACK);
+
+	//モデルデータの複製処理のために二度回す
+	for(int i = 0; i < 2; i++)
+	{
+		//非同期読み込み終了までの間連番画像でのアニメーション再生
+		while(GetASyncLoadNum() > 0)
+		{
+			ProcessMessage();
+			ClearDrawScreen();
+
+			DrawGraph(30, 670, loadingAnimHandle[loadingAnimNum], true);
+			loadingAnimNum < 27 ? loadingAnimNum++ : loadingAnimNum = 0;
+
+			ScreenFlip();
+		}
+
+		if (i == 0) { _modeServer->RS.duplicateModelListImportR(); }
+	}
+
+	return GetASyncLoadNum();
 }
 
 bool	modeGame::Process()

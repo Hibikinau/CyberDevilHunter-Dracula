@@ -16,6 +16,12 @@ struct modelHandleInf
 	int handle;
 };
 
+struct duplicateModelHandleInf
+{
+	std::string dir;
+	int motherModelHandle, *duplicateModelhandle;
+};
+
 struct graphHandleInf
 {
 	std::string dir;
@@ -32,11 +38,13 @@ struct divGraphHandleInf
 class Rserver
 {
 public:
-	int modelImportR(const char* dir);
+	int modelImportR(const char* dir, int* handle);
 	int loadGraphR(const char* dir);
 	int loadDivGraphR(const char* dir, int allNum, int xNum, int yNum, int xSize, int ySize, int* handle);
+	int duplicateModelListImportR();
 
 	std::vector<modelHandleInf> modelHandleList;
 	std::vector<graphHandleInf> graphHandleList;
 	std::vector<divGraphHandleInf> divGraphHandleList;
+	std::vector<duplicateModelHandleInf> duplicateModelPointerList;
 };

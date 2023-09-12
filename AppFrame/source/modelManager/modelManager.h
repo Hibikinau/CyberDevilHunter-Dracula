@@ -31,7 +31,7 @@ struct modelInf
 	float playTime, playTimeOld, totalTime, rate, scale, animSpdBuff = 0;
 	bool isBrending, isBrendingNext, animOldLoop, animLoopNext, isAnimEnd;
 	VECTOR pos = VGet(0, 0, 0), addPos = VGet(0, 0, 0), dir = VGet(0, 0, 0), vec = VGet(0, 0, 0);
-	std::vector<weponModelInf> wepons;
+	std::vector<std::shared_ptr<weponModelInf> > wepons;
 };
 
 namespace model

@@ -102,9 +102,9 @@ bool	player::Terminate()
  */
 bool KATANAIO(modelInf* MI, bool isIO)
 {
-	MI->wepons[0].isActive = isIO;
-	MI->wepons[1].isActive = isIO;
-	MI->wepons[2].isActive = !isIO;
+	MI->wepons[0]->isActive = isIO;
+	MI->wepons[1]->isActive = isIO;
+	MI->wepons[2]->isActive = !isIO;
 
 	return true;
 }

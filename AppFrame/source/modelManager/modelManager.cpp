@@ -9,7 +9,7 @@
 
 bool model::modelImport(const char* dir, const float scale, modelInf* MI, Rserver* _Rserver)
 {
-	MI->modelHandle = _Rserver->modelImportR(dir);
+	_Rserver->modelImportR(dir, &MI->modelHandle);
 
 	//if (MI->modelHandle == -1) { return false; }
 	MI->playTime = 0.0f;
@@ -30,11 +30,11 @@ bool model::changeScale(modelInf* MI)
 	}
 	for (int j = 0; j < MI->wepons.size(); j++)
 	{
-		int MaterialNumW = MV1GetMaterialNum(MI->wepons[j].weponHandle);
+		int MaterialNumW = MV1GetMaterialNum(MI->wepons[j]->weponHandle);
 		for (int k = 0; k < MaterialNumW; k++)
 		{
-			float dotwidthW = MV1GetMaterialOutLineDotWidth(MI->wepons[j].weponHandle, k);
-			MV1SetMaterialOutLineDotWidth(MI->wepons[j].weponHandle, k, dotwidthW / MI->wepons[j].scale);
+			float dotwidthW = MV1GetMaterialOutLineDotWidth(MI->wepons[j]->weponHandle, k);
+			MV1SetMaterialOutLineDotWidth(MI->wepons[j]->weponHandle, k, dotwidthW / MI->wepons[j]->scale);
 		}
 	}
 
@@ -43,15 +43,15 @@ bool model::changeScale(modelInf* MI)
 
 bool model::weponAttach(const char* dir, modelInf* MI, int attachFrameNum, const float scale, bool activate, const char* name, Rserver* _Rserver)
 {
-	weponModelInf weponMI;
-	weponMI.isActive = activate;
-	weponMI.name = name;
-	weponMI.scale = scale;
-	weponMI.weponHandle = _Rserver->modelImportR(dir);
+	std::shared_ptr<weponModelInf> weponMI(new weponModelInf);
+	weponMI->isActive = activate;
+	weponMI->name = name;
+	weponMI->scale = scale;
+	_Rserver->modelImportR(dir, &weponMI->weponHandle);
 	//if (weponMI.weponHandle == -1) { return false; }
-	weponMI.weponAttachFrameNum = attachFrameNum;
+	weponMI->weponAttachFrameNum = attachFrameNum;
 
-	MI->wepons.emplace_back(weponMI);
+	MI->wepons.emplace_back(std::move(weponMI));
 	return true;
 }
 
@@ -120,14 +120,14 @@ bool model::modelRender(modelInf* MI, float animSpeed, float timeSpead)
 	MV1SetRotationXYZ(MI->modelHandle, VScale(MI->dir, (DX_PI_F / 180.0f)));
 	MV1DrawModel(MI->modelHandle);
 
-	for (auto _weponInf : MI->wepons)
+	for (int i = 0; i < MI->wepons.size(); i++)
 	{
-		if (!_weponInf.isActive) { continue; }
-		_weponInf.weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, _weponInf.weponAttachFrameNum);
+		if (!MI->wepons[i]->isActive) { continue; }
+		MI->wepons[i]->weponFrameMatrix = MV1GetFrameLocalWorldMatrix(MI->modelHandle, MI->wepons[i]->weponAttachFrameNum);
 
-		MV1SetMatrix(_weponInf.weponHandle, _weponInf.weponFrameMatrix);
+		MV1SetMatrix(MI->wepons[i]->weponHandle, MI->wepons[i]->weponFrameMatrix);
 
-		MV1DrawModel(_weponInf.weponHandle);
+		MV1DrawModel(MI->wepons[i]->weponHandle);
 	}
 
 	return MI->isAnimEnd;
@@ -137,7 +137,7 @@ bool model::modelDelete(modelInf* MI)
 {//装備モデルのメモリ解放してからコンテナの消去
 	for (int i = 0; i < MI->wepons.size(); i++)
 	{
-		auto a = MV1DeleteModel(MI->wepons[i].weponHandle);
+		auto a = MV1DeleteModel(MI->wepons[i]->weponHandle);
 	}
 	MI->wepons.clear();
 	auto b = MV1DeleteModel(MI->modelHandle);//キャラモデルのメモリ解放
