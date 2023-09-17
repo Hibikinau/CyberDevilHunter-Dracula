@@ -146,7 +146,18 @@ bool	player::Process()
 	if (_imputInf->lTriggerX < 20 && _imputInf->rTriggerX < 20 && isAwakening == 1) { isAwakening = 2; }
 
 	//覚醒中にブラッドポイントの減少、尽きた際の覚醒解除処理
-	if (isAwakening > 0) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
+	if (isAwakening > 0)
+	{
+		if (_statusInf.bloodPoint > 0) { _statusInf.bloodPoint--; }
+		else
+		{
+			_statusInf.bloodPoint = 0;
+			isAwakening = 0;
+			atkBuff = 0.f;
+			_modelInf.animSpdBuff = 0.f;
+			PlaySoundMem(soundHandle[19], DX_PLAYTYPE_BACK);
+		}
+	}
 
 	//キーボードでの自機移動処理(デバッグ用)
 	if (CheckHitKey(KEY_INPUT_W)) { spd = runSpd; charMove(spd, *_cameraDir, false); }
@@ -346,11 +357,9 @@ bool	player::Process()
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);//ボイス再生
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
-		makeAttackCap(defaultAttackUnderPos, skillAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[finishNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
+		makeAttackCap(defaultAttackUnderPos, skillAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[finishNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		//覚醒時のステータス処理
-		_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f;
-		immortalTime = _modelInf.totalTime;
-		_statusInf.bloodPoint = 0;
+		_statusInf.bloodPoint = 0, immortalTime = _modelInf.totalTime, _modelInf.animSpdBuff = 0.f;
 		break;
 	case pushButton::Lstick://ダッシュ
 		//設定処理
@@ -487,6 +496,7 @@ bool	player::Process()
 	caRecastX > 0 ? caRecastX -= insNum : caRecastX = 0;
 	caRecastY > 0 ? caRecastY -= insNum : caRecastY = 0;
 	waitBlowTime > 0 ? waitBlowTime-- : waitBlowTime = 0;
+	awakeSeCoolTime > 0 ? awakeSeCoolTime-- : awakeSeCoolTime = 0;
 
 	//攻撃ヒット時のSE再生
 	if (isHit)
@@ -587,7 +597,11 @@ bool player::BPmath(float math)
 
 	//BP増減処理
 	_statusInf.bloodPoint += math;
-	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
+	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint)
+	{
+		_statusInf.bloodPoint = _statusInf.maxBloodPoint;
+		if (awakeSeCoolTime <= 0) { PlaySoundMem(soundHandle[20], DX_PLAYTYPE_BACK);			awakeSeCoolTime = 240; }
+	}
 	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
 
 	return true;

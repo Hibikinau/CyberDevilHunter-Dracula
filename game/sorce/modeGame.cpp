@@ -688,7 +688,7 @@ bool modeGame::drawUI()
 	}
 	DrawString(995 + 80, 520 + 70, "X", GetColor(255, 255, 255));
 
-	DrawExtendGraph(1145, 520, 1265, 640, swordIcon, true);
+	DrawExtendGraph(1145, 520, 1265, 640, swordRecastIconHandle, true);
 	DrawString(1145 + 80, 520 + 70, "B", GetColor(255, 255, 255));
 
 	DrawExtendGraph(1070, 590, 1190, 710, heatIcon, true);

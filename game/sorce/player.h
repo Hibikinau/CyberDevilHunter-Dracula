@@ -252,7 +252,8 @@ protected:
 		, waitCAChargeTime//!入れ替え技での移動までの待機時間
 		, CAChargeTime//!入れ替え技での移動時間
 		, CAChargeSpd//!入れ替え技での移動スピード
-		, CAChargeAttackNum = 0;//!入れ替え技のチャージ段階
+		, CAChargeAttackNum = 0//!入れ替え技のチャージ段階
+		, awakeSeCoolTime = 0;//!覚醒可能時SEを連続再生させないための変数
 	float spd//!キャラの移動速度
 		, dodgeDir//!キャラの回避方向
 		, atkBuff = 0.f;//!加算攻撃バフ値
