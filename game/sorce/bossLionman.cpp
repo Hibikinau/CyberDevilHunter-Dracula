@@ -51,7 +51,7 @@ bool	BossLion::Process()
 	if (status == STATUS::DEAD)
 	{
 		animSpd = 0.7f;
-		animChange(BOSS2_dead, &_modelInf, false, true, false);
+		animChange(BOSS2_DEAD, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -71,7 +71,7 @@ bool	BossLion::Process()
 		if (!actionFlag)
 		{
 			animSpd = 1.0;
-			animChange(BOSS2_down, &_modelInf, true, true, false);
+			animChange(BOSS2_DOWN, &_modelInf, true, true, false);
 			actionFlag = true;
 		}
 		if (stanTime == 0)
@@ -116,7 +116,7 @@ bool	BossLion::Process()
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
 		animSpd = .5f;
-		animChange(BOSS2_idel, &_modelInf, true, true, false);
+		animChange(BOSS2_IDLE, &_modelInf, true, true, false);
 		if (time == 0)
 		{
 			UtilityJudge();
@@ -138,14 +138,14 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.f;
-		animChange(BOSS2_damege, &_modelInf, false, true, false);
+		animChange(BOSS2_DAMAGE, &_modelInf, false, true, false);
 		actionFlag = true;
 		break;
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = playerDir;
 		animSpd = 1.0f * awakeSpd;
-		animChange(BOSS2_run, &_modelInf, true, true, false);
+		animChange(BOSS2_RUN, &_modelInf, true, true, false);
 		Move(runSpd * awakeMove, 0);
 		if (playerDistance < 300) { UtilityJudge(); }
 		if (time == 0) { UtilityJudge(); }
@@ -158,7 +158,7 @@ bool	BossLion::Process()
 			if (status != STATUS::FSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_DODGE, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
 			Move(60.0 * awakeMove, 0.0);
@@ -171,7 +171,7 @@ bool	BossLion::Process()
 			if (status != STATUS::BSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_DODGE, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
 			Move(60.0 * awakeMove, 180.0);
@@ -184,7 +184,7 @@ bool	BossLion::Process()
 			if (status != STATUS::RSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_DODGE, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
 			Move(40.0 * awakeMove, 90.0);
@@ -197,7 +197,7 @@ bool	BossLion::Process()
 			if (status != STATUS::LSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS2_dodge, &_modelInf, false, true, false);
+		animChange(BOSS2_DODGE, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 30)
 		{
 			Move(40.0 * awakeMove, 270.0);
@@ -217,7 +217,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.5f * awakeSpd;
-		animChange(BOSS2_attack1, &_modelInf, false, true, true);
+		animChange(BOSS2_ATTACK1, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, -0.f), VGet(50.f, 0.f, 0.f), 40.f, 28.f, _modelInf.totalTime * awakeSpd - 28.f, animSpd, true, 20.f * awakeDmg, 0, 41, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -237,7 +237,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 2.0f * awakeSpd;
-		animChange(BOSS2_attack2, &_modelInf, false, true, true);
+		animChange(BOSS2_ATTACK2, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 75.f, _modelInf.totalTime * awakeSpd - 75.f, animSpd, true, 20.f * awakeDmg, 0, 18, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -257,7 +257,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 2.0f * awakeSpd;
-		animChange(BOSS2_attack3, &_modelInf, false, true, true);
+		animChange(BOSS2_ATTACK3, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 75.f, _modelInf.totalTime * awakeSpd - 75.f, animSpd, true, 20.f * awakeDmg, 0, 41, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -277,7 +277,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.5f * awakeSpd;
-		animChange(BOSS2_haniattack, &_modelInf, false, true, true);
+		animChange(BOSS2_KNEE, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 60.f, 10.f, _modelInf.totalTime * awakeSpd - 10.f, animSpd, true, 20.f * awakeDmg, 0, 8, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -309,7 +309,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.0f * awakeSpd;
-		animChange(BOSS2_tackle, &_modelInf, false, false, true);
+		animChange(BOSS2_TACKLE, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * awakeSpd, animSpd, true, 50.f * awakeDmg, 0, 3, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -333,7 +333,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.0f * awakeSpd;
-		animChange(BOSS2_tatakituke, &_modelInf, false, false, true);
+		animChange(BOSS2_SLAP, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * awakeSpd, animSpd, true, 50.f * awakeDmg, 0, 3, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -371,7 +371,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.0f * awakeSpd;
-		animChange(BOSS2_divetackle, &_modelInf, false, false, true);
+		animChange(BOSS2_DIVE, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * awakeSpd, animSpd, true, 50.f * awakeDmg, 0, 3, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;

@@ -51,7 +51,7 @@ bool	BossKnight::Process()
 	if (status == STATUS::DEAD) 
 	{
 		animSpd = 0.7f;
-		animChange(BOSS1_dead, &_modelInf, false, true, false);
+		animChange(BOSS1_DEAD, &_modelInf, false, true, false);
 		if (isAnimEnd) { isDead = 2; }
 		return true;
 	}
@@ -67,7 +67,7 @@ bool	BossKnight::Process()
 
 	if (status == STATUS::STAN) 
 	{
-		animChange(BOSS1_hidan, &_modelInf, true, true, false);
+		animChange(BOSS1_DAMAGE, &_modelInf, true, true, false);
 		if (stanTime == 0) 
 		{
 			status = STATUS::WAIT;
@@ -110,7 +110,7 @@ bool	BossKnight::Process()
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
 		animSpd = .5f;
-		animChange(BOSS1_idel, &_modelInf, true, true, false);
+		animChange(BOSS1_IDLE, &_modelInf, true, true, false);
 		if (time == 0) 
 		{
 			UtilityJudge();
@@ -132,14 +132,14 @@ bool	BossKnight::Process()
 			break;
 		}
 		animSpd = 1.f;
-		animChange(BOSS1_hidan, &_modelInf, false, true, false);
+		animChange(BOSS1_DAMAGE, &_modelInf, false, true, false);
 		actionFlag = true;
 		break;
 	case STATUS::DEAD:break;
 	case STATUS::RUN:
 		_modelInf.dir.y = playerDir;
 		animSpd = 0.8f * awakeSpd;
-		animChange(BOSS1_run, &_modelInf, true, true, false);
+		animChange(BOSS1_RUN, &_modelInf, true, true, false);
 		Move(runSpd * awakeMove, 0);
 		if (playerDistance < 200) { UtilityJudge(); }
 		break;
@@ -150,7 +150,7 @@ bool	BossKnight::Process()
 			if (status != STATUS::FSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS1_dodgeF, &_modelInf, false, true, false);
+		animChange(BOSS1_DODGE_F, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * awakeMove, 0.0);
@@ -163,7 +163,7 @@ bool	BossKnight::Process()
 			if (status != STATUS::BSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS1_dodgeB, &_modelInf, false, true, false);
+		animChange(BOSS1_DODGE_B, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * awakeMove, 180.0);
@@ -176,7 +176,7 @@ bool	BossKnight::Process()
 			if (status != STATUS::RSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS1_dodgeR, &_modelInf, false, true, false);
+		animChange(BOSS1_DODGE_R, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * awakeMove, 90.0);
@@ -189,7 +189,7 @@ bool	BossKnight::Process()
 			if (status != STATUS::LSTEP) { break; }
 		}
 		animSpd = 1.f * awakeSpd;
-		animChange(BOSS1_dodgeL, &_modelInf, false, true, false);
+		animChange(BOSS1_DODGE_L, &_modelInf, false, true, false);
 		if (_modelInf.playTime > 5 && _modelInf.playTime < 27)
 		{
 			Move(40.0 * awakeMove, 270.0);
@@ -250,7 +250,7 @@ bool	BossKnight::Process()
 		}
 		attackStep > 3 ? animSpd = 1.3f * awakeSpd : animSpd = .7f * awakeSpd;
 		attackStep > 5 ? insAddNum = 12 : insAddNum = 0;
-		animChange(BOSS1_tatakituke_r1 + attackStep + insAddNum, &_modelInf, false, false, true);
+		animChange(BOSS1_SLAP_R1 + attackStep + insAddNum, &_modelInf, false, false, true);
 		actionFlag = true;
 		break;
 	case STATUS::STAB:
@@ -273,7 +273,7 @@ bool	BossKnight::Process()
 		}
 		if (attackStep == 0) { animSpd = 0.18f * awakeSpd; }
 		else { animSpd = 0.7f * awakeSpd; }
-		animChange(BOSS1_tuki1 + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS1_THRUST1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 3)
 		{
 			makeAttackCap(VGet(-20.f, 80.f, 0.f), VGet(-20.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime, animSpd, true, 30.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
@@ -335,7 +335,7 @@ bool	BossKnight::Process()
 			break;
 		}
 		animSpd = 0.7f * awakeSpd;
-		animChange(BOSS1_jumpA1 + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS1_JUMP_A1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 1) { RangeJ(); }
 		actionFlag = true;
 		break;
@@ -366,7 +366,7 @@ VECTOR getDirVec(float dir, int powar)
 bool	BossKnight::Render(float timeSpeed)
 {
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
-	_modelInf.animHandleOld == BOSS1_run ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
+	_modelInf.animHandleOld == BOSS1_RUN ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
 	return true;
 }
