@@ -102,9 +102,9 @@ bool	player::Terminate()
  */
 bool KATANAIO(modelInf* MI, bool isIO)
 {
-	MI->wepons[0].isActive = isIO;
-	MI->wepons[1].isActive = isIO;
-	MI->wepons[2].isActive = !isIO;
+	MI->wepons[0]->isActive = isIO;
+	MI->wepons[1]->isActive = isIO;
+	MI->wepons[2]->isActive = !isIO;
 
 	return true;
 }
@@ -120,7 +120,7 @@ bool	player::Process()
 		animSpd = .7f;//アニメーション再生速度設定
 		_modelInf.animSpdBuff = .0f;//アニメーション再生速度バフ設定
 
-		animChange(PL_death, &_modelInf, false, true, false);//アニメーションを死亡モーションに変更
+		animChange(PL_DEATH, &_modelInf, false, true, false);//アニメーションを死亡モーションに変更
 		//死亡音声の再生
 		if (!deadVoice) { deadVoice = true; PlaySoundMem(soundHandle[voiceStartNum + 31 + rand() % 4], DX_PLAYTYPE_BACK); }
 		//アニメーションの再生が終わったら死亡状態をキャラ削除状態に
@@ -146,7 +146,18 @@ bool	player::Process()
 	if (_imputInf->lTriggerX < 20 && _imputInf->rTriggerX < 20 && isAwakening == 1) { isAwakening = 2; }
 
 	//覚醒中にブラッドポイントの減少、尽きた際の覚醒解除処理
-	if (isAwakening > 0) { _statusInf.bloodPoint > 0 ? _statusInf.bloodPoint-- : (_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f); }
+	if (isAwakening > 0)
+	{
+		if (_statusInf.bloodPoint > 0) { _statusInf.bloodPoint--; }
+		else
+		{
+			_statusInf.bloodPoint = 0;
+			isAwakening = 0;
+			atkBuff = 0.f;
+			_modelInf.animSpdBuff = 0.f;
+			PlaySoundMem(soundHandle[19], DX_PLAYTYPE_BACK);
+		}
+	}
 
 	//キーボードでの自機移動処理(デバッグ用)
 	if (CheckHitKey(KEY_INPUT_W)) { spd = runSpd; charMove(spd, *_cameraDir, false); }
@@ -218,10 +229,10 @@ bool	player::Process()
 		else if (dodgeDir < 0) { dodgeDir += 360; }
 
 		//回避方向を基準にしたモーションの選択と再生
-		if (dodgeDir >= 45 && 135 > dodgeDir) { animChange(PL_dodge_L, &_modelInf, false, false, false); }//アニメーションを左回避モーションに変更
-		else if (dodgeDir >= 135 && 225 > dodgeDir) { animChange(PL_dodge_B, &_modelInf, false, false, false); }//アニメーションを後ろ回避モーションに変更
-		else if (dodgeDir >= 225 && 315 > dodgeDir) { animChange(PL_dodge_R, &_modelInf, false, false, false); }//アニメーションを右回避モーションに変更
-		else { animChange(PL_dodge_F, &_modelInf, false, false, false); }//アニメーションを前回避モーションに変更
+		if (dodgeDir >= 45 && 135 > dodgeDir) { animChange(PL_DODGE_L, &_modelInf, false, false, false); }//アニメーションを左回避モーションに変更
+		else if (dodgeDir >= 135 && 225 > dodgeDir) { animChange(PL_DODGE_B, &_modelInf, false, false, false); }//アニメーションを後ろ回避モーションに変更
+		else if (dodgeDir >= 225 && 315 > dodgeDir) { animChange(PL_DODGE_R, &_modelInf, false, false, false); }//アニメーションを右回避モーションに変更
+		else { animChange(PL_DODGE_F, &_modelInf, false, false, false); }//アニメーションを前回避モーションに変更
 
 		//無敵判定の設定
 		dodgeTime = getAnimPlayTotalTime();
@@ -246,7 +257,7 @@ bool	player::Process()
 		if (attackNumOld == 0)
 		{
 			PlaySoundMem(soundHandle[12], DX_PLAYTYPE_BACK);
-			animChange(PL_jaku_1, &_modelInf, false, false, true);//アニメーションを弱攻撃１段目モーションに変更
+			animChange(PL_JAB_1, &_modelInf, false, false, true);//アニメーションを弱攻撃１段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(defaultAttackUnderPos, defaultAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[jakuNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
@@ -254,7 +265,7 @@ bool	player::Process()
 		else if (attackNumOld == 1)
 		{
 			PlaySoundMem(soundHandle[13], DX_PLAYTYPE_BACK);
-			animChange(PL_jaku_2, &_modelInf, false, false, true);//アニメーションを弱攻撃２段目モーションに変更
+			animChange(PL_JAB_2, &_modelInf, false, false, true);//アニメーションを弱攻撃２段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(defaultAttackUnderPos, defaultAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[jakuNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
@@ -262,7 +273,7 @@ bool	player::Process()
 		else if (attackNumOld == 2)
 		{
 			PlaySoundMem(soundHandle[14], DX_PLAYTYPE_BACK);
-			animChange(PL_jaku_3, &_modelInf, false, false, true);//アニメーションを弱攻撃３段目モーションに変更
+			animChange(PL_JAB_3, &_modelInf, false, false, true);//アニメーションを弱攻撃３段目モーションに変更
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 			makeAttackCap(defaultAttackUnderPos, defaultAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[jakuNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
@@ -270,8 +281,8 @@ bool	player::Process()
 		else if (attackNumOld == 3)
 		{
 			PlaySoundMem(soundHandle[14], DX_PLAYTYPE_BACK);
-			animChange(PL_jaku_4_1, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション１に変更
-			setNextAnim(PL_jaku_4_2, &_modelInf, true, true);//次アニメーションに納刀をセット
+			animChange(PL_JAB_4_1, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション１に変更
+			setNextAnim(PL_JAB_4_2, &_modelInf, true, true);//次アニメーションに納刀をセット
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld++;
 		}
@@ -279,8 +290,8 @@ bool	player::Process()
 		{
 			PlaySoundMem(soundHandle[14], DX_PLAYTYPE_BACK);
 			_modelInf.animHandleNext = -1;
-			animChange(PL_jaku_4_3, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション２に変更
-			setNextAnim(PL_jaku_4_2, &_modelInf, true, false);//次アニメーションに納刀をセット
+			animChange(PL_JAB_4_3, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション２に変更
+			setNextAnim(PL_JAB_4_2, &_modelInf, true, false);//次アニメーションに納刀をセット
 			waitNextAttack += getAnimPlayTotalTime();
 			attackNumOld = 4;
 			makeAttackCap(defaultAttackUnderPos, defaultAttackOverPos, 20.f, 0.f, 12.f, animSpd, true, _valData->plAtkNum[jakuNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
@@ -292,7 +303,7 @@ bool	player::Process()
 		{
 			PlaySoundMem(soundHandle[14], DX_PLAYTYPE_BACK);
 			_modelInf.animHandleNext = -1;
-			animChange(PL_jaku_4_4, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション３に変更
+			animChange(PL_JAB_4_4, &_modelInf, false, false, true);//アニメーションを弱攻撃４段目モーション３に変更
 			waitNextAttack = 0;
 			makeAttackCap(defaultAttackUnderPos, defaultAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[jakuNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
 		}
@@ -346,11 +357,9 @@ bool	player::Process()
 		if (insDir != 0) { _modelInf.dir.y = insDir; }
 		PlaySoundMem(soundHandle[voiceStartNum + 39 + rand() % 2], DX_PLAYTYPE_BACK);//ボイス再生
 		animChange(PL_motion_hissatsu, &_modelInf, false, false, true);//アニメーションを覚醒時必殺技モーションに変更
-		makeAttackCap(defaultAttackUnderPos, skillAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[finishNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 2);
+		makeAttackCap(defaultAttackUnderPos, skillAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[finishNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		//覚醒時のステータス処理
-		_statusInf.bloodPoint = 0, isAwakening = 0, atkBuff = 0.f, _modelInf.animSpdBuff = 0.f;
-		immortalTime = _modelInf.totalTime;
-		_statusInf.bloodPoint = 0;
+		_statusInf.bloodPoint = 0, immortalTime = _modelInf.totalTime, _modelInf.animSpdBuff = 0.f;
 		break;
 	case pushButton::Lstick://ダッシュ
 		//設定処理
@@ -393,7 +402,7 @@ bool	player::Process()
 			_valData->hitstopF = 5;//ヒットストップ
 			//攻撃時処理
 			KATANAIO(&_modelInf, true);//カタナの鞘をカタナにつけるか腰につけるかの設定変更
-			animChange(PL_counter, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
+			animChange(PL_COUNTER, &_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
 			makeAttackCap(defaultAttackUnderPos, skillAttackOverPos, 20.f, 0.f, getAnimPlayTotalTime(), animSpd, true, _valData->plAtkNum[counterNum] + atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 			//飛ぶ斬撃への設定
 			VECTOR underPos, overPos, modeDir;
@@ -414,12 +423,12 @@ bool	player::Process()
 		{
 			animSpd = 10.f;
 			animSpd = _valData->counterSpd;
-			animChange(PL_guard_1, &_modelInf, false, false, false);//アニメーションをガードモーション１に変更
+			animChange(PL_GUARD_1, &_modelInf, false, false, false);//アニメーションをガードモーション１に変更
 		}
 		else if (isCounter != 2)
 		{
 			animSpd = 1.f;
-			animChange(PL_guard_2, &_modelInf, true, false, false);//アニメーションをガードモーション２に変更
+			animChange(PL_GUARD_2, &_modelInf, true, false, false);//アニメーションをガードモーション２に変更
 			Estate = _estate::NORMAL;
 			BPmath(-1);
 		}
@@ -431,7 +440,7 @@ bool	player::Process()
 
 		//待機モーションに移行
 		Estate = _estate::NORMAL;
-		animChange(PL_idel, &_modelInf, true, true, false);//アニメーションを待機モーションに変更
+		animChange(PL_IDLE, &_modelInf, true, true, false);//アニメーションを待機モーションに変更
 		spd = 0.f;
 		break;
 	default://その他
@@ -487,6 +496,7 @@ bool	player::Process()
 	caRecastX > 0 ? caRecastX -= insNum : caRecastX = 0;
 	caRecastY > 0 ? caRecastY -= insNum : caRecastY = 0;
 	waitBlowTime > 0 ? waitBlowTime-- : waitBlowTime = 0;
+	awakeSeCoolTime > 0 ? awakeSeCoolTime-- : awakeSeCoolTime = 0;
 
 	//攻撃ヒット時のSE再生
 	if (isHit)
@@ -529,7 +539,7 @@ void player::charMove(float Speed, float _Dir, bool isAnimChange)
 	//キャラ移動時アニメーション変更処理
 	if (isAnimChange)
 	{
-		animChange(PL_run, &_modelInf, true, true, false);//アニメーションを走りモーションに変更
+		animChange(PL_RUN, &_modelInf, true, true, false);//アニメーションを走りモーションに変更
 		animSpd = 1.f;
 		_modelInf.dir.y = _Dir + 180.f;
 	}
@@ -587,7 +597,11 @@ bool player::BPmath(float math)
 
 	//BP増減処理
 	_statusInf.bloodPoint += math;
-	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint) { _statusInf.bloodPoint = _statusInf.maxBloodPoint; }
+	if (_statusInf.bloodPoint > _statusInf.maxBloodPoint)
+	{
+		_statusInf.bloodPoint = _statusInf.maxBloodPoint;
+		if (awakeSeCoolTime <= 0) { PlaySoundMem(soundHandle[20], DX_PLAYTYPE_BACK);			awakeSeCoolTime = 240; }
+	}
 	if (_statusInf.bloodPoint < 0) { _statusInf.bloodPoint = 0; }
 
 	return true;
@@ -785,7 +799,7 @@ bool player::CA_charge(player* insPL)
 		if (insDir != 0) { insPL->_modelInf.dir.y = insDir; }
 		insPL->animSpd = 3.f;
 		PlaySoundMem(insPL->soundHandle[insPL->voiceStartNum + 14 + rand() % 3], DX_PLAYTYPE_BACK);
-		animChange(PL_counter, &insPL->_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
+		animChange(PL_COUNTER, &insPL->_modelInf, false, false, true);//アニメーションをカウンターモーションに変更
 		insPL->makeAttackCap(defaultAttackUnderPos, skillAttackOverPos, 20.f, 16.f, 41.f, insPL->animSpd, true, insPL->_valData->plAtkNum[charge3Num] + insPL->atkBuff, 5, rWeponParentFrame, VGet(0, 0, 0), 1);
 		insPL->waitCAChargeTime = 16.f;
 		insPL->CAChargeTime = 41.f;

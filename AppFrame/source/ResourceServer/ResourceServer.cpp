@@ -8,20 +8,35 @@
 #include"ResourceServer.h"
 #include"DxLib.h"
 #include<stdexcept>
-#include <algorithm>
+#include<algorithm>
+#include <memory>
 
-int Rserver::modelImportR(const char* dir)
+
+int Rserver::modelImportR(const char* dir, int* handle)
 {
 	for (int i = 0; i < modelHandleList.size(); i++)
 	{
-		if (modelHandleList[i].dir == dir) { return MV1DuplicateModel(modelHandleList[i].handle); }
+		if (modelHandleList[i].dir == dir) { *handle = MV1DuplicateModel(modelHandleList[i].handle); return 1; }
 	}
 
-	int insHandle = -1;
-	insHandle = MV1LoadModel(dir);
-	modelHandleInf insInf = { dir, insHandle };
-	modelHandleList.emplace_back(insInf);
-	return insHandle;
+	int insHandle = MV1LoadModel(dir);
+	duplicateModelHandleInf insInf = { dir, insHandle, handle };
+	duplicateModelPointerList.emplace_back(insInf);
+
+	return 0;
+}
+
+int Rserver::duplicateModelListImportR()
+{
+	for (int i = 0; duplicateModelPointerList.size() > i; i++)
+	{
+		*duplicateModelPointerList[i].duplicateModelhandle = MV1DuplicateModel(duplicateModelPointerList[i].motherModelHandle);
+		modelHandleInf insInf = { duplicateModelPointerList[i].dir, duplicateModelPointerList[i].motherModelHandle };
+		modelHandleList.emplace_back(insInf);
+	}
+	duplicateModelPointerList.clear();
+
+	return 0;
 }
 
 int Rserver::loadGraphR(const char* dir)
