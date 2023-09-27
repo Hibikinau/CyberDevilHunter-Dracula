@@ -66,7 +66,7 @@ Boss2
 LBoss
 ここまで
 所持ポイント
-779997
+819997
 プレイヤーボイスリスト
 player_voice_01_A.mp3
 player_voice_01_B.mp3
@@ -162,6 +162,8 @@ SE_Player_nATK4_Finish.mp3
 SE_Player_nATK4_loop.mp3
 ガード_02.mp3
 system_select_01.mp3
+kakusei_owari.mp3
+kakusei_tamaru.mp3
 ここまで
 開発者モード
 エンドロール
