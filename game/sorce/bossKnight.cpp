@@ -48,7 +48,7 @@ bool	BossKnight::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 
-	if (status == STATUS::DEAD) 
+	if (status == STATUS::DEAD)
 	{
 		animSpd = 0.7f;
 		animChange(BOSS1_DEAD, &_modelInf, false, true, false);
@@ -56,7 +56,7 @@ bool	BossKnight::Process()
 		return true;
 	}
 
-	if (_statusInf.hitPoint <= 5000) 
+	if (_statusInf.hitPoint <= 5000)
 	{
 		awake = true;
 		awakeSpd = 1.5f;
@@ -65,10 +65,10 @@ bool	BossKnight::Process()
 		awakeWaitTime = 35;
 	}
 
-	if (status == STATUS::STAN) 
+	if (status == STATUS::STAN)
 	{
 		animChange(BOSS1_DAMAGE, &_modelInf, true, true, false);
-		if (stanTime == 0) 
+		if (stanTime == 0)
 		{
 			status = STATUS::WAIT;
 			stanTime = 100;
@@ -78,7 +78,7 @@ bool	BossKnight::Process()
 		return true;
 	}
 
-	for (auto i = charBox->begin(); i != charBox->end(); i++) 
+	for (auto i = charBox->begin(); i != charBox->end(); i++)
 	{
 		if (i->second->getType() == 1)
 		{
@@ -105,29 +105,29 @@ bool	BossKnight::Process()
 	int insAddNum = 0;
 	bool insFreeBool = false;
 
-	switch (status) 
+	switch (status)
 	{
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
 		animSpd = .5f;
 		animChange(BOSS1_IDLE, &_modelInf, true, true, false);
-		if (time == 0) 
+		if (time == 0)
 		{
 			UtilityJudge();
 		}
-		else if (time > 0) 
+		else if (time > 0)
 		{
 			time--;
 		}
 		break;
 	case STATUS::DAMAGE:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			actionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::DAMAGE) { break; }
 		}
-		if (actionFlag == true) 
+		if (actionFlag == true)
 		{
 			break;
 		}
@@ -144,7 +144,7 @@ bool	BossKnight::Process()
 		if (playerDistance < 200) { UtilityJudge(); }
 		break;
 	case STATUS::FSTEP:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::FSTEP) { break; }
@@ -157,7 +157,7 @@ bool	BossKnight::Process()
 		}
 		break;
 	case STATUS::BSTEP:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::BSTEP) { break; }
@@ -170,7 +170,7 @@ bool	BossKnight::Process()
 		}
 		break;
 	case STATUS::RSTEP:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::RSTEP) { break; }
@@ -183,7 +183,7 @@ bool	BossKnight::Process()
 		}
 		break;
 	case STATUS::LSTEP:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::LSTEP) { break; }
@@ -196,7 +196,7 @@ bool	BossKnight::Process()
 		}
 		break;
 	case STATUS::SRASH:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			actionFlag = false;
 			attackStep == 0 ? attackStep++ : UtilityJudge();
@@ -204,18 +204,18 @@ bool	BossKnight::Process()
 				break;
 			}
 		}
-		if (actionFlag == true) 
+		if (actionFlag == true)
 		{
 			break;
 		}
 		animSpd = .7f * awakeSpd;
-		animChange(BOSS1_MOWING, &_modelInf, false, true, true);
+		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime - 10.f, animSpd, true, 20.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::SLAM:
-		if (isAnimEnd == true) 
+		if (isAnimEnd == true)
 		{
 			actionFlag = false;
 			if (attackStep < 8)
@@ -236,7 +236,7 @@ bool	BossKnight::Process()
 				}
 				attackStep++;
 			}
-			else 
+			else
 			{
 				UtilityJudge();
 				if (status != STATUS::SLAM) { break; }
@@ -254,11 +254,11 @@ bool	BossKnight::Process()
 		actionFlag = true;
 		break;
 	case STATUS::STAB:
-		if (isAnimEnd == true) 
+		if (isAnimEnd == true)
 		{
 			actionFlag = false;
 			if (attackStep < 4) { attackStep++; }
-			else 
+			else
 			{
 				UtilityJudge();
 				if (status != STATUS::STAB) { break; }
@@ -267,13 +267,13 @@ bool	BossKnight::Process()
 		if (actionFlag == true)
 		{
 			STABFlag = true;
-		    if (attackStep == 0) { posFlag = true; }
+			if (attackStep == 0) { posFlag = true; }
 			else if ((attackStep == 2 && _modelInf.playTime > 5) || attackStep == 3) { Move(90.0f * awakeMove, .0f); }
 			break;
 		}
 		if (attackStep == 0) { animSpd = 0.18f * awakeSpd; }
 		else { animSpd = 0.7f * awakeSpd; }
-		animChange(BOSS1_THRUST_1 + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS1_THRUST1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 3)
 		{
 			makeAttackCap(VGet(-20.f, 80.f, 0.f), VGet(-20.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime, animSpd, true, 30.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
@@ -281,7 +281,7 @@ bool	BossKnight::Process()
 		actionFlag = true;
 		break;
 	case STATUS::ROBES:
-		if (isAnimEnd == true) 
+		if (isAnimEnd == true)
 		{
 			actionFlag = false;
 			if (attackStep < 3) { attackStep++; }
@@ -294,7 +294,7 @@ bool	BossKnight::Process()
 		if (actionFlag == true) { break; }
 
 		animSpd = 0.7f * awakeSpd;
-		animChange(BOSS1_CUT_1 + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
 			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime, animSpd, true, 20.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
@@ -302,12 +302,12 @@ bool	BossKnight::Process()
 		actionFlag = true;
 		break;
 	case STATUS::JUMPACT:
-		if (isAnimEnd == true) 
+		if (isAnimEnd == true)
 		{
 			actionFlag = false;
 			if (attackStep < 3)
 			{
-				if (isGround && attackStep == 2) 
+				if (isGround && attackStep == 2)
 				{
 					makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, 5.0f, _modelInf.totalTime - 5, animSpd, true, 50.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
 				}
@@ -316,7 +316,7 @@ bool	BossKnight::Process()
 				else { attackStep++; }
 
 			}
-			else 
+			else
 			{
 				UtilityJudge();
 				if (status != STATUS::JUMPACT) { break; }
@@ -372,35 +372,35 @@ bool	BossKnight::Render(float timeSpeed)
 }
 
 
-bool BossKnight::UtilityJudge() 
+bool BossKnight::UtilityJudge()
 {
 	attackStep = 0, jumpActFlag = false;
 	STABFlag = false;
 	_modelInf.dir.y = playerDir;
 	int Rand = GetRand(100);
 
-	if (!awake) 
+	if (!awake)
 	{
-		switch (status) 
+		switch (status)
 		{
 		case STATUS::NONE:
 		case STATUS::WAIT:
 			RangeJ();
-			if (range == RANGE::CrossRange) 
+			if (range == RANGE::CrossRange)
 			{
 				if (Rand < 40) { status = STATUS::SRASH; }
-				if (Rand >= 40) 
+				if (Rand >= 40)
 				{
 					status = STATUS::SLAM;
 				}
 				break;
 			}
-			if (range == RANGE::MidRange) 
+			if (range == RANGE::MidRange)
 			{
 				if (Rand < 80) { status = STATUS::STAB; }
 				if (Rand >= 80) { status = STATUS::RUN; }
 			}
-			if (range == RANGE::LongRange) 
+			if (range == RANGE::LongRange)
 			{
 				if (Rand < 70) { status = STATUS::JUMPACT; }
 				if (Rand >= 70) { status = STATUS::RUN; }
@@ -416,110 +416,7 @@ bool BossKnight::UtilityJudge()
 			if (range == RANGE::CrossRange)
 			{
 				if (Rand < 65) { status = STATUS::SRASH; }
-				if (Rand >= 65) 
-				{
-					status = STATUS::SLAM;
-				}
-				break;
-			}
-			if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
-			if (range == RANGE::LongRange) 
-			{
-				status = STATUS::JUMPACT;
-				break;
-			}
-			break;
-		case STATUS::FSTEP:
-			if (Rand < 70) { status = STATUS::SRASH; }
-			if (Rand >= 70) { status = STATUS::SLAM; }
-			break;
-		case STATUS::BSTEP:
-			RangeJ();
-			if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
-			if (range == RANGE::MidRange) { status = STATUS::STAB; break; }
-			if (range == RANGE::LongRange) { status = STATUS::JUMPACT; break; }
-			break;
-		case STATUS::RSTEP:
-			status = STATUS::WAIT;
-			break;
-		case STATUS::LSTEP:
-			status = STATUS::WAIT;
-			break;
-		case STATUS::SRASH:
-			if (Rand > 80) 
-			{
-				break;
-			}
-			if (80 >= Rand && Rand > 40)
-			{
-				status = STATUS::BSTEP;
-				break;
-			}
-			if (40 >= Rand) 
-			{
-				status = STATUS::ROBES;
-				break;
-			}
-			break;
-		case STATUS::SLAM:
-			status = STATUS::WAIT;
-			time = 50 - awakeWaitTime;
-			break;
-		case STATUS::STAB:
-			if (Rand < 25) { status = STATUS::FSTEP; break; }
-			if (25 <= Rand) { status = STATUS::JUMPACT; break; }
-			break;
-		case STATUS::ROBES:
-			status = STATUS::WAIT;
-			time = 50 - awakeWaitTime;
-			break;
-		case STATUS::JUMPACT:
-			if (Rand < 25) { status = STATUS::FSTEP; break; }
-			if (25 <= Rand) { status = STATUS::ROBES; break; }
-			break;
-		case STATUS::ONESLASH:
-			status = STATUS::BSTEP; break;
-			break;
-		};
-	}
-	else if (awake) 
-	{
-		switch (status) 
-		{
-		case STATUS::NONE:
-		case STATUS::WAIT:
-			RangeJ();
-			if (range == RANGE::CrossRange) 
-			{
-				if (Rand < 40) { status = STATUS::SRASH; }
-				if (Rand >= 40) 
-				{
-					status = STATUS::SLAM;
-				}
-				break;
-			}
-			if (range == RANGE::MidRange) 
-			{
-				if (Rand < 80) { status = STATUS::STAB; }
-				if (Rand >= 80) { status = STATUS::RUN; }
-			}
-			if (range == RANGE::LongRange) 
-			{
-				if (Rand < 70) { status = STATUS::JUMPACT; }
-				if (Rand >= 70) { status = STATUS::RUN; }
-				break;
-			}
-			break;
-		case STATUS::DAMAGE:
-			status = STATUS::WAIT;
-			break;
-		case STATUS::DEAD:break;
-		case STATUS::RUN:
-			RangeJ();
-			if (range == RANGE::CrossRange) 
-			{
-				if (Rand < 65) { status = STATUS::SRASH; }
-				if (Rand >= 65) 
+				if (Rand >= 65)
 				{
 					status = STATUS::SLAM;
 				}
@@ -549,16 +446,119 @@ bool BossKnight::UtilityJudge()
 			status = STATUS::WAIT;
 			break;
 		case STATUS::SRASH:
-			if (Rand > 80) 
+			if (Rand > 80)
 			{
 				break;
 			}
-			if (80 >= Rand && Rand > 40) 
+			if (80 >= Rand && Rand > 40)
 			{
 				status = STATUS::BSTEP;
 				break;
 			}
-			if (40 >= Rand) 
+			if (40 >= Rand)
+			{
+				status = STATUS::ROBES;
+				break;
+			}
+			break;
+		case STATUS::SLAM:
+			status = STATUS::WAIT;
+			time = 50 - awakeWaitTime;
+			break;
+		case STATUS::STAB:
+			if (Rand < 25) { status = STATUS::FSTEP; break; }
+			if (25 <= Rand) { status = STATUS::JUMPACT; break; }
+			break;
+		case STATUS::ROBES:
+			status = STATUS::WAIT;
+			time = 50 - awakeWaitTime;
+			break;
+		case STATUS::JUMPACT:
+			if (Rand < 25) { status = STATUS::FSTEP; break; }
+			if (25 <= Rand) { status = STATUS::ROBES; break; }
+			break;
+		case STATUS::ONESLASH:
+			status = STATUS::BSTEP; break;
+			break;
+		};
+	}
+	else if (awake)
+	{
+		switch (status)
+		{
+		case STATUS::NONE:
+		case STATUS::WAIT:
+			RangeJ();
+			if (range == RANGE::CrossRange)
+			{
+				if (Rand < 40) { status = STATUS::SRASH; }
+				if (Rand >= 40)
+				{
+					status = STATUS::SLAM;
+				}
+				break;
+			}
+			if (range == RANGE::MidRange)
+			{
+				if (Rand < 80) { status = STATUS::STAB; }
+				if (Rand >= 80) { status = STATUS::RUN; }
+			}
+			if (range == RANGE::LongRange)
+			{
+				if (Rand < 70) { status = STATUS::JUMPACT; }
+				if (Rand >= 70) { status = STATUS::RUN; }
+				break;
+			}
+			break;
+		case STATUS::DAMAGE:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::DEAD:break;
+		case STATUS::RUN:
+			RangeJ();
+			if (range == RANGE::CrossRange)
+			{
+				if (Rand < 65) { status = STATUS::SRASH; }
+				if (Rand >= 65)
+				{
+					status = STATUS::SLAM;
+				}
+				break;
+			}
+			if (range == RANGE::MidRange) { status = STATUS::FSTEP; break; }
+			if (range == RANGE::LongRange)
+			{
+				status = STATUS::JUMPACT;
+				break;
+			}
+			break;
+		case STATUS::FSTEP:
+			if (Rand < 70) { status = STATUS::SRASH; }
+			if (Rand >= 70) { status = STATUS::SLAM; }
+			break;
+		case STATUS::BSTEP:
+			RangeJ();
+			if (range == RANGE::CrossRange) { status = STATUS::SRASH; break; }
+			if (range == RANGE::MidRange) { status = STATUS::STAB; break; }
+			if (range == RANGE::LongRange) { status = STATUS::JUMPACT; break; }
+			break;
+		case STATUS::RSTEP:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::LSTEP:
+			status = STATUS::WAIT;
+			break;
+		case STATUS::SRASH:
+			if (Rand > 80)
+			{
+				break;
+			}
+			if (80 >= Rand && Rand > 40)
+			{
+				status = STATUS::BSTEP;
+				break;
+			}
+			if (40 >= Rand)
 			{
 				status = STATUS::ROBES;
 				break;
@@ -590,7 +590,7 @@ bool BossKnight::UtilityJudge()
 	return true;
 }
 
-bool BossKnight::RangeJ() 
+bool BossKnight::RangeJ()
 {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
@@ -611,7 +611,7 @@ bool BossKnight::RangeJ()
 }
 
 
-void BossKnight::Move(float speed, float radian) 
+void BossKnight::Move(float speed, float radian)
 {
 	float Speed = speed;
 	float Radian = (_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
@@ -624,16 +624,16 @@ bool BossKnight::HPmath(float Num, float Stan)
 {
 	_statusInf.hitPoint += Num;
 	_statusInf.stanPoint += Stan;
-	if (Num <= -200) 
+	if (Num <= -200)
 	{
 		status = STATUS::DAMAGE;
 		actionFlag = false;
 	}
-	if (_statusInf.hitPoint <= 5000) 
+	if (_statusInf.hitPoint <= 5000)
 	{
 		awake = true;
 	}
-	if (_statusInf.stanPoint >= 150) 
+	if (_statusInf.stanPoint >= 150)
 	{
 		status = STATUS::STAN;
 		_statusInf.stanPoint = 150;

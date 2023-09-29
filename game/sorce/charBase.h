@@ -15,6 +15,8 @@
 struct statusInf
 {
 	float hitPoint//!体力値
+		, redHitPoint//!体力減少時の赤いHP描画用
+		, redHitPointDelayTime//!体力減少時の赤いHP描画の遅延用
 		, stanPoint//!スタン値
 		, maxHitPoint//!最大体力値
 		, bloodPoint//!ブラッドポイント値

@@ -63,7 +63,7 @@ bool	LastBoss::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 
-	if (status == STATUS::DEAD) 
+	if (status == STATUS::DEAD)
 	{
 		animSpd = 0.7f;
 		animChange(PL_DEATH, &_modelInf, false, true, false);
@@ -71,7 +71,7 @@ bool	LastBoss::Process()
 		return true;
 	}
 
-	if (_statusInf.hitPoint <= 5000) 
+	if (_statusInf.hitPoint <= 5000)
 	{
 		awake = true;
 		awakeSpd = 1.5f;
@@ -81,15 +81,15 @@ bool	LastBoss::Process()
 		awakeAddDistance = 30;
 	}
 
-	if (status == STATUS::STAN) 
+	if (status == STATUS::STAN)
 	{
-		if (!actionFlag) 
+		if (!actionFlag)
 		{
 			animSpd = 1.0;
-			animChange(PL_STAGGER, &_modelInf, true, true, false);
+			animChange(PL_hirumi, &_modelInf, true, true, false);
 			actionFlag = true;
 		}
-		if (stanTime == 0) 
+		if (stanTime == 0)
 		{
 			status = STATUS::WAIT;
 			time = 0;
@@ -101,7 +101,7 @@ bool	LastBoss::Process()
 		return true;
 	}
 
-	for (auto i = charBox->begin(); i != charBox->end(); i++) 
+	for (auto i = charBox->begin(); i != charBox->end(); i++)
 	{
 		if (i->second->getType() == 1)
 		{
@@ -130,16 +130,16 @@ bool	LastBoss::Process()
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
 		animSpd = .5f;
-		animChange(BOSS_IDLE_1, &_modelInf, true, true, false);
+		animChange(BOSS_IDLE1, &_modelInf, true, true, false);
 		if (time == 300)
 		{
 			PlaySoundMem(soundHandle[voiceStartNum + rand() % 8], DX_PLAYTYPE_BACK);
 		}
-		if (time == 0) 
+		if (time == 0)
 		{
 			UtilityJudge();
 		}
-		else if (time > 0) 
+		else if (time > 0)
 		{
 			time--;
 		}
@@ -151,7 +151,7 @@ bool	LastBoss::Process()
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::DAMAGE) { break; }
 		}
-		if (actionFlag == true) 
+		if (actionFlag == true)
 		{
 			break;
 		}
@@ -170,7 +170,7 @@ bool	LastBoss::Process()
 		else { time--; }
 		break;
 	case STATUS::FSTEP:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::FSTEP) { break; }
@@ -222,7 +222,7 @@ bool	LastBoss::Process()
 		}
 		break;
 	case STATUS::kick:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::kick) {
@@ -241,7 +241,7 @@ bool	LastBoss::Process()
 		actionFlag = true;
 		break;
 	case STATUS::kaiten:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
 			if (status != STATUS::kaiten) {
@@ -249,7 +249,7 @@ bool	LastBoss::Process()
 				break;
 			}
 		}
-		if (actionFlag == true) 
+		if (actionFlag == true)
 		{
 			break;
 		}
@@ -260,27 +260,27 @@ bool	LastBoss::Process()
 		actionFlag = true;
 		break;
 	case STATUS::jumpattack:
-		if (_modelInf.isAnimEnd == true) 
+		if (_modelInf.isAnimEnd == true)
 		{
 			attackStep == 0 ? attackStep++ : UtilityJudge();
-			if (status != STATUS::jumpattack) 
+			if (status != STATUS::jumpattack)
 			{
 				actionFlag = false;
 				break;
 			}
 		}
-		if (actionFlag == true) 
+		if (actionFlag == true)
 		{
 			break;
 		}
 		animSpd = 2.0f * awakeSpd;
-		animChange(BOSS_JUMP_ATTACK, &_modelInf, false, true, true);
+		animChange(BOSS_JUMPATTACK, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * awakeSpd - 10.f, animSpd, true, 20.f * awakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::quick:
-		if (isAnimEnd == true) 
+		if (isAnimEnd == true)
 		{
 			actionFlag = false;
 			if (attackStep < 10)
@@ -305,14 +305,14 @@ bool	LastBoss::Process()
 		actionFlag = true;
 		break;
 	case STATUS::STAB:
-		if (isAnimEnd == true) 
+		if (isAnimEnd == true)
 		{
 			actionFlag = false;
-			if (attackStep < 3) 
+			if (attackStep < 3)
 			{
 				attackStep++;
 			}
-			else 
+			else
 			{
 				UtilityJudge();
 				if (status != STATUS::STAB) { break; }
@@ -330,13 +330,13 @@ bool	LastBoss::Process()
 			}
 			break;
 		}
-		if (attackStep == 1) 
+		if (attackStep == 1)
 		{
 			animSpd = 2.0f * awakeSpd;
 		}
 		else if (attackStep == 2) { animSpd = 3.5f * awakeSpd; }
 		else { animSpd = 1.2f * awakeSpd; }
-		animChange(BOSS_ARTS_THRUST_1 + attackStep, &_modelInf, false, false, true);
+		animChange(BOSS_ARTS_TSUKI_1 + attackStep, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
 			_modelInf.dir.y = playerDir;
@@ -347,12 +347,12 @@ bool	LastBoss::Process()
 		break;
 	};
 
-	if (isHit && hitTime == 0) 
+	if (isHit && hitTime == 0)
 	{
 		hitFlag = true;
 		hitTime = 50;
 	}
-	else if (hitFlag) 
+	else if (hitFlag)
 	{
 		hitTime--;
 		if (hitTime == 0) { hitFlag = false; }
@@ -378,7 +378,7 @@ bool	LastBoss::Render(float timeSpeed)
 }
 
 
-bool LastBoss::UtilityJudge() 
+bool LastBoss::UtilityJudge()
 {
 	attackStep = 0;
 	_modelInf.dir.y = playerDir;
@@ -397,7 +397,7 @@ bool LastBoss::UtilityJudge()
 		case STATUS::DEAD:break;
 		case STATUS::RUN:
 			RangeJ();
-			if (range == RANGE::CrossRange) 
+			if (range == RANGE::CrossRange)
 			{
 				if (Rand > 50) { status = STATUS::kick; }
 				if (Rand <= 50) { status = STATUS::kaiten; }
@@ -406,7 +406,7 @@ bool LastBoss::UtilityJudge()
 			{
 				status = STATUS::FSTEP;
 			}
-			if (range == RANGE::LongRange) 
+			if (range == RANGE::LongRange)
 			{
 				status = STATUS::RUN;
 			}
@@ -447,9 +447,9 @@ bool LastBoss::UtilityJudge()
 
 		}
 	}
-	if (awake) 
+	if (awake)
 	{
-		switch (status) 
+		switch (status)
 		{
 		case STATUS::NONE:
 		case STATUS::WAIT:
@@ -472,7 +472,7 @@ bool LastBoss::UtilityJudge()
 			{
 				status = STATUS::FSTEP;
 			}
-			if (range == RANGE::LongRange) 
+			if (range == RANGE::LongRange)
 			{
 				status = STATUS::RUN;
 			}
@@ -516,7 +516,7 @@ bool LastBoss::UtilityJudge()
 	return true;
 }
 
-bool LastBoss::RangeJ() 
+bool LastBoss::RangeJ()
 {
 	auto Pvector = VSub(plMI->pos, _modelInf.pos);
 	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
@@ -557,11 +557,11 @@ bool LastBoss::HPmath(float Num, float Stan)
 		actionFlag = false;
 		PlaySoundMem(soundHandle[voiceStartNum + 15 + rand() % 3], DX_PLAYTYPE_BACK);
 	}
-	if (_statusInf.hitPoint <= 5000) 
+	if (_statusInf.hitPoint <= 5000)
 	{
 		awake = true;
 	}
-	if (_statusInf.stanPoint >= 150) 
+	if (_statusInf.stanPoint >= 150)
 	{
 		status = STATUS::STAN;
 		_statusInf.stanPoint = 150;

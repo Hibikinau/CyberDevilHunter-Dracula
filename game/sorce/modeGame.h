@@ -69,12 +69,7 @@ public:
 	int slashLineAnimHandle[39] = { -1 };
 	int loadingAnimHandle[27] = { -1 }, loadingAnimNum;
 
-	int StageModelHandle;
-	int CharaModelHandle;
-	int ShadowMapHandle;
-	float bright = .6f;
-	float Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
+	int StageModelHandle, CharaModelHandle, ShadowMapHandle, BGMdelay;
+	float bright = .6f, Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = false, plDead;
-	int BGMdelay;
-	int drawAreaSize = 0;
 };

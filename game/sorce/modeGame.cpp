@@ -29,12 +29,11 @@ bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint
 bool	modeGame::Initialize()
 {
 	//設定処理
-	SetUseLighting(true);
-	SetUseZBuffer3D(true);// Ｚバッファを有効にする
-	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みを有効にする
-	SetUseBackCulling(false);
-	SetAlwaysRunFlag(true);
-	//Effekseer_StartNetwork(60000);// ネットワーク機能を有効にする
+	SetUseLighting(true);//光源処理の有効化
+	SetUseZBuffer3D(true);// Ｚバッファの有効化
+	SetWriteZBuffer3D(true);// Ｚバッファへの書き込みの有効化
+	SetUseBackCulling(false);//ポリゴンの背面描画を無効化
+	SetAlwaysRunFlag(true);//ウィンドウが非アクティブ時にも動作を継続する
 
 	//ロードアニメーション画像の読み込み
 	_modeServer->RS.loadDivGraphR("game/res/loading/1_sheet.png", 27, 27, 1, 28, 28, loadingAnimHandle);
@@ -148,10 +147,10 @@ bool	modeGame::ASyncLoadAnim()
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	//モデルデータの複製処理のために二度回す
-	for(int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		//非同期読み込み終了までの間連番画像でのアニメーション再生
-		while(GetASyncLoadNum() > 0)
+		while (GetASyncLoadNum() > 0)
 		{
 			ProcessMessage();
 			ClearDrawScreen();
@@ -620,14 +619,17 @@ bool modeGame::drawUI()
 	//自機HPバー描画
 	int barPposX = 10, barPosY = 10;
 	float barLength = 462;
-	float gauge = barLength - ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint);
-	DrawRectGraph(98, 23, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false);
+	float gauge = ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint);
+
+	DrawBox(98, 23, ((barLength / plStatus.maxHitPoint) * (plStatus.redHitPoint + plStatus.hitPoint)) + 98, 29 + 23, GetColor(255, 0, 0), true);
+	DrawRectGraph(98, 23, 0, 0, ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint), 29, HPgaugeHandle, true, false);
 	DrawGraph(90, 15, HPgaugeHandleWaku, true);
 	DrawGraph(30, 23, HPstrHandle, true);
 
 	//自機BPバー描画
 	barLength = 303, barPposX = 90, barPosY = 70;
 	gauge = barLength - ((barLength / plStatus.maxBloodPoint) * plStatus.bloodPoint);
+
 	DrawRectGraph(barPposX - 5, barPosY - 7, 0, 0, barLength - gauge, 66, BPgaugeHandle, true, false);
 	DrawExtendGraph(barPposX, barPosY, barPposX + barLength - 10, barPosY + 20, BPgaugeHandleWaku, true);
 	DrawGraph(30, 70, BPstrHandle, true);
@@ -636,6 +638,7 @@ bool modeGame::drawUI()
 	//bossHPバー描画
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
 	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
+
 	if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 3) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle3, true, false); }
 	else if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 5) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle2, true, false); }
 	else { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false); }
@@ -646,19 +649,11 @@ bool modeGame::drawUI()
 	//bossスタンバー描画
 	barLength = 462, barPposX = 409, barPosY = 666;
 	gauge = ((barLength / 150) * bossStatus.stanPoint);
+
 	DrawRectGraph(barPposX, barPosY, 0, 0, barLength, 53, stunGaugeHandleWaku, true, false);
-	if (gauge < (barLength / 2))
-	{
-		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle, true, false);
-	}
-	else if (gauge < ((barLength / 4) * 3))
-	{
-		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle2, true, false);
-	}
-	else
-	{
-		DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle3, true, false);
-	}
+	if (gauge < (barLength / 2)) { DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle, true, false); }
+	else if (gauge < ((barLength / 4) * 3)) { DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle2, true, false); }
+	else { DrawRectGraph(barPposX + 10, barPosY + 10, 0, 0, gauge, 53, stunGaugeHandle3, true, false); }
 	DrawGraph(353, 670, stunStrHandle, true);
 
 	//スキルアイコン描画
