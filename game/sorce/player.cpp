@@ -42,6 +42,7 @@ bool player::Initialize()
 	isCharge = 0;
 	Estate = _estate::NORMAL;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 200;
+	_statusInf.redHitPoint = 0;
 	_statusInf.maxBloodPoint = 1500;
 	_statusInf.bloodPoint = 0;
 
@@ -498,7 +499,7 @@ bool	player::Process()
 	waitBlowTime > 0 ? waitBlowTime-- : waitBlowTime = 0;
 	awakeSeCoolTime > 0 ? awakeSeCoolTime-- : awakeSeCoolTime = 0;
 	if (_statusInf.redHitPointDelayTime > 0) { _statusInf.redHitPointDelayTime--; }
-	else if (_statusInf.redHitPoint > 0) { _statusInf.redHitPoint -= 0.5f; }
+	else { _statusInf.redHitPoint > 0 ? _statusInf.redHitPoint -= _statusInf.maxHitPoint / 600.f : _statusInf.redHitPoint = 0; }
 
 	//UŒ‚ƒqƒbƒg‚ÌSEÄ¶
 	if (isHit)
@@ -586,6 +587,7 @@ bool player::HPmath(float math, float Stan)
 	{
 		//‰ñ•œˆ—
 		_statusInf.hitPoint += math;
+		_statusInf.redHitPoint < std::abs(math) ? _statusInf.redHitPoint = 0 : _statusInf.redHitPoint -= std::abs(math);
 		if (_statusInf.hitPoint > _statusInf.maxHitPoint) { _statusInf.hitPoint = _statusInf.maxHitPoint; }
 	}
 

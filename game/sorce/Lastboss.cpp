@@ -25,6 +25,7 @@ bool LastBoss::Initialize()
 	stanTime = 200;
 	hitTime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
+	_statusInf.redHitPoint = 0;
 	_statusInf.stanPoint = 0;
 	hitFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
@@ -367,6 +368,10 @@ bool	LastBoss::Process()
 		PlaySoundMem(soundHandle[voiceStartNum + 8 + rand() % 7], DX_PLAYTYPE_BACK);
 		isHit = false;
 	}
+
+	if (_statusInf.redHitPointDelayTime > 0) { _statusInf.redHitPointDelayTime--; }
+	else { _statusInf.redHitPoint > 0 ? _statusInf.redHitPoint -= _statusInf.maxHitPoint / 600.f : _statusInf.redHitPoint = 0; }
+
 	return true;
 }
 
@@ -550,6 +555,8 @@ void LastBoss::Move(float speed, float radian)
 bool LastBoss::HPmath(float Num, float Stan)
 {
 	_statusInf.hitPoint += Num;
+	if (_statusInf.redHitPoint <= 0) { _statusInf.redHitPointDelayTime = 100; }
+	_statusInf.redHitPoint += std::abs(Num);
 	_statusInf.stanPoint += Stan;
 	if (Num <= -200)
 	{

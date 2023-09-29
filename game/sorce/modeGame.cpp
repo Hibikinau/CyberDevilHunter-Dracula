@@ -621,7 +621,7 @@ bool modeGame::drawUI()
 	float barLength = 462;
 	float gauge = ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint);
 
-	DrawBox(98, 23, ((barLength / plStatus.maxHitPoint) * (plStatus.redHitPoint + plStatus.hitPoint)) + 98, 29 + 23, GetColor(255, 0, 0), true);
+	DrawBox(98, 23, ((barLength / plStatus.maxHitPoint) * (plStatus.redHitPoint + plStatus.hitPoint)) + 98, 29 + 23, GetColor(150, 150, 150), true);
 	DrawRectGraph(98, 23, 0, 0, ((barLength / plStatus.maxHitPoint) * plStatus.hitPoint), 29, HPgaugeHandle, true, false);
 	DrawGraph(90, 15, HPgaugeHandleWaku, true);
 	DrawGraph(30, 23, HPstrHandle, true);
@@ -637,11 +637,12 @@ bool modeGame::drawUI()
 
 	//bossHPÉoÅ[ï`âÊ
 	barLength = 462, barPposX = 640 - barLength / 2, barPosY = 620;
-	gauge = barLength - ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
+	gauge = ((barLength / bossStatus.maxHitPoint) * bossStatus.hitPoint);
 
-	if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 3) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle3, true, false); }
-	else if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 5) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle2, true, false); }
-	else { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, barLength - gauge, 29, HPgaugeHandle, true, false); }
+	DrawBox(barPposX + 6, barPosY + 8, ((barLength / bossStatus.maxHitPoint) * (bossStatus.redHitPoint + bossStatus.hitPoint)) + barPposX + 6, 29 + barPosY + 8, GetColor(150, 150, 150), true);
+	if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 3) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, gauge, 29, HPgaugeHandle3, true, false); }
+	else if (bossStatus.hitPoint < (bossStatus.maxHitPoint / 10) * 5) { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, gauge, 29, HPgaugeHandle2, true, false); }
+	else { DrawRectGraph(barPposX + 6, barPosY + 8, 0, 0, gauge, 29, HPgaugeHandle, true, false); }
 
 	DrawGraph(barPposX, barPosY, HPgaugeHandleWakuB, true);
 	DrawGraph(bossNamePosX, 628, bossNameStrHandle, true);

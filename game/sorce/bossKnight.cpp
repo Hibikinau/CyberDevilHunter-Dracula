@@ -19,6 +19,7 @@ bool BossKnight::Initialize()
 	stanTime = 200;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	_statusInf.stanPoint = 0;
+	_statusInf.redHitPoint = 0;
 	actionFlag = false;
 	posFlag = false;
 	STABFlag = false;
@@ -349,6 +350,10 @@ bool	BossKnight::Process()
 	{
 		isHit = false;
 	}
+
+	if (_statusInf.redHitPointDelayTime > 0) { _statusInf.redHitPointDelayTime--; }
+	else { _statusInf.redHitPoint > 0 ? _statusInf.redHitPoint -= _statusInf.maxHitPoint / 600.f : _statusInf.redHitPoint = 0; }
+
 	return true;
 }
 
@@ -623,7 +628,10 @@ void BossKnight::Move(float speed, float radian)
 bool BossKnight::HPmath(float Num, float Stan)
 {
 	_statusInf.hitPoint += Num;
+	if (_statusInf.redHitPoint <= 0) { _statusInf.redHitPointDelayTime = 100; }
+	_statusInf.redHitPoint += std::abs(Num);
 	_statusInf.stanPoint += Stan;
+
 	if (Num <= -200)
 	{
 		status = STATUS::DAMAGE;
