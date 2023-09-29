@@ -218,7 +218,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 1.5f * awakeSpd;
-		animChange(BOSS2_ATTACK1, &_modelInf, false, true, true);
+		animChange(BOSS2_ATTACK_1, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, -0.f), VGet(50.f, 0.f, 0.f), 40.f, 28.f, _modelInf.totalTime * awakeSpd - 28.f, animSpd, true, 20.f * awakeDmg, 0, 41, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -238,7 +238,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 2.0f * awakeSpd;
-		animChange(BOSS2_ATTACK2, &_modelInf, false, true, true);
+		animChange(BOSS2_ATTACK_2, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 75.f, _modelInf.totalTime * awakeSpd - 75.f, animSpd, true, 20.f * awakeDmg, 0, 18, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -258,7 +258,7 @@ bool	BossLion::Process()
 			break;
 		}
 		animSpd = 2.0f * awakeSpd;
-		animChange(BOSS2_ATTACK3, &_modelInf, false, true, true);
+		animChange(BOSS2_ATTACK_3, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 75.f, _modelInf.totalTime * awakeSpd - 75.f, animSpd, true, 20.f * awakeDmg, 0, 41, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;

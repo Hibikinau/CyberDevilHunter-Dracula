@@ -210,7 +210,7 @@ bool	BossKnight::Process()
 			break;
 		}
 		animSpd = .7f * awakeSpd;
-		animChange(BOSS1_nagiharai, &_modelInf, false, true, true);
+		animChange(BOSS1_MOWING, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 50.f, 10.f + 18.f, _modelInf.totalTime - 10.f, animSpd, true, 20.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
 		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -274,7 +274,7 @@ bool	BossKnight::Process()
 		}
 		if (attackStep == 0) { animSpd = 0.18f * awakeSpd; }
 		else { animSpd = 0.7f * awakeSpd; }
-		animChange(BOSS1_THRUST1 + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS1_THRUST_1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 3)
 		{
 			makeAttackCap(VGet(-20.f, 80.f, 0.f), VGet(-20.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime, animSpd, true, 30.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
@@ -295,7 +295,7 @@ bool	BossKnight::Process()
 		if (actionFlag == true) { break; }
 
 		animSpd = 0.7f * awakeSpd;
-		animChange(BOSS1_kesa1 + attackStep - 1, &_modelInf, false, false, true);
+		animChange(BOSS1_CUT_1 + attackStep - 1, &_modelInf, false, false, true);
 		if (attackStep == 2)
 		{
 			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime, animSpd, true, 20.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
@@ -631,7 +631,6 @@ bool BossKnight::HPmath(float Num, float Stan)
 	if (_statusInf.redHitPoint <= 0) { _statusInf.redHitPointDelayTime = 100; }
 	_statusInf.redHitPoint += std::abs(Num);
 	_statusInf.stanPoint += Stan;
-
 	if (Num <= -200)
 	{
 		status = STATUS::DAMAGE;

@@ -87,7 +87,7 @@ bool	LastBoss::Process()
 		if (!actionFlag)
 		{
 			animSpd = 1.0;
-			animChange(PL_hirumi, &_modelInf, true, true, false);
+			animChange(PL_STAGGER, &_modelInf, true, true, false);
 			actionFlag = true;
 		}
 		if (stanTime == 0)
@@ -131,7 +131,7 @@ bool	LastBoss::Process()
 	case STATUS::NONE:break;
 	case STATUS::WAIT:
 		animSpd = .5f;
-		animChange(BOSS_IDLE1, &_modelInf, true, true, false);
+		animChange(BOSS_IDLE_1, &_modelInf, true, true, false);
 		if (time == 300)
 		{
 			PlaySoundMem(soundHandle[voiceStartNum + rand() % 8], DX_PLAYTYPE_BACK);
@@ -275,7 +275,7 @@ bool	LastBoss::Process()
 			break;
 		}
 		animSpd = 2.0f * awakeSpd;
-		animChange(BOSS_JUMPATTACK, &_modelInf, false, true, true);
+		animChange(BOSS_JUMP_ATTACK, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 100.f), 20.f, 10.f, _modelInf.totalTime * awakeSpd - 10.f, animSpd, true, 20.f * awakeDmg, 0, rWeponParentFrame, VGet(0, 0, 0), 1);
 		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
 		actionFlag = true;
@@ -337,7 +337,7 @@ bool	LastBoss::Process()
 		}
 		else if (attackStep == 2) { animSpd = 3.5f * awakeSpd; }
 		else { animSpd = 1.2f * awakeSpd; }
-		animChange(BOSS_ARTS_TSUKI_1 + attackStep, &_modelInf, false, false, true);
+		animChange(BOSS_ARTS_THRUST_1 + attackStep, &_modelInf, false, false, true);
 		if (attackStep == 2 || attackStep == 3)
 		{
 			_modelInf.dir.y = playerDir;
