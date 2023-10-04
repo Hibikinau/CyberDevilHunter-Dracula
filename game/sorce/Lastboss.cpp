@@ -68,7 +68,7 @@ bool	LastBoss::Process()
 	{
 		animSpd = 0.7f;
 		animChange(PL_DEATH, &_modelInf, false, true, false);
-		if (isAnimEnd) { isDead = 2; }
+		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
 

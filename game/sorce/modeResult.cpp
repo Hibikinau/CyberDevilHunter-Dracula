@@ -33,9 +33,9 @@ bool	modeResult::Render()
 	SetFontSize(120);
 	DrawString(640 - 240, 20, "討伐完了", GetColor(255, 255, 255));
 	SetFontSize(40);
-	DrawString(640 - 200, 160, "報酬", GetColor(255, 255, 255));
-	DrawString(640 - 200 + 120, 160, "20,000pt", GetColor(255, 255, 255));
-	DrawString(300, 250, "新たなアーツが解放可能になりました\n\n「アーツ名」\n\n新たなアビリティが解放可能になりました\n\n「アビリティ名」\n\n\n→メインメニューに戻る", GetColor(255, 255, 255));
+	DrawString(640 - 200, 200, "報酬", GetColor(255, 255, 255));
+	DrawString(640 - 200 + 120, 200, "20,000pt", GetColor(255, 255, 255));
+	DrawString(640 - 220, 650, "→メインメニューに戻る", GetColor(255, 255, 255));
 	return true;
 }
 

@@ -53,7 +53,7 @@ bool	BossLion::Process()
 	{
 		animSpd = 0.7f;
 		animChange(BOSS2_DEAD, &_modelInf, false, true, false);
-		if (isAnimEnd) { isDead = 2; }
+		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
 
