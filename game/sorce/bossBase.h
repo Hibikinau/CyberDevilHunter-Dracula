@@ -8,6 +8,7 @@ namespace {
 
 class BossBase : public CharBase 
 {
+public:
 	enum class TYPE
 	{
 		KNIGHT,
@@ -32,7 +33,7 @@ class BossBase : public CharBase
 	STATUS status;
 
 	bool loadJson(TYPE _type);
-	RANGE RangeJ() {
+	int RangeJ() {
 		auto Pvector = VSub(plMI->pos, _modelInf.pos);
 		auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 		auto playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
@@ -48,8 +49,12 @@ class BossBase : public CharBase
 		{
 			range = RANGE::LongRange;
 		}
-		return range;
+		return static_cast<int>(range);
 	};
 	STATUS UtilityJudge() {}
+	float PlayerDir() {
+		auto Pvector = VSub(plMI->pos, _modelInf.pos);
+		auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
+		return playerDir;}
 	modelInf* plMI;
 };
