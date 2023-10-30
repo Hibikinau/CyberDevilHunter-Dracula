@@ -26,35 +26,57 @@ public:
 	};
 	RANGE range;
 
-	enum class STATUS 
+	enum class K_STATUS 
 	{
-		NONE
+		NONE,
+		WAIT,
+		DAMAGE,
+		STAN,
+		DEAD,
+		RUN,
+		FSTEP,
+		BSTEP,
+		RSTEP,
+		LSTEP,
+		SRASH,
+		SLAM,
+		STAB,
+		ROBES,
+		JUMPACT,
+		ONESLASH,
 	};
-	STATUS status;
+	
 
 	bool loadJson(TYPE _type);
-	int RangeJ() {
-		auto Pvector = VSub(plMI->pos, _modelInf.pos);
+	float RangeJ() {
+		for (auto i = charBox->begin(); i != charBox->end(); i++)
+		{
+			if (i->second->getType() == 1)
+			{
+				plMI = i->second->getInf();
+			}
+		}
+		auto Pvector = VSub(plMI->pos, this->_modelInf.pos);
 		auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 		auto playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 		if (playerRange < 300)
 		{
-			range = RANGE::CrossRange;
+			this->range = RANGE::CrossRange;
 		}
 		if (300 <= playerRange && playerRange <= 2000)
 		{
-			range = RANGE::MidRange;
+			this->range = RANGE::MidRange;
 		}
 		if (playerRange > 2000)
 		{
-			range = RANGE::LongRange;
+			this->range = RANGE::LongRange;
 		}
-		return static_cast<int>(range);
+		return playerDir;
 	};
-	STATUS UtilityJudge() {}
-	float PlayerDir() {
+	//STATUS UtilityJudge() {}
+	/*float PlayerDir() {
 		auto Pvector = VSub(plMI->pos, _modelInf.pos);
 		auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-		return playerDir;}
+		return playerDir;}*/
 	modelInf* plMI;
 };

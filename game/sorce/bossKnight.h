@@ -7,13 +7,14 @@
  *********************************************************************/
 #pragma once
 #include"charBase.h"
+#include"bossBase.h"
 #include"player.h"
 
  /**
 	* @class BossKnight
 	* @brief ボス「騎士」クラス
 	*/
-class BossKnight : public CharBase
+class BossKnight : public BossBase
 {
 public:
 	/**
@@ -60,7 +61,7 @@ public:
 	 * @brief プレイヤーとの距離判定
 	 * @return true
 	 */
-	bool RangeJ();
+	//bool RangeJ();
 	/**
 	 * @brief キャラクターの移動
 	 * @param speed 移動速度
@@ -72,36 +73,19 @@ public:
 	/**
 	 * @brief キャラクターの現在の状態
 	 */
-	enum class STATUS {
-		NONE,
-		WAIT,
-		DAMAGE,
-		STAN,
-		DEAD,
-		RUN,
-		FSTEP,
-		BSTEP,
-		RSTEP,
-		LSTEP,
-		SRASH,
-		SLAM,
-		STAB,
-		ROBES,
-		JUMPACT,
-		ONESLASH,
-	};
-	STATUS status;
+	
+	K_STATUS status;
 
 	/**
 	 * @brief プレイヤーとの距離状態
 	 */
-	enum class RANGE {
+	/*enum class RANGE {
 		NONE,
 		CrossRange,
 		MidRange,
 		LongRange
 	};
-	RANGE range;
+	RANGE range;*/
 
 protected:
 	float animSpd,       //!アニメーションのスピード
