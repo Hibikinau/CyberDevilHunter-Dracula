@@ -9,7 +9,6 @@ namespace {
 class BossBase : public CharBase 
 {
 public:
-	
 	enum class TYPE
 	{
 		KNIGHT,
@@ -53,6 +52,8 @@ public:
 		ONESLASH,
 	};
 	
+	BossBase():CharBase() {};
+	~BossBase() {};
 
 	bool loadJson(TYPE _type);
 	/**
@@ -60,6 +61,13 @@ public:
 	 * @return true
 	 */
 	float RangeJ();
+	/**
+ * @brief キャラクターの移動
+ * @param speed 移動速度
+ * @param radian 移動方向
+ * @return true
+ */
+	void Move(float speed, float radian);
 	//STATUS UtilityJudge() {}
 protected:
 	float animSpd,     //!アニメーションのスピード
@@ -71,6 +79,7 @@ protected:
 	float playerDir,       //!プレイヤーの方向
 		playerRange,       //!プレイヤーとの距離
 		playerDistance;      //!プレイヤーとの距離その２
+	VECTOR Pvector;               //!プレイヤーとの距離の数
 	bool awake;       //!覚醒したかどうか
 	float awakeSpd,   //!覚醒時スピード
 		awakeDmg,     //!覚醒時追加ダメージ

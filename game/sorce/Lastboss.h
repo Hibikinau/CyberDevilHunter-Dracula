@@ -20,7 +20,7 @@ public:
 	/**
 	 * @brief コンストラクタ
 	 */
-	LastBoss() {};
+	LastBoss() : BossBase() {};
 	/**
 	 * @brief デストラクタ
 	 */
@@ -57,14 +57,7 @@ public:
 	* @return true
 	*/
 	bool UtilityJudge();
-	/**
-	 * @brief キャラクターの移動
-	 * @param speed 移動速度
-	 * @param radian 移動方向
-	 * @return true
-	 */
-	void Move(float speed, float radian);
-
+	
 	/**
 	 * @brief キャラクターの現在の状態
 	 */
@@ -97,7 +90,6 @@ public:
 	STATUS	oldEstate = STATUS::NORMAL;//!1つ前のキャラの行動状態インスタンス
 	STATUS	lastAttackState;//!キャラの最終攻撃インスタンス
 
-	
 protected:
 	bool actionFlag;  //!行動してるかどうか
 	bool hitFlag;

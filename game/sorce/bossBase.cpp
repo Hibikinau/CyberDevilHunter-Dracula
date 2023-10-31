@@ -38,9 +38,9 @@ float BossBase::RangeJ(){
 			plMI = i->second->getInf();
 		}
 	}
-	auto Pvector = VSub(plMI->pos, this->_modelInf.pos);
-	auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-	auto playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
+	Pvector = VSub(plMI->pos, this->_modelInf.pos);
+	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
+	playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 	if (playerRange < 300)
 	{
 		this->range = RANGE::CrossRange;
@@ -54,4 +54,18 @@ float BossBase::RangeJ(){
 		this->range = RANGE::LongRange;
 	}
 	return playerDir;
+};
+
+/**
+ * @brief キャラクターの移動
+ * @param speed 移動速度
+ * @param radian 移動方向
+ * @return true
+ */
+void BossBase::Move(float speed, float radian) 
+{
+	float Speed = speed;
+	float Radian = (this->_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
+	this->_modelInf.pos.x -= sin(Radian) * Speed;
+	this->_modelInf.pos.z -= cos(Radian) * Speed;
 };

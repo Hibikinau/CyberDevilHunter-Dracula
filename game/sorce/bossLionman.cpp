@@ -105,7 +105,7 @@ bool	BossLion::Process()
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
 	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
-	auto Pvector = VSub(plMI->pos, _modelInf.pos);
+	Pvector = VSub(plMI->pos, _modelInf.pos);
 	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	playerDistance = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
@@ -682,18 +682,6 @@ bool BossLion::UtilityJudge()
 
 	return true;
 }
-
-
-
-void BossLion::Move(float speed, float radian)
-{
-	float Speed = speed;
-	float Radian = (_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
-
-	_modelInf.pos.x -= sin(Radian) * Speed;
-	_modelInf.pos.z -= cos(Radian) * Speed;
-}
-
 
 bool BossLion::HPmath(float Num, float Stan)
 {
