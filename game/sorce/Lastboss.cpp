@@ -119,7 +119,7 @@ bool	LastBoss::Process()
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
 
 	//boss‚Æ‹——£ˆê’èˆÈ“às“®•ÏX
-	auto Pvector = VSub(plMI->pos, _modelInf.pos);
+	Pvector = VSub(plMI->pos, _modelInf.pos);
 	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	playerDistance = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
 
@@ -386,6 +386,7 @@ bool	LastBoss::Render(float timeSpeed)
 bool LastBoss::UtilityJudge()
 {
 	attackStep = 0;
+	playerDir = RangeJ();
 	_modelInf.dir.y = playerDir;
 	int Rand = GetRand(100);
 	if (!awake) {
@@ -517,40 +518,8 @@ bool LastBoss::UtilityJudge()
 			break;
 		}
 	}
-
 	return true;
 }
-
-bool LastBoss::RangeJ()
-{
-	auto Pvector = VSub(plMI->pos, _modelInf.pos);
-	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-	playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	if (playerRange < 300)
-	{
-		range = RANGE::CrossRange;
-	}
-	if (300 <= playerRange && playerRange <= 2000)
-	{
-		range = RANGE::MidRange;
-	}
-	if (playerRange > 2000)
-	{
-		range = RANGE::LongRange;
-	}
-	return true;
-}
-
-
-void LastBoss::Move(float speed, float radian)
-{
-	float Speed = speed;
-	float Radian = (_modelInf.dir.y + radian) * DX_PI_F / 180.0f;
-
-	_modelInf.pos.x -= sin(Radian) * Speed;
-	_modelInf.pos.z -= cos(Radian) * Speed;
-}
-
 
 bool LastBoss::HPmath(float Num, float Stan)
 {

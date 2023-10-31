@@ -57,13 +57,6 @@ public:
 	* @return true
 	*/
 	bool UtilityJudge();
-	/**
-	 * @brief キャラクターの移動
-	 * @param speed 移動速度
-	 * @param radian 移動方向
-	 * @return true
-	 */
-	void Move(float speed, float radian);
 
 	/**
 	 * @brief キャラクターの現在の状態
