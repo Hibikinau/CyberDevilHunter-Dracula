@@ -9,6 +9,7 @@ namespace {
 class BossBase : public CharBase 
 {
 public:
+	
 	enum class TYPE
 	{
 		KNIGHT,
@@ -17,6 +18,9 @@ public:
 	};
 	TYPE type;
 
+	/**
+	 * @brief プレイヤーとの距離状態
+	 */
 	enum class RANGE
 	{
 		NONE,
@@ -26,6 +30,9 @@ public:
 	};
 	RANGE range;
 
+	/**
+	 * @brief キャラクターの現在の状態
+	 */
 	enum class K_STATUS 
 	{
 		NONE,
@@ -48,35 +55,28 @@ public:
 	
 
 	bool loadJson(TYPE _type);
-	float RangeJ() {
-		for (auto i = charBox->begin(); i != charBox->end(); i++)
-		{
-			if (i->second->getType() == 1)
-			{
-				plMI = i->second->getInf();
-			}
-		}
-		auto Pvector = VSub(plMI->pos, this->_modelInf.pos);
-		auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-		auto playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-		if (playerRange < 300)
-		{
-			this->range = RANGE::CrossRange;
-		}
-		if (300 <= playerRange && playerRange <= 2000)
-		{
-			this->range = RANGE::MidRange;
-		}
-		if (playerRange > 2000)
-		{
-			this->range = RANGE::LongRange;
-		}
-		return playerDir;
-	};
+	/**
+	 * @brief プレイヤーとの距離判定
+	 * @return true
+	 */
+	float RangeJ();
 	//STATUS UtilityJudge() {}
-	/*float PlayerDir() {
-		auto Pvector = VSub(plMI->pos, _modelInf.pos);
-		auto playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-		return playerDir;}*/
-	modelInf* plMI;
+protected:
+	float animSpd,     //!アニメーションのスピード
+		stanTime;   //!スタン時間
+	int  time,        //!待機時間
+		attackStep;   //!行動番号
+	int  swingSE,     //!斬撃SEハンドル
+		newSomenHandle; //エフェクトハンドル
+	float playerDir,       //!プレイヤーの方向
+		playerRange,       //!プレイヤーとの距離
+		playerDistance;      //!プレイヤーとの距離その２
+	bool awake;       //!覚醒したかどうか
+	float awakeSpd,   //!覚醒時スピード
+		awakeDmg,     //!覚醒時追加ダメージ
+		awakeMove,    //!覚醒時移動量
+		awakeTime,       //!覚醒時待機時間
+		awakeAddDistance;      //!覚醒時攻撃モーション移動量追加
+	modelInf* plMI; //!プレイヤー情報のインスタンス
+	bool  isAnimEnd;       //アニメーション終わったかどうか
 };

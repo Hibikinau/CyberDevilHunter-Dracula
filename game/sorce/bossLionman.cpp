@@ -416,6 +416,7 @@ bool	BossLion::Render(float timeSpeed)
 bool BossLion::UtilityJudge()
 {
 	attackStep = 0;
+	playerDir = RangeJ();
 	_modelInf.dir.y = playerDir;
 	int Rand = GetRand(100);
 	if (!awake)
@@ -503,6 +504,7 @@ bool BossLion::UtilityJudge()
 			if (range == RANGE::LongRange || range == RANGE::MidRange)
 			{
 				status = STATUS::DIVE;
+				break;
 			}
 			if (range == RANGE::CrossRange)
 			{
@@ -514,6 +516,7 @@ bool BossLion::UtilityJudge()
 				if (Rand <= 50) { status = STATUS::TACKLE; }
 				break;
 			}
+			break;
 		case STATUS::HANIATTACK:
 			if (Rand > 50) { status = STATUS::SLAM; }
 			if (Rand <= 50) { status = STATUS::TACKLE; }
@@ -680,25 +683,6 @@ bool BossLion::UtilityJudge()
 	return true;
 }
 
-bool BossLion::RangeJ()
-{
-	auto Pvector = VSub(plMI->pos, _modelInf.pos);
-	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
-	playerRange = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-	if (playerRange < 300)
-	{
-		range = RANGE::CrossRange;
-	}
-	if (300 <= playerRange && playerRange <= 2000)
-	{
-		range = RANGE::MidRange;
-	}
-	if (playerRange > 2000)
-	{
-		range = RANGE::LongRange;
-	}
-	return true;
-}
 
 
 void BossLion::Move(float speed, float radian)

@@ -57,11 +57,7 @@ public:
 	 * @return true
 	 */
 	bool UtilityJudge();
-	/**
-	 * @brief プレイヤーとの距離判定
-	 * @return true
-	 */
-	//bool RangeJ();
+	
 	/**
 	 * @brief キャラクターの移動
 	 * @param speed 移動速度
@@ -76,36 +72,11 @@ public:
 	
 	K_STATUS status;
 
-	/**
-	 * @brief プレイヤーとの距離状態
-	 */
-	/*enum class RANGE {
-		NONE,
-		CrossRange,
-		MidRange,
-		LongRange
-	};
-	RANGE range;*/
-
+	
 protected:
-	float animSpd,       //!アニメーションのスピード
-		stanTime;        //!スタン時間
-	int   time,          //!待機時間
-		attackStep;      //!行動番号
-	bool  isAnimEnd;       //アニメーション終わったかどうか
-	modelInf* plMI;        //!プレイヤー情報のインスタンス
 	bool  actionFlag;      //!行動してるかどうか
 	bool  jumpActFlag;     //!ジャンプ行動してるか
 	bool  posFlag;
 	bool  STABFlag;        //!突進攻撃してるかどうか
-	int   swingSE,         //!斬撃SEハンドル
-		newSomenHandle;  //エフェクトハンドル
-	float playerDir,       //!プレイヤーの方向
-		playerRange,       //!プレイヤーとの距離
-		playerDistance;    //!プレイヤーとの距離その２
-	bool  awake;           //!覚醒したかどうか
-	float awakeSpd,        //!覚醒時スピード
-		awakeDmg,        //!覚醒時追加ダメージ
-		awakeMove,       //!覚醒時移動量
-		awakeWaitTime;     //!覚醒時待機時間
+    float	 awakeWaitTime;     //!覚醒時待機時間
 };
