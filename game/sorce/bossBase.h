@@ -52,7 +52,7 @@ public:
 		ONESLASH,
 	};
 	
-	BossBase():CharBase() {};
+	BossBase() :CharBase() {};
 	~BossBase() {};
 
 	bool loadJson(TYPE _type);
@@ -68,6 +68,7 @@ public:
  * @return true
  */
 	void Move(float speed, float radian);
+
 	//STATUS UtilityJudge() {}
 protected:
 	float animSpd,     //!アニメーションのスピード
