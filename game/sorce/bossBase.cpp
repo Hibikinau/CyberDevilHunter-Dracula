@@ -69,3 +69,17 @@ void BossBase::Move(float speed, float radian)
 	this->_modelInf.pos.x -= sin(Radian) * Speed;
 	this->_modelInf.pos.z -= cos(Radian) * Speed;
 };
+
+
+bool BossBase::HPmath(float Num, float Stan)
+{
+	this->_statusInf.hitPoint += Num;
+	if (this->_statusInf.redHitPoint <= 0) {this-> _statusInf.redHitPointDelayTime = 100; }
+	this->_statusInf.redHitPoint += std::abs(Num);
+	this->_statusInf.stanPoint += Stan;
+	
+	int a = PlayEffekseer3DEffect(_valData->efcHandle);
+	SetPosPlayingEffekseer3DEffect(a, this->_modelInf.pos.x, this->_modelInf.pos.y, this->_modelInf.pos.z);
+
+	return true;
+}

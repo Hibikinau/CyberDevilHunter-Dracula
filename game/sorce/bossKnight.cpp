@@ -596,10 +596,7 @@ bool BossKnight::UtilityJudge()
 
 bool BossKnight::HPmath(float Num, float Stan)
 {
-	_statusInf.hitPoint += Num;
-	if (_statusInf.redHitPoint <= 0) { _statusInf.redHitPointDelayTime = 100; }
-	_statusInf.redHitPoint += std::abs(Num);
-	_statusInf.stanPoint += Stan;
+	BossBase::HPmath(Num,Stan);
 	if (Num <= -200)
 	{
 		status = K_STATUS::DAMAGE;
@@ -614,9 +611,6 @@ bool BossKnight::HPmath(float Num, float Stan)
 		status = K_STATUS::STAN;
 		_statusInf.stanPoint = 150;
 	}
-	int a = PlayEffekseer3DEffect(_valData->efcHandle);
-	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
-
 	if (_statusInf.hitPoint <= 0)
 	{
 		status = K_STATUS::DEAD;

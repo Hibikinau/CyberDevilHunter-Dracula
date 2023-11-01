@@ -685,10 +685,7 @@ bool BossLion::UtilityJudge()
 
 bool BossLion::HPmath(float Num, float Stan)
 {
-	_statusInf.hitPoint += Num;
-	if (_statusInf.redHitPoint <= 0) { _statusInf.redHitPointDelayTime = 100; }
-	_statusInf.redHitPoint += std::abs(Num);
-	_statusInf.stanPoint += Stan;
+	BossBase::HPmath(Num, Stan);
 	if (Num <= -200)
 	{
 		status = STATUS::DAMAGE;
@@ -708,9 +705,6 @@ bool BossLion::HPmath(float Num, float Stan)
 	{
 		status = STATUS::DEAD;
 	}
-
-	int a = PlayEffekseer3DEffect(_valData->efcHandle);
-	SetPosPlayingEffekseer3DEffect(a, _modelInf.pos.x, _modelInf.pos.y, _modelInf.pos.z);
 
 	return true;
 }

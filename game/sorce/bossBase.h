@@ -69,6 +69,7 @@ public:
  */
 	void Move(float speed, float radian);
 
+	bool HPmath(float Num, float Stan) override;
 	//STATUS UtilityJudge() {}
 protected:
 	float animSpd,     //!アニメーションのスピード
