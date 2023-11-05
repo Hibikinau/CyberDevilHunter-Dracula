@@ -81,6 +81,9 @@
     <ClCompile Include="game\sorce\bossBase.cpp">
       <Filter>ソース ファイル\char</Filter>
     </ClCompile>
+    <ClCompile Include="game\sorce\ComponentBase.cpp">
+      <Filter>ソース ファイル\char</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game\sorce\gameMain.h">
@@ -141,6 +144,9 @@
       <Filter>ヘッダー ファイル\mode</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\bossBase.h">
+      <Filter>ヘッダー ファイル\char</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\ComponentBase.h">
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
   </ItemGroup>
