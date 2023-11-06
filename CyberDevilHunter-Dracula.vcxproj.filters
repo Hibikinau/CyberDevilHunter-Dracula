@@ -25,6 +25,12 @@
     <Filter Include="ヘッダー ファイル\mode">
       <UniqueIdentifier>{48d1ada7-94c0-4b4a-a0cf-e135f4fad1e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\仮">
+      <UniqueIdentifier>{c67025c2-881c-4e34-968f-7553012d51b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\仮">
+      <UniqueIdentifier>{801e4a7b-9e84-426f-afd5-381689ba4bc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game\sorce\gameMain.cpp">
@@ -82,7 +88,10 @@
       <Filter>ソース ファイル\char</Filter>
     </ClCompile>
     <ClCompile Include="game\sorce\ComponentBase.cpp">
-      <Filter>ソース ファイル\char</Filter>
+      <Filter>ソース ファイル\仮</Filter>
+    </ClCompile>
+    <ClCompile Include="game\sorce\ComponentAI.cpp">
+      <Filter>ソース ファイル\仮</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +156,10 @@
       <Filter>ヘッダー ファイル\char</Filter>
     </ClInclude>
     <ClInclude Include="game\sorce\ComponentBase.h">
-      <Filter>ヘッダー ファイル\char</Filter>
+      <Filter>ヘッダー ファイル\仮</Filter>
+    </ClInclude>
+    <ClInclude Include="game\sorce\ComponentAI.h">
+      <Filter>ヘッダー ファイル\仮</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
