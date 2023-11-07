@@ -7,31 +7,23 @@
 ********************************************************************/
 #include"Lastboss.h"
 #include <math.h>
-#define runSpd 40.f
-
-//武器追従フレーム番号設定
-#define rWeponParentFrame 190
-#define lWeponParentFrame 165
 using namespace model;
+using namespace LASTBOSS;
 
 bool LastBoss::Initialize()
 {
+	BossBase::Initialize();
 	//モデルの読み込み
 	modelImport("game/res/Enemy03/Enemy03.mv1", 1.8f, &_modelInf, RS);
 	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
 	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
 	status = STATUS::WAIT;
-	time = 200;
-	stanTime = 200;
 	hitTime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
-	_statusInf.redHitPoint = 0;
-	_statusInf.stanPoint = 0;
 	hitFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	actionFlag = false;
-	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
 	ChangeVolumeSoundMem(120, swingSE);
 
@@ -42,13 +34,6 @@ bool LastBoss::Initialize()
 		std::string insName = "game/res/voice/boss_voice/" + voiceNameList;
 		soundHandle.emplace_back(LoadSoundMem(insName.c_str()));
 	}
-
-	awake = false;
-	awakeDmg = 1;
-	awakeMove = 1;
-	awakeSpd = 1;
-	awakeTime = 0;
-	awakeAddDistance = 0;
 	return true;
 }
 
@@ -61,6 +46,7 @@ bool	LastBoss::Terminate()
 
 bool	LastBoss::Process()
 {
+	BossBase::Process();
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 
@@ -100,18 +86,6 @@ bool	LastBoss::Process()
 		}
 		else { stanTime--; }
 		return true;
-	}
-
-	for (auto i = charBox->begin(); i != charBox->end(); i++)
-	{
-		if (i->second->getType() == 1)
-		{
-			plMI = i->second->getInf();
-		}
-	}
-	if (CheckHitKey(KEY_INPUT_K))
-	{
-		_statusInf.hitPoint = 1;
 	}
 
 	collCap.r = 80.f;

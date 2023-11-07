@@ -9,6 +9,12 @@
 #include"charBase.h"
 #include"bossBase.h"
 #include"player.h"
+namespace LASTBOSS {
+	constexpr float runSpd = 40.0f;
+	//•Ší’Ç]ƒtƒŒ[ƒ€”Ô†İ’è
+	constexpr auto rWeponParentFrame = 190;
+	constexpr auto lWeponParentFrame = 165;
+}
 
  /**
   * @class LastBoss

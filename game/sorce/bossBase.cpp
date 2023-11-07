@@ -9,6 +9,8 @@
 
 bool BossBase::Initialize()
 {
+	time = 200;
+	stanTime = 200;
 	_statusInf.stanPoint = 0;
 	_statusInf.redHitPoint = 0;
 	g = 3.f;
@@ -20,18 +22,30 @@ bool BossBase::Initialize()
 	awakeAddDistance = 0;
 	return true;
 }
+
 bool BossBase::Terminate()
 {
 	return false;
 }
+
 bool BossBase::Process()
 {
-	return false;
+	for (auto i = charBox->begin(); i != charBox->end(); i++)
+	{
+		if (i->second->getType() == 1)
+		{
+			plMI = i->second->getInf();
+			dodgeTime = i->second->dodgeTime;
+		}
+	}
+	return true;
 }
+
 bool BossBase::Render(float timeSpeed)
 {
 	return false;
 }
+
  /**
    * @brief プレイヤーとの距離判定
    * @return PlayerDir(プレイヤーの方向)
@@ -94,7 +108,7 @@ bool BossBase::HPmath(float Num, float Stan)
 
 	return true;
 }
-
+/*
 void BossBase::AddComponent(std::unique_ptr<ComponentBase> component, int id)
 {
 	component->SetParent(this);
@@ -103,3 +117,4 @@ void BossBase::AddComponent(std::unique_ptr<ComponentBase> component, int id)
 		_components[{typeid(*component), id}] = (std::move(component));
 	}
 }
+*/

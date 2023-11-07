@@ -7,33 +7,22 @@
  *********************************************************************/
 #include"bossLionman.h"
 #include <math.h>
-#define runSpd 25.f
-
 using namespace model;
+using namespace BOSSLION;
 
 bool BossLion::Initialize()
 {
+	BossBase::Initialize();
 	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
-	time = 200;
-	stanTime = 200;
 	hitTime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
-	_statusInf.redHitPoint = 0;
-	_statusInf.stanPoint = 0;
 	hitFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	actionFlag = false;
-	g = 3.f;
 	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
 	ChangeVolumeSoundMem(120, swingSE);
-	awake = false;
-	awakeDmg = 1;
-	awakeMove = 1;
-	awakeSpd = 1;
-	awakeTime = 0;
-	awakeAddDistance = 0;
 	return true;
 }
 
@@ -46,6 +35,7 @@ bool	BossLion::Terminate()
 
 bool	BossLion::Process()
 {
+	BossBase::Process();
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 
@@ -87,18 +77,6 @@ bool	BossLion::Process()
 		return true;
 	}
 
-	for (auto i = charBox->begin(); i != charBox->end(); i++)
-	{
-		if (i->second->getType() == 1)
-		{
-			plMI = i->second->getInf();
-			dodgeTime = i->second->dodgeTime;
-		}
-	}
-	if (CheckHitKey(KEY_INPUT_K))
-	{
-		_statusInf.hitPoint = 1;
-	}
 
 	collCap.r = 80.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
@@ -705,6 +683,5 @@ bool BossLion::HPmath(float Num, float Stan)
 	{
 		status = STATUS::DEAD;
 	}
-
 	return true;
 }
