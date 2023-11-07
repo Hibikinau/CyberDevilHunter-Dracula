@@ -9,6 +9,9 @@
 #include"charBase.h"
 #include"bossBase.h"
 #include"player.h"
+namespace BOSSLION {
+	constexpr float runSpd =25.0f;
+}
 
  /**
   * @class BossLionman

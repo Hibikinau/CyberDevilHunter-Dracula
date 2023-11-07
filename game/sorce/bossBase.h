@@ -7,7 +7,7 @@
  *********************************************************************/
 #pragma once
 #include"charBase.h"
-#include"ComponentBase.h"
+//#include"ComponentBase.h"
 #include <map>
 #include <memory>
 #include <typeindex>
@@ -79,13 +79,15 @@ public:
 	 */
 	bool HPmath(float Num, float Stan) override;
 
+	
 	//同型コンポーネントを追加する際は異なるIDを設定する
-	virtual void AddComponent(std::unique_ptr<ComponentBase> component, int id = 0);
+	//virtual void AddComponent(std::unique_ptr<ComponentBase> component, int id = 0);
 
 	/**
 	 * \brief 指定のコンポーネントを取得する　例：GetComponent<MV1Component>()
 	 * \return コンポーネントのポインタを返す。所持していなければnullptrを返す。
 	 */
+	/*
 	template <typename C>
 	C* GetComponent(int id = 0) {
 		C* result = nullptr;
@@ -95,11 +97,12 @@ public:
 		}
 		return result;
 	}
-
+	*/
 	/**
 	 * \brief 指定のクラスか確認する　例：CheckType<Player>()、CheckType<Enemy>()
 	 * \return 指定のクラスであればtrueを返す
 	 */
+	/*
 	template <typename T>
 	bool CheckType()const {
 		if (typeid(T&) == typeid(*this)) {
@@ -107,7 +110,7 @@ public:
 		}
 		return false;
 	}
-
+	*/
 protected:
 	float animSpd,     //!アニメーションのスピード
 		stanTime;   //!スタン時間
@@ -127,5 +130,5 @@ protected:
 		awakeAddDistance;      //!覚醒時攻撃モーション移動量追加
 	modelInf* plMI; //!プレイヤー情報のインスタンス
 	bool  isAnimEnd;       //アニメーション終わったかどうか
-	std::map<std::pair<std::type_index, int>, std::unique_ptr<ComponentBase>> _components;
+	//std::map<std::pair<std::type_index, int>, std::unique_ptr<ComponentBase>> _components;
 };

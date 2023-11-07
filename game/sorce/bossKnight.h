@@ -9,6 +9,9 @@
 #include"charBase.h"
 #include"bossBase.h"
 #include"player.h"
+namespace BOSSKNIGHT {
+	constexpr float  runSpd = 20.0f;
+}
 
  /**
 	* @class BossKnight

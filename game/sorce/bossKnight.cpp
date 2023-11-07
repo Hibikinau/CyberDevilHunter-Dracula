@@ -7,31 +7,21 @@
  *********************************************************************/
 #include"bossKnight.h"
 #include <math.h>
-#define runSpd 20.f
-
 using namespace model;
+using namespace BOSSKNIGHT;
 
 bool BossKnight::Initialize()
 {
+	BossBase::Initialize();
 	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
 	status = K_STATUS::WAIT;
-	time = 200;
-	stanTime = 200;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
-	_statusInf.stanPoint = 0;
-	_statusInf.redHitPoint = 0;
 	actionFlag = false;
 	posFlag = false;
 	STABFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	g = 3.f;
 	soundHandle.emplace_back(LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3"));
-	awake = false;
-	awakeDmg = 1;
-	awakeMove = 1;
-	awakeSpd = 1;
-	awakeWaitTime = 0;
 	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
 	return true;
@@ -46,6 +36,7 @@ bool	BossKnight::Terminate()
 
 bool	BossKnight::Process()
 {
+	BossBase::Process();
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 
@@ -79,18 +70,6 @@ bool	BossKnight::Process()
 		return true;
 	}
 
-	for (auto i = charBox->begin(); i != charBox->end(); i++)
-	{
-		if (i->second->getType() == 1)
-		{
-			plMI = i->second->getInf();
-		}
-	}
-	if (CheckHitKey(KEY_INPUT_K))
-	{
-		_statusInf.hitPoint = 1;
-	}
-
 	collCap.r = 120.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
@@ -100,8 +79,6 @@ bool	BossKnight::Process()
 	Pvector = VSub(plMI->pos, _modelInf.pos);
 	playerDir = (std::atan2(-Pvector.x, -Pvector.z) * 180.f) / DX_PI_F;
 	playerDistance = sqrt(Pvector.x * Pvector.x + Pvector.y * Pvector.y + Pvector.z * Pvector.z);
-
-
 
 	int insAddNum = 0;
 	bool insFreeBool = false;
