@@ -1,23 +1,24 @@
+/*****************************************************************//**
+ * \file    bossBase.h
+ * \brief   ボスの基底クラス
+ *
+ * \author  松田　裕
+ * \date    November 2023
+ *********************************************************************/
 #pragma once
 #include"charBase.h"
 #include"ComponentBase.h"
-#include "picojson/picojson.h"
 #include <map>
 #include <memory>
 #include <typeindex>
 
-
+ /**
+	* @class BossKnight
+	* @brief ボスの基底クラス
+	*/
 class BossBase : public CharBase 
 {
 public:
-	enum class TYPE
-	{
-		KNIGHT,
-		LION,
-		LAST
-	};
-	TYPE type;
-
 	/**
 	 * @brief プレイヤーとの距離状態
 	 */
@@ -31,45 +32,51 @@ public:
 	RANGE range;
 
 	/**
-	 * @brief キャラクターの現在の状態
+	 * @brief コンストラクタ
 	 */
-	enum class K_STATUS 
-	{
-		NONE,
-		WAIT,
-		DAMAGE,
-		STAN,
-		DEAD,
-		RUN,
-		FSTEP,
-		BSTEP,
-		RSTEP,
-		LSTEP,
-		SRASH,
-		SLAM,
-		STAB,
-		ROBES,
-		JUMPACT,
-		ONESLASH,
-	};
-	
 	BossBase() :CharBase() {};
+	/**
+	 * @brief デストラクタ
+	 */
 	~BossBase() {};
-
-	
+	/**
+	 * @brief 初期化処理
+	 * @return true
+	 */
+	virtual bool Initialize();
+	/**
+	 * @brief 削除処理
+	 * @return true
+	 */
+	virtual bool Terminate();
+	/**
+	 * @brief 更新処理
+	 * @return true
+	 */
+	virtual bool Process();
+	/**
+	 * @brief 描画処理
+	 * @param 再生速度
+	 * @return true
+	 */
+	virtual bool Render(float timeSpeed);
 	/**
 	 * @brief プレイヤーとの距離判定
-	 * @return true
+	 * @return PlayerDir(プレイヤーの方向)
 	 */
 	float RangeJ();
 	/**
- * @brief キャラクターの移動
- * @param speed 移動速度
- * @param radian 移動方向
- * @return true
- */
+　 * @brief キャラクターの移動
+ 　* @param speed 移動速度
+ 　* @param radian 移動方向
+ 　* @return true
+ 　*/
 	void Move(float speed, float radian);
-
+	/**
+	 * @brief 体力計算処理
+	 * @param 数値
+	 * @return true
+	 */
 	bool HPmath(float Num, float Stan) override;
 
 	//同型コンポーネントを追加する際は異なるIDを設定する
@@ -98,12 +105,9 @@ public:
 		if (typeid(T&) == typeid(*this)) {
 			return true;
 		}
-
 		return false;
 	}
 
-
-	//STATUS UtilityJudge() {}
 protected:
 	float animSpd,     //!アニメーションのスピード
 		stanTime;   //!スタン時間

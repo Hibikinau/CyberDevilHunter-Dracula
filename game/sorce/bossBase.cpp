@@ -1,6 +1,41 @@
+/*****************************************************************//**
+ * \file    bossBase.cpp
+ * \brief   ボスの基底クラスの定義
+ *
+ * \author  松田　裕
+ * \date    November 2023
+ *********************************************************************/
 #include"bossBase.h"
 
-
+bool BossBase::Initialize()
+{
+	_statusInf.stanPoint = 0;
+	_statusInf.redHitPoint = 0;
+	g = 3.f;
+	awake = false;
+	awakeDmg = 1;
+	awakeMove = 1;
+	awakeSpd = 1;
+	awakeTime = 0;
+	awakeAddDistance = 0;
+	return true;
+}
+bool BossBase::Terminate()
+{
+	return false;
+}
+bool BossBase::Process()
+{
+	return false;
+}
+bool BossBase::Render(float timeSpeed)
+{
+	return false;
+}
+ /**
+   * @brief プレイヤーとの距離判定
+   * @return PlayerDir(プレイヤーの方向)
+   */
 float BossBase::RangeJ(){
 	for (auto i = charBox->begin(); i != charBox->end(); i++)
 	{
@@ -41,7 +76,12 @@ void BossBase::Move(float speed, float radian)
 	this->_modelInf.pos.z -= cos(Radian) * Speed;
 };
 
-
+/**
+ * @brief キャラクターの移動
+ * @param speed 移動速度
+ * @param radian 移動方向
+ * @return true
+ */
 bool BossBase::HPmath(float Num, float Stan)
 {
 	this->_statusInf.hitPoint += Num;

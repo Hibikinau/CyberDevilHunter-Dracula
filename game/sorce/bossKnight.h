@@ -61,7 +61,25 @@ public:
 	/**
 	 * @brief キャラクターの現在の状態
 	 */
-	
+	enum class K_STATUS
+	{
+		NONE,
+		WAIT,
+		DAMAGE,
+		STAN,
+		DEAD,
+		RUN,
+		FSTEP,
+		BSTEP,
+		RSTEP,
+		LSTEP,
+		SRASH,
+		SLAM,
+		STAB,
+		ROBES,
+		JUMPACT,
+		ONESLASH,
+	};
 	K_STATUS status;
 
 	
