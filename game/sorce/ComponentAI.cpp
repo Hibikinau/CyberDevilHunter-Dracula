@@ -19,4 +19,5 @@ void ComponentAI::Process()
 
 void ComponentAI::Render(float timeSpeed)
 {
+	
 }

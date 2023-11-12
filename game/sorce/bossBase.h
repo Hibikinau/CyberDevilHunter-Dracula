@@ -7,11 +7,14 @@
  *********************************************************************/
 #pragma once
 #include"charBase.h"
+#include"modeGame.h"
 //#include"ComponentBase.h"
 #include <map>
 #include <memory>
 #include <typeindex>
 
+
+class modeGame;
  /**
 	* @class BossKnight
 	* @brief ボスの基底クラス
@@ -79,6 +82,8 @@ public:
 	 */
 	bool HPmath(float Num, float Stan) override;
 
+	int Load3DSoundMem(const char* FileName, int ReverbNo = 0, float InitRadius = 256.0f);
+
 	
 	//同型コンポーネントを追加する際は異なるIDを設定する
 	//virtual void AddComponent(std::unique_ptr<ComponentBase> component, int id = 0);
@@ -129,6 +134,7 @@ protected:
 		awakeTime,       //!覚醒時待機時間
 		awakeAddDistance;      //!覚醒時攻撃モーション移動量追加
 	modelInf* plMI; //!プレイヤー情報のインスタンス
+	modeGame* _modeG;
 	bool  isAnimEnd;       //アニメーション終わったかどうか
 	//std::map<std::pair<std::type_index, int>, std::unique_ptr<ComponentBase>> _components;
 };

@@ -108,6 +108,19 @@ bool BossBase::HPmath(float Num, float Stan)
 
 	return true;
 }
+
+int BossBase::Load3DSoundMem(const char* FileName,int ReverbNo, float InitRadius)
+{
+	int tmpSoundHandle;
+
+	SetCreate3DSoundFlag(TRUE);
+	tmpSoundHandle = LoadSoundMem(FileName);
+	Set3DPresetReverbParamSoundMem(ReverbNo,tmpSoundHandle);
+	SetCreate3DSoundFlag(FALSE);
+	Set3DRadiusSoundMem(InitRadius, tmpSoundHandle);
+
+	return tmpSoundHandle;
+}
 /*
 void BossBase::AddComponent(std::unique_ptr<ComponentBase> component, int id)
 {
