@@ -14,9 +14,9 @@
 
 
  /**
-	* @class BossKnight
-	* @brief ボスの基底クラス
-	*/
+　* @class BossKnight
+　* @brief ボスの基底クラス
+　*/
 class BossBase : public CharBase 
 {
 public:
@@ -79,8 +79,14 @@ public:
 	 * @return true
 	 */
 	bool HPmath(float Num, float Stan) override;
-
-	int Load3DSoundMem(const char* FileName, int ReverbNo = 0, float InitRadius = 256.0f);
+	/**
+ 　　* @brief 3Dサウンドをメモリに読み込む
+ 　　* @param FileName サウンドのファイルパス
+　　 * @param InitRadius サウンドの聞こえる距離
+　　 * @param ReverbNo リバーブプリセット
+　　 * @return SoundHandle
+ 　　*/
+	int Load3DSoundMem(const char* FileName, float InitRadius = 256.0f, int ReverbNo = 0);
 
 	
 	//同型コンポーネントを追加する際は異なるIDを設定する

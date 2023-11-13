@@ -22,10 +22,6 @@ bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint
 	charPoint->allColl = &insMG->mAllColl;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insMG->charBox.emplace(nameA, std::move(charPoint));
-	if (charPoint->type == 2) {
-		charPoint->cameraPosP = &insMG->cameraPos;
-		charPoint->cameraForP = &insMG->cameraFor;
-	}
 
 	return true;
 }
@@ -208,6 +204,8 @@ bool	modeGame::Process()
 				endVoice = true; charBox[Char_PL]->battleEndVoice();
 				isLockon = false;
 			}
+			i->second->cameraPosP = cameraPos;
+			i->second->cameraForP = cameraFor;
 			debugWardBox.emplace_back("“G‚ÌƒXƒ^ƒ“’l = " + std::to_string(bossStatus.stanPoint));
 		}
 

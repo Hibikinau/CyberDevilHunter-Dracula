@@ -110,16 +110,24 @@ bool BossBase::HPmath(float Num, float Stan)
 	return true;
 }
 
-int BossBase::Load3DSoundMem(const char* FileName,int ReverbNo, float InitRadius)
+/**
+ * @brief 3Dサウンドをメモリに読み込む
+ * @param FileName サウンドのファイルパス
+ * @param InitRadius サウンドの聞こえる距離
+ * @param ReverbNo リバーブプリセット
+ * @return SoundHandle
+ */
+int BossBase::Load3DSoundMem(const char* FileName, float InitRadius, int ReverbNo)
 {
-	int tmpSoundHandle;
+	int tmpSoundHandle=0;
 
 	SetCreate3DSoundFlag(TRUE);
 	tmpSoundHandle = LoadSoundMem(FileName);
-	Set3DPresetReverbParamSoundMem(ReverbNo,tmpSoundHandle);
 	SetCreate3DSoundFlag(FALSE);
+	Set3DPositionSoundMem(VGet(0, 0, 0), tmpSoundHandle);
 	Set3DRadiusSoundMem(InitRadius, tmpSoundHandle);
-
+    Set3DPresetReverbParamSoundMem(ReverbNo, tmpSoundHandle);
+	
 	return tmpSoundHandle;
 }
 /*
