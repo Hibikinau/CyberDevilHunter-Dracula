@@ -229,6 +229,7 @@ public:
 
 	static VECTOR getDirVecP(float dir, int powar);
 
+
 	int type = 0//!キャラクタタイプ(player = 1, boss = 2)
 		, caRecastX = 0, caRecastY = 0, setRecastTime = 0, drawStopF = 0//!リキャスト設定
 		, isDead//!キャラが志望常態か(0.生きてる 1.死亡モーション中 2.インスタンス解放)
@@ -241,6 +242,8 @@ public:
 		, camDir//!ロックオンカメラ位置情報
 		, * _cameraDir//!カメラ位置情報
 		, animSpd;//!アニメーション
+	VECTOR cameraPosP;
+	VECTOR cameraForP;
 	std::string name//!自キャラの名前
 		, attackChar;//!攻撃してきたキャラの名前
 	modelInf _modelInf//!モデル情報インスタンス
@@ -254,6 +257,4 @@ public:
 	std::vector<attackColl>* allColl;//!当たり判定カプセル用コンテナ用ポインタ
 	imputInf* _imputInf;//!入力データ用ポインタ
 	Rserver* RS;//!リソースサーバークラス用ポインタ
-	DxLib::VECTOR* cameraPosP;
-	DxLib::VECTOR* cameraForP;
 };

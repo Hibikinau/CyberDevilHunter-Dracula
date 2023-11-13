@@ -21,15 +21,17 @@ bool BossLion::Initialize()
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	actionFlag = false;
-	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
-	ChangeVolumeSoundMem(120, swingSE);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
+	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3", 2000));
+	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
+	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
 	return true;
 }
 
 bool	BossLion::Terminate()
 {
 	CharBase::Terminate();
-	DeleteSoundMem(swingSE);
+	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
 	return true;
 }
 
@@ -38,6 +40,8 @@ bool	BossLion::Process()
 	BossBase::Process();
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
 
 	if (status == STATUS::DEAD)
 	{
@@ -198,7 +202,7 @@ bool	BossLion::Process()
 		animSpd = 1.5f * awakeSpd;
 		animChange(BOSS2_ATTACK_1, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, -0.f), VGet(50.f, 0.f, 0.f), 40.f, 28.f, _modelInf.totalTime * awakeSpd - 28.f, animSpd, true, 20.f * awakeDmg, 0, 41, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::ATTACK2:
@@ -218,7 +222,7 @@ bool	BossLion::Process()
 		animSpd = 2.0f * awakeSpd;
 		animChange(BOSS2_ATTACK_2, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 75.f, _modelInf.totalTime * awakeSpd - 75.f, animSpd, true, 20.f * awakeDmg, 0, 18, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::ATTACK3:
@@ -238,7 +242,7 @@ bool	BossLion::Process()
 		animSpd = 2.0f * awakeSpd;
 		animChange(BOSS2_ATTACK_3, &_modelInf, false, true, true);
 		makeAttackCap(VGet(-20.f, 0.f, 0.f), VGet(50.f, 0.f, 0.f), 40.f, 75.f, _modelInf.totalTime * awakeSpd - 75.f, animSpd, true, 20.f * awakeDmg, 0, 41, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::HANIATTACK:
@@ -258,7 +262,7 @@ bool	BossLion::Process()
 		animSpd = 1.5f * awakeSpd;
 		animChange(BOSS2_KNEE, &_modelInf, false, true, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, -100.f, 0.f), 60.f, 10.f, _modelInf.totalTime * awakeSpd - 10.f, animSpd, true, 20.f * awakeDmg, 0, 8, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::TACKLE:
@@ -290,7 +294,7 @@ bool	BossLion::Process()
 		animSpd = 1.0f * awakeSpd;
 		animChange(BOSS2_TACKLE, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * awakeSpd, animSpd, true, 50.f * awakeDmg, 0, 3, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::SLAM:
@@ -314,7 +318,7 @@ bool	BossLion::Process()
 		animSpd = 1.0f * awakeSpd;
 		animChange(BOSS2_SLAP, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * awakeSpd, animSpd, true, 50.f * awakeDmg, 0, 3, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	case STATUS::DIVE:
@@ -352,7 +356,7 @@ bool	BossLion::Process()
 		animSpd = 1.0f * awakeSpd;
 		animChange(BOSS2_DIVE, &_modelInf, false, false, true);
 		makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 240.f, .0f, _modelInf.totalTime * awakeSpd, animSpd, true, 50.f * awakeDmg, 0, 3, VGet(0, 0, 0), 1);
-		PlaySoundMem(swingSE, DX_PLAYTYPE_BACK);
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		actionFlag = true;
 		break;
 	};

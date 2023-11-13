@@ -28,6 +28,10 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms)
 	// Effekseerを使用するには必ず設定する。
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 
+	// 3Dサウンドにおける1メートルの距離を指定する
+	// DxLib_Init の前に Set3DSoundOneMetre を呼ぶ
+	Set3DSoundOneMetre(100.0f);
+
 	if (DxLib_Init() == -1)
 	{	// エラーが起きたら直ちに終了
 		return false;

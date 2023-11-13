@@ -91,5 +91,5 @@ protected:
 	bool  jumpActFlag;     //!ジャンプ行動してるか
 	bool  posFlag;
 	bool  STABFlag;        //!突進攻撃してるかどうか
-    float	 awakeWaitTime;     //!覚醒時待機時間
+    float awakeWaitTime;     //!覚醒時待機時間
 };

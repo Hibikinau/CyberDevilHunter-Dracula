@@ -19,12 +19,13 @@ bool BossKnight::Initialize()
 	actionFlag = false;
 	posFlag = false;
 	STABFlag = false;
+	awakeWaitTime=0;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
-	soundHandle.emplace_back(LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3"));
+	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3",2000));
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
+	setMasterVolume(20000 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
 	return true;
 }
@@ -42,7 +43,7 @@ bool	BossKnight::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPos,cameraFor);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
 
 	if (status == K_STATUS::DEAD)
 	{
@@ -101,6 +102,7 @@ bool	BossKnight::Process()
 		{
 			time--;
 		}
+		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		break;
 	case K_STATUS::DAMAGE:
 		if (_modelInf.isAnimEnd == true)
@@ -259,6 +261,7 @@ bool	BossKnight::Process()
 		if (attackStep == 3)
 		{
 			makeAttackCap(VGet(-20.f, 80.f, 0.f), VGet(-20.f, -100.f, 0.f), 100.f, .0f, _modelInf.totalTime, animSpd, true, 30.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
+			PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		actionFlag = true;
 		break;
@@ -280,6 +283,7 @@ bool	BossKnight::Process()
 		if (attackStep == 2)
 		{
 			makeAttackCap(VGet(0.f, 50.f, 0.f), VGet(0.f, -120.f, 0.f), 50.f, .0f, _modelInf.totalTime, animSpd, true, 20.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
+			PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		}
 		actionFlag = true;
 		break;
@@ -292,6 +296,7 @@ bool	BossKnight::Process()
 				if (isGround && attackStep == 2)
 				{
 					makeAttackCap(VGet(0.f, 0.f, 0.f), VGet(0.f, 0.f, 0.f), 500.f, 5.0f, _modelInf.totalTime - 5, animSpd, true, 50.f * awakeDmg, 0, 100, VGet(0, 0, 0), 1);
+					PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 				}
 				if (_modelInf.vec.y > 0 && attackStep == 1) { actionFlag = true; }
 				else if (!isGround && attackStep == 2) { actionFlag = true; }
