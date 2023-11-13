@@ -13,9 +13,13 @@
 #include <thread>
 #include <future>
 
-//#pragma comment(lib,"AppFrame.lib")
+#if _DEBUG
 #pragma comment(lib,"../x64/Debug/AppFrame.lib")
-//#pragma comment(lib,"../x64/Release/AppFrame.lib")
+#elif !_DEBUG
+#pragma comment(lib,"../x64/Release/AppFrame.lib")
+#endif
+
+//#pragma comment(lib,"AppFrame.lib")
 
 #include "Application/ApplicationBase.h"
 #include "CFile/CFile.h"

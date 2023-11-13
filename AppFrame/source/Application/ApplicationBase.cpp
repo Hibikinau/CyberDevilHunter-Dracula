@@ -16,11 +16,11 @@ ApplicationBase::~ApplicationBase() {}
 
 bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms)
 {
-
-	// DXライブラリの初期化
-	if (AppWindowed()) {
-		ChangeWindowMode(true);// ウィンドウモードに指定する
-	}
+#ifdef _DEBUG
+	ChangeWindowMode(true);
+#else
+	ChangeWindowMode(false);
+#endif //DEBUG時:ウィンドウモード / RELEASE時：フルスクリーンモード
 	SetMainWindowText("CyberDevilHunter-Dracula");
 	SetGraphMode(DispSizeW(), DispSizeH(), 32);
 
