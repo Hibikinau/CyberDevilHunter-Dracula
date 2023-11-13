@@ -22,6 +22,10 @@ bool makeChar(modeGame* insMG, Rserver* _rs, std::shared_ptr<CharBase> charPoint
 	charPoint->allColl = &insMG->mAllColl;
 	charPoint->getInputKey(&insMG->_imputInf, &insMG->cameraDir);
 	insMG->charBox.emplace(nameA, std::move(charPoint));
+	if (charPoint->type == 2) {
+		charPoint->cameraPosP = &insMG->cameraPos;
+		charPoint->cameraForP = &insMG->cameraFor;
+	}
 
 	return true;
 }

@@ -21,7 +21,7 @@ bool BossKnight::Initialize()
 	STABFlag = false;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
-	Set3DSoundListenerPosAndFrontPos_UpVecY(_modeG->cameraPos, _modeG->cameraFor);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
 	soundHandle.emplace_back(LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3"));
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
 	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
@@ -42,7 +42,7 @@ bool	BossKnight::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	Set3DSoundListenerPosAndFrontPos_UpVecY(_modeG->cameraPos, _modeG->cameraFor);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPos,cameraFor);
 
 	if (status == K_STATUS::DEAD)
 	{

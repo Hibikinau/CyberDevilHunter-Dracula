@@ -7,14 +7,12 @@
  *********************************************************************/
 #pragma once
 #include"charBase.h"
-#include"modeGame.h"
 //#include"ComponentBase.h"
 #include <map>
 #include <memory>
 #include <typeindex>
 
 
-class modeGame;
  /**
 	* @class BossKnight
 	* @brief ボスの基底クラス
@@ -134,7 +132,6 @@ protected:
 		awakeTime,       //!覚醒時待機時間
 		awakeAddDistance;      //!覚醒時攻撃モーション移動量追加
 	modelInf* plMI; //!プレイヤー情報のインスタンス
-	modeGame* _modeG;
 	bool  isAnimEnd;       //アニメーション終わったかどうか
 	//std::map<std::pair<std::type_index, int>, std::unique_ptr<ComponentBase>> _components;
 };

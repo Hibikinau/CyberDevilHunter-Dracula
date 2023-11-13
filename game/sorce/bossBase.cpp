@@ -9,6 +9,7 @@
 
 bool BossBase::Initialize()
 {
+	type = 2;
 	time = 200;
 	stanTime = 200;
 	_statusInf.stanPoint = 0;

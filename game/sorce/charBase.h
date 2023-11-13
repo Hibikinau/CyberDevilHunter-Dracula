@@ -254,4 +254,6 @@ public:
 	std::vector<attackColl>* allColl;//!当たり判定カプセル用コンテナ用ポインタ
 	imputInf* _imputInf;//!入力データ用ポインタ
 	Rserver* RS;//!リソースサーバークラス用ポインタ
+	DxLib::VECTOR* cameraPosP;
+	DxLib::VECTOR* cameraForP;
 };

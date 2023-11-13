@@ -68,7 +68,6 @@ public:
 	int gameStartAnimHandle[89] = { -1 }, GSAnimNum;
 	int slashLineAnimHandle[39] = { -1 };
 	int loadingAnimHandle[27] = { -1 }, loadingAnimNum;
-
 	int StageModelHandle, CharaModelHandle, ShadowMapHandle, BGMdelay;
 	float bright = .6f, Atten0 = 0.8f, Atten1 = 0.f, Atten2 = 0.f;
 	bool debugMode = false, plDead;
