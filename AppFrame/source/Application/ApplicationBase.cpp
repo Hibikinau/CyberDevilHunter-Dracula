@@ -30,7 +30,7 @@ bool ApplicationBase::Initialize(HINSTANCE hInstance, ModeServer* ms)
 
 	// 3Dサウンドにおける1メートルの距離を指定する
 	// DxLib_Init の前に Set3DSoundOneMetre を呼ぶ
-	Set3DSoundOneMetre(100.0f);
+	Set3DSoundOneMetre(200.0f);
 
 	if (DxLib_Init() == -1)
 	{	// エラーが起きたら直ちに終了
