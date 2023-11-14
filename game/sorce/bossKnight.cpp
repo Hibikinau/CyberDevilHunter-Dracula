@@ -23,7 +23,7 @@ bool BossKnight::Initialize()
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
-	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3",2000));
+	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3",3000));
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
 	setMasterVolume(20000 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
