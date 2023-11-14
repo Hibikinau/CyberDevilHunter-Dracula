@@ -30,39 +30,37 @@ L１＋R１　	     : 覚醒<br>
 # 実行方法
 exeファイルを実行してください
 
-ーーーーーーーーーーコードについてーーーーーーーーーー
+# コードについて
 
-appFrame 使用したフレームワークです
+appFrame 使用したフレームワークです<br>
 
-/ApplicationBase  gameMainクラスの基底クラスです
-/CFile  CSVファイルの読み書きをするための関数まとめ
-/modelManager  3Dモデルの制御をするための関数まとめ
-/modeBase  モードの基底クラスです
-/modeServer  モードを管理するためのクラスです
-/ResourceServer  素材の読み込みとハンドルを制御するためのクラスです
-
-
+/ApplicationBase  gameMainクラスの基底クラスです<br>
+/CFile  CSVファイルの読み書きをするための関数まとめ<br>
+/modelManager  3Dモデルの制御をするための関数まとめ<br>
+/modeBase  モードの基底クラスです<br>
+/modeServer  モードを管理するためのクラスです<br>
+/ResourceServer  素材の読み込みとハンドルを制御するためのクラスです<br>
 
 CyberDevilHunter-Dracula ゲーム部分です
 
-/char/bossKnight  騎士型ボスクラス
-/char/bossLionman  ライオン型ボスクラス
-/char/charBase  プレイヤークラス、ボスクラスの基底クラスです
-/char/Lastboss  ラスボスのクラス
-/char/player  プレイヤークラス
+/char/bossKnight  騎士型ボスクラス<br>
+/char/bossLionman  ライオン型ボスクラス<br>
+/char/charBase  プレイヤークラス、ボスクラスの基底クラスです<br>
+/char/Lastboss  ラスボスのクラス<br>
+/char/player  プレイヤークラス<br>
 
-/mode/modeArtsGet  入れ替え技取得画面
-/mode/modeBossChoose  ボス選択画面
-/mode/modeEnd  エンディング画面
-/mode/modeEquipmentSelection  入れ替え技選択画面
-/mode/modeGame  インゲーム画面
-/mode/modeGameOver  ゲームオーバー画面
-/mode/modeMainMenu  メインメニュー画面
-/mode/modeMenu  戦闘中に呼び出せるメニュー画面
-/mode/modeResult  リザルト画面
-/mode/modeSetting  設定画面
-/mode/modeTitle  タイトル画面
+/mode/modeArtsGet  入れ替え技取得画面<br>
+/mode/modeBossChoose  ボス選択画面<br>
+/mode/modeEnd  エンディング画面<br>
+/mode/modeEquipmentSelection  入れ替え技選択画面<br>
+/mode/modeGame  インゲーム画面<br>
+/mode/modeGameOver  ゲームオーバー画面<br>
+/mode/modeMainMenu  メインメニュー画面<br>
+/mode/modeMenu  戦闘中に呼び出せるメニュー画面<br>
+/mode/modeResult  リザルト画面<br>
+/mode/modeSetting  設定画面<br>
+/mode/modeTitle  タイトル画面<br>
 
-/gameMain  ApplicationBaseクラスの関数を呼び出すなどしているクラスです
+/gameMain  ApplicationBaseクラスの関数を呼び出すなどしているクラスです<br>
 
-/save.csv  セーブデータ、各種設定などを入れています
+/save.csv  セーブデータ、各種設定などを入れています<br>
