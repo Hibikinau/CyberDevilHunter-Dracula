@@ -7,13 +7,20 @@
  *********************************************************************/
 #include"bossKnight.h"
 #include <math.h>
+namespace 
+{
+	constexpr float  runSpd = 20.0f;
+	constexpr auto Path = "game/res/shader/SkinMesh4_DirLight_ToonVS.vso";
+	constexpr auto auraShaderPath = "game/res/shader/AuraPixelShader.pso";
+}
 using namespace model;
-using namespace BOSSKNIGHT;
 
 bool BossKnight::Initialize()
 {
 	BossBase::Initialize();
 	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
+	//path = LoadVertexShader(Path);
+	//auraShaderHandle = LoadPixelShader(auraShaderPath);
 	status = K_STATUS::WAIT;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	actionFlag = false;
@@ -25,7 +32,7 @@ bool BossKnight::Initialize()
 	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
 	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3",3000));
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	setMasterVolume(20000 * (0.01 * _valData->soundMasterValume));
+	setMasterVolume(2000 * (0.01 * _valData->soundMasterValume));
 	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
 	return true;
 }
@@ -34,6 +41,7 @@ bool	BossKnight::Terminate()
 {
 	CharBase::Terminate();
 	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
+	//DeleteShader(auraShaderHandle);
 	return true;
 }
 
@@ -43,7 +51,9 @@ bool	BossKnight::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
+	//Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(plMI->pos, VAdd(_modelInf.pos,VGet(0,100,0)));
+
 
 	if (status == K_STATUS::DEAD)
 	{
@@ -102,7 +112,6 @@ bool	BossKnight::Process()
 		{
 			time--;
 		}
-		PlaySoundMem(soundHandle[0], DX_PLAYTYPE_BACK);
 		break;
 	case K_STATUS::DAMAGE:
 		if (_modelInf.isAnimEnd == true)
@@ -358,7 +367,11 @@ bool	BossKnight::Render(float timeSpeed)
 {
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_RUN ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
+	//MV1SetUseOrigShader(true);
+	//SetUseVertexShader(path);
+	//SetUsePixelShader(auraShaderHandle);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
+	//MV1SetUseOrigShader(false);
 	return true;
 }
 

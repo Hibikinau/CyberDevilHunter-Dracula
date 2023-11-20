@@ -126,7 +126,7 @@ int BossBase::Load3DSoundMem(const char* FileName, float InitRadius, int ReverbN
 	SetCreate3DSoundFlag(FALSE);
 	Set3DPositionSoundMem(VGet(0, 0, 0), tmpSoundHandle);
 	Set3DRadiusSoundMem(InitRadius, tmpSoundHandle);
-    Set3DPresetReverbParamSoundMem(ReverbNo, tmpSoundHandle);
+    //Set3DPresetReverbParamSoundMem(ReverbNo, tmpSoundHandle);
 	
 	return tmpSoundHandle;
 }

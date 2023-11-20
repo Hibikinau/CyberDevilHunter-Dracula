@@ -7,8 +7,14 @@
 ********************************************************************/
 #include"Lastboss.h"
 #include <math.h>
+namespace 
+{
+	constexpr float runSpd = 40.0f;
+	//•Ší’Ç]ƒtƒŒ[ƒ€”Ô†İ’è
+	constexpr auto rWeponParentFrame = 190;
+	constexpr auto lWeponParentFrame = 165;
+}
 using namespace model;
-using namespace LASTBOSS;
 
 bool LastBoss::Initialize()
 {

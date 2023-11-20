@@ -7,8 +7,11 @@
  *********************************************************************/
 #include"bossLionman.h"
 #include <math.h>
+namespace 
+{
+	constexpr float runSpd = 25.0f;
+}
 using namespace model;
-using namespace BOSSLION;
 
 bool BossLion::Initialize()
 {
@@ -41,7 +44,8 @@ bool	BossLion::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
+	//Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
+	Set3DSoundListenerPosAndFrontPos_UpVecY(plMI->pos, VAdd(_modelInf.pos, VGet(0, 100, 0)));
 
 	if (status == STATUS::DEAD)
 	{

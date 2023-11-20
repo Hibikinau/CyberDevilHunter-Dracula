@@ -6,12 +6,8 @@
  * \date    March 2023
  *********************************************************************/
 #pragma once
-#include"charBase.h"
 #include"bossBase.h"
 #include"player.h"
-namespace BOSSKNIGHT {
-	constexpr float  runSpd = 20.0f;
-}
 
  /**
 	* @class BossKnight
@@ -92,4 +88,7 @@ protected:
 	bool  posFlag;
 	bool  STABFlag;        //!“ËiUŒ‚‚µ‚Ä‚é‚©‚Ç‚¤‚©
     float awakeWaitTime;     //!ŠoÁ‘Ò‹@ŠÔ
+	int auraShaderHandle;
+	int path;
+	int cbHandle;
 };

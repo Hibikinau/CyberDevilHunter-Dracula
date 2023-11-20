@@ -86,7 +86,7 @@ public:
 　　 * @param ReverbNo リバーブプリセット
 　　 * @return SoundHandle
  　　*/
-	int Load3DSoundMem(const char* FileName, float InitRadius = 256.0f, int ReverbNo = 0);
+	int Load3DSoundMem(const char* FileName, float InitRadius = 256.0f, int ReverbNo = DX_REVERB_PRESET_DEFAULT);
 
 	
 	//同型コンポーネントを追加する際は異なるIDを設定する
