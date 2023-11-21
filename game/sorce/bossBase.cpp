@@ -130,13 +130,3 @@ int BossBase::Load3DSoundMem(const char* FileName, float InitRadius, int ReverbN
 	
 	return tmpSoundHandle;
 }
-/*
-void BossBase::AddComponent(std::unique_ptr<ComponentBase> component, int id)
-{
-	component->SetParent(this);
-
-	if (component->Initialize()) {
-		_components[{typeid(*component), id}] = (std::move(component));
-	}
-}
-*/

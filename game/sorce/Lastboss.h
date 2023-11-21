@@ -91,7 +91,7 @@ public:
 
 protected:
 	bool actionFlag;  //!行動してるかどうか
-	bool hitFlag;
+	bool hitFlag;       //!ヒットしているかどうか
 	int impactEfcHandle; //!衝撃波エフェクト用ハンドル
 	int hitTime;
 	int voiceStartNum;   //!何番目のボイスを再生するか

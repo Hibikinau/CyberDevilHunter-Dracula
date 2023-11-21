@@ -17,7 +17,7 @@
 　* @class BossKnight
 　* @brief ボスの基底クラス
 　*/
-class BossBase : public CharBase 
+class BossBase : public CharBase
 {
 public:
 	/**
@@ -88,38 +88,6 @@ public:
  　　*/
 	int Load3DSoundMem(const char* FileName, float InitRadius = 256.0f, int ReverbNo = DX_REVERB_PRESET_DEFAULT);
 
-	
-	//同型コンポーネントを追加する際は異なるIDを設定する
-	//virtual void AddComponent(std::unique_ptr<ComponentBase> component, int id = 0);
-
-	/**
-	 * \brief 指定のコンポーネントを取得する　例：GetComponent<MV1Component>()
-	 * \return コンポーネントのポインタを返す。所持していなければnullptrを返す。
-	 */
-	/*
-	template <typename C>
-	C* GetComponent(int id = 0) {
-		C* result = nullptr;
-
-		if (_components.count({ typeid(C), id }) != 0) {
-			result = static_cast<C*>(_components[{typeid(C), id}].get());
-		}
-		return result;
-	}
-	*/
-	/**
-	 * \brief 指定のクラスか確認する　例：CheckType<Player>()、CheckType<Enemy>()
-	 * \return 指定のクラスであればtrueを返す
-	 */
-	/*
-	template <typename T>
-	bool CheckType()const {
-		if (typeid(T&) == typeid(*this)) {
-			return true;
-		}
-		return false;
-	}
-	*/
 protected:
 	float animSpd,     //!アニメーションのスピード
 		stanTime;   //!スタン時間
@@ -139,5 +107,4 @@ protected:
 		awakeAddDistance;      //!覚醒時攻撃モーション移動量追加
 	modelInf* plMI; //!プレイヤー情報のインスタンス
 	bool  isAnimEnd;       //アニメーション終わったかどうか
-	//std::map<std::pair<std::type_index, int>, std::unique_ptr<ComponentBase>> _components;
 };

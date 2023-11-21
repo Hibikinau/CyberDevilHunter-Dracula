@@ -60,7 +60,7 @@ public:
 	/**
 	 * @brief キャラクターの現在の状態
 	 */
-	enum class K_STATUS
+	enum class STATUS
 	{
 		NONE,
 		WAIT,
@@ -79,7 +79,7 @@ public:
 		JUMPACT,
 		ONESLASH,
 	};
-	K_STATUS status;
+	STATUS status;
 
 	
 protected:
