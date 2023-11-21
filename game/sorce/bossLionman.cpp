@@ -43,10 +43,11 @@ bool	BossLion::Process()
 	BossBase::Process();
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+	//3Dサウンドの位置設定
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	//Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
 	Set3DSoundListenerPosAndFrontPos_UpVecY(plMI->pos, VAdd(_modelInf.pos, VGet(0, 100, 0)));
 
+	//死亡判定
 	if (status == STATUS::DEAD)
 	{
 		animSpd = 0.7f;
@@ -54,17 +55,7 @@ bool	BossLion::Process()
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
-
-	if (_statusInf.hitPoint <= 5000)
-	{
-		awake = true;
-		awakeSpd = 1.5f;
-		awakeMove = 1.5f;
-		awakeDmg = 1.5f;
-		awakeTime = 30;
-		awakeAddDistance = 30;
-	}
-
+	//スタン判定
 	if (status == STATUS::STAN)
 	{
 		if (!actionFlag)
@@ -84,7 +75,16 @@ bool	BossLion::Process()
 		else { stanTime--; }
 		return true;
 	}
-
+	//体力一定以下になると強化
+	if (_statusInf.hitPoint <= 5000)
+	{
+		awake = true;
+		awakeSpd = 1.5f;
+		awakeMove = 1.5f;
+		awakeDmg = 1.5f;
+		awakeTime = 30;
+		awakeAddDistance = 30;
+	}
 
 	collCap.r = 80.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
@@ -97,7 +97,7 @@ bool	BossLion::Process()
 
 	int insAddNum = 0;
 	bool insFreeBool = false;
-
+	//行動毎の処理部分
 	switch (status)
 	{
 	case STATUS::NONE:break;

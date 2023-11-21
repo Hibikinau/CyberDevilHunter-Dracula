@@ -171,8 +171,6 @@
     <ClCompile Include="game\sorce\bossKnight.cpp" />
     <ClCompile Include="game\sorce\bossLionman.cpp" />
     <ClCompile Include="game\sorce\charBase.cpp" />
-    <ClCompile Include="game\sorce\ComponentAI.cpp" />
-    <ClCompile Include="game\sorce\ComponentBase.cpp" />
     <ClCompile Include="game\sorce\Lastboss.cpp" />
     <ClCompile Include="game\sorce\modeArtsGet.cpp" />
     <ClCompile Include="game\sorce\modeEnd.cpp" />
@@ -194,8 +192,6 @@
     <ClInclude Include="game\sorce\bossKnight.h" />
     <ClInclude Include="game\sorce\bossLionman.h" />
     <ClInclude Include="game\sorce\charBase.h" />
-    <ClInclude Include="game\sorce\ComponentAI.h" />
-    <ClInclude Include="game\sorce\ComponentBase.h" />
     <ClInclude Include="game\sorce\Lastboss.h" />
     <ClInclude Include="game\sorce\modeArtsGet.h" />
     <ClInclude Include="game\sorce\modeEnd.h" />

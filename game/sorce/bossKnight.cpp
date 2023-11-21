@@ -10,8 +10,6 @@
 namespace 
 {
 	constexpr float  runSpd = 20.0f;
-	constexpr auto Path = "game/res/shader/SkinMesh4_DirLight_ToonVS.vso";
-	constexpr auto auraShaderPath = "game/res/shader/AuraPixelShader.pso";
 }
 using namespace model;
 
@@ -19,8 +17,6 @@ bool BossKnight::Initialize()
 {
 	BossBase::Initialize();
 	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
-	//path = LoadVertexShader(Path);
-	//auraShaderHandle = LoadPixelShader(auraShaderPath);
 	status = K_STATUS::WAIT;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	actionFlag = false;
@@ -41,7 +37,6 @@ bool	BossKnight::Terminate()
 {
 	CharBase::Terminate();
 	for (auto handle : soundHandle) { DeleteSoundMem(handle); }
-	//DeleteShader(auraShaderHandle);
 	return true;
 }
 
@@ -50,11 +45,11 @@ bool	BossKnight::Process()
 	BossBase::Process();
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
+	//3Dサウンドの位置設定
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
-	//Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
 	Set3DSoundListenerPosAndFrontPos_UpVecY(plMI->pos, VAdd(_modelInf.pos,VGet(0,100,0)));
 
-
+	//死亡判定
 	if (status == K_STATUS::DEAD)
 	{
 		animSpd = 0.7f;
@@ -62,16 +57,7 @@ bool	BossKnight::Process()
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
-
-	if (_statusInf.hitPoint <= 5000)
-	{
-		awake = true;
-		awakeSpd = 1.5f;
-		awakeMove = 1.5f;
-		awakeDmg = 1.5f;
-		awakeWaitTime = 35;
-	}
-
+	//スタン判定
 	if (status == K_STATUS::STAN)
 	{
 		animChange(BOSS1_DAMAGE, &_modelInf, true, true, false);
@@ -84,11 +70,19 @@ bool	BossKnight::Process()
 		else { stanTime--; }
 		return true;
 	}
+	//体力一定以下になると強化
+	if (_statusInf.hitPoint <= 5000)
+	{
+		awake = true;
+		awakeSpd = 1.5f;
+		awakeMove = 1.5f;
+		awakeDmg = 1.5f;
+		awakeWaitTime = 35;
+	}
 
 	collCap.r = 120.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
 	collCap.overPos = VAdd(_modelInf.pos, VGet(0, 300, 0));
-
 
 	//bossと距離一定以内行動変更
 	Pvector = VSub(plMI->pos, _modelInf.pos);
@@ -97,7 +91,7 @@ bool	BossKnight::Process()
 
 	int insAddNum = 0;
 	bool insFreeBool = false;
-
+	//行動毎の処理部分
 	switch (status)
 	{
 	case K_STATUS::NONE:break;
@@ -367,11 +361,7 @@ bool	BossKnight::Render(float timeSpeed)
 {
 	//DrawCapsule3D(collCap.underPos, collCap.overPos, collCap.r, 8, GetColor(255, 0, 0), GetColor(0, 0, 0), false);
 	_modelInf.animHandleOld == BOSS1_RUN ? _modelInf.addPos = VGet(0, 80.f, 0) : _modelInf.addPos = VGet(0, 0, 0);
-	//MV1SetUseOrigShader(true);
-	//SetUseVertexShader(path);
-	//SetUsePixelShader(auraShaderHandle);
 	isAnimEnd = modelRender(&_modelInf, animSpd, timeSpeed);
-	//MV1SetUseOrigShader(false);
 	return true;
 }
 

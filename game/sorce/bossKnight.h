@@ -88,7 +88,4 @@ protected:
 	bool  posFlag;
 	bool  STABFlag;        //!“ËiUŒ‚‚µ‚Ä‚é‚©‚Ç‚¤‚©
     float awakeWaitTime;     //!ŠoÁ‘Ò‹@ŠÔ
-	int auraShaderHandle;
-	int path;
-	int cbHandle;
 };
