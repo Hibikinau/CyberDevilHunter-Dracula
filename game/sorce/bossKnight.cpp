@@ -10,13 +10,17 @@
 namespace 
 {
 	constexpr float  runSpd = 20.0f;
+	constexpr auto  modelKnightPath = "game / res / Enemy01 / MV1 / enemy_1_.mv1";
+	constexpr auto  seSrashPaeh = "game/res/SE/BOSS_swing/swing3.mp3";
+	constexpr auto  newSomenPaeh = "game/res/new_soumen.png";
 }
 using namespace model;
 
 bool BossKnight::Initialize()
 {
 	BossBase::Initialize();
-	modelImport("game/res/Enemy01/MV1/enemy_1_.mv1", 2.5f, &_modelInf, RS);
+	//モデル読み込み及び初期設定
+	modelImport(modelKnightPath, 2.5f, &_modelInf, RS);
 	status = K_STATUS::WAIT;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 10000;
 	actionFlag = false;
@@ -25,11 +29,12 @@ bool BossKnight::Initialize()
 	awakeWaitTime=0;
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
+	//サウンド設定
 	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
-	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3",3000));
+	soundHandle.emplace_back(Load3DSoundMem(seSrashPaeh,3000));
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
 	setMasterVolume(2000 * (0.01 * _valData->soundMasterValume));
-	newSomenHandle = RS->loadGraphR("game/res/new_soumen.png");
+	newSomenHandle = RS->loadGraphR(newSomenPaeh);
 	return true;
 }
 

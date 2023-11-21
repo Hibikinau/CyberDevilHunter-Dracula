@@ -13,6 +13,10 @@ namespace
 	//武器追従フレーム番号設定
 	constexpr auto rWeponParentFrame = 190;
 	constexpr auto lWeponParentFrame = 165;
+	constexpr auto modelLassBossPath = "game/res/Enemy03/Enemy03.mv1";
+	constexpr auto modelKatanaPath = "game/res/Weapon_Katana/Weapon_katana.mv1";
+	constexpr auto modelNoutouPath = "game/res/Weapon_noutou/Weapon_noutou.mv1";
+	constexpr auto  seSrashPaeh = "game/res/SE/BOSS_swing/swing3.mp3";
 }
 using namespace model;
 
@@ -20,9 +24,9 @@ bool LastBoss::Initialize()
 {
 	BossBase::Initialize();
 	//モデルの読み込み
-	modelImport("game/res/Enemy03/Enemy03.mv1", 1.8f, &_modelInf, RS);
-	weponAttach("game/res/Weapon_Katana/Weapon_katana.mv1", &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
-	weponAttach("game/res/Weapon_noutou/Weapon_noutou.mv1", &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
+	modelImport(modelLassBossPath, 1.8f, &_modelInf, RS);
+	weponAttach(modelKatanaPath, &_modelInf, rWeponParentFrame, 2.f, true, "katana", RS);
+	weponAttach(modelNoutouPath, &_modelInf, lWeponParentFrame, 2.f, false, "noutou", RS);
 	status = STATUS::WAIT;
 	hitTime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
@@ -30,7 +34,8 @@ bool LastBoss::Initialize()
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	actionFlag = false;
-	swingSE = LoadSoundMem("game/res/SE/BOSS_swing/swing3.mp3");
+	//サウンド設定
+	swingSE = LoadSoundMem(seSrashPaeh);
 	ChangeVolumeSoundMem(120, swingSE);
 
 	//音声データの読み込み
@@ -56,6 +61,7 @@ bool	LastBoss::Process()
 	//マスター音量の適応
 	if (!isSetSoundValume) { setMasterVolume(_valData->soundMasterValume); isSetSoundValume = true; }
 
+	//死亡判定
 	if (status == STATUS::DEAD)
 	{
 		animSpd = 0.7f;
@@ -63,17 +69,7 @@ bool	LastBoss::Process()
 		if (_modelInf.isAnimEnd) { isDead = 2; }
 		return true;
 	}
-
-	if (_statusInf.hitPoint <= 5000)
-	{
-		awake = true;
-		awakeSpd = 1.5f;
-		awakeDmg = 1.5f;
-		awakeMove = 1.5f;
-		awakeTime = 30;
-		awakeAddDistance = 30;
-	}
-
+	//スタン判定
 	if (status == STATUS::STAN)
 	{
 		if (!actionFlag)
@@ -93,6 +89,16 @@ bool	LastBoss::Process()
 		else { stanTime--; }
 		return true;
 	}
+	//体力一定以下になると強化
+	if (_statusInf.hitPoint <= 5000)
+	{
+		awake = true;
+		awakeSpd = 1.5f;
+		awakeDmg = 1.5f;
+		awakeMove = 1.5f;
+		awakeTime = 30;
+		awakeAddDistance = 30;
+	}
 
 	collCap.r = 80.f;
 	collCap.underPos = VAdd(_modelInf.pos, VGet(0, 60, 0));
@@ -105,7 +111,7 @@ bool	LastBoss::Process()
 
 	int insAddNum = 0;
 	bool insFreeBool = false;
-
+	//行動毎の処理部分
 	switch (status)
 	{
 	case STATUS::NONE:break;

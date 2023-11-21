@@ -83,7 +83,7 @@ public:
 
 protected:
 	bool actionFlag; //!s“®‚µ‚Ä‚é‚©‚Ç‚¤‚©
-	bool hitFlag;
+	bool hitFlag;      //!ƒqƒbƒg‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©
 	int  dodgeTime,
 		hitTime;
 };

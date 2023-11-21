@@ -10,13 +10,16 @@
 namespace 
 {
 	constexpr float runSpd = 25.0f;
+	constexpr auto modelLionPath = "game/res/Enemy02_mv1/Enemy02.mv1";
+	constexpr auto  seSrashPaeh = "game/res/SE/BOSS_swing/swing3.mp3";
 }
 using namespace model;
 
 bool BossLion::Initialize()
 {
 	BossBase::Initialize();
-	modelImport("game/res/Enemy02_mv1/Enemy02.mv1", 2.5f, &_modelInf, RS);
+	//モデル読み込み及び初期設定
+	modelImport(modelLionPath, 2.5f, &_modelInf, RS);
 	status = STATUS::WAIT;
 	hitTime = 0;
 	_statusInf.maxHitPoint = _statusInf.hitPoint = 12000;
@@ -24,8 +27,9 @@ bool BossLion::Initialize()
 	_modelInf.pos = VGet(0.0f, 1100.0f, 100.f);
 	_modelInf.dir = VGet(0.0f, 180.0f, 0.0f);
 	actionFlag = false;
+	//サウンド設定
 	Set3DSoundListenerPosAndFrontPos_UpVecY(cameraPosP, cameraForP);
-	soundHandle.emplace_back(Load3DSoundMem("game/res/SE/BOSS_swing/swing3.mp3", 2000));
+	soundHandle.emplace_back(Load3DSoundMem(seSrashPaeh, 2000));
 	Set3DPositionSoundMem(_modelInf.pos, soundHandle[0]);
 	setMasterVolume(120 * (0.01 * _valData->soundMasterValume));
 	return true;
