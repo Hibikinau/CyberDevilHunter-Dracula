@@ -7,7 +7,6 @@
  *********************************************************************/
 #pragma once
 #include"charBase.h"
-//#include"ComponentBase.h"
 #include <map>
 #include <memory>
 #include <typeindex>
