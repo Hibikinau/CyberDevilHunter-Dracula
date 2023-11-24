@@ -64,3 +64,5 @@ CyberDevilHunter-Dracula ゲーム部分です
 /gameMain  ApplicationBaseクラスの関数を呼び出すなどしているクラスです<br>
 
 /save.csv  セーブデータ、各種設定などを入れています<br>
+
+担当箇所はこちら(https://github.com/Hibikinau/CyberDevilHunter-Dracula/blob/main/ResponsiblePart.md)<br>
